@@ -68,7 +68,7 @@ QueryDSL 도입 결정
 기존 방식의 한계 JPQL: 문자열 기반으로 컴파일 시점 오류 검증 불가 Criteria API: 복잡하고 가독성이 떨어지는 코드 동적 쿼리 구성: 조건에 따른 쿼리 생성이 복잡하고 오류 발생 가능성 🛠️ 기술적 해결 방안 QueryDSL 도입 결정 기존 JPQL이나 Criteria API 대신 QueryDSL을 도입하여 다음과 같은 이점을 확보했습니다:">
   <meta itemprop="datePublished" content="2025-08-16T10:00:00+09:00">
   <meta itemprop="dateModified" content="2025-08-16T10:00:00+09:00">
-  <meta itemprop="wordCount" content="264">
+  <meta itemprop="wordCount" content="265">
   <meta itemprop="keywords" content="Querydsl,Jpa,Typesafety,Dynamic-Queries">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보">
@@ -165,35 +165,16 @@ QueryDSL 도입 결정
 <h3 id="querydsl-도입-결정">QueryDSL 도입 결정</h3>
 <p>기존 JPQL이나 Criteria API 대신 <strong>QueryDSL</strong>을 도입하여 다음과 같은 이점을 확보했습니다:</p>
 <h4 id="1-컴파일-시점-오류-검증">1. 컴파일 시점 오류 검증</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// QueryDSL - 컴파일 시점에 오류 발견</span>
-</span></span><span style="display:flex;"><span>QProduct product <span style="color:#f92672">=</span> QProduct.<span style="color:#a6e22e">product</span>;
-</span></span><span style="display:flex;"><span>JPAQueryFactory queryFactory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JPAQueryFactory(entityManager);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>BooleanBuilder builder <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BooleanBuilder();
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (searchCondition.<span style="color:#a6e22e">getName</span>() <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
-</span></span><span style="display:flex;"><span>    builder.<span style="color:#a6e22e">and</span>(product.<span style="color:#a6e22e">name</span>.<span style="color:#a6e22e">containsIgnoreCase</span>(searchCondition.<span style="color:#a6e22e">getName</span>()));
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h4 id="2-동적-쿼리-작성-용이성">2. 동적 쿼리 작성 용이성</h4>
-<p>조건에 따라 WHERE 절을 동적으로 구성하는 코드를 깔끔하게 작성할 수 있었습니다:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Product<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">searchProducts</span>(ProductSearchCondition condition) {
-</span></span><span style="display:flex;"><span>    BooleanBuilder builder <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BooleanBuilder();
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (condition.<span style="color:#a6e22e">getName</span>() <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
-</span></span><span style="display:flex;"><span>        builder.<span style="color:#a6e22e">and</span>(product.<span style="color:#a6e22e">name</span>.<span style="color:#a6e22e">containsIgnoreCase</span>(condition.<span style="color:#a6e22e">getName</span>()));
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (condition.<span style="color:#a6e22e">getBrand</span>() <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
-</span></span><span style="display:flex;"><span>        builder.<span style="color:#a6e22e">and</span>(product.<span style="color:#a6e22e">brand</span>.<span style="color:#a6e22e">eq</span>(condition.<span style="color:#a6e22e">getBrand</span>()));
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (condition.<span style="color:#a6e22e">getCategory</span>() <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
-</span></span><span style="display:flex;"><span>        builder.<span style="color:#a6e22e">and</span>(product.<span style="color:#a6e22e">category</span>.<span style="color:#a6e22e">eq</span>(condition.<span style="color:#a6e22e">getCategory</span>()));
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> queryFactory
-</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">selectFrom</span>(product)
-</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">where</span>(builder)
-</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">fetch</span>();
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h4 id="3-타입-안정성">3. 타입 안정성</h4>
+<p>QueryDSL은 Q클래스를 통해 엔티티의 필드를 타입 안전하게 참조할 수 있습니다. 이를 통해 쿼리 작성 시 오타나 잘못된 필드 참조를 컴파일 시점에 발견할 수 있었습니다.</p>
+<h4 id="2-동적-쿼리-작성-용이성">2. 동적 쿼리 작성 용이성</h4>
+<p>BooleanBuilder를 활용하여 조건에 따라 WHERE 절을 동적으로 구성하는 방식을 채택했습니다. 각 검색 조건이 존재할 때만 해당 조건을 쿼리에 추가하는 방식으로, 복잡한 if-else 문 없이도 깔끔한 동적 쿼리를 작성할 수 있었습니다.</p>
+<p><strong>주요 구현 패턴:</strong></p>
+<ul>
+<li><strong>BooleanBuilder</strong>: 조건별 동적 WHERE 절 구성</li>
+<li><strong>메소드 체이닝</strong>: 가독성 높은 쿼리 작성</li>
+<li><strong>조건부 필터링</strong>: null 체크를 통한 선택적 조건 적용</li>
+</ul>
+<h4 id="3-타입-안정성">3. 타입 안정성</h4>
 <p>엔티티 필드의 타입 변경 시 관련 쿼리도 함께 오류로 감지되어 일관성을 유지할 수 있었습니다.</p>
 <h2 id="-구현-결과">📊 구현 결과</h2>
 <h3 id="성과-지표">성과 지표</h3>

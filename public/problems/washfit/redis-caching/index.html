@@ -6,13 +6,12 @@
     
     <title>Redis를 활용한 캐싱 및 세션 관리 구현 | 김찬규 | Backend Developer</title>
     <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="description" content="Redis를 활용한 캐싱 및 세션 관리 구현
+    <meta name="description" content="Redis를 활용한 세션 관리 구현
 🔍 문제 상황
 Redis 도입 배경
-WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:
+WashFit 서비스에서는 사용자 세션 관리를 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:
 
-세션 관리: 사용자 로그인 상태의 효율적인 관리
-캐싱: 자주 조회되는 데이터의 응답 속도 향상
+세션 관리: 사용자 /로그인 상태의 효율적인 관리
 임시 데이터 저장: 인증 토큰 등 시간 제한이 있는 데이터의 관리
 
 기존 방식의 한계
@@ -56,8 +55,8 @@ spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현
     <meta property="og:url" content="http://localhost:1313/problems/washfit/redis-caching/">
   <meta property="og:site_name" content="김찬규 | Backend Developer">
   <meta property="og:title" content="Redis를 활용한 캐싱 및 세션 관리 구현">
-  <meta property="og:description" content="Redis를 활용한 캐싱 및 세션 관리 구현 🔍 문제 상황 Redis 도입 배경 WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:
-세션 관리: 사용자 로그인 상태의 효율적인 관리 캐싱: 자주 조회되는 데이터의 응답 속도 향상 임시 데이터 저장: 인증 토큰 등 시간 제한이 있는 데이터의 관리 기존 방식의 한계 메모리 기반 세션: 서버 재시작 시 세션 정보 손실 데이터베이스 부하: 반복적인 데이터 조회로 인한 PostgreSQL 부하 증가 확장성 문제: 멀티 서버 환경에서 세션 공유 불가 🛠️ 기술적 해결 방안 Redis 기술적 구현 spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현했습니다:">
+  <meta property="og:description" content="Redis를 활용한 세션 관리 구현 🔍 문제 상황 Redis 도입 배경 WashFit 서비스에서는 사용자 세션 관리를 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:
+세션 관리: 사용자 /로그인 상태의 효율적인 관리 임시 데이터 저장: 인증 토큰 등 시간 제한이 있는 데이터의 관리 기존 방식의 한계 메모리 기반 세션: 서버 재시작 시 세션 정보 손실 데이터베이스 부하: 반복적인 데이터 조회로 인한 PostgreSQL 부하 증가 확장성 문제: 멀티 서버 환경에서 세션 공유 불가 🛠️ 기술적 해결 방안 Redis 기술적 구현 spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현했습니다:">
   <meta property="og:locale" content="ko">
   <meta property="og:type" content="article">
     <meta property="article:section" content="problems">
@@ -69,16 +68,16 @@ spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현
     <meta property="article:tag" content="Performance">
 
   <meta itemprop="name" content="Redis를 활용한 캐싱 및 세션 관리 구현">
-  <meta itemprop="description" content="Redis를 활용한 캐싱 및 세션 관리 구현 🔍 문제 상황 Redis 도입 배경 WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:
-세션 관리: 사용자 로그인 상태의 효율적인 관리 캐싱: 자주 조회되는 데이터의 응답 속도 향상 임시 데이터 저장: 인증 토큰 등 시간 제한이 있는 데이터의 관리 기존 방식의 한계 메모리 기반 세션: 서버 재시작 시 세션 정보 손실 데이터베이스 부하: 반복적인 데이터 조회로 인한 PostgreSQL 부하 증가 확장성 문제: 멀티 서버 환경에서 세션 공유 불가 🛠️ 기술적 해결 방안 Redis 기술적 구현 spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현했습니다:">
+  <meta itemprop="description" content="Redis를 활용한 세션 관리 구현 🔍 문제 상황 Redis 도입 배경 WashFit 서비스에서는 사용자 세션 관리를 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:
+세션 관리: 사용자 /로그인 상태의 효율적인 관리 임시 데이터 저장: 인증 토큰 등 시간 제한이 있는 데이터의 관리 기존 방식의 한계 메모리 기반 세션: 서버 재시작 시 세션 정보 손실 데이터베이스 부하: 반복적인 데이터 조회로 인한 PostgreSQL 부하 증가 확장성 문제: 멀티 서버 환경에서 세션 공유 불가 🛠️ 기술적 해결 방안 Redis 기술적 구현 spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현했습니다:">
   <meta itemprop="datePublished" content="2025-08-16T10:00:00+09:00">
   <meta itemprop="dateModified" content="2025-08-16T10:00:00+09:00">
-  <meta itemprop="wordCount" content="473">
+  <meta itemprop="wordCount" content="462">
   <meta itemprop="keywords" content="Redis,Caching,Session,Performance">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Redis를 활용한 캐싱 및 세션 관리 구현">
-  <meta name="twitter:description" content="Redis를 활용한 캐싱 및 세션 관리 구현 🔍 문제 상황 Redis 도입 배경 WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:
-세션 관리: 사용자 로그인 상태의 효율적인 관리 캐싱: 자주 조회되는 데이터의 응답 속도 향상 임시 데이터 저장: 인증 토큰 등 시간 제한이 있는 데이터의 관리 기존 방식의 한계 메모리 기반 세션: 서버 재시작 시 세션 정보 손실 데이터베이스 부하: 반복적인 데이터 조회로 인한 PostgreSQL 부하 증가 확장성 문제: 멀티 서버 환경에서 세션 공유 불가 🛠️ 기술적 해결 방안 Redis 기술적 구현 spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현했습니다:">
+  <meta name="twitter:description" content="Redis를 활용한 세션 관리 구현 🔍 문제 상황 Redis 도입 배경 WashFit 서비스에서는 사용자 세션 관리를 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:
+세션 관리: 사용자 /로그인 상태의 효율적인 관리 임시 데이터 저장: 인증 토큰 등 시간 제한이 있는 데이터의 관리 기존 방식의 한계 메모리 기반 세션: 서버 재시작 시 세션 정보 손실 데이터베이스 부하: 반복적인 데이터 조회로 인한 PostgreSQL 부하 증가 확장성 문제: 멀티 서버 환경에서 세션 공유 불가 🛠️ 기술적 해결 방안 Redis 기술적 구현 spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현했습니다:">
 
 	
   </head><body class="ma0 avenir bg-near-white development">
@@ -156,13 +155,12 @@ spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현
       
       
     </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="redis를-활용한-캐싱-및-세션-관리-구현">Redis를 활용한 캐싱 및 세션 관리 구현</h1>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="redis를-활용한-세션-관리-구현">Redis를 활용한 세션 관리 구현</h1>
 <h2 id="-문제-상황">🔍 문제 상황</h2>
 <h3 id="redis-도입-배경">Redis 도입 배경</h3>
-<p>WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:</p>
+<p>WashFit 서비스에서는 사용자 세션 관리를 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:</p>
 <ul>
-<li><strong>세션 관리</strong>: 사용자 로그인 상태의 효율적인 관리</li>
-<li><strong>캐싱</strong>: 자주 조회되는 데이터의 응답 속도 향상</li>
+<li><strong>세션 관리</strong>: 사용자 /로그인 상태의 효율적인 관리</li>
 <li><strong>임시 데이터 저장</strong>: 인증 토큰 등 시간 제한이 있는 데이터의 관리</li>
 </ul>
 <h3 id="기존-방식의-한계">기존 방식의 한계</h3>
@@ -175,92 +173,72 @@ spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현
 <h3 id="redis-기술적-구현">Redis 기술적 구현</h3>
 <p><strong>spring-boot-starter-data-redis</strong> 의존성을 활용하여 다음과 같이 구현했습니다:</p>
 <h4 id="1-세션-스토어-구성">1. 세션 스토어 구성</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@EnableRedisHttpSession</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RedisSessionConfig</span> {
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> LettuceConnectionFactory <span style="color:#a6e22e">connectionFactory</span>() {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> LettuceConnectionFactory(
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">new</span> RedisStandaloneConfiguration(<span style="color:#e6db74">&#34;localhost&#34;</span>, 6379)
-</span></span><span style="display:flex;"><span>        );
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, Object<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">redisTemplate</span>() {
-</span></span><span style="display:flex;"><span>        RedisTemplate<span style="color:#f92672">&lt;</span>String, Object<span style="color:#f92672">&gt;</span> template <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RedisTemplate<span style="color:#f92672">&lt;&gt;</span>();
-</span></span><span style="display:flex;"><span>        template.<span style="color:#a6e22e">setConnectionFactory</span>(connectionFactory());
-</span></span><span style="display:flex;"><span>        template.<span style="color:#a6e22e">setDefaultSerializer</span>(<span style="color:#66d9ef">new</span> GenericJackson2JsonRedisSerializer());
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> template;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h4 id="2-캐시-전략-구현">2. 캐시 전략 구현</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@CacheConfig</span>(cacheNames <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;products&#34;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProductService</span> {
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Cacheable</span>(key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#productId&#34;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Product <span style="color:#a6e22e">getProduct</span>(Long productId) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> productRepository.<span style="color:#a6e22e">findById</span>(productId)
-</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">orElseThrow</span>(() <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">new</span> ProductNotFoundException(<span style="color:#e6db74">&#34;Product not found&#34;</span>));
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@CacheEvict</span>(key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#product.id&#34;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Product <span style="color:#a6e22e">updateProduct</span>(Product product) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> productRepository.<span style="color:#a6e22e">save</span>(product);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Cacheable</span>(key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#39;popular-products&#39;&#34;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Product<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">getPopularProducts</span>() {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> productRepository.<span style="color:#a6e22e">findPopularProducts</span>();
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h4 id="3-ttl-활용">3. TTL 활용</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TokenService</span> {
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> redisTemplate;
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">saveVerificationToken</span>(String email, String token) {
-</span></span><span style="display:flex;"><span>        String key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;verification:&#34;</span> <span style="color:#f92672">+</span> email;
-</span></span><span style="display:flex;"><span>        redisTemplate.<span style="color:#a6e22e">opsForValue</span>().<span style="color:#a6e22e">set</span>(key, token, Duration.<span style="color:#a6e22e">ofMinutes</span>(5));
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">verifyToken</span>(String email, String token) {
-</span></span><span style="display:flex;"><span>        String key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;verification:&#34;</span> <span style="color:#f92672">+</span> email;
-</span></span><span style="display:flex;"><span>        String storedToken <span style="color:#f92672">=</span> redisTemplate.<span style="color:#a6e22e">opsForValue</span>().<span style="color:#a6e22e">get</span>(key);
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> token.<span style="color:#a6e22e">equals</span>(storedToken);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="캐시-전략-설계">캐시 전략 설계</h3>
-<h4 id="1-cache-aside-pattern">1. Cache-Aside Pattern</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> Product <span style="color:#a6e22e">getProductWithCache</span>(Long productId) {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1. 캐시에서 조회</span>
-</span></span><span style="display:flex;"><span>    String cacheKey <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;product:&#34;</span> <span style="color:#f92672">+</span> productId;
-</span></span><span style="display:flex;"><span>    Product cachedProduct <span style="color:#f92672">=</span> redisTemplate.<span style="color:#a6e22e">opsForValue</span>().<span style="color:#a6e22e">get</span>(cacheKey);
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (cachedProduct <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> cachedProduct; <span style="color:#75715e">// Cache Hit</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2. DB에서 조회</span>
-</span></span><span style="display:flex;"><span>    Product product <span style="color:#f92672">=</span> productRepository.<span style="color:#a6e22e">findById</span>(productId)
-</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">orElseThrow</span>(() <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">new</span> ProductNotFoundException(<span style="color:#e6db74">&#34;Product not found&#34;</span>));
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3. 캐시에 저장</span>
-</span></span><span style="display:flex;"><span>    redisTemplate.<span style="color:#a6e22e">opsForValue</span>().<span style="color:#a6e22e">set</span>(cacheKey, product, Duration.<span style="color:#a6e22e">ofHours</span>(1));
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> product;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h4 id="2-write-through-pattern">2. Write-Through Pattern</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@CachePut</span>(key <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#product.id&#34;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> Product <span style="color:#a6e22e">saveProduct</span>(Product product) {
-</span></span><span style="display:flex;"><span>    Product savedProduct <span style="color:#f92672">=</span> productRepository.<span style="color:#a6e22e">save</span>(product);
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Spring Cache가 자동으로 Redis에 업데이트</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> savedProduct;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h2 id="-구현-결과">📊 구현 결과</h2>
+<p><strong>Redis 기반 세션 관리 전략:</strong></p>
+<ul>
+<li>Spring Session과 Redis를 통합하여 분산 세션 관리 구현</li>
+<li>Lettuce 커넥션 팩토리를 통한 비동기 연결 관리</li>
+<li>JSON 직렬화를 통한 데이터 효율성 확보</li>
+</ul>
+<p><strong>세션 데이터 관리:</strong></p>
+<ul>
+<li>사용자 인증 상태 저장</li>
+<li>서버 재시작 시에도 세션 유지</li>
+<li>다중 서버 환경에서 일관된 세션 접근</li>
+</ul>
+<h4 id="2-캐시-전략-구현">2. 캐시 전략 구현</h4>
+<p><strong>Spring Cache 추상화 활용:</strong></p>
+<ul>
+<li>@Cacheable 어노테이션을 통한 선언적 캐싱</li>
+<li>메소드 레벨에서 캐시 정책 정의</li>
+<li>자동 캐시 무효화 및 업데이트</li>
+</ul>
+<p><strong>캐시 키 전략:</strong></p>
+<ul>
+<li>개별 엔티티 ID 기반 캐싱</li>
+<li>연관 데이터 그룹 캐싱</li>
+<li>캐시 일관성 유지를 위한 업데이트/삭제 전략</li>
+</ul>
+<h4 id="3-ttl-활용">3. TTL 활용</h4>
+<p><strong>시간 기반 데이터 관리:</strong></p>
+<ul>
+<li>인증 토큰의 자동 만료 처리</li>
+<li>캐시 데이터의 전략적 만료 설정</li>
+<li>메모리 사용량 최적화를 위한 자동 정리</li>
+</ul>
+<p><strong>TTL 전략:</strong></p>
+<ul>
+<li>인증 토큰: 5분 단기 만료</li>
+<li>제품 정보 캐시: 1시간 중기 만료</li>
+<li>통계 데이터: 24시간 장기 만료</li>
+</ul>
+<h3 id="캐시-전략-설계">캐시 전략 설계</h3>
+<h4 id="1-cache-aside-pattern-채택">1. Cache-Aside Pattern 채택</h4>
+<p><strong>전략적 선택 이유:</strong></p>
+<ul>
+<li>캐시 데이터와 DB 데이터 간의 일관성 유지</li>
+<li>캐시 실패 시에도 애플리케이션 정상 동작 보장</li>
+<li>애플리케이션에서 직접 캐시 제어 가능</li>
+</ul>
+<p><strong>구현 패턴:</strong></p>
+<ol>
+<li>캐시에서 데이터 조회 시도</li>
+<li>Cache Miss 시 DB에서 데이터 로드</li>
+<li>조회된 데이터를 캐시에 저장</li>
+<li>적절한 TTL 설정으로 캐시 무효화</li>
+</ol>
+<h4 id="2-write-through-pattern-보완">2. Write-Through Pattern 보완</h4>
+<p><strong>데이터 일관성 전략:</strong></p>
+<ul>
+<li>데이터 업데이트 시 캐시 동기화</li>
+<li>@CachePut 어노테이션을 통한 자동 캐시 갱신</li>
+<li>캐시와 DB 간의 데이터 불일치 방지</li>
+</ul>
+<p><strong>성능 고려사항:</strong></p>
+<ul>
+<li>쓰기 지연 시간은 증가하지만 읽기 성능 향상</li>
+<li>비즈니스 로직에 따른 제선적 캐시 업데이트</li>
+</ul>
+<h2 id="-구현-결과">📊 구현 결과</h2>
 <h3 id="성과-지표">성과 지표</h3>
 <ul>
 <li><strong>응답 속도 향상</strong>: 자주 조회되는 제품 정보 응답 시간 85% 단축</li>
@@ -284,23 +262,19 @@ spring-boot-starter-data-redis 의존성을 활용하여 다음과 같이 구현
 <li>Redis Cluster 구성으로 수평적 확장 가능</li>
 </ul>
 <h3 id="모니터링-및-관리">모니터링 및 관리</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CacheMetrics</span> {
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> MeterRegistry meterRegistry;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> RedisTemplate<span style="color:#f92672">&lt;</span>String, Object<span style="color:#f92672">&gt;</span> redisTemplate;
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@EventListener</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">handleCacheHit</span>(CacheHitEvent event) {
-</span></span><span style="display:flex;"><span>        meterRegistry.<span style="color:#a6e22e">counter</span>(<span style="color:#e6db74">&#34;cache.hit&#34;</span>, <span style="color:#e6db74">&#34;cache&#34;</span>, event.<span style="color:#a6e22e">getCacheName</span>()).<span style="color:#a6e22e">increment</span>();
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@EventListener</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">handleCacheMiss</span>(CacheMissEvent event) {
-</span></span><span style="display:flex;"><span>        meterRegistry.<span style="color:#a6e22e">counter</span>(<span style="color:#e6db74">&#34;cache.miss&#34;</span>, <span style="color:#e6db74">&#34;cache&#34;</span>, event.<span style="color:#a6e22e">getCacheName</span>()).<span style="color:#a6e22e">increment</span>();
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><hr>
+<p><strong>캐시 성능 메트릭 수집:</strong></p>
+<ul>
+<li>Cache Hit/Miss Rate 추적을 통한 캐시 효율성 모니터링</li>
+<li>캐시별 사용량 및 성능 지표 측정</li>
+<li>실시간 알림을 통한 캐시 시스템 상태 모니터링</li>
+</ul>
+<p><strong>운영 관리 전략:</strong></p>
+<ul>
+<li>매일 캐시 히트율 리포트 작성</li>
+<li>캐시 데이터 만료 전략 업데이트</li>
+<li>Redis 메모리 사용량 및 성능 최적화</li>
+</ul>
+<hr>
 <p><strong>프로젝트</strong>: WashFit | <strong>기술</strong>: Redis, Spring Cache, Spring Session | <strong>기간</strong>: 2024.01 - 2024.04</p>
 <ul class="pa0">
   

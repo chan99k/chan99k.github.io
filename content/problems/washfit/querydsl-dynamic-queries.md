@@ -28,40 +28,15 @@ WashFit 서비스에서는 사용자가 다양한 조건으로 세차 용품을 
 기존 JPQL이나 Criteria API 대신 **QueryDSL**을 도입하여 다음과 같은 이점을 확보했습니다:
 
 #### 1. 컴파일 시점 오류 검증
-```java
-// QueryDSL - 컴파일 시점에 오류 발견
-QProduct product = QProduct.product;
-JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+QueryDSL은 Q클래스를 통해 엔티티의 필드를 타입 안전하게 참조할 수 있습니다. 이를 통해 쿼리 작성 시 오타나 잘못된 필드 참조를 컴파일 시점에 발견할 수 있었습니다.
 
-BooleanBuilder builder = new BooleanBuilder();
-if (searchCondition.getName() != null) {
-    builder.and(product.name.containsIgnoreCase(searchCondition.getName()));
-}
-```
+#### 2. 동적 쿼리 작성 용이성  
+BooleanBuilder를 활용하여 조건에 따라 WHERE 절을 동적으로 구성하는 방식을 채택했습니다. 각 검색 조건이 존재할 때만 해당 조건을 쿼리에 추가하는 방식으로, 복잡한 if-else 문 없이도 깔끔한 동적 쿼리를 작성할 수 있었습니다.
 
-#### 2. 동적 쿼리 작성 용이성
-조건에 따라 WHERE 절을 동적으로 구성하는 코드를 깔끔하게 작성할 수 있었습니다:
-
-```java
-public List<Product> searchProducts(ProductSearchCondition condition) {
-    BooleanBuilder builder = new BooleanBuilder();
-    
-    if (condition.getName() != null) {
-        builder.and(product.name.containsIgnoreCase(condition.getName()));
-    }
-    if (condition.getBrand() != null) {
-        builder.and(product.brand.eq(condition.getBrand()));
-    }
-    if (condition.getCategory() != null) {
-        builder.and(product.category.eq(condition.getCategory()));
-    }
-    
-    return queryFactory
-        .selectFrom(product)
-        .where(builder)
-        .fetch();
-}
-```
+**주요 구현 패턴:**
+- **BooleanBuilder**: 조건별 동적 WHERE 절 구성
+- **메소드 체이닝**: 가독성 높은 쿼리 작성
+- **조건부 필터링**: null 체크를 통한 선택적 조건 적용
 
 #### 3. 타입 안정성
 엔티티 필드의 타입 변경 시 관련 쿼리도 함께 오류로 감지되어 일관성을 유지할 수 있었습니다.
