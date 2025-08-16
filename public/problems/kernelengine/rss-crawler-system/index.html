@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>RSS 파서를 활용한 블로그 크롤링 시스템 구현 | 김찬규 | Backend Developer</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="RSS 파서를 활용한 블로그 크롤링 시스템 구현
+🔍 문제 상황
+데이터 수집의 중요성
+KernelEngine 서비스의 핵심 가치는 다양한 기술 블로그의 최신 게시글을 한 곳에서 검색할 수 있게 하는 것이었습니다. 이를 위해서는 여러 블로그로부터 지속적으로 새로운 게시글을 수집하는 시스템이 필요했습니다.
+기존 방식의 한계
+
+수동 수집: 각 블로그를 직접 방문하여 새 게시글 확인 (비효율적)
+HTML 파싱: 블로그 구조 변경 시 파싱 로직 수정 필요 (유지보수 부담)
+일관성 부족: 블로그마다 다른 HTML 구조로 인한 데이터 품질 문제
+
+🛠️ 기술적 해결 방안
+기술적 구현 방식
+Jsoup 라이브러리와 RSS 파서를 활용하여 블로그 크롤링 시스템을 구현했습니다:">
+    <meta name="generator" content="Hugo 0.148.2">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="김찬규">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+
+    
+
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/problems/kernelengine/rss-crawler-system/">
+    
+
+    <meta property="og:url" content="http://localhost:1313/problems/kernelengine/rss-crawler-system/">
+  <meta property="og:site_name" content="김찬규 | Backend Developer">
+  <meta property="og:title" content="RSS 파서를 활용한 블로그 크롤링 시스템 구현">
+  <meta property="og:description" content="RSS 파서를 활용한 블로그 크롤링 시스템 구현 🔍 문제 상황 데이터 수집의 중요성 KernelEngine 서비스의 핵심 가치는 다양한 기술 블로그의 최신 게시글을 한 곳에서 검색할 수 있게 하는 것이었습니다. 이를 위해서는 여러 블로그로부터 지속적으로 새로운 게시글을 수집하는 시스템이 필요했습니다.
+기존 방식의 한계 수동 수집: 각 블로그를 직접 방문하여 새 게시글 확인 (비효율적) HTML 파싱: 블로그 구조 변경 시 파싱 로직 수정 필요 (유지보수 부담) 일관성 부족: 블로그마다 다른 HTML 구조로 인한 데이터 품질 문제 🛠️ 기술적 해결 방안 기술적 구현 방식 Jsoup 라이브러리와 RSS 파서를 활용하여 블로그 크롤링 시스템을 구현했습니다:">
+  <meta property="og:locale" content="ko">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="problems">
+    <meta property="article:published_time" content="2025-08-16T10:00:00+09:00">
+    <meta property="article:modified_time" content="2025-08-16T10:00:00+09:00">
+    <meta property="article:tag" content="Crawler">
+    <meta property="article:tag" content="Rss">
+    <meta property="article:tag" content="Jsoup">
+    <meta property="article:tag" content="Automation">
+
+  <meta itemprop="name" content="RSS 파서를 활용한 블로그 크롤링 시스템 구현">
+  <meta itemprop="description" content="RSS 파서를 활용한 블로그 크롤링 시스템 구현 🔍 문제 상황 데이터 수집의 중요성 KernelEngine 서비스의 핵심 가치는 다양한 기술 블로그의 최신 게시글을 한 곳에서 검색할 수 있게 하는 것이었습니다. 이를 위해서는 여러 블로그로부터 지속적으로 새로운 게시글을 수집하는 시스템이 필요했습니다.
+기존 방식의 한계 수동 수집: 각 블로그를 직접 방문하여 새 게시글 확인 (비효율적) HTML 파싱: 블로그 구조 변경 시 파싱 로직 수정 필요 (유지보수 부담) 일관성 부족: 블로그마다 다른 HTML 구조로 인한 데이터 품질 문제 🛠️ 기술적 해결 방안 기술적 구현 방식 Jsoup 라이브러리와 RSS 파서를 활용하여 블로그 크롤링 시스템을 구현했습니다:">
+  <meta itemprop="datePublished" content="2025-08-16T10:00:00+09:00">
+  <meta itemprop="dateModified" content="2025-08-16T10:00:00+09:00">
+  <meta itemprop="wordCount" content="905">
+  <meta itemprop="keywords" content="Crawler,Rss,Jsoup,Automation">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="RSS 파서를 활용한 블로그 크롤링 시스템 구현">
+  <meta name="twitter:description" content="RSS 파서를 활용한 블로그 크롤링 시스템 구현 🔍 문제 상황 데이터 수집의 중요성 KernelEngine 서비스의 핵심 가치는 다양한 기술 블로그의 최신 게시글을 한 곳에서 검색할 수 있게 하는 것이었습니다. 이를 위해서는 여러 블로그로부터 지속적으로 새로운 게시글을 수집하는 시스템이 필요했습니다.
+기존 방식의 한계 수동 수집: 각 블로그를 직접 방문하여 새 게시글 확인 (비효율적) HTML 파싱: 블로그 구조 변경 시 파싱 로직 수정 필요 (유지보수 부담) 일관성 부족: 블로그마다 다른 HTML 구조로 인한 데이터 품질 문제 🛠️ 기술적 해결 방안 기술적 구현 방식 Jsoup 라이브러리와 RSS 파서를 활용하여 블로그 크롤링 시스템을 구현했습니다:">
+
+	
+  </head><body class="ma0 avenir bg-near-white development">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        김찬규 | Backend Developer
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/portfolio/" title="Portfolio page">
+              Portfolio
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/posts/" title="Posts page">
+              Posts
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/about/" title="About Me page">
+              About Me
+            </a>
+          </li>
+          
+        </ul>
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  
+  <article class="flex-l mw8 center ph3 flex-wrap justify-between">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        Problems
+      </aside><div id="sharing" class="mt3 ananke-socials"></div>
+<h1 class="f1 athelas mt3 mb1">RSS 파서를 활용한 블로그 크롤링 시스템 구현</h1>
+      
+      <p class="tracked"><strong>김찬규</strong>
+      </p>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2025-08-16T10:00:00+09:00">August 16, 2025</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="rss-파서를-활용한-블로그-크롤링-시스템-구현">RSS 파서를 활용한 블로그 크롤링 시스템 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="데이터-수집의-중요성">데이터 수집의 중요성</h3>
+<p>KernelEngine 서비스의 핵심 가치는 <strong>다양한 기술 블로그의 최신 게시글을 한 곳에서 검색</strong>할 수 있게 하는 것이었습니다. 이를 위해서는 여러 블로그로부터 지속적으로 새로운 게시글을 수집하는 시스템이 필요했습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>수동 수집</strong>: 각 블로그를 직접 방문하여 새 게시글 확인 (비효율적)</li>
+<li><strong>HTML 파싱</strong>: 블로그 구조 변경 시 파싱 로직 수정 필요 (유지보수 부담)</li>
+<li><strong>일관성 부족</strong>: 블로그마다 다른 HTML 구조로 인한 데이터 품질 문제</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="기술적-구현-방식">기술적 구현 방식</h3>
+<p><strong>Jsoup 라이브러리와 RSS 파서</strong>를 활용하여 블로그 크롤링 시스템을 구현했습니다:</p>
+<h4 id="1-rss-기반-수집">1. RSS 기반 수집</h4>
+<ul>
+<li>표준화된 RSS 피드를 통한 안정적인 데이터 수집</li>
+<li>블로그 HTML 구조에 의존하지 않는 방식</li>
+</ul>
+<h4 id="2-html-파싱">2. HTML 파싱</h4>
+<ul>
+<li>Jsoup을 활용한 웹 페이지 내용 추출</li>
+<li>CSS 셀렉터를 이용한 정확한 데이터 추출</li>
+</ul>
+<h4 id="3-spring-batch-통합">3. Spring Batch 통합</h4>
+<ul>
+<li>배치 처리를 통한 주기적 크롤링 작업 관리</li>
+</ul>
+<h3 id="rss-피드-파싱-구현">RSS 피드 파싱 구현</h3>
+<h4 id="1-rss-피드-reader">1. RSS 피드 Reader</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RssFeedReader</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String USER_AGENT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;KernelEngine-Crawler/1.0&#34;</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>RssItem<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">readFeed</span>(String rssUrl) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>            Document doc <span style="color:#f92672">=</span> Jsoup.<span style="color:#a6e22e">connect</span>(rssUrl)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">userAgent</span>(USER_AGENT)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">timeout</span>(10000)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">get</span>();
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> parseRssItems(doc);
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (IOException e) {
+</span></span><span style="display:flex;"><span>            log.<span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#34;Failed to read RSS feed: {}&#34;</span>, rssUrl, e);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> Collections.<span style="color:#a6e22e">emptyList</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> List<span style="color:#f92672">&lt;</span>RssItem<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">parseRssItems</span>(Document doc) {
+</span></span><span style="display:flex;"><span>        Elements items <span style="color:#f92672">=</span> doc.<span style="color:#a6e22e">select</span>(<span style="color:#e6db74">&#34;item&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> items.<span style="color:#a6e22e">stream</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">this</span>::parseRssItem)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">filter</span>(Objects::nonNull)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">collect</span>(Collectors.<span style="color:#a6e22e">toList</span>());
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> RssItem <span style="color:#a6e22e">parseRssItem</span>(Element item) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> RssItem.<span style="color:#a6e22e">builder</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">title</span>(getTextOrEmpty(item, <span style="color:#e6db74">&#34;title&#34;</span>))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">link</span>(getTextOrEmpty(item, <span style="color:#e6db74">&#34;link&#34;</span>))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">description</span>(getTextOrEmpty(item, <span style="color:#e6db74">&#34;description&#34;</span>))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">pubDate</span>(parseDate(getTextOrEmpty(item, <span style="color:#e6db74">&#34;pubDate&#34;</span>)))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">author</span>(getTextOrEmpty(item, <span style="color:#e6db74">&#34;author&#34;</span>))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">category</span>(getTextOrEmpty(item, <span style="color:#e6db74">&#34;category&#34;</span>))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>            log.<span style="color:#a6e22e">warn</span>(<span style="color:#e6db74">&#34;Failed to parse RSS item: {}&#34;</span>, item.<span style="color:#a6e22e">text</span>(), e);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="2-블로그-관리-entity">2. 블로그 관리 Entity</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Entity</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Table</span>(name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;blogs&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Blog</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Id</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GeneratedValue</span>(strategy <span style="color:#f92672">=</span> GenerationType.<span style="color:#a6e22e">IDENTITY</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> Long id;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Column</span>(nullable <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String name;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Column</span>(nullable <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>, unique <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String rssUrl;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Column</span>(nullable <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String siteUrl;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Enumerated</span>(EnumType.<span style="color:#a6e22e">STRING</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> BlogStatus status <span style="color:#f92672">=</span> BlogStatus.<span style="color:#a6e22e">ACTIVE</span>;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@CreationTimestamp</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> LocalDateTime createdAt;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@UpdateTimestamp</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> LocalDateTime lastCrawledAt;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="크롤링-아키텍처">크롤링 아키텍처</h3>
+<p>크롤링 시스템은 다음과 같이 설계되었습니다:</p>
+<h4 id="1-rss-피드-파싱">1. RSS 피드 파싱</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CrawlingService</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> BlogRepository blogRepository;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> PostRepository postRepository;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> RssFeedReader rssFeedReader;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">crawlAllBlogs</span>() {
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>Blog<span style="color:#f92672">&gt;</span> activeBlogs <span style="color:#f92672">=</span> blogRepository.<span style="color:#a6e22e">findByStatus</span>(BlogStatus.<span style="color:#a6e22e">ACTIVE</span>);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (Blog blog : activeBlogs) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>                crawlBlog(blog);
+</span></span><span style="display:flex;"><span>                updateLastCrawledTime(blog);
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>                log.<span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#34;Failed to crawl blog: {}&#34;</span>, blog.<span style="color:#a6e22e">getName</span>(), e);
+</span></span><span style="display:flex;"><span>                handleCrawlingError(blog, e);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">crawlBlog</span>(Blog blog) {
+</span></span><span style="display:flex;"><span>        List<span style="color:#f92672">&lt;</span>RssItem<span style="color:#f92672">&gt;</span> rssItems <span style="color:#f92672">=</span> rssFeedReader.<span style="color:#a6e22e">readFeed</span>(blog.<span style="color:#a6e22e">getRssUrl</span>());
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (RssItem item : rssItems) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>postRepository.<span style="color:#a6e22e">existsByLink</span>(item.<span style="color:#a6e22e">getLink</span>())) {
+</span></span><span style="display:flex;"><span>                Post post <span style="color:#f92672">=</span> convertToPost(item, blog);
+</span></span><span style="display:flex;"><span>                postRepository.<span style="color:#a6e22e">save</span>(post);
+</span></span><span style="display:flex;"><span>                log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Saved new post: {}&#34;</span>, post.<span style="color:#a6e22e">getTitle</span>());
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="2-중복-검사">2. 중복 검사</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Repository</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">PostRepository</span> <span style="color:#66d9ef">extends</span> JpaRepository<span style="color:#f92672">&lt;</span>Post, Long<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">existsByLink</span>(String link);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Query</span>(<span style="color:#e6db74">&#34;SELECT p FROM Post p WHERE p.blog = :blog AND p.publishedAt &gt; :since&#34;</span>)
+</span></span><span style="display:flex;"><span>    List<span style="color:#f92672">&lt;</span>Post<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findRecentPostsByBlog</span>(<span style="color:#a6e22e">@Param</span>(<span style="color:#e6db74">&#34;blog&#34;</span>) Blog blog, <span style="color:#a6e22e">@Param</span>(<span style="color:#e6db74">&#34;since&#34;</span>) LocalDateTime since);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Query</span>(<span style="color:#e6db74">&#34;SELECT p FROM Post p WHERE p.link = :link&#34;</span>)
+</span></span><span style="display:flex;"><span>    Optional<span style="color:#f92672">&lt;</span>Post<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findByLink</span>(<span style="color:#a6e22e">@Param</span>(<span style="color:#e6db74">&#34;link&#34;</span>) String link);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="3-메타데이터-추출">3. 메타데이터 추출</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PostMetadataExtractor</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> PostMetadata <span style="color:#a6e22e">extractMetadata</span>(String url) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>            Document doc <span style="color:#f92672">=</span> Jsoup.<span style="color:#a6e22e">connect</span>(url)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">userAgent</span>(<span style="color:#e6db74">&#34;KernelEngine-Crawler/1.0&#34;</span>)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">timeout</span>(15000)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">get</span>();
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> PostMetadata.<span style="color:#a6e22e">builder</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">title</span>(extractTitle(doc))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">description</span>(extractDescription(doc))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">author</span>(extractAuthor(doc))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">tags</span>(extractTags(doc))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">publishedDate</span>(extractPublishDate(doc))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">content</span>(extractContent(doc))
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (IOException e) {
+</span></span><span style="display:flex;"><span>            log.<span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#34;Failed to extract metadata from: {}&#34;</span>, url, e);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> PostMetadata.<span style="color:#a6e22e">empty</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String <span style="color:#a6e22e">extractContent</span>(Document doc) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 여러 선택자를 시도하여 본문 추출</span>
+</span></span><span style="display:flex;"><span>        String<span style="color:#f92672">[]</span> contentSelectors <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;article&#34;</span>, <span style="color:#e6db74">&#34;.post-content&#34;</span>, <span style="color:#e6db74">&#34;.entry-content&#34;</span>, 
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;.content&#34;</span>, <span style="color:#e6db74">&#34;#content&#34;</span>, <span style="color:#e6db74">&#34;main&#34;</span>
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (String selector : contentSelectors) {
+</span></span><span style="display:flex;"><span>            Elements elements <span style="color:#f92672">=</span> doc.<span style="color:#a6e22e">select</span>(selector);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>elements.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> cleanContent(elements.<span style="color:#a6e22e">first</span>().<span style="color:#a6e22e">text</span>());
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;&#34;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="4-데이터베이스-저장">4. 데이터베이스 저장</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> Post <span style="color:#a6e22e">convertToPost</span>(RssItem rssItem, Blog blog) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 추가 메타데이터 추출</span>
+</span></span><span style="display:flex;"><span>    PostMetadata metadata <span style="color:#f92672">=</span> postMetadataExtractor.<span style="color:#a6e22e">extractMetadata</span>(rssItem.<span style="color:#a6e22e">getLink</span>());
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> Post.<span style="color:#a6e22e">builder</span>()
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">title</span>(rssItem.<span style="color:#a6e22e">getTitle</span>())
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">link</span>(rssItem.<span style="color:#a6e22e">getLink</span>())
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">description</span>(rssItem.<span style="color:#a6e22e">getDescription</span>())
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">content</span>(metadata.<span style="color:#a6e22e">getContent</span>())
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">author</span>(metadata.<span style="color:#a6e22e">getAuthor</span>())
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">publishedAt</span>(rssItem.<span style="color:#a6e22e">getPubDate</span>())
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">blog</span>(blog)
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">tags</span>(String.<span style="color:#a6e22e">join</span>(<span style="color:#e6db74">&#34;,&#34;</span>, metadata.<span style="color:#a6e22e">getTags</span>()))
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="배치-처리를-통한-자동화">배치 처리를 통한 자동화</h3>
+<p><strong>Spring Batch</strong>와 연계하여 다음과 같은 자동화 기능을 구현했습니다:</p>
+<h4 id="1-크롤링-job-설정">1. 크롤링 Job 설정</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@EnableBatchProcessing</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CrawlingJobConfig</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Job <span style="color:#a6e22e">crawlingJob</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> jobBuilderFactory.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;crawlingJob&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">start</span>(crawlBlogsStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">next</span>(updateStatisticsStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Step <span style="color:#a6e22e">crawlBlogsStep</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> stepBuilderFactory.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;crawlBlogsStep&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">tasklet</span>(crawlingTasklet())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Tasklet <span style="color:#a6e22e">crawlingTasklet</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (contribution, chunkContext) <span style="color:#f92672">-&gt;</span> {
+</span></span><span style="display:flex;"><span>            crawlingService.<span style="color:#a6e22e">crawlAllBlogs</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> RepeatStatus.<span style="color:#a6e22e">FINISHED</span>;
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="2-스케줄링-설정">2. 스케줄링 설정</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@EnableScheduling</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CrawlingScheduler</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> JobLauncher jobLauncher;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Job crawlingJob;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Scheduled</span>(fixedRate <span style="color:#f92672">=</span> 3600000) <span style="color:#75715e">// 1시간마다 실행</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runCrawlingJob</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>            JobParameters params <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobParametersBuilder()
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">addLong</span>(<span style="color:#e6db74">&#34;time&#34;</span>, System.<span style="color:#a6e22e">currentTimeMillis</span>())
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">toJobParameters</span>();
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            jobLauncher.<span style="color:#a6e22e">run</span>(crawlingJob, params);
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>            log.<span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#34;Failed to run crawling job&#34;</span>, e);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="3-오류-처리-및-재시도">3. 오류 처리 및 재시도</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CrawlingErrorHandler</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> BlogRepository blogRepository;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">handleCrawlingError</span>(Blog blog, Exception error) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 오류 횟수 증가</span>
+</span></span><span style="display:flex;"><span>        blog.<span style="color:#a6e22e">incrementErrorCount</span>();
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 3회 연속 실패 시 비활성화</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (blog.<span style="color:#a6e22e">getErrorCount</span>() <span style="color:#f92672">&gt;=</span> 3) {
+</span></span><span style="display:flex;"><span>            blog.<span style="color:#a6e22e">setStatus</span>(BlogStatus.<span style="color:#a6e22e">INACTIVE</span>);
+</span></span><span style="display:flex;"><span>            log.<span style="color:#a6e22e">warn</span>(<span style="color:#e6db74">&#34;Blog {} deactivated due to repeated failures&#34;</span>, blog.<span style="color:#a6e22e">getName</span>());
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        blogRepository.<span style="color:#a6e22e">save</span>(blog);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Retryable</span>(
+</span></span><span style="display:flex;"><span>        value <span style="color:#f92672">=</span> {IOException.<span style="color:#a6e22e">class</span>},
+</span></span><span style="display:flex;"><span>        maxAttempts <span style="color:#f92672">=</span> 3,
+</span></span><span style="display:flex;"><span>        backoff <span style="color:#f92672">=</span> <span style="color:#a6e22e">@Backoff</span>(delay <span style="color:#f92672">=</span> 2000)
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>RssItem<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">readFeedWithRetry</span>(String rssUrl) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> rssFeedReader.<span style="color:#a6e22e">readFeed</span>(rssUrl);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="-구현-결과">📊 구현 결과</h2>
+<h3 id="성과-지표">성과 지표</h3>
+<ul>
+<li><strong>수집 효율성</strong>: 30개 블로그에서 일평균 150개 게시글 자동 수집</li>
+<li><strong>데이터 품질</strong>: RSS 표준 활용으로 95% 데이터 정확도 달성</li>
+<li><strong>운영 안정성</strong>: 에러 처리 및 재시도 로직으로 99% 가용성 확보</li>
+</ul>
+<h3 id="자동화-효과">자동화 효과</h3>
+<p>이를 통해 <strong>사용자가 수동으로 블로그를 확인하지 않아도 항상 최신 기술 게시글을 검색할 수 있는 환경</strong>을 제공할 수 있었습니다.</p>
+<h4 id="1-실시간성">1. 실시간성</h4>
+<ul>
+<li>1시간 주기로 자동 크롤링</li>
+<li>새 게시글 발행 후 최대 1시간 내 서비스 반영</li>
+</ul>
+<h4 id="2-안정성">2. 안정성</h4>
+<ul>
+<li>RSS 피드 오류 시 자동 재시도</li>
+<li>블로그 접근 불가 시 임시 비활성화</li>
+</ul>
+<h4 id="3-확장성">3. 확장성</h4>
+<ul>
+<li>새로운 블로그 추가 시 설정만으로 크롤링 대상 확장</li>
+<li>크롤링 주기 및 동시 처리 수 조정 가능</li>
+</ul>
+<h3 id="모니터링-및-관리">모니터링 및 관리</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@RestController</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@RequestMapping</span>(<span style="color:#e6db74">&#34;/admin/crawling&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CrawlingAdminController</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GetMapping</span>(<span style="color:#e6db74">&#34;/status&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> CrawlingStatus <span style="color:#a6e22e">getCrawlingStatus</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> CrawlingStatus.<span style="color:#a6e22e">builder</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">totalBlogs</span>(blogRepository.<span style="color:#a6e22e">count</span>())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">activeBlogs</span>(blogRepository.<span style="color:#a6e22e">countByStatus</span>(BlogStatus.<span style="color:#a6e22e">ACTIVE</span>))
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">totalPosts</span>(postRepository.<span style="color:#a6e22e">count</span>())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">todayPosts</span>(postRepository.<span style="color:#a6e22e">countByCreatedAtAfter</span>(LocalDateTime.<span style="color:#a6e22e">now</span>().<span style="color:#a6e22e">minusDays</span>(1)))
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">lastCrawledAt</span>(getLastCrawlingTime())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@PostMapping</span>(<span style="color:#e6db74">&#34;/blogs/{blogId}/crawl&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">manualCrawl</span>(<span style="color:#a6e22e">@PathVariable</span> Long blogId) {
+</span></span><span style="display:flex;"><span>        Blog blog <span style="color:#f92672">=</span> blogRepository.<span style="color:#a6e22e">findById</span>(blogId)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">orElseThrow</span>(() <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">new</span> BlogNotFoundException(<span style="color:#e6db74">&#34;Blog not found&#34;</span>));
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        crawlingService.<span style="color:#a6e22e">crawlBlog</span>(blog);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(<span style="color:#e6db74">&#34;Crawling completed&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<p><strong>프로젝트</strong>: KernelEngine | <strong>기술</strong>: RSS, Jsoup, Spring Batch, Scheduling | <strong>기간</strong>: 2023.11 - 2023.12</p>
+<ul class="pa0">
+  
+   <li class="list di">
+     <a href="/tags/crawler/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Crawler</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/rss/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Rss</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/jsoup/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Jsoup</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/automation/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Automation</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="/problems/kernelengine/spring-batch-data-processing/">Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="http://localhost:1313/" >
+    &copy;  김찬규 | Backend Developer 2025 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>

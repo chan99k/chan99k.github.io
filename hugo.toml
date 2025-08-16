@@ -18,18 +18,23 @@ theme = 'ananke'
     name = "email"
     url = "mailto:kjkj5868@gmail.com"
 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
 [menu]
   [[menu.main]]
-    name = "포트폴리오"
+    name = "Portfolio"
     url = "/portfolio/"
     weight = 10
     
   [[menu.main]]
-    name = "블로그"
+    name = "Posts"
     url = "/posts/"
     weight = 20
     
   [[menu.main]]
-    name = "소개"
+    name = "About Me"
     url = "/about/"
     weight = 30

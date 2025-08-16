@@ -6,20 +6,19 @@ tags: ["introduction", "backend", "development"]
 categories: ["blog"]
 ---
 
-안녕하세요! 백엔드 개발자 Chan99K의 포트폴리오 & 블로그에 오신 것을 환영합니다.
+안녕하세요! 백엔드 개발자 chan99k 의 포트폴리오 & 블로그에 오신 것을 환영합니다.
 
 ## 🚀 이 블로그에서 다룰 내용
 
 - **백엔드 개발 경험담**
 - **기술 스택 리뷰**
 - **프로젝트 회고**
-- **개발 트렌드 분석**
 
-## 💻 주요 기술 스택
 
-- **언어**: Java, Python, Go
-- **프레임워크**: Spring Boot, FastAPI
-- **데이터베이스**: PostgreSQL, MongoDB, Redis
-- **인프라**: Docker, Kubernetes, AWS
+## 💻 관심 기술
 
-앞으로 많은 유용한 콘텐츠로 찾아뵙겠습니다!
+- **언어**: Java
+- **프레임워크**: Spring Boot
+- **데이터베이스**: MySQL, MongoDB, Redis
+- **인프라**: Docker, AWS
+

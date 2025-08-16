@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현 | 김찬규 | Backend Developer</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현
+🔍 문제 상황
+검색 기능 요구사항
+KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 다양한 검색 기술 중에서 프로젝트 규모와 요구사항에 적합한 솔루션을 선택해야 했습니다.
+기술적 고려사항
+검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:
+1. MySQL LIKE 검색
+SELECT * FROM posts 
+WHERE title LIKE &#39;%Spring%&#39; OR content LIKE &#39;%Spring%&#39;;
+
+장점: 구현이 간단, 추가 인프라 불필요
+단점: 성능이 느림, 복잡한 검색 불가능
+
+2. MySQL FULLTEXT 검색
+SELECT * FROM posts 
+WHERE MATCH(title, content) AGAINST(&#39;Spring Boot&#39; IN NATURAL LANGUAGE MODE);
+
+장점: 내장된 전문 검색 기능, 관련도 점수 제공
+단점: 기능이 제한적, 고급 검색 기능 부족
+
+3. Elasticsearch
+
+장점: 고도화된 검색 기능, 분석 기능
+단점: 추가 인프라 필요, 운영 복잡도 증가
+
+🛠️ 기술적 해결 방안
+MySQL FULLTEXT 선택 이유
+프로젝트의 초기 단계에서는 MySQL FULLTEXT 인덱스를 활용한 검색 기능을 구현했습니다:">
+    <meta name="generator" content="Hugo 0.148.2">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="김찬규">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+
+    
+
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/problems/kernelengine/mysql-fulltext-search/">
+    
+
+    <meta property="og:url" content="http://localhost:1313/problems/kernelengine/mysql-fulltext-search/">
+  <meta property="og:site_name" content="김찬규 | Backend Developer">
+  <meta property="og:title" content="MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현">
+  <meta property="og:description" content="MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현 🔍 문제 상황 검색 기능 요구사항 KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 다양한 검색 기술 중에서 프로젝트 규모와 요구사항에 적합한 솔루션을 선택해야 했습니다.
+기술적 고려사항 검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:
+1. MySQL LIKE 검색 SELECT * FROM posts WHERE title LIKE &#39;%Spring%&#39; OR content LIKE &#39;%Spring%&#39;; 장점: 구현이 간단, 추가 인프라 불필요 단점: 성능이 느림, 복잡한 검색 불가능 2. MySQL FULLTEXT 검색 SELECT * FROM posts WHERE MATCH(title, content) AGAINST(&#39;Spring Boot&#39; IN NATURAL LANGUAGE MODE); 장점: 내장된 전문 검색 기능, 관련도 점수 제공 단점: 기능이 제한적, 고급 검색 기능 부족 3. Elasticsearch 장점: 고도화된 검색 기능, 분석 기능 단점: 추가 인프라 필요, 운영 복잡도 증가 🛠️ 기술적 해결 방안 MySQL FULLTEXT 선택 이유 프로젝트의 초기 단계에서는 MySQL FULLTEXT 인덱스를 활용한 검색 기능을 구현했습니다:">
+  <meta property="og:locale" content="ko">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="problems">
+    <meta property="article:published_time" content="2025-08-16T10:00:00+09:00">
+    <meta property="article:modified_time" content="2025-08-16T10:00:00+09:00">
+    <meta property="article:tag" content="Search">
+    <meta property="article:tag" content="Mysql">
+    <meta property="article:tag" content="Fulltext">
+    <meta property="article:tag" content="Performance">
+
+  <meta itemprop="name" content="MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현">
+  <meta itemprop="description" content="MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현 🔍 문제 상황 검색 기능 요구사항 KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 다양한 검색 기술 중에서 프로젝트 규모와 요구사항에 적합한 솔루션을 선택해야 했습니다.
+기술적 고려사항 검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:
+1. MySQL LIKE 검색 SELECT * FROM posts WHERE title LIKE &#39;%Spring%&#39; OR content LIKE &#39;%Spring%&#39;; 장점: 구현이 간단, 추가 인프라 불필요 단점: 성능이 느림, 복잡한 검색 불가능 2. MySQL FULLTEXT 검색 SELECT * FROM posts WHERE MATCH(title, content) AGAINST(&#39;Spring Boot&#39; IN NATURAL LANGUAGE MODE); 장점: 내장된 전문 검색 기능, 관련도 점수 제공 단점: 기능이 제한적, 고급 검색 기능 부족 3. Elasticsearch 장점: 고도화된 검색 기능, 분석 기능 단점: 추가 인프라 필요, 운영 복잡도 증가 🛠️ 기술적 해결 방안 MySQL FULLTEXT 선택 이유 프로젝트의 초기 단계에서는 MySQL FULLTEXT 인덱스를 활용한 검색 기능을 구현했습니다:">
+  <meta itemprop="datePublished" content="2025-08-16T10:00:00+09:00">
+  <meta itemprop="dateModified" content="2025-08-16T10:00:00+09:00">
+  <meta itemprop="wordCount" content="719">
+  <meta itemprop="keywords" content="Search,Mysql,Fulltext,Performance">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현">
+  <meta name="twitter:description" content="MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현 🔍 문제 상황 검색 기능 요구사항 KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 다양한 검색 기술 중에서 프로젝트 규모와 요구사항에 적합한 솔루션을 선택해야 했습니다.
+기술적 고려사항 검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:
+1. MySQL LIKE 검색 SELECT * FROM posts WHERE title LIKE &#39;%Spring%&#39; OR content LIKE &#39;%Spring%&#39;; 장점: 구현이 간단, 추가 인프라 불필요 단점: 성능이 느림, 복잡한 검색 불가능 2. MySQL FULLTEXT 검색 SELECT * FROM posts WHERE MATCH(title, content) AGAINST(&#39;Spring Boot&#39; IN NATURAL LANGUAGE MODE); 장점: 내장된 전문 검색 기능, 관련도 점수 제공 단점: 기능이 제한적, 고급 검색 기능 부족 3. Elasticsearch 장점: 고도화된 검색 기능, 분석 기능 단점: 추가 인프라 필요, 운영 복잡도 증가 🛠️ 기술적 해결 방안 MySQL FULLTEXT 선택 이유 프로젝트의 초기 단계에서는 MySQL FULLTEXT 인덱스를 활용한 검색 기능을 구현했습니다:">
+
+	
+  </head><body class="ma0 avenir bg-near-white development">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        김찬규 | Backend Developer
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/portfolio/" title="Portfolio page">
+              Portfolio
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/posts/" title="Posts page">
+              Posts
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/about/" title="About Me page">
+              About Me
+            </a>
+          </li>
+          
+        </ul>
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  
+  <article class="flex-l mw8 center ph3 flex-wrap justify-between">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        Problems
+      </aside><div id="sharing" class="mt3 ananke-socials"></div>
+<h1 class="f1 athelas mt3 mb1">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h1>
+      
+      <p class="tracked"><strong>김찬규</strong>
+      </p>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2025-08-16T10:00:00+09:00">August 16, 2025</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="mysql-fulltext를-활용한-효율적인-검색-기능-구현">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="검색-기능-요구사항">검색 기능 요구사항</h3>
+<p>KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 다양한 검색 기술 중에서 프로젝트 규모와 요구사항에 적합한 솔루션을 선택해야 했습니다.</p>
+<h3 id="기술적-고려사항">기술적 고려사항</h3>
+<p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
+<h4 id="1-mysql-like-검색">1. MySQL LIKE 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> title <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span> <span style="color:#66d9ef">OR</span> content <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span>;
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 구현이 간단, 추가 인프라 불필요</li>
+<li><strong>단점</strong>: 성능이 느림, 복잡한 검색 불가능</li>
+</ul>
+<h4 id="2-mysql-fulltext-검색">2. MySQL FULLTEXT 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">MATCH</span>(title, content) AGAINST(<span style="color:#e6db74">&#39;Spring Boot&#39;</span> <span style="color:#66d9ef">IN</span> <span style="color:#66d9ef">NATURAL</span> <span style="color:#66d9ef">LANGUAGE</span> <span style="color:#66d9ef">MODE</span>);
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 내장된 전문 검색 기능, 관련도 점수 제공</li>
+<li><strong>단점</strong>: 기능이 제한적, 고급 검색 기능 부족</li>
+</ul>
+<h4 id="3-elasticsearch">3. Elasticsearch</h4>
+<ul>
+<li><strong>장점</strong>: 고도화된 검색 기능, 분석 기능</li>
+<li><strong>단점</strong>: 추가 인프라 필요, 운영 복잡도 증가</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="mysql-fulltext-선택-이유">MySQL FULLTEXT 선택 이유</h3>
+<p>프로젝트의 초기 단계에서는 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
+<h4 id="1-개발-효율성">1. 개발 효율성</h4>
+<ul>
+<li>기존 MySQL 데이터베이스 인프라 활용으로 추가 시스템 도입 없음</li>
+<li>개발 시간 단축 및 운영 부담 최소화</li>
+</ul>
+<h4 id="2-성능-최적화">2. 성능 최적화</h4>
+<ul>
+<li>FULLTEXT 인덱스를 통한 빠른 텍스트 검색 가능</li>
+<li>LIKE 검색 대비 10배 이상의 성능 향상</li>
+</ul>
+<h4 id="3-단순성">3. 단순성</h4>
+<ul>
+<li>복잡한 검색 엔진 운영 부담 없이 필요한 검색 기능 제공</li>
+</ul>
+<h3 id="구현-세부사항">구현 세부사항</h3>
+<h4 id="1-테이블-구조-및-인덱스-설정">1. 테이블 구조 및 인덱스 설정</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> posts (
+</span></span><span style="display:flex;"><span>    id BIGINT AUTO_INCREMENT <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span>,
+</span></span><span style="display:flex;"><span>    title VARCHAR(<span style="color:#ae81ff">255</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>    content TEXT <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>    author VARCHAR(<span style="color:#ae81ff">100</span>),
+</span></span><span style="display:flex;"><span>    created_at <span style="color:#66d9ef">TIMESTAMP</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">CURRENT_TIMESTAMP</span>,
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    FULLTEXT(title, content) <span style="color:#66d9ef">WITH</span> PARSER ngram
+</span></span><span style="display:flex;"><span>) ENGINE<span style="color:#f92672">=</span>InnoDB;
+</span></span></code></pre></div><h4 id="2-jpa-entity-설정">2. JPA Entity 설정</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Entity</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Table</span>(name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;posts&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Post</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Id</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GeneratedValue</span>(strategy <span style="color:#f92672">=</span> GenerationType.<span style="color:#a6e22e">IDENTITY</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> Long id;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Column</span>(nullable <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String title;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Column</span>(columnDefinition <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;TEXT&#34;</span>, nullable <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String content;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String author;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@CreationTimestamp</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> LocalDateTime createdAt;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="3-repository-구현">3. Repository 구현</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Repository</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">PostRepository</span> <span style="color:#66d9ef">extends</span> JpaRepository<span style="color:#f92672">&lt;</span>Post, Long<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Query</span>(value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        SELECT p.*, MATCH(p.title, p.content) AGAINST(:keyword IN NATURAL LANGUAGE MODE) as relevance
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        FROM posts p 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        WHERE MATCH(p.title, p.content) AGAINST(:keyword IN NATURAL LANGUAGE MODE)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ORDER BY relevance DESC
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;&#34;&#34;</span>, nativeQuery <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span>    List<span style="color:#f92672">&lt;</span>Post<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">searchByKeyword</span>(<span style="color:#a6e22e">@Param</span>(<span style="color:#e6db74">&#34;keyword&#34;</span>) String keyword);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Query</span>(value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        SELECT p.*, MATCH(p.title, p.content) AGAINST(:keyword IN BOOLEAN MODE) as relevance
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        FROM posts p 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        WHERE MATCH(p.title, p.content) AGAINST(:keyword IN BOOLEAN MODE)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ORDER BY relevance DESC
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;&#34;&#34;</span>, nativeQuery <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span>    List<span style="color:#f92672">&lt;</span>Post<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">searchByKeywordBoolean</span>(<span style="color:#a6e22e">@Param</span>(<span style="color:#e6db74">&#34;keyword&#34;</span>) String keyword);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="4-service-구현">4. Service 구현</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Transactional</span>(readOnly <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SearchService</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> PostRepository postRepository;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Post<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">searchPosts</span>(String keyword) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (keyword.<span style="color:#a6e22e">trim</span>().<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> Collections.<span style="color:#a6e22e">emptyList</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 키워드 전처리</span>
+</span></span><span style="display:flex;"><span>        String processedKeyword <span style="color:#f92672">=</span> preprocessKeyword(keyword);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// FULLTEXT 검색 실행</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> postRepository.<span style="color:#a6e22e">searchByKeyword</span>(processedKeyword);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>Post<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">advancedSearch</span>(String keyword) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Boolean 모드로 고급 검색</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// +Spring +Boot (둘 다 포함)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Spring -Boot (Spring 포함, Boot 제외)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> postRepository.<span style="color:#a6e22e">searchByKeywordBoolean</span>(keyword);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String <span style="color:#a6e22e">preprocessKeyword</span>(String keyword) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 특수문자 제거 및 공백 정리</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> keyword.<span style="color:#a6e22e">replaceAll</span>(<span style="color:#e6db74">&#34;[^가-힣a-zA-Z0-9\\s]&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>).<span style="color:#a6e22e">trim</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="검색-성능-최적화">검색 성능 최적화</h3>
+<h4 id="1-인덱스-튜닝">1. 인덱스 튜닝</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#75715e">-- ngram 파서를 이용한 한글 검색 최적화
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> posts <span style="color:#66d9ef">ADD</span> FULLTEXT(title, content) <span style="color:#66d9ef">WITH</span> PARSER ngram;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- ft_min_word_len 설정으로 최소 검색어 길이 조정
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">SET</span> <span style="color:#66d9ef">GLOBAL</span> ft_min_word_len <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+</span></span></code></pre></div><h4 id="2-쿼리-최적화">2. 쿼리 최적화</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Query</span>(value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    SELECT p.id, p.title, p.author, p.created_at,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">           SUBSTRING(p.content, 1, 200) as summary,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">           MATCH(p.title, p.content) AGAINST(:keyword IN NATURAL LANGUAGE MODE) as relevance
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    FROM posts p 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    WHERE MATCH(p.title, p.content) AGAINST(:keyword IN NATURAL LANGUAGE MODE)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        AND relevance &gt; 0.1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ORDER BY relevance DESC, p.created_at DESC
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    LIMIT :limit OFFSET :offset
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>, nativeQuery <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span>Page<span style="color:#f92672">&lt;</span>PostSearchResult<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">searchWithPagination</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Param</span>(<span style="color:#e6db74">&#34;keyword&#34;</span>) String keyword,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Param</span>(<span style="color:#e6db74">&#34;limit&#34;</span>) <span style="color:#66d9ef">int</span> limit,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Param</span>(<span style="color:#e6db74">&#34;offset&#34;</span>) <span style="color:#66d9ef">int</span> offset);
+</span></span></code></pre></div><h2 id="-구현-결과">📊 구현 결과</h2>
+<h3 id="성과-지표">성과 지표</h3>
+<ul>
+<li><strong>검색 성능</strong>: LIKE 검색 대비 90% 성능 향상 (2초 → 200ms)</li>
+<li><strong>검색 정확도</strong>: 관련도 점수 기반 결과 정렬로 사용자 만족도 향상</li>
+<li><strong>운영 효율성</strong>: 추가 인프라 없이 검색 기능 구현</li>
+</ul>
+<h3 id="안정적인-검색-성능">안정적인 검색 성능</h3>
+<p>MySQL FULLTEXT 기반 검색 시스템을 통해 다음과 같은 성과를 달성했습니다:</p>
+<h4 id="1-안정적인-검색-성능">1. 안정적인 검색 성능</h4>
+<ul>
+<li>인덱스 기반의 일관된 검색 응답 속도 확보</li>
+<li>데이터양 증가에도 안정적인 성능 유지</li>
+</ul>
+<h4 id="2-유지보수-용이성">2. 유지보수 용이성</h4>
+<ul>
+<li>기존 데이터베이스 내에서 검색 기능 관리</li>
+<li>DBA 별도 없이도 운영 가능</li>
+</ul>
+<h4 id="3-확장-가능한-구조">3. 확장 가능한 구조</h4>
+<ul>
+<li>향후 Elasticsearch 도입 시 마이그레이션 가능한 아키텍처 설계</li>
+<li>검색 인터페이스 추상화로 구현체 교체 용이</li>
+</ul>
+<h3 id="향후-발전-계획">향후 발전 계획</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">// 검색 인터페이스 추상화</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">SearchService</span> {
+</span></span><span style="display:flex;"><span>    List<span style="color:#f92672">&lt;</span>Post<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">searchPosts</span>(String keyword);
+</span></span><span style="display:flex;"><span>    Page<span style="color:#f92672">&lt;</span>Post<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">searchWithPagination</span>(String keyword, Pageable pageable);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// MySQL FULLTEXT 구현체</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>(<span style="color:#e6db74">&#34;mysqlSearchService&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MySqlSearchService</span> <span style="color:#66d9ef">implements</span> SearchService {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 현재 구현</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 향후 Elasticsearch 구현체</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Service</span>(<span style="color:#e6db74">&#34;elasticsearchSearchService&#34;</span>) 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ElasticsearchSearchService</span> <span style="color:#66d9ef">implements</span> SearchService {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 향후 구현</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>이러한 단계적 접근을 통해 <strong>프로젝트 초기에는 실용적인 검색 기능을 빠르게 구현</strong>하고, 향후 서비스 성장에 따라 더 고도화된 검색 엔진으로 발전시킬 수 있는 기반을 마련했습니다.</p>
+<hr>
+<p><strong>프로젝트</strong>: KernelEngine | <strong>기술</strong>: MySQL FULLTEXT, JPA, Spring Boot | <strong>기간</strong>: 2023.11 - 2023.12</p>
+<ul class="pa0">
+  
+   <li class="list di">
+     <a href="/tags/search/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Search</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/mysql/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Mysql</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/fulltext/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Fulltext</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/performance/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Performance</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="/problems/washfit/redis-caching/">Redis를 활용한 캐싱 및 세션 관리 구현</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="http://localhost:1313/" >
+    &copy;  김찬규 | Backend Developer 2025 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>

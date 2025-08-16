@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템 | 김찬규 | Backend Developer</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템
+🔍 문제 상황
+대용량 데이터 처리의 필요성
+KernelEngine 서비스에서는 다음과 같은 데이터 처리 작업들이 필요했습니다:
+
+대량 블로그 게시글 수집: 여러 블로그의 게시글을 일괄 처리
+사용자 통계 생성: 일간 가입자 수, 인기 게시글 등 서비스 지표 계산
+데이터 정제: 수집된 데이터의 품질 관리 및 중복 제거
+
+기존 방식의 한계
+
+실시간 처리 부담: API 서버에서 대용량 데이터 처리 시 성능 저하
+메모리 부족: 모든 데이터를 메모리에 로드하여 처리하는 방식의 한계
+트랜잭션 관리: 대용량 처리 중 오류 발생 시 전체 롤백 문제
+모니터링 부족: 배치 작업 상태 및 진행률 추적 어려움
+
+이러한 작업들은 실시간 API 처리와는 다른 특성을 가지므로 별도의 배치 처리 시스템이 필요했습니다.">
+    <meta name="generator" content="Hugo 0.148.2">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="김찬규">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+
+    
+
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/problems/kernelengine/spring-batch-data-processing/">
+    
+
+    <meta property="og:url" content="http://localhost:1313/problems/kernelengine/spring-batch-data-processing/">
+  <meta property="og:site_name" content="김찬규 | Backend Developer">
+  <meta property="og:title" content="Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템">
+  <meta property="og:description" content="Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템 🔍 문제 상황 대용량 데이터 처리의 필요성 KernelEngine 서비스에서는 다음과 같은 데이터 처리 작업들이 필요했습니다:
+대량 블로그 게시글 수집: 여러 블로그의 게시글을 일괄 처리 사용자 통계 생성: 일간 가입자 수, 인기 게시글 등 서비스 지표 계산 데이터 정제: 수집된 데이터의 품질 관리 및 중복 제거 기존 방식의 한계 실시간 처리 부담: API 서버에서 대용량 데이터 처리 시 성능 저하 메모리 부족: 모든 데이터를 메모리에 로드하여 처리하는 방식의 한계 트랜잭션 관리: 대용량 처리 중 오류 발생 시 전체 롤백 문제 모니터링 부족: 배치 작업 상태 및 진행률 추적 어려움 이러한 작업들은 실시간 API 처리와는 다른 특성을 가지므로 별도의 배치 처리 시스템이 필요했습니다.">
+  <meta property="og:locale" content="ko">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="problems">
+    <meta property="article:published_time" content="2025-08-16T10:00:00+09:00">
+    <meta property="article:modified_time" content="2025-08-16T10:00:00+09:00">
+    <meta property="article:tag" content="Springbatch">
+    <meta property="article:tag" content="Automation">
+    <meta property="article:tag" content="Statistics">
+    <meta property="article:tag" content="Data-Processing">
+
+  <meta itemprop="name" content="Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템">
+  <meta itemprop="description" content="Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템 🔍 문제 상황 대용량 데이터 처리의 필요성 KernelEngine 서비스에서는 다음과 같은 데이터 처리 작업들이 필요했습니다:
+대량 블로그 게시글 수집: 여러 블로그의 게시글을 일괄 처리 사용자 통계 생성: 일간 가입자 수, 인기 게시글 등 서비스 지표 계산 데이터 정제: 수집된 데이터의 품질 관리 및 중복 제거 기존 방식의 한계 실시간 처리 부담: API 서버에서 대용량 데이터 처리 시 성능 저하 메모리 부족: 모든 데이터를 메모리에 로드하여 처리하는 방식의 한계 트랜잭션 관리: 대용량 처리 중 오류 발생 시 전체 롤백 문제 모니터링 부족: 배치 작업 상태 및 진행률 추적 어려움 이러한 작업들은 실시간 API 처리와는 다른 특성을 가지므로 별도의 배치 처리 시스템이 필요했습니다.">
+  <meta itemprop="datePublished" content="2025-08-16T10:00:00+09:00">
+  <meta itemprop="dateModified" content="2025-08-16T10:00:00+09:00">
+  <meta itemprop="wordCount" content="998">
+  <meta itemprop="keywords" content="Springbatch,Automation,Statistics,Data-Processing">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템">
+  <meta name="twitter:description" content="Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템 🔍 문제 상황 대용량 데이터 처리의 필요성 KernelEngine 서비스에서는 다음과 같은 데이터 처리 작업들이 필요했습니다:
+대량 블로그 게시글 수집: 여러 블로그의 게시글을 일괄 처리 사용자 통계 생성: 일간 가입자 수, 인기 게시글 등 서비스 지표 계산 데이터 정제: 수집된 데이터의 품질 관리 및 중복 제거 기존 방식의 한계 실시간 처리 부담: API 서버에서 대용량 데이터 처리 시 성능 저하 메모리 부족: 모든 데이터를 메모리에 로드하여 처리하는 방식의 한계 트랜잭션 관리: 대용량 처리 중 오류 발생 시 전체 롤백 문제 모니터링 부족: 배치 작업 상태 및 진행률 추적 어려움 이러한 작업들은 실시간 API 처리와는 다른 특성을 가지므로 별도의 배치 처리 시스템이 필요했습니다.">
+
+	
+  </head><body class="ma0 avenir bg-near-white development">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        김찬규 | Backend Developer
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/portfolio/" title="Portfolio page">
+              Portfolio
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/posts/" title="Posts page">
+              Posts
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/about/" title="About Me page">
+              About Me
+            </a>
+          </li>
+          
+        </ul>
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  
+  <article class="flex-l mw8 center ph3 flex-wrap justify-between">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        Problems
+      </aside><div id="sharing" class="mt3 ananke-socials"></div>
+<h1 class="f1 athelas mt3 mb1">Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템</h1>
+      
+      <p class="tracked"><strong>김찬규</strong>
+      </p>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2025-08-16T10:00:00+09:00">August 16, 2025</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="spring-batch를-활용한-데이터-처리-및-통계-관리-시스템">Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="대용량-데이터-처리의-필요성">대용량 데이터 처리의 필요성</h3>
+<p>KernelEngine 서비스에서는 다음과 같은 데이터 처리 작업들이 필요했습니다:</p>
+<ol>
+<li><strong>대량 블로그 게시글 수집</strong>: 여러 블로그의 게시글을 일괄 처리</li>
+<li><strong>사용자 통계 생성</strong>: 일간 가입자 수, 인기 게시글 등 서비스 지표 계산</li>
+<li><strong>데이터 정제</strong>: 수집된 데이터의 품질 관리 및 중복 제거</li>
+</ol>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>실시간 처리 부담</strong>: API 서버에서 대용량 데이터 처리 시 성능 저하</li>
+<li><strong>메모리 부족</strong>: 모든 데이터를 메모리에 로드하여 처리하는 방식의 한계</li>
+<li><strong>트랜잭션 관리</strong>: 대용량 처리 중 오류 발생 시 전체 롤백 문제</li>
+<li><strong>모니터링 부족</strong>: 배치 작업 상태 및 진행률 추적 어려움</li>
+</ul>
+<p>이러한 작업들은 실시간 API 처리와는 다른 특성을 가지므로 별도의 배치 처리 시스템이 필요했습니다.</p>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="spring-batch-아키텍처">Spring Batch 아키텍처</h3>
+<p><strong>Spring Batch 프레임워크</strong>를 활용하여 견고한 배치 처리 시스템을 구축했습니다:</p>
+<h4 id="1-job과-step-분리">1. Job과 Step 분리</h4>
+<p>각 데이터 처리 작업을 독립적인 Job으로 구성하여 관리 용이성을 확보했습니다.</p>
+<h4 id="2-청크-기반-처리">2. 청크 기반 처리</h4>
+<p>메모리 효율성을 위한 청크 단위 데이터 처리로 대용량 데이터 안정적 처리가 가능합니다.</p>
+<h4 id="3-트랜잭션-관리">3. 트랜잭션 관리</h4>
+<p>배치 작업의 안정성을 위한 트랜잭션 처리로 데이터 일관성을 보장합니다.</p>
+<h3 id="구현된-배치-작업들">구현된 배치 작업들</h3>
+<h4 id="1-크롤링-배치-작업">1. 크롤링 배치 작업</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@EnableBatchProcessing</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CrawlingBatchConfig</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Job <span style="color:#a6e22e">crawlingJob</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> jobBuilderFactory.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;crawlingJob&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">incrementer</span>(<span style="color:#66d9ef">new</span> RunIdIncrementer())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">start</span>(crawlBlogsStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">next</span>(processNewPostsStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">next</span>(updateBlogStatisticsStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Step <span style="color:#a6e22e">crawlBlogsStep</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> stepBuilderFactory.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;crawlBlogsStep&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#f92672">&lt;</span>Blog, Blog<span style="color:#f92672">&gt;</span>chunk(10)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">reader</span>(blogReader())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">processor</span>(blogCrawlingProcessor())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">writer</span>(blogUpdateWriter())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">faultTolerant</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">retryLimit</span>(3)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">retry</span>(IOException.<span style="color:#a6e22e">class</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">skipLimit</span>(5)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">skip</span>(CrawlingException.<span style="color:#a6e22e">class</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@StepScope</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> ItemReader<span style="color:#f92672">&lt;</span>Blog<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">blogReader</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> RepositoryItemReaderBuilder<span style="color:#f92672">&lt;</span>Blog<span style="color:#f92672">&gt;</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">name</span>(<span style="color:#e6db74">&#34;blogReader&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">repository</span>(blogRepository)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">methodName</span>(<span style="color:#e6db74">&#34;findByStatus&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">arguments</span>(BlogStatus.<span style="color:#a6e22e">ACTIVE</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">pageSize</span>(10)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">sorts</span>(Map.<span style="color:#a6e22e">of</span>(<span style="color:#e6db74">&#34;id&#34;</span>, Sort.<span style="color:#a6e22e">Direction</span>.<span style="color:#a6e22e">ASC</span>))
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> ItemProcessor<span style="color:#f92672">&lt;</span>Blog, Blog<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">blogCrawlingProcessor</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> blog <span style="color:#f92672">-&gt;</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>                List<span style="color:#f92672">&lt;</span>RssItem<span style="color:#f92672">&gt;</span> rssItems <span style="color:#f92672">=</span> rssFeedReader.<span style="color:#a6e22e">readFeed</span>(blog.<span style="color:#a6e22e">getRssUrl</span>());
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">int</span> newPosts <span style="color:#f92672">=</span> processBlogPosts(blog, rssItems);
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                blog.<span style="color:#a6e22e">setLastCrawledAt</span>(LocalDateTime.<span style="color:#a6e22e">now</span>());
+</span></span><span style="display:flex;"><span>                blog.<span style="color:#a6e22e">setLastPostCount</span>(newPosts);
+</span></span><span style="display:flex;"><span>                blog.<span style="color:#a6e22e">setErrorCount</span>(0); <span style="color:#75715e">// 성공 시 에러 카운트 리셋</span>
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> blog;
+</span></span><span style="display:flex;"><span>            } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>                blog.<span style="color:#a6e22e">incrementErrorCount</span>();
+</span></span><span style="display:flex;"><span>                log.<span style="color:#a6e22e">error</span>(<span style="color:#e6db74">&#34;Failed to crawl blog: {}&#34;</span>, blog.<span style="color:#a6e22e">getName</span>(), e);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> CrawlingException(<span style="color:#e6db74">&#34;Crawling failed for blog: &#34;</span> <span style="color:#f92672">+</span> blog.<span style="color:#a6e22e">getName</span>(), e);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="2-통계-집계-배치-작업">2. 통계 집계 배치 작업</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StatisticsBatchConfig</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Job <span style="color:#a6e22e">dailyStatisticsJob</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> jobBuilderFactory.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;dailyStatisticsJob&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">incrementer</span>(<span style="color:#66d9ef">new</span> RunIdIncrementer())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">start</span>(calculateUserStatisticsStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">next</span>(calculatePostStatisticsStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">next</span>(calculatePopularTagsStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Step <span style="color:#a6e22e">calculateUserStatisticsStep</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> stepBuilderFactory.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;calculateUserStatisticsStep&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">tasklet</span>(userStatisticsTasklet())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Tasklet <span style="color:#a6e22e">userStatisticsTasklet</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (contribution, chunkContext) <span style="color:#f92672">-&gt;</span> {
+</span></span><span style="display:flex;"><span>            LocalDate yesterday <span style="color:#f92672">=</span> LocalDate.<span style="color:#a6e22e">now</span>().<span style="color:#a6e22e">minusDays</span>(1);
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 일간 가입자 수 계산</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">long</span> newUsers <span style="color:#f92672">=</span> userRepository.<span style="color:#a6e22e">countByCreatedDateBetween</span>(
+</span></span><span style="display:flex;"><span>                yesterday.<span style="color:#a6e22e">atStartOfDay</span>(),
+</span></span><span style="display:flex;"><span>                yesterday.<span style="color:#a6e22e">plusDays</span>(1).<span style="color:#a6e22e">atStartOfDay</span>()
+</span></span><span style="display:flex;"><span>            );
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 일간 활성 사용자 수 계산</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">long</span> activeUsers <span style="color:#f92672">=</span> userActivityRepository.<span style="color:#a6e22e">countActiveUsersByDate</span>(yesterday);
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 통계 저장</span>
+</span></span><span style="display:flex;"><span>            DailyUserStatistics statistics <span style="color:#f92672">=</span> DailyUserStatistics.<span style="color:#a6e22e">builder</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">date</span>(yesterday)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">newUsers</span>(newUsers)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">activeUsers</span>(activeUsers)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">totalUsers</span>(userRepository.<span style="color:#a6e22e">count</span>())
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            dailyUserStatisticsRepository.<span style="color:#a6e22e">save</span>(statistics);
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;User statistics calculated for {}: new={}, active={}&#34;</span>, 
+</span></span><span style="display:flex;"><span>                yesterday, newUsers, activeUsers);
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> RepeatStatus.<span style="color:#a6e22e">FINISHED</span>;
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Step <span style="color:#a6e22e">calculatePostStatisticsStep</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> stepBuilderFactory.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;calculatePostStatisticsStep&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#f92672">&lt;</span>Post, PostStatistics<span style="color:#f92672">&gt;</span>chunk(1000)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">reader</span>(postReader())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">processor</span>(postStatisticsProcessor())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">writer</span>(postStatisticsWriter())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> ItemProcessor<span style="color:#f92672">&lt;</span>Post, PostStatistics<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">postStatisticsProcessor</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> post <span style="color:#f92672">-&gt;</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 게시글 조회수, 좋아요 수 등 통계 계산</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">long</span> viewCount <span style="color:#f92672">=</span> postViewRepository.<span style="color:#a6e22e">countByPostId</span>(post.<span style="color:#a6e22e">getId</span>());
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">long</span> likeCount <span style="color:#f92672">=</span> postLikeRepository.<span style="color:#a6e22e">countByPostId</span>(post.<span style="color:#a6e22e">getId</span>());
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> PostStatistics.<span style="color:#a6e22e">builder</span>()
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">postId</span>(post.<span style="color:#a6e22e">getId</span>())
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">viewCount</span>(viewCount)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">likeCount</span>(likeCount)
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">calculatedAt</span>(LocalDateTime.<span style="color:#a6e22e">now</span>())
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="3-데이터-정제-배치-작업">3. 데이터 정제 배치 작업</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DataCleanupBatchConfig</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Job <span style="color:#a6e22e">dataCleanupJob</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> jobBuilderFactory.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;dataCleanupJob&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">incrementer</span>(<span style="color:#66d9ef">new</span> RunIdIncrementer())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">start</span>(removeDuplicatePostsStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">next</span>(cleanupOldLogsStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">next</span>(optimizeSearchIndexStep())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Step <span style="color:#a6e22e">removeDuplicatePostsStep</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> stepBuilderFactory.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;removeDuplicatePostsStep&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#f92672">&lt;</span>DuplicatePost, DuplicatePost<span style="color:#f92672">&gt;</span>chunk(100)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">reader</span>(duplicatePostReader())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">processor</span>(duplicatePostProcessor())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">writer</span>(duplicatePostWriter())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> ItemReader<span style="color:#f92672">&lt;</span>DuplicatePost<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">duplicatePostReader</span>() {
+</span></span><span style="display:flex;"><span>        String sql <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            SELECT p1.id as keepId, p2.id as removeId, p1.title, p1.link
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            FROM posts p1 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            JOIN posts p2 ON p1.link = p2.link AND p1.id &lt; p2.id
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;&#34;&#34;</span>;
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> JdbcCursorItemReaderBuilder<span style="color:#f92672">&lt;</span>DuplicatePost<span style="color:#f92672">&gt;</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">name</span>(<span style="color:#e6db74">&#34;duplicatePostReader&#34;</span>)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">dataSource</span>(dataSource)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">sql</span>(sql)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">rowMapper</span>(duplicatePostRowMapper())
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">build</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> ItemProcessor<span style="color:#f92672">&lt;</span>DuplicatePost, DuplicatePost<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">duplicatePostProcessor</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> duplicatePost <span style="color:#f92672">-&gt;</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 중복 게시글 중 더 최근 것을 유지하고 오래된 것을 삭제 대상으로 표시</span>
+</span></span><span style="display:flex;"><span>            Post keepPost <span style="color:#f92672">=</span> postRepository.<span style="color:#a6e22e">findById</span>(duplicatePost.<span style="color:#a6e22e">getKeepId</span>()).<span style="color:#a6e22e">orElse</span>(<span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>            Post removePost <span style="color:#f92672">=</span> postRepository.<span style="color:#a6e22e">findById</span>(duplicatePost.<span style="color:#a6e22e">getRemoveId</span>()).<span style="color:#a6e22e">orElse</span>(<span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (keepPost <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> removePost <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// 더 많은 정보를 가진 게시글을 유지</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (removePost.<span style="color:#a6e22e">getContent</span>().<span style="color:#a6e22e">length</span>() <span style="color:#f92672">&gt;</span> keepPost.<span style="color:#a6e22e">getContent</span>().<span style="color:#a6e22e">length</span>()) {
+</span></span><span style="display:flex;"><span>                    duplicatePost.<span style="color:#a6e22e">swapIds</span>();
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> duplicatePost;
+</span></span><span style="display:flex;"><span>        };
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="배치-작업-모니터링">배치 작업 모니터링</h3>
+<h4 id="1-job-execution-listener">1. Job Execution Listener</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BatchJobListener</span> <span style="color:#66d9ef">implements</span> JobExecutionListener {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> NotificationService notificationService;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">beforeJob</span>(JobExecution jobExecution) {
+</span></span><span style="display:flex;"><span>        String jobName <span style="color:#f92672">=</span> jobExecution.<span style="color:#a6e22e">getJobInstance</span>().<span style="color:#a6e22e">getJobName</span>();
+</span></span><span style="display:flex;"><span>        log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Starting batch job: {}&#34;</span>, jobName);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 작업 시작 메트릭 기록</span>
+</span></span><span style="display:flex;"><span>        meterRegistry.<span style="color:#a6e22e">counter</span>(<span style="color:#e6db74">&#34;batch.job.started&#34;</span>, <span style="color:#e6db74">&#34;job&#34;</span>, jobName).<span style="color:#a6e22e">increment</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">afterJob</span>(JobExecution jobExecution) {
+</span></span><span style="display:flex;"><span>        String jobName <span style="color:#f92672">=</span> jobExecution.<span style="color:#a6e22e">getJobInstance</span>().<span style="color:#a6e22e">getJobName</span>();
+</span></span><span style="display:flex;"><span>        BatchStatus status <span style="color:#f92672">=</span> jobExecution.<span style="color:#a6e22e">getStatus</span>();
+</span></span><span style="display:flex;"><span>        Duration duration <span style="color:#f92672">=</span> Duration.<span style="color:#a6e22e">between</span>(
+</span></span><span style="display:flex;"><span>            jobExecution.<span style="color:#a6e22e">getStartTime</span>().<span style="color:#a6e22e">toInstant</span>(),
+</span></span><span style="display:flex;"><span>            jobExecution.<span style="color:#a6e22e">getEndTime</span>().<span style="color:#a6e22e">toInstant</span>()
+</span></span><span style="display:flex;"><span>        );
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Completed batch job: {} with status: {} in {}ms&#34;</span>, 
+</span></span><span style="display:flex;"><span>            jobName, status, duration.<span style="color:#a6e22e">toMillis</span>());
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 메트릭 기록</span>
+</span></span><span style="display:flex;"><span>        meterRegistry.<span style="color:#a6e22e">counter</span>(<span style="color:#e6db74">&#34;batch.job.completed&#34;</span>, <span style="color:#e6db74">&#34;job&#34;</span>, jobName, <span style="color:#e6db74">&#34;status&#34;</span>, status.<span style="color:#a6e22e">name</span>()).<span style="color:#a6e22e">increment</span>();
+</span></span><span style="display:flex;"><span>        meterRegistry.<span style="color:#a6e22e">timer</span>(<span style="color:#e6db74">&#34;batch.job.duration&#34;</span>, <span style="color:#e6db74">&#34;job&#34;</span>, jobName).<span style="color:#a6e22e">record</span>(duration);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 실패 시 알림</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (status <span style="color:#f92672">==</span> BatchStatus.<span style="color:#a6e22e">FAILED</span>) {
+</span></span><span style="display:flex;"><span>            notificationService.<span style="color:#a6e22e">sendBatchFailureAlert</span>(jobName, jobExecution.<span style="color:#a6e22e">getAllFailureExceptions</span>());
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="2-배치-상태-api">2. 배치 상태 API</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@RestController</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@RequestMapping</span>(<span style="color:#e6db74">&#34;/admin/batch&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BatchAdminController</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> JobExplorer jobExplorer;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> JobOperator jobOperator;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GetMapping</span>(<span style="color:#e6db74">&#34;/jobs&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>BatchJobInfo<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">getJobsStatus</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> jobExplorer.<span style="color:#a6e22e">getJobNames</span>().<span style="color:#a6e22e">stream</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">this</span>::getJobInfo)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">collect</span>(Collectors.<span style="color:#a6e22e">toList</span>());
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@GetMapping</span>(<span style="color:#e6db74">&#34;/jobs/{jobName}/executions&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> List<span style="color:#f92672">&lt;</span>JobExecutionInfo<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">getJobExecutions</span>(<span style="color:#a6e22e">@PathVariable</span> String jobName) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> jobExplorer.<span style="color:#a6e22e">getJobInstances</span>(jobName, 0, 10).<span style="color:#a6e22e">stream</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">map</span>(jobInstance <span style="color:#f92672">-&gt;</span> jobExplorer.<span style="color:#a6e22e">getJobExecutions</span>(jobInstance))
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">flatMap</span>(Collection::stream)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">this</span>::toJobExecutionInfo)
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">collect</span>(Collectors.<span style="color:#a6e22e">toList</span>());
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@PostMapping</span>(<span style="color:#e6db74">&#34;/jobs/{jobName}/start&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">startJob</span>(<span style="color:#a6e22e">@PathVariable</span> String jobName) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>            JobParameters params <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobParametersBuilder()
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">addLong</span>(<span style="color:#e6db74">&#34;time&#34;</span>, System.<span style="color:#a6e22e">currentTimeMillis</span>())
+</span></span><span style="display:flex;"><span>                .<span style="color:#a6e22e">toJobParameters</span>();
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            Long executionId <span style="color:#f92672">=</span> jobOperator.<span style="color:#a6e22e">start</span>(jobName, 
+</span></span><span style="display:flex;"><span>                params.<span style="color:#a6e22e">getParameters</span>().<span style="color:#a6e22e">entrySet</span>().<span style="color:#a6e22e">stream</span>()
+</span></span><span style="display:flex;"><span>                    .<span style="color:#a6e22e">collect</span>(Collectors.<span style="color:#a6e22e">toMap</span>(
+</span></span><span style="display:flex;"><span>                        Map.<span style="color:#a6e22e">Entry</span>::getKey,
+</span></span><span style="display:flex;"><span>                        entry <span style="color:#f92672">-&gt;</span> entry.<span style="color:#a6e22e">getValue</span>().<span style="color:#a6e22e">toString</span>()
+</span></span><span style="display:flex;"><span>                    ))
+</span></span><span style="display:flex;"><span>            );
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(<span style="color:#e6db74">&#34;Job started with execution ID: &#34;</span> <span style="color:#f92672">+</span> executionId);
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">badRequest</span>().<span style="color:#a6e22e">body</span>(<span style="color:#e6db74">&#34;Failed to start job: &#34;</span> <span style="color:#f92672">+</span> e.<span style="color:#a6e22e">getMessage</span>());
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="-구현-결과">📊 구현 결과</h2>
+<h3 id="배치-처리의-이점">배치 처리의 이점</h3>
+<p>Spring Batch 도입을 통해 다음과 같은 이점을 확보했습니다:</p>
+<h4 id="1-안정성">1. 안정성</h4>
+<ul>
+<li><strong>재시작 기능</strong>: 대용량 데이터 처리 중 오류 발생 시 중단된 지점부터 재시작</li>
+<li><strong>트랜잭션 관리</strong>: 청크 단위 트랜잭션으로 부분 실패 시에도 처리된 데이터 보존</li>
+<li><strong>오류 처리</strong>: Skip과 Retry 기능으로 일시적 오류에 대한 복원력 확보</li>
+</ul>
+<h4 id="2-성능">2. 성능</h4>
+<ul>
+<li><strong>청크 기반 처리</strong>: 메모리 사용량 최적화로 100만 건 이상 데이터 안정적 처리</li>
+<li><strong>병렬 처리</strong>: 멀티스레드 스텝으로 처리 속도 향상</li>
+<li><strong>파티셔닝</strong>: 대용량 데이터를 여러 파티션으로 나누어 병렬 처리</li>
+</ul>
+<h4 id="3-모니터링">3. 모니터링</h4>
+<ul>
+<li><strong>실행 이력</strong>: 모든 배치 작업의 실행 상태 및 결과 추적 가능</li>
+<li><strong>메트릭 수집</strong>: 처리 시간, 처리 건수, 오류율 등 상세 메트릭 제공</li>
+<li><strong>알림 기능</strong>: 작업 실패 시 자동 알림으로 신속한 대응 가능</li>
+</ul>
+<h4 id="4-확장성">4. 확장성</h4>
+<ul>
+<li><strong>수평 확장</strong>: 여러 서버에서 배치 작업 분산 실행 가능</li>
+<li><strong>동적 설정</strong>: 파라미터를 통한 배치 작업 동적 설정 변경</li>
+<li><strong>플러그인 구조</strong>: 새로운 배치 작업 추가 시 기존 인프라 재사용</li>
+</ul>
+<h3 id="성과-지표">성과 지표</h3>
+<ul>
+<li><strong>처리 성능</strong>: 100만 건 데이터 처리 시간 기존 6시간 → 1시간으로 단축</li>
+<li><strong>시스템 안정성</strong>: API 서버 부하 90% 감소로 전체 시스템 안정성 향상</li>
+<li><strong>운영 효율성</strong>: 배치 작업 자동화로 수동 작업 시간 95% 단축</li>
+<li><strong>데이터 품질</strong>: 중복 제거 및 정제 작업으로 데이터 정확도 98% 달성</li>
+</ul>
+<p>이를 통해 <strong>API 서버의 성능에 영향을 주지 않으면서도 필요한 데이터 처리 작업을 안정적으로 수행</strong>할 수 있는 시스템을 구축했습니다.</p>
+<hr>
+<p><strong>프로젝트</strong>: KernelEngine | <strong>기술</strong>: Spring Batch, JPA, Scheduling, Monitoring | <strong>기간</strong>: 2023.11 - 2023.12</p>
+<ul class="pa0">
+  
+   <li class="list di">
+     <a href="/tags/springbatch/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Springbatch</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/automation/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Automation</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/statistics/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Statistics</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/data-processing/" class="link f5 grow br-pill ba ph3 pv2 mb2 dib black sans-serif no-underline">Data-Processing</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="/problems/washfit/spring-batch-architecture/">Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/problems/kernelengine/rss-crawler-system/">RSS 파서를 활용한 블로그 크롤링 시스템 구현</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="http://localhost:1313/" >
+    &copy;  김찬규 | Backend Developer 2025 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>

@@ -77,20 +77,20 @@
         <ul class="pl0 mr3">
           
           <li class="list f5 f4-ns fw4 dib pr3">
-            <a class="hover-white white-90 no-underline" href="/portfolio/" title="포트폴리오 page">
-              포트폴리오
+            <a class="hover-white white-90 no-underline" href="/portfolio/" title="Portfolio page">
+              Portfolio
             </a>
           </li>
           
           <li class="list f5 f4-ns fw4 dib pr3">
-            <a class="hover-white white-90 no-underline" href="/posts/" title="블로그 page">
-              블로그
+            <a class="hover-white white-90 no-underline" href="/posts/" title="Posts page">
+              Posts
             </a>
           </li>
           
           <li class="list f5 f4-ns fw4 dib pr3">
-            <a class="hover-white white-90 no-underline" href="/about/" title="소개 page">
-              소개
+            <a class="hover-white white-90 no-underline" href="/about/" title="About Me page">
+              About Me
             </a>
           </li>
           
@@ -124,6 +124,136 @@
     <section class="ph4">
       
         <h2 class="f1">
+          <a href="/tags/architecture/" class="link blue hover-black">
+            Tag: Architecture
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/spring-batch-architecture/" class="link black dim">
+        Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="spring-batch-모듈-설계를-통한-데이터-처리-아키텍처-구축">Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="데이터-처리-요구사항">데이터 처리 요구사항</h3>
+<p>WashFit 서비스는 세차 용품의 안전 정보를 제공하기 위해 대량의 데이터를 처리해야 했습니다. 이를 위해서는 안정적이고 확장 가능한 데이터 처리 아키텍처가 필요했습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>API 서버 부하</strong>: 대용량 데이터 처리 시 API 응답 성능 저하</li>
+<li><strong>메모리 문제</strong>: 전체 데이터를 메모리에 로드하여 처리하는 방식의 한계</li>
+<li><strong>오류 처리</strong>: 데이터 처리 중 오류 발생 시 복구 메커니즘 부재</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="멀티-모듈-아키텍처-내의-배치-시스템">멀티 모듈 아키텍처 내의 배치 시스템</h3>
+<p><strong>module-batch</strong>를 별도 모듈로 분리하여 다음과 같은 이점을 확보했습니다:</p>
+    </div>
+    <a href="/problems/washfit/spring-batch-architecture/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/multimodule-architecture/" class="link black dim">
+        멀티 모듈 프로젝트 아키텍처 설계 및 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="멀티-모듈-프로젝트-아키텍처-설계-및-구현">멀티 모듈 프로젝트 아키텍처 설계 및 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="프로젝트-구조-설계-요구사항">프로젝트 구조 설계 요구사항</h3>
+<p>WashFit 프로젝트는 확장성과 유지보수성을 고려하여 <strong>멀티 모듈 아키텍처</strong>로 설계되었습니다. 단일 모듈 구조로는 다음과 같은 한계가 있었습니다:</p>
+<ul>
+<li><strong>코드 복잡도 증가</strong>: 모든 기능이 하나의 모듈에 집중</li>
+<li><strong>빌드 시간 증가</strong>: 작은 변경에도 전체 프로젝트 빌드 필요</li>
+<li><strong>팀 협업 어려움</strong>: 여러 개발자가 동일한 코드베이스에서 충돌 발생</li>
+<li><strong>배포 복잡성</strong>: 부분적 배포 불가능</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="모듈-구조-및-역할">모듈 구조 및 역할</h3>
+<p>각 모듈은 명확한 역할과 책임을 가지도록 구성했습니다:</p>
+    </div>
+    <a href="/problems/washfit/multimodule-architecture/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/automation/" class="link blue hover-black">
+            Tag: Automation
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/rss-crawler-system/" class="link black dim">
+        RSS 파서를 활용한 블로그 크롤링 시스템 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="rss-파서를-활용한-블로그-크롤링-시스템-구현">RSS 파서를 활용한 블로그 크롤링 시스템 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="데이터-수집의-중요성">데이터 수집의 중요성</h3>
+<p>KernelEngine 서비스의 핵심 가치는 <strong>다양한 기술 블로그의 최신 게시글을 한 곳에서 검색</strong>할 수 있게 하는 것이었습니다. 이를 위해서는 여러 블로그로부터 지속적으로 새로운 게시글을 수집하는 시스템이 필요했습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>수동 수집</strong>: 각 블로그를 직접 방문하여 새 게시글 확인 (비효율적)</li>
+<li><strong>HTML 파싱</strong>: 블로그 구조 변경 시 파싱 로직 수정 필요 (유지보수 부담)</li>
+<li><strong>일관성 부족</strong>: 블로그마다 다른 HTML 구조로 인한 데이터 품질 문제</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="기술적-구현-방식">기술적 구현 방식</h3>
+<p><strong>Jsoup 라이브러리와 RSS 파서</strong>를 활용하여 블로그 크롤링 시스템을 구현했습니다:</p>
+    </div>
+    <a href="/problems/kernelengine/rss-crawler-system/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/spring-batch-data-processing/" class="link black dim">
+        Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="spring-batch를-활용한-데이터-처리-및-통계-관리-시스템">Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="대용량-데이터-처리의-필요성">대용량 데이터 처리의 필요성</h3>
+<p>KernelEngine 서비스에서는 다음과 같은 데이터 처리 작업들이 필요했습니다:</p>
+<ol>
+<li><strong>대량 블로그 게시글 수집</strong>: 여러 블로그의 게시글을 일괄 처리</li>
+<li><strong>사용자 통계 생성</strong>: 일간 가입자 수, 인기 게시글 등 서비스 지표 계산</li>
+<li><strong>데이터 정제</strong>: 수집된 데이터의 품질 관리 및 중복 제거</li>
+</ol>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>실시간 처리 부담</strong>: API 서버에서 대용량 데이터 처리 시 성능 저하</li>
+<li><strong>메모리 부족</strong>: 모든 데이터를 메모리에 로드하여 처리하는 방식의 한계</li>
+<li><strong>트랜잭션 관리</strong>: 대용량 처리 중 오류 발생 시 전체 롤백 문제</li>
+<li><strong>모니터링 부족</strong>: 배치 작업 상태 및 진행률 추적 어려움</li>
+</ul>
+<p>이러한 작업들은 실시간 API 처리와는 다른 특성을 가지므로 별도의 배치 처리 시스템이 필요했습니다.</p>
+    </div>
+    <a href="/problems/kernelengine/spring-batch-data-processing/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
           <a href="/tags/backend/" class="link blue hover-black">
             Tag: Backend
           </a>
@@ -138,24 +268,199 @@
       </a>
     </h1>
     <div class="nested-links f5 lh-copy nested-copy-line-height">
-      <p>안녕하세요! 백엔드 개발자 Chan99K의 포트폴리오 &amp; 블로그에 오신 것을 환영합니다.</p>
+      <p>안녕하세요! 백엔드 개발자 chan99k 의 포트폴리오 &amp; 블로그에 오신 것을 환영합니다.</p>
 <h2 id="-이-블로그에서-다룰-내용">🚀 이 블로그에서 다룰 내용</h2>
 <ul>
 <li><strong>백엔드 개발 경험담</strong></li>
 <li><strong>기술 스택 리뷰</strong></li>
 <li><strong>프로젝트 회고</strong></li>
-<li><strong>개발 트렌드 분석</strong></li>
 </ul>
-<h2 id="-주요-기술-스택">💻 주요 기술 스택</h2>
+<h2 id="-관심-기술">💻 관심 기술</h2>
 <ul>
-<li><strong>언어</strong>: Java, Python, Go</li>
-<li><strong>프레임워크</strong>: Spring Boot, FastAPI</li>
-<li><strong>데이터베이스</strong>: PostgreSQL, MongoDB, Redis</li>
-<li><strong>인프라</strong>: Docker, Kubernetes, AWS</li>
+<li><strong>언어</strong>: Java</li>
+<li><strong>프레임워크</strong>: Spring Boot</li>
+<li><strong>데이터베이스</strong>: MySQL, MongoDB, Redis</li>
+<li><strong>인프라</strong>: Docker, AWS</li>
 </ul>
-<p>앞으로 많은 유용한 콘텐츠로 찾아뵙겠습니다!</p>
     </div>
     <a href="/posts/hello-world/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/caching/" class="link blue hover-black">
+            Tag: Caching
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/redis-caching/" class="link black dim">
+        Redis를 활용한 캐싱 및 세션 관리 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="redis를-활용한-캐싱-및-세션-관리-구현">Redis를 활용한 캐싱 및 세션 관리 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="redis-도입-배경">Redis 도입 배경</h3>
+<p>WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:</p>
+<ul>
+<li><strong>세션 관리</strong>: 사용자 로그인 상태의 효율적인 관리</li>
+<li><strong>캐싱</strong>: 자주 조회되는 데이터의 응답 속도 향상</li>
+<li><strong>임시 데이터 저장</strong>: 인증 토큰 등 시간 제한이 있는 데이터의 관리</li>
+</ul>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>메모리 기반 세션</strong>: 서버 재시작 시 세션 정보 손실</li>
+<li><strong>데이터베이스 부하</strong>: 반복적인 데이터 조회로 인한 PostgreSQL 부하 증가</li>
+<li><strong>확장성 문제</strong>: 멀티 서버 환경에서 세션 공유 불가</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="redis-기술적-구현">Redis 기술적 구현</h3>
+<p><strong>spring-boot-starter-data-redis</strong> 의존성을 활용하여 다음과 같이 구현했습니다:</p>
+    </div>
+    <a href="/problems/washfit/redis-caching/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/crawler/" class="link blue hover-black">
+            Tag: Crawler
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/rss-crawler-system/" class="link black dim">
+        RSS 파서를 활용한 블로그 크롤링 시스템 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="rss-파서를-활용한-블로그-크롤링-시스템-구현">RSS 파서를 활용한 블로그 크롤링 시스템 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="데이터-수집의-중요성">데이터 수집의 중요성</h3>
+<p>KernelEngine 서비스의 핵심 가치는 <strong>다양한 기술 블로그의 최신 게시글을 한 곳에서 검색</strong>할 수 있게 하는 것이었습니다. 이를 위해서는 여러 블로그로부터 지속적으로 새로운 게시글을 수집하는 시스템이 필요했습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>수동 수집</strong>: 각 블로그를 직접 방문하여 새 게시글 확인 (비효율적)</li>
+<li><strong>HTML 파싱</strong>: 블로그 구조 변경 시 파싱 로직 수정 필요 (유지보수 부담)</li>
+<li><strong>일관성 부족</strong>: 블로그마다 다른 HTML 구조로 인한 데이터 품질 문제</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="기술적-구현-방식">기술적 구현 방식</h3>
+<p><strong>Jsoup 라이브러리와 RSS 파서</strong>를 활용하여 블로그 크롤링 시스템을 구현했습니다:</p>
+    </div>
+    <a href="/problems/kernelengine/rss-crawler-system/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/data-processing/" class="link blue hover-black">
+            Tag: Data-Processing
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/spring-batch-architecture/" class="link black dim">
+        Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="spring-batch-모듈-설계를-통한-데이터-처리-아키텍처-구축">Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="데이터-처리-요구사항">데이터 처리 요구사항</h3>
+<p>WashFit 서비스는 세차 용품의 안전 정보를 제공하기 위해 대량의 데이터를 처리해야 했습니다. 이를 위해서는 안정적이고 확장 가능한 데이터 처리 아키텍처가 필요했습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>API 서버 부하</strong>: 대용량 데이터 처리 시 API 응답 성능 저하</li>
+<li><strong>메모리 문제</strong>: 전체 데이터를 메모리에 로드하여 처리하는 방식의 한계</li>
+<li><strong>오류 처리</strong>: 데이터 처리 중 오류 발생 시 복구 메커니즘 부재</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="멀티-모듈-아키텍처-내의-배치-시스템">멀티 모듈 아키텍처 내의 배치 시스템</h3>
+<p><strong>module-batch</strong>를 별도 모듈로 분리하여 다음과 같은 이점을 확보했습니다:</p>
+    </div>
+    <a href="/problems/washfit/spring-batch-architecture/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/spring-batch-data-processing/" class="link black dim">
+        Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="spring-batch를-활용한-데이터-처리-및-통계-관리-시스템">Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="대용량-데이터-처리의-필요성">대용량 데이터 처리의 필요성</h3>
+<p>KernelEngine 서비스에서는 다음과 같은 데이터 처리 작업들이 필요했습니다:</p>
+<ol>
+<li><strong>대량 블로그 게시글 수집</strong>: 여러 블로그의 게시글을 일괄 처리</li>
+<li><strong>사용자 통계 생성</strong>: 일간 가입자 수, 인기 게시글 등 서비스 지표 계산</li>
+<li><strong>데이터 정제</strong>: 수집된 데이터의 품질 관리 및 중복 제거</li>
+</ol>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>실시간 처리 부담</strong>: API 서버에서 대용량 데이터 처리 시 성능 저하</li>
+<li><strong>메모리 부족</strong>: 모든 데이터를 메모리에 로드하여 처리하는 방식의 한계</li>
+<li><strong>트랜잭션 관리</strong>: 대용량 처리 중 오류 발생 시 전체 롤백 문제</li>
+<li><strong>모니터링 부족</strong>: 배치 작업 상태 및 진행률 추적 어려움</li>
+</ul>
+<p>이러한 작업들은 실시간 API 처리와는 다른 특성을 가지므로 별도의 배치 처리 시스템이 필요했습니다.</p>
+    </div>
+    <a href="/problems/kernelengine/spring-batch-data-processing/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/design/" class="link blue hover-black">
+            Tag: Design
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/multimodule-architecture/" class="link black dim">
+        멀티 모듈 프로젝트 아키텍처 설계 및 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="멀티-모듈-프로젝트-아키텍처-설계-및-구현">멀티 모듈 프로젝트 아키텍처 설계 및 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="프로젝트-구조-설계-요구사항">프로젝트 구조 설계 요구사항</h3>
+<p>WashFit 프로젝트는 확장성과 유지보수성을 고려하여 <strong>멀티 모듈 아키텍처</strong>로 설계되었습니다. 단일 모듈 구조로는 다음과 같은 한계가 있었습니다:</p>
+<ul>
+<li><strong>코드 복잡도 증가</strong>: 모든 기능이 하나의 모듈에 집중</li>
+<li><strong>빌드 시간 증가</strong>: 작은 변경에도 전체 프로젝트 빌드 필요</li>
+<li><strong>팀 협업 어려움</strong>: 여러 개발자가 동일한 코드베이스에서 충돌 발생</li>
+<li><strong>배포 복잡성</strong>: 부분적 배포 불가능</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="모듈-구조-및-역할">모듈 구조 및 역할</h3>
+<p>각 모듈은 명확한 역할과 책임을 가지도록 구성했습니다:</p>
+    </div>
+    <a href="/problems/washfit/multimodule-architecture/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
   </div>
 </div>
 
@@ -176,24 +481,107 @@
       </a>
     </h1>
     <div class="nested-links f5 lh-copy nested-copy-line-height">
-      <p>안녕하세요! 백엔드 개발자 Chan99K의 포트폴리오 &amp; 블로그에 오신 것을 환영합니다.</p>
+      <p>안녕하세요! 백엔드 개발자 chan99k 의 포트폴리오 &amp; 블로그에 오신 것을 환영합니다.</p>
 <h2 id="-이-블로그에서-다룰-내용">🚀 이 블로그에서 다룰 내용</h2>
 <ul>
 <li><strong>백엔드 개발 경험담</strong></li>
 <li><strong>기술 스택 리뷰</strong></li>
 <li><strong>프로젝트 회고</strong></li>
-<li><strong>개발 트렌드 분석</strong></li>
 </ul>
-<h2 id="-주요-기술-스택">💻 주요 기술 스택</h2>
+<h2 id="-관심-기술">💻 관심 기술</h2>
 <ul>
-<li><strong>언어</strong>: Java, Python, Go</li>
-<li><strong>프레임워크</strong>: Spring Boot, FastAPI</li>
-<li><strong>데이터베이스</strong>: PostgreSQL, MongoDB, Redis</li>
-<li><strong>인프라</strong>: Docker, Kubernetes, AWS</li>
+<li><strong>언어</strong>: Java</li>
+<li><strong>프레임워크</strong>: Spring Boot</li>
+<li><strong>데이터베이스</strong>: MySQL, MongoDB, Redis</li>
+<li><strong>인프라</strong>: Docker, AWS</li>
 </ul>
-<p>앞으로 많은 유용한 콘텐츠로 찾아뵙겠습니다!</p>
     </div>
     <a href="/posts/hello-world/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/dynamic-queries/" class="link blue hover-black">
+            Tag: Dynamic-Queries
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/querydsl-dynamic-queries/" class="link black dim">
+        QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="querydsl을-활용한-동적-쿼리-및-타입-안정성-확보">QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="동적-검색-요구사항">동적 검색 요구사항</h3>
+<p>WashFit 서비스에서는 사용자가 다양한 조건으로 세차 용품을 검색할 수 있어야 했습니다. 제품명, 브랜드, 카테고리, 성분 등 복합적인 검색 조건을 처리해야 하는 상황이었습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>JPQL</strong>: 문자열 기반으로 컴파일 시점 오류 검증 불가</li>
+<li><strong>Criteria API</strong>: 복잡하고 가독성이 떨어지는 코드</li>
+<li><strong>동적 쿼리 구성</strong>: 조건에 따른 쿼리 생성이 복잡하고 오류 발생 가능성</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="querydsl-도입-결정">QueryDSL 도입 결정</h3>
+<p>기존 JPQL이나 Criteria API 대신 <strong>QueryDSL</strong>을 도입하여 다음과 같은 이점을 확보했습니다:</p>
+    </div>
+    <a href="/problems/washfit/querydsl-dynamic-queries/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/fulltext/" class="link blue hover-black">
+            Tag: Fulltext
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/mysql-fulltext-search/" class="link black dim">
+        MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="mysql-fulltext를-활용한-효율적인-검색-기능-구현">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="검색-기능-요구사항">검색 기능 요구사항</h3>
+<p>KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 다양한 검색 기술 중에서 프로젝트 규모와 요구사항에 적합한 솔루션을 선택해야 했습니다.</p>
+<h3 id="기술적-고려사항">기술적 고려사항</h3>
+<p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
+<h4 id="1-mysql-like-검색">1. MySQL LIKE 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> title <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span> <span style="color:#66d9ef">OR</span> content <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span>;
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 구현이 간단, 추가 인프라 불필요</li>
+<li><strong>단점</strong>: 성능이 느림, 복잡한 검색 불가능</li>
+</ul>
+<h4 id="2-mysql-fulltext-검색">2. MySQL FULLTEXT 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">MATCH</span>(title, content) AGAINST(<span style="color:#e6db74">&#39;Spring Boot&#39;</span> <span style="color:#66d9ef">IN</span> <span style="color:#66d9ef">NATURAL</span> <span style="color:#66d9ef">LANGUAGE</span> <span style="color:#66d9ef">MODE</span>);
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 내장된 전문 검색 기능, 관련도 점수 제공</li>
+<li><strong>단점</strong>: 기능이 제한적, 고급 검색 기능 부족</li>
+</ul>
+<h4 id="3-elasticsearch">3. Elasticsearch</h4>
+<ul>
+<li><strong>장점</strong>: 고도화된 검색 기능, 분석 기능</li>
+<li><strong>단점</strong>: 추가 인프라 필요, 운영 복잡도 증가</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="mysql-fulltext-선택-이유">MySQL FULLTEXT 선택 이유</h3>
+<p>프로젝트의 초기 단계에서는 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
+    </div>
+    <a href="/problems/kernelengine/mysql-fulltext-search/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
   </div>
 </div>
 
@@ -214,24 +602,671 @@
       </a>
     </h1>
     <div class="nested-links f5 lh-copy nested-copy-line-height">
-      <p>안녕하세요! 백엔드 개발자 Chan99K의 포트폴리오 &amp; 블로그에 오신 것을 환영합니다.</p>
+      <p>안녕하세요! 백엔드 개발자 chan99k 의 포트폴리오 &amp; 블로그에 오신 것을 환영합니다.</p>
 <h2 id="-이-블로그에서-다룰-내용">🚀 이 블로그에서 다룰 내용</h2>
 <ul>
 <li><strong>백엔드 개발 경험담</strong></li>
 <li><strong>기술 스택 리뷰</strong></li>
 <li><strong>프로젝트 회고</strong></li>
-<li><strong>개발 트렌드 분석</strong></li>
 </ul>
-<h2 id="-주요-기술-스택">💻 주요 기술 스택</h2>
+<h2 id="-관심-기술">💻 관심 기술</h2>
 <ul>
-<li><strong>언어</strong>: Java, Python, Go</li>
-<li><strong>프레임워크</strong>: Spring Boot, FastAPI</li>
-<li><strong>데이터베이스</strong>: PostgreSQL, MongoDB, Redis</li>
-<li><strong>인프라</strong>: Docker, Kubernetes, AWS</li>
+<li><strong>언어</strong>: Java</li>
+<li><strong>프레임워크</strong>: Spring Boot</li>
+<li><strong>데이터베이스</strong>: MySQL, MongoDB, Redis</li>
+<li><strong>인프라</strong>: Docker, AWS</li>
 </ul>
-<p>앞으로 많은 유용한 콘텐츠로 찾아뵙겠습니다!</p>
     </div>
     <a href="/posts/hello-world/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/jpa/" class="link blue hover-black">
+            Tag: Jpa
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/querydsl-dynamic-queries/" class="link black dim">
+        QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="querydsl을-활용한-동적-쿼리-및-타입-안정성-확보">QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="동적-검색-요구사항">동적 검색 요구사항</h3>
+<p>WashFit 서비스에서는 사용자가 다양한 조건으로 세차 용품을 검색할 수 있어야 했습니다. 제품명, 브랜드, 카테고리, 성분 등 복합적인 검색 조건을 처리해야 하는 상황이었습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>JPQL</strong>: 문자열 기반으로 컴파일 시점 오류 검증 불가</li>
+<li><strong>Criteria API</strong>: 복잡하고 가독성이 떨어지는 코드</li>
+<li><strong>동적 쿼리 구성</strong>: 조건에 따른 쿼리 생성이 복잡하고 오류 발생 가능성</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="querydsl-도입-결정">QueryDSL 도입 결정</h3>
+<p>기존 JPQL이나 Criteria API 대신 <strong>QueryDSL</strong>을 도입하여 다음과 같은 이점을 확보했습니다:</p>
+    </div>
+    <a href="/problems/washfit/querydsl-dynamic-queries/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/jsoup/" class="link blue hover-black">
+            Tag: Jsoup
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/rss-crawler-system/" class="link black dim">
+        RSS 파서를 활용한 블로그 크롤링 시스템 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="rss-파서를-활용한-블로그-크롤링-시스템-구현">RSS 파서를 활용한 블로그 크롤링 시스템 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="데이터-수집의-중요성">데이터 수집의 중요성</h3>
+<p>KernelEngine 서비스의 핵심 가치는 <strong>다양한 기술 블로그의 최신 게시글을 한 곳에서 검색</strong>할 수 있게 하는 것이었습니다. 이를 위해서는 여러 블로그로부터 지속적으로 새로운 게시글을 수집하는 시스템이 필요했습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>수동 수집</strong>: 각 블로그를 직접 방문하여 새 게시글 확인 (비효율적)</li>
+<li><strong>HTML 파싱</strong>: 블로그 구조 변경 시 파싱 로직 수정 필요 (유지보수 부담)</li>
+<li><strong>일관성 부족</strong>: 블로그마다 다른 HTML 구조로 인한 데이터 품질 문제</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="기술적-구현-방식">기술적 구현 방식</h3>
+<p><strong>Jsoup 라이브러리와 RSS 파서</strong>를 활용하여 블로그 크롤링 시스템을 구현했습니다:</p>
+    </div>
+    <a href="/problems/kernelengine/rss-crawler-system/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/modularity/" class="link blue hover-black">
+            Tag: Modularity
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/spring-batch-architecture/" class="link black dim">
+        Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="spring-batch-모듈-설계를-통한-데이터-처리-아키텍처-구축">Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="데이터-처리-요구사항">데이터 처리 요구사항</h3>
+<p>WashFit 서비스는 세차 용품의 안전 정보를 제공하기 위해 대량의 데이터를 처리해야 했습니다. 이를 위해서는 안정적이고 확장 가능한 데이터 처리 아키텍처가 필요했습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>API 서버 부하</strong>: 대용량 데이터 처리 시 API 응답 성능 저하</li>
+<li><strong>메모리 문제</strong>: 전체 데이터를 메모리에 로드하여 처리하는 방식의 한계</li>
+<li><strong>오류 처리</strong>: 데이터 처리 중 오류 발생 시 복구 메커니즘 부재</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="멀티-모듈-아키텍처-내의-배치-시스템">멀티 모듈 아키텍처 내의 배치 시스템</h3>
+<p><strong>module-batch</strong>를 별도 모듈로 분리하여 다음과 같은 이점을 확보했습니다:</p>
+    </div>
+    <a href="/problems/washfit/spring-batch-architecture/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/multimodule/" class="link blue hover-black">
+            Tag: Multimodule
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/multimodule-architecture/" class="link black dim">
+        멀티 모듈 프로젝트 아키텍처 설계 및 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="멀티-모듈-프로젝트-아키텍처-설계-및-구현">멀티 모듈 프로젝트 아키텍처 설계 및 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="프로젝트-구조-설계-요구사항">프로젝트 구조 설계 요구사항</h3>
+<p>WashFit 프로젝트는 확장성과 유지보수성을 고려하여 <strong>멀티 모듈 아키텍처</strong>로 설계되었습니다. 단일 모듈 구조로는 다음과 같은 한계가 있었습니다:</p>
+<ul>
+<li><strong>코드 복잡도 증가</strong>: 모든 기능이 하나의 모듈에 집중</li>
+<li><strong>빌드 시간 증가</strong>: 작은 변경에도 전체 프로젝트 빌드 필요</li>
+<li><strong>팀 협업 어려움</strong>: 여러 개발자가 동일한 코드베이스에서 충돌 발생</li>
+<li><strong>배포 복잡성</strong>: 부분적 배포 불가능</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="모듈-구조-및-역할">모듈 구조 및 역할</h3>
+<p>각 모듈은 명확한 역할과 책임을 가지도록 구성했습니다:</p>
+    </div>
+    <a href="/problems/washfit/multimodule-architecture/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/mysql/" class="link blue hover-black">
+            Tag: Mysql
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/mysql-fulltext-search/" class="link black dim">
+        MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="mysql-fulltext를-활용한-효율적인-검색-기능-구현">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="검색-기능-요구사항">검색 기능 요구사항</h3>
+<p>KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 다양한 검색 기술 중에서 프로젝트 규모와 요구사항에 적합한 솔루션을 선택해야 했습니다.</p>
+<h3 id="기술적-고려사항">기술적 고려사항</h3>
+<p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
+<h4 id="1-mysql-like-검색">1. MySQL LIKE 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> title <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span> <span style="color:#66d9ef">OR</span> content <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span>;
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 구현이 간단, 추가 인프라 불필요</li>
+<li><strong>단점</strong>: 성능이 느림, 복잡한 검색 불가능</li>
+</ul>
+<h4 id="2-mysql-fulltext-검색">2. MySQL FULLTEXT 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">MATCH</span>(title, content) AGAINST(<span style="color:#e6db74">&#39;Spring Boot&#39;</span> <span style="color:#66d9ef">IN</span> <span style="color:#66d9ef">NATURAL</span> <span style="color:#66d9ef">LANGUAGE</span> <span style="color:#66d9ef">MODE</span>);
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 내장된 전문 검색 기능, 관련도 점수 제공</li>
+<li><strong>단점</strong>: 기능이 제한적, 고급 검색 기능 부족</li>
+</ul>
+<h4 id="3-elasticsearch">3. Elasticsearch</h4>
+<ul>
+<li><strong>장점</strong>: 고도화된 검색 기능, 분석 기능</li>
+<li><strong>단점</strong>: 추가 인프라 필요, 운영 복잡도 증가</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="mysql-fulltext-선택-이유">MySQL FULLTEXT 선택 이유</h3>
+<p>프로젝트의 초기 단계에서는 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
+    </div>
+    <a href="/problems/kernelengine/mysql-fulltext-search/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/performance/" class="link blue hover-black">
+            Tag: Performance
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/mysql-fulltext-search/" class="link black dim">
+        MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="mysql-fulltext를-활용한-효율적인-검색-기능-구현">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="검색-기능-요구사항">검색 기능 요구사항</h3>
+<p>KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 다양한 검색 기술 중에서 프로젝트 규모와 요구사항에 적합한 솔루션을 선택해야 했습니다.</p>
+<h3 id="기술적-고려사항">기술적 고려사항</h3>
+<p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
+<h4 id="1-mysql-like-검색">1. MySQL LIKE 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> title <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span> <span style="color:#66d9ef">OR</span> content <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span>;
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 구현이 간단, 추가 인프라 불필요</li>
+<li><strong>단점</strong>: 성능이 느림, 복잡한 검색 불가능</li>
+</ul>
+<h4 id="2-mysql-fulltext-검색">2. MySQL FULLTEXT 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">MATCH</span>(title, content) AGAINST(<span style="color:#e6db74">&#39;Spring Boot&#39;</span> <span style="color:#66d9ef">IN</span> <span style="color:#66d9ef">NATURAL</span> <span style="color:#66d9ef">LANGUAGE</span> <span style="color:#66d9ef">MODE</span>);
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 내장된 전문 검색 기능, 관련도 점수 제공</li>
+<li><strong>단점</strong>: 기능이 제한적, 고급 검색 기능 부족</li>
+</ul>
+<h4 id="3-elasticsearch">3. Elasticsearch</h4>
+<ul>
+<li><strong>장점</strong>: 고도화된 검색 기능, 분석 기능</li>
+<li><strong>단점</strong>: 추가 인프라 필요, 운영 복잡도 증가</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="mysql-fulltext-선택-이유">MySQL FULLTEXT 선택 이유</h3>
+<p>프로젝트의 초기 단계에서는 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
+    </div>
+    <a href="/problems/kernelengine/mysql-fulltext-search/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/redis-caching/" class="link black dim">
+        Redis를 활용한 캐싱 및 세션 관리 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="redis를-활용한-캐싱-및-세션-관리-구현">Redis를 활용한 캐싱 및 세션 관리 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="redis-도입-배경">Redis 도입 배경</h3>
+<p>WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:</p>
+<ul>
+<li><strong>세션 관리</strong>: 사용자 로그인 상태의 효율적인 관리</li>
+<li><strong>캐싱</strong>: 자주 조회되는 데이터의 응답 속도 향상</li>
+<li><strong>임시 데이터 저장</strong>: 인증 토큰 등 시간 제한이 있는 데이터의 관리</li>
+</ul>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>메모리 기반 세션</strong>: 서버 재시작 시 세션 정보 손실</li>
+<li><strong>데이터베이스 부하</strong>: 반복적인 데이터 조회로 인한 PostgreSQL 부하 증가</li>
+<li><strong>확장성 문제</strong>: 멀티 서버 환경에서 세션 공유 불가</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="redis-기술적-구현">Redis 기술적 구현</h3>
+<p><strong>spring-boot-starter-data-redis</strong> 의존성을 활용하여 다음과 같이 구현했습니다:</p>
+    </div>
+    <a href="/problems/washfit/redis-caching/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/querydsl/" class="link blue hover-black">
+            Tag: Querydsl
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/querydsl-dynamic-queries/" class="link black dim">
+        QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="querydsl을-활용한-동적-쿼리-및-타입-안정성-확보">QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="동적-검색-요구사항">동적 검색 요구사항</h3>
+<p>WashFit 서비스에서는 사용자가 다양한 조건으로 세차 용품을 검색할 수 있어야 했습니다. 제품명, 브랜드, 카테고리, 성분 등 복합적인 검색 조건을 처리해야 하는 상황이었습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>JPQL</strong>: 문자열 기반으로 컴파일 시점 오류 검증 불가</li>
+<li><strong>Criteria API</strong>: 복잡하고 가독성이 떨어지는 코드</li>
+<li><strong>동적 쿼리 구성</strong>: 조건에 따른 쿼리 생성이 복잡하고 오류 발생 가능성</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="querydsl-도입-결정">QueryDSL 도입 결정</h3>
+<p>기존 JPQL이나 Criteria API 대신 <strong>QueryDSL</strong>을 도입하여 다음과 같은 이점을 확보했습니다:</p>
+    </div>
+    <a href="/problems/washfit/querydsl-dynamic-queries/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/redis/" class="link blue hover-black">
+            Tag: Redis
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/redis-caching/" class="link black dim">
+        Redis를 활용한 캐싱 및 세션 관리 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="redis를-활용한-캐싱-및-세션-관리-구현">Redis를 활용한 캐싱 및 세션 관리 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="redis-도입-배경">Redis 도입 배경</h3>
+<p>WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:</p>
+<ul>
+<li><strong>세션 관리</strong>: 사용자 로그인 상태의 효율적인 관리</li>
+<li><strong>캐싱</strong>: 자주 조회되는 데이터의 응답 속도 향상</li>
+<li><strong>임시 데이터 저장</strong>: 인증 토큰 등 시간 제한이 있는 데이터의 관리</li>
+</ul>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>메모리 기반 세션</strong>: 서버 재시작 시 세션 정보 손실</li>
+<li><strong>데이터베이스 부하</strong>: 반복적인 데이터 조회로 인한 PostgreSQL 부하 증가</li>
+<li><strong>확장성 문제</strong>: 멀티 서버 환경에서 세션 공유 불가</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="redis-기술적-구현">Redis 기술적 구현</h3>
+<p><strong>spring-boot-starter-data-redis</strong> 의존성을 활용하여 다음과 같이 구현했습니다:</p>
+    </div>
+    <a href="/problems/washfit/redis-caching/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/rss/" class="link blue hover-black">
+            Tag: Rss
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/rss-crawler-system/" class="link black dim">
+        RSS 파서를 활용한 블로그 크롤링 시스템 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="rss-파서를-활용한-블로그-크롤링-시스템-구현">RSS 파서를 활용한 블로그 크롤링 시스템 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="데이터-수집의-중요성">데이터 수집의 중요성</h3>
+<p>KernelEngine 서비스의 핵심 가치는 <strong>다양한 기술 블로그의 최신 게시글을 한 곳에서 검색</strong>할 수 있게 하는 것이었습니다. 이를 위해서는 여러 블로그로부터 지속적으로 새로운 게시글을 수집하는 시스템이 필요했습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>수동 수집</strong>: 각 블로그를 직접 방문하여 새 게시글 확인 (비효율적)</li>
+<li><strong>HTML 파싱</strong>: 블로그 구조 변경 시 파싱 로직 수정 필요 (유지보수 부담)</li>
+<li><strong>일관성 부족</strong>: 블로그마다 다른 HTML 구조로 인한 데이터 품질 문제</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="기술적-구현-방식">기술적 구현 방식</h3>
+<p><strong>Jsoup 라이브러리와 RSS 파서</strong>를 활용하여 블로그 크롤링 시스템을 구현했습니다:</p>
+    </div>
+    <a href="/problems/kernelengine/rss-crawler-system/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/scalability/" class="link blue hover-black">
+            Tag: Scalability
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/multimodule-architecture/" class="link black dim">
+        멀티 모듈 프로젝트 아키텍처 설계 및 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="멀티-모듈-프로젝트-아키텍처-설계-및-구현">멀티 모듈 프로젝트 아키텍처 설계 및 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="프로젝트-구조-설계-요구사항">프로젝트 구조 설계 요구사항</h3>
+<p>WashFit 프로젝트는 확장성과 유지보수성을 고려하여 <strong>멀티 모듈 아키텍처</strong>로 설계되었습니다. 단일 모듈 구조로는 다음과 같은 한계가 있었습니다:</p>
+<ul>
+<li><strong>코드 복잡도 증가</strong>: 모든 기능이 하나의 모듈에 집중</li>
+<li><strong>빌드 시간 증가</strong>: 작은 변경에도 전체 프로젝트 빌드 필요</li>
+<li><strong>팀 협업 어려움</strong>: 여러 개발자가 동일한 코드베이스에서 충돌 발생</li>
+<li><strong>배포 복잡성</strong>: 부분적 배포 불가능</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="모듈-구조-및-역할">모듈 구조 및 역할</h3>
+<p>각 모듈은 명확한 역할과 책임을 가지도록 구성했습니다:</p>
+    </div>
+    <a href="/problems/washfit/multimodule-architecture/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/search/" class="link blue hover-black">
+            Tag: Search
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/mysql-fulltext-search/" class="link black dim">
+        MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="mysql-fulltext를-활용한-효율적인-검색-기능-구현">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="검색-기능-요구사항">검색 기능 요구사항</h3>
+<p>KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 다양한 검색 기술 중에서 프로젝트 규모와 요구사항에 적합한 솔루션을 선택해야 했습니다.</p>
+<h3 id="기술적-고려사항">기술적 고려사항</h3>
+<p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
+<h4 id="1-mysql-like-검색">1. MySQL LIKE 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> title <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span> <span style="color:#66d9ef">OR</span> content <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span>;
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 구현이 간단, 추가 인프라 불필요</li>
+<li><strong>단점</strong>: 성능이 느림, 복잡한 검색 불가능</li>
+</ul>
+<h4 id="2-mysql-fulltext-검색">2. MySQL FULLTEXT 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">MATCH</span>(title, content) AGAINST(<span style="color:#e6db74">&#39;Spring Boot&#39;</span> <span style="color:#66d9ef">IN</span> <span style="color:#66d9ef">NATURAL</span> <span style="color:#66d9ef">LANGUAGE</span> <span style="color:#66d9ef">MODE</span>);
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 내장된 전문 검색 기능, 관련도 점수 제공</li>
+<li><strong>단점</strong>: 기능이 제한적, 고급 검색 기능 부족</li>
+</ul>
+<h4 id="3-elasticsearch">3. Elasticsearch</h4>
+<ul>
+<li><strong>장점</strong>: 고도화된 검색 기능, 분석 기능</li>
+<li><strong>단점</strong>: 추가 인프라 필요, 운영 복잡도 증가</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="mysql-fulltext-선택-이유">MySQL FULLTEXT 선택 이유</h3>
+<p>프로젝트의 초기 단계에서는 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
+    </div>
+    <a href="/problems/kernelengine/mysql-fulltext-search/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/session/" class="link blue hover-black">
+            Tag: Session
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/redis-caching/" class="link black dim">
+        Redis를 활용한 캐싱 및 세션 관리 구현
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="redis를-활용한-캐싱-및-세션-관리-구현">Redis를 활용한 캐싱 및 세션 관리 구현</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="redis-도입-배경">Redis 도입 배경</h3>
+<p>WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:</p>
+<ul>
+<li><strong>세션 관리</strong>: 사용자 로그인 상태의 효율적인 관리</li>
+<li><strong>캐싱</strong>: 자주 조회되는 데이터의 응답 속도 향상</li>
+<li><strong>임시 데이터 저장</strong>: 인증 토큰 등 시간 제한이 있는 데이터의 관리</li>
+</ul>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>메모리 기반 세션</strong>: 서버 재시작 시 세션 정보 손실</li>
+<li><strong>데이터베이스 부하</strong>: 반복적인 데이터 조회로 인한 PostgreSQL 부하 증가</li>
+<li><strong>확장성 문제</strong>: 멀티 서버 환경에서 세션 공유 불가</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="redis-기술적-구현">Redis 기술적 구현</h3>
+<p><strong>spring-boot-starter-data-redis</strong> 의존성을 활용하여 다음과 같이 구현했습니다:</p>
+    </div>
+    <a href="/problems/washfit/redis-caching/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/springbatch/" class="link blue hover-black">
+            Tag: Springbatch
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/spring-batch-architecture/" class="link black dim">
+        Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="spring-batch-모듈-설계를-통한-데이터-처리-아키텍처-구축">Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="데이터-처리-요구사항">데이터 처리 요구사항</h3>
+<p>WashFit 서비스는 세차 용품의 안전 정보를 제공하기 위해 대량의 데이터를 처리해야 했습니다. 이를 위해서는 안정적이고 확장 가능한 데이터 처리 아키텍처가 필요했습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>API 서버 부하</strong>: 대용량 데이터 처리 시 API 응답 성능 저하</li>
+<li><strong>메모리 문제</strong>: 전체 데이터를 메모리에 로드하여 처리하는 방식의 한계</li>
+<li><strong>오류 처리</strong>: 데이터 처리 중 오류 발생 시 복구 메커니즘 부재</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="멀티-모듈-아키텍처-내의-배치-시스템">멀티 모듈 아키텍처 내의 배치 시스템</h3>
+<p><strong>module-batch</strong>를 별도 모듈로 분리하여 다음과 같은 이점을 확보했습니다:</p>
+    </div>
+    <a href="/problems/washfit/spring-batch-architecture/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/spring-batch-data-processing/" class="link black dim">
+        Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="spring-batch를-활용한-데이터-처리-및-통계-관리-시스템">Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="대용량-데이터-처리의-필요성">대용량 데이터 처리의 필요성</h3>
+<p>KernelEngine 서비스에서는 다음과 같은 데이터 처리 작업들이 필요했습니다:</p>
+<ol>
+<li><strong>대량 블로그 게시글 수집</strong>: 여러 블로그의 게시글을 일괄 처리</li>
+<li><strong>사용자 통계 생성</strong>: 일간 가입자 수, 인기 게시글 등 서비스 지표 계산</li>
+<li><strong>데이터 정제</strong>: 수집된 데이터의 품질 관리 및 중복 제거</li>
+</ol>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>실시간 처리 부담</strong>: API 서버에서 대용량 데이터 처리 시 성능 저하</li>
+<li><strong>메모리 부족</strong>: 모든 데이터를 메모리에 로드하여 처리하는 방식의 한계</li>
+<li><strong>트랜잭션 관리</strong>: 대용량 처리 중 오류 발생 시 전체 롤백 문제</li>
+<li><strong>모니터링 부족</strong>: 배치 작업 상태 및 진행률 추적 어려움</li>
+</ul>
+<p>이러한 작업들은 실시간 API 처리와는 다른 특성을 가지므로 별도의 배치 처리 시스템이 필요했습니다.</p>
+    </div>
+    <a href="/problems/kernelengine/spring-batch-data-processing/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/statistics/" class="link blue hover-black">
+            Tag: Statistics
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/spring-batch-data-processing/" class="link black dim">
+        Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="spring-batch를-활용한-데이터-처리-및-통계-관리-시스템">Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="대용량-데이터-처리의-필요성">대용량 데이터 처리의 필요성</h3>
+<p>KernelEngine 서비스에서는 다음과 같은 데이터 처리 작업들이 필요했습니다:</p>
+<ol>
+<li><strong>대량 블로그 게시글 수집</strong>: 여러 블로그의 게시글을 일괄 처리</li>
+<li><strong>사용자 통계 생성</strong>: 일간 가입자 수, 인기 게시글 등 서비스 지표 계산</li>
+<li><strong>데이터 정제</strong>: 수집된 데이터의 품질 관리 및 중복 제거</li>
+</ol>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>실시간 처리 부담</strong>: API 서버에서 대용량 데이터 처리 시 성능 저하</li>
+<li><strong>메모리 부족</strong>: 모든 데이터를 메모리에 로드하여 처리하는 방식의 한계</li>
+<li><strong>트랜잭션 관리</strong>: 대용량 처리 중 오류 발생 시 전체 롤백 문제</li>
+<li><strong>모니터링 부족</strong>: 배치 작업 상태 및 진행률 추적 어려움</li>
+</ul>
+<p>이러한 작업들은 실시간 API 처리와는 다른 특성을 가지므로 별도의 배치 처리 시스템이 필요했습니다.</p>
+    </div>
+    <a href="/problems/kernelengine/spring-batch-data-processing/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+      
+        <h2 class="f1">
+          <a href="/tags/typesafety/" class="link blue hover-black">
+            Tag: Typesafety
+          </a>
+        </h2>
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/washfit/querydsl-dynamic-queries/" class="link black dim">
+        QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="querydsl을-활용한-동적-쿼리-및-타입-안정성-확보">QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="동적-검색-요구사항">동적 검색 요구사항</h3>
+<p>WashFit 서비스에서는 사용자가 다양한 조건으로 세차 용품을 검색할 수 있어야 했습니다. 제품명, 브랜드, 카테고리, 성분 등 복합적인 검색 조건을 처리해야 하는 상황이었습니다.</p>
+<h3 id="기존-방식의-한계">기존 방식의 한계</h3>
+<ul>
+<li><strong>JPQL</strong>: 문자열 기반으로 컴파일 시점 오류 검증 불가</li>
+<li><strong>Criteria API</strong>: 복잡하고 가독성이 떨어지는 코드</li>
+<li><strong>동적 쿼리 구성</strong>: 조건에 따른 쿼리 생성이 복잡하고 오류 발생 가능성</li>
+</ul>
+<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
+<h3 id="querydsl-도입-결정">QueryDSL 도입 결정</h3>
+<p>기존 JPQL이나 Criteria API 대신 <strong>QueryDSL</strong>을 도입하여 다음과 같은 이점을 확보했습니다:</p>
+    </div>
+    <a href="/problems/washfit/querydsl-dynamic-queries/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
   </div>
 </div>
 
