@@ -1,0 +1,35 @@
+baseURL = 'https://chan99k.github.io/'
+languageCode = 'ko'
+title = '김찬규 | Backend Developer'
+theme = 'ananke'
+
+[params]
+  author = "김찬규"
+  description = "Java/Spring 백엔드 개발자 포트폴리오 & 블로그"
+  dateFormat = "2006-01-02"
+  relatedPosts = true
+  readingTime = true
+  
+  [[params.social]]
+    name = "github"
+    url = "https://github.com/chan99k"
+    
+  [[params.social]]
+    name = "email"
+    url = "mailto:kjkj5868@gmail.com"
+
+[menu]
+  [[menu.main]]
+    name = "포트폴리오"
+    url = "/portfolio/"
+    weight = 10
+    
+  [[menu.main]]
+    name = "블로그"
+    url = "/posts/"
+    weight = 20
+    
+  [[menu.main]]
+    name = "소개"
+    url = "/about/"
+    weight = 30
