@@ -69,75 +69,29 @@ washfit-backend/
 
 ### Gradle 멀티 모듈 설정
 
-#### 루트 build.gradle
-```gradle
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.2.0'
-    id 'io.spring.dependency-management' version '1.1.4'
-}
+**루트 프로젝트 설정:**
+- 모든 모듈에 공통으로 적용될 설정 정의
+- 버전 관리와 리포지토리 설정 중앙화
+- Spring Boot 및 의존성 관리 플러그인 일괄 적용
 
-allprojects {
-    group = 'com.washfit'
-    version = '1.0.0'
-    
-    repositories {
-        mavenCentral()
-    }
-}
-
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
-    
-    java {
-        sourceCompatibility = JavaVersion.VERSION_17
-    }
-    
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter'
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    }
-}
-```
-
-#### settings.gradle
-```gradle
-rootProject.name = 'washfit-backend'
-
-include 'module-api'
-include 'module-batch'
-include 'module-domain'
-include 'module-common'
-include 'module-admin'
-```
+**모듈 등록 전략:**
+- settings.gradle에서 모든 모듈을 명시적으로 선언
+- 모듈 이름 일관성 유지 (module- prefix)
+- 새 모듈 추가 시 자동 인식
 
 ### 모듈 간 의존성 관리
 
-#### module-api/build.gradle
-```gradle
-dependencies {
-    implementation project(':module-domain')
-    implementation project(':module-common')
-    
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-}
-```
+**의존성 원칙:**
+- **위층 모듈 → 하위층 모듈**: API → Domain → Common
+- **순환 의존성 방지**: 모듈 간 순환 참조 금지
+- **필요 최소 의존성**: 반드시 필요한 모듈만 의존
 
-#### module-domain/build.gradle
-```gradle
-dependencies {
-    implementation project(':module-common')
-    
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-    implementation 'org.postgresql:postgresql'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-}
-```
+**모듈별 의존성 전략:**
+- **module-api**: Domain + Common 모듈 의존
+- **module-batch**: Domain + Common 모듈 의존
+- **module-domain**: Common 모듈만 의존
+- **module-admin**: Domain + Common 모듈 의존
+- **module-common**: 외부 라이브러리만 의존
 
 ## 📊 구현 결과
 
@@ -146,34 +100,17 @@ dependencies {
 이러한 모듈 분리를 통해 다음과 같은 이점을 확보했습니다:
 
 #### 1. 관심사 분리
-```java
-// module-api에서는 REST API에만 집중
-@RestController
-@RequestMapping("/api/products")
-public class ProductController {
-    
-    private final ProductService productService;
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProduct(@PathVariable Long id) {
-        Product product = productService.getProduct(id);
-        return ResponseEntity.ok(ProductDto.from(product));
-    }
-}
+**모듈별 역할 분담:**
+- **module-api**: REST API 엔드포인트와 웹 계층 처리에만 집중
+- **module-domain**: 엔티티, 리포지토리, 비즈니스 로직에만 집중
+- **module-batch**: 데이터 처리 및 배치 작업에만 집중
+- **module-common**: 공통 유틸리티와 설정에만 집중
+- **module-admin**: 관리자 기능에만 집중
 
-// module-domain에서는 비즈니스 로직에만 집중
-@Service
-@Transactional
-public class ProductService {
-    
-    private final ProductRepository productRepository;
-    
-    public Product getProduct(Long id) {
-        return productRepository.findById(id)
-            .orElseThrow(() -> new ProductNotFoundException("Product not found"));
-    }
-}
-```
+**이점:**
+- 각 모듈이 명확한 역할과 책임을 가지므로 코드 이해도 향상
+- 단일 역할 원칙(SRP)에 따른 모듈 설계
+- 의존성 역전 방지로 바람직한 아키텍처 유지
 
 #### 2. 독립적 개발
 - **팀원별 모듈 할당**: API 개발자, 배치 개발자, 도메인 개발자가 독립적으로 작업
@@ -200,32 +137,16 @@ services:
 ```
 
 #### 4. 테스트 용이성
-```java
-// module-domain의 단위 테스트
-@DataJpaTest
-class ProductRepositoryTest {
-    
-    @Autowired
-    private TestEntityManager entityManager;
-    
-    @Autowired
-    private ProductRepository productRepository;
-    
-    @Test
-    void findByName_shouldReturnProduct() {
-        // given
-        Product product = new Product("Test Product", "Test Brand");
-        entityManager.persistAndFlush(product);
-        
-        // when
-        Optional<Product> result = productRepository.findByName("Test Product");
-        
-        // then
-        assertThat(result).isPresent();
-        assertThat(result.get().getName()).isEqualTo("Test Product");
-    }
-}
-```
+**모듈별 독립적 테스트:**
+- 각 모듈은 자체적으로 테스트 가능한 구조로 설계
+- 의존성이 명확히 분리되어 Mocking이 용이
+- 단위 테스트, 통합 테스트를 모듈 단위로 실행 가능
+
+**테스트 전략:**
+- **@DataJpaTest**: Domain 모듈의 Repository 레이어 테스트
+- **@WebMvcTest**: API 모듈의 Controller 레이어 테스트
+- **@SpringBatchTest**: Batch 모듈의 배치 작업 테스트
+- **Slice Test**: 각 모듈의 특정 레이어만 로드하여 빠른 테스트 실행
 
 ### 성과 지표
 
@@ -238,20 +159,16 @@ class ProductRepositoryTest {
 
 멀티 모듈 구조를 통해 **시스템의 복잡도가 증가해도 각 모듈의 역할이 명확히 분리**되어 있어, 새로운 기능 추가나 기존 기능 수정 시에도 영향 범위를 최소화할 수 있었습니다.
 
-#### 새로운 모듈 추가 예시
-```gradle
-// settings.gradle에 새 모듈 추가
-include 'module-notification'  // 알림 기능 모듈
+#### 새로운 모듈 추가 전략
+**확장 가능한 모듈 구조:**
+- 새로운 기능 요구사항 발생 시 독립적인 모듈로 추가 가능
+- 기존 모듈에 영향을 주지 않고 새로운 기능 개발
+- 새 몤에서의 전문화된 기능 개발
 
-// module-notification/build.gradle
-dependencies {
-    implementation project(':module-domain')
-    implementation project(':module-common')
-    
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'org.springframework.kafka:spring-kafka'
-}
-```
+**모듈 추가 원칙:**
+- 단일 책임 원칙에 따른 모듈 분리
+- 의존성 방향성 유지 (내부 모듈에만 의존)
+- 공통 기능은 module-common에 집약
 
 ---
 

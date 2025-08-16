@@ -7,16 +7,15 @@ tags: ["redis", "caching", "session", "performance"]
 problem_type: "성능 최적화"
 ---
 
-# Redis를 활용한 캐싱 및 세션 관리 구현
+# Redis를 활용한 세션 관리 구현
 
 ## 🔍 문제 상황
 
 ### Redis 도입 배경
 
-WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:
+WashFit 서비스에서는 사용자 세션 관리를 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:
 
-- **세션 관리**: 사용자 로그인 상태의 효율적인 관리
-- **캐싱**: 자주 조회되는 데이터의 응답 속도 향상
+- **세션 관리**: 사용자 /로그인 상태의 효율적인 관리
 - **임시 데이터 저장**: 인증 토큰 등 시간 제한이 있는 데이터의 관리
 
 ### 기존 방식의 한계
@@ -32,106 +31,61 @@ WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해
 **spring-boot-starter-data-redis** 의존성을 활용하여 다음과 같이 구현했습니다:
 
 #### 1. 세션 스토어 구성
-```java
-@Configuration
-@EnableRedisHttpSession
-public class RedisSessionConfig {
-    
-    @Bean
-    public LettuceConnectionFactory connectionFactory() {
-        return new LettuceConnectionFactory(
-            new RedisStandaloneConfiguration("localhost", 6379)
-        );
-    }
-    
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory());
-        template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
-        return template;
-    }
-}
-```
+**Redis 기반 세션 관리 전략:**
+- Spring Session과 Redis를 통합하여 분산 세션 관리 구현
+- Lettuce 커넥션 팩토리를 통한 비동기 연결 관리
+- JSON 직렬화를 통한 데이터 효율성 확보
+
+**세션 데이터 관리:**
+- 사용자 인증 상태 저장
+- 서버 재시작 시에도 세션 유지
+- 다중 서버 환경에서 일관된 세션 접근
 
 #### 2. 캐시 전략 구현
-```java
-@Service
-@CacheConfig(cacheNames = "products")
-public class ProductService {
-    
-    @Cacheable(key = "#productId")
-    public Product getProduct(Long productId) {
-        return productRepository.findById(productId)
-            .orElseThrow(() -> new ProductNotFoundException("Product not found"));
-    }
-    
-    @CacheEvict(key = "#product.id")
-    public Product updateProduct(Product product) {
-        return productRepository.save(product);
-    }
-    
-    @Cacheable(key = "'popular-products'")
-    public List<Product> getPopularProducts() {
-        return productRepository.findPopularProducts();
-    }
-}
-```
+**Spring Cache 추상화 활용:**
+- @Cacheable 어노테이션을 통한 선언적 캐싱
+- 메소드 레벨에서 캐시 정책 정의
+- 자동 캐시 무효화 및 업데이트
+
+**캐시 키 전략:**
+- 개별 엔티티 ID 기반 캐싱
+- 연관 데이터 그룹 캐싱
+- 캐시 일관성 유지를 위한 업데이트/삭제 전략
 
 #### 3. TTL 활용
-```java
-@Component
-public class TokenService {
-    
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-    
-    public void saveVerificationToken(String email, String token) {
-        String key = "verification:" + email;
-        redisTemplate.opsForValue().set(key, token, Duration.ofMinutes(5));
-    }
-    
-    public boolean verifyToken(String email, String token) {
-        String key = "verification:" + email;
-        String storedToken = redisTemplate.opsForValue().get(key);
-        return token.equals(storedToken);
-    }
-}
-```
+**시간 기반 데이터 관리:**
+- 인증 토큰의 자동 만료 처리
+- 캐시 데이터의 전략적 만료 설정
+- 메모리 사용량 최적화를 위한 자동 정리
+
+**TTL 전략:**
+- 인증 토큰: 5분 단기 만료
+- 제품 정보 캐시: 1시간 중기 만료
+- 통계 데이터: 24시간 장기 만료
 
 ### 캐시 전략 설계
 
-#### 1. Cache-Aside Pattern
-```java
-public Product getProductWithCache(Long productId) {
-    // 1. 캐시에서 조회
-    String cacheKey = "product:" + productId;
-    Product cachedProduct = redisTemplate.opsForValue().get(cacheKey);
-    
-    if (cachedProduct != null) {
-        return cachedProduct; // Cache Hit
-    }
-    
-    // 2. DB에서 조회
-    Product product = productRepository.findById(productId)
-        .orElseThrow(() -> new ProductNotFoundException("Product not found"));
-    
-    // 3. 캐시에 저장
-    redisTemplate.opsForValue().set(cacheKey, product, Duration.ofHours(1));
-    
-    return product;
-}
-```
+#### 1. Cache-Aside Pattern 채택
+**전략적 선택 이유:**
+- 캐시 데이터와 DB 데이터 간의 일관성 유지
+- 캐시 실패 시에도 애플리케이션 정상 동작 보장
+- 애플리케이션에서 직접 캐시 제어 가능
 
-#### 2. Write-Through Pattern
-```java
-@CachePut(key = "#product.id")
-public Product saveProduct(Product product) {
-    Product savedProduct = productRepository.save(product);
-    // Spring Cache가 자동으로 Redis에 업데이트
-    return savedProduct;
-}
-```
+**구현 패턴:**
+1. 캐시에서 데이터 조회 시도
+2. Cache Miss 시 DB에서 데이터 로드
+3. 조회된 데이터를 캐시에 저장
+4. 적절한 TTL 설정으로 캐시 무효화
+
+#### 2. Write-Through Pattern 보완
+**데이터 일관성 전략:**
+- 데이터 업데이트 시 캐시 동기화
+- @CachePut 어노테이션을 통한 자동 캐시 갱신
+- 캐시와 DB 간의 데이터 불일치 방지
+
+**성능 고려사항:**
+- 쓰기 지연 시간은 증가하지만 읽기 성능 향상
+- 비즈니스 로직에 따른 제선적 캐시 업데이트
 
 ## 📊 구현 결과
 
@@ -158,24 +112,15 @@ Redis 도입을 통해 다음과 같은 이점을 확보했습니다:
 
 ### 모니터링 및 관리
 
-```java
-@Component
-public class CacheMetrics {
-    
-    private final MeterRegistry meterRegistry;
-    private final RedisTemplate<String, Object> redisTemplate;
-    
-    @EventListener
-    public void handleCacheHit(CacheHitEvent event) {
-        meterRegistry.counter("cache.hit", "cache", event.getCacheName()).increment();
-    }
-    
-    @EventListener
-    public void handleCacheMiss(CacheMissEvent event) {
-        meterRegistry.counter("cache.miss", "cache", event.getCacheName()).increment();
-    }
-}
-```
+**캐시 성능 메트릭 수집:**
+- Cache Hit/Miss Rate 추적을 통한 캐시 효율성 모니터링
+- 캐시별 사용량 및 성능 지표 측정
+- 실시간 알림을 통한 캐시 시스템 상태 모니터링
+
+**운영 관리 전략:**
+- 매일 캐시 히트율 리포트 작성
+- 캐시 데이터 만료 전략 업데이트
+- Redis 메모리 사용량 및 성능 최적화
 
 ---
 

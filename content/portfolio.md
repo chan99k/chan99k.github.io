@@ -23,7 +23,7 @@ draft: false
 - **멀티 모듈 아키텍처** 설계 및 구현 (API, Batch, Domain, Common, Admin 모듈 분리)
 - **Spring Batch** 모듈을 통한 데이터 처리 파이프라인 설계
 - **QueryDSL**을 이용한 동적 검색 쿼리 작성으로 **복합 조건 검색 기능 구현**
-- **Redis**를 활용한 캐싱 및 세션 관리
+- **Redis**를 활용한 세션 관리
 
 ### 주요 성과
 

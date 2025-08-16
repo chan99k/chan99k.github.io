@@ -49,53 +49,40 @@ washfit-backend/
 Spring Batch의 표준 아키텍처를 따라 다음과 같이 구성했습니다:
 
 #### 1. Job과 Step 분리
-```java
-@Configuration
-@EnableBatchProcessing
-public class BatchConfig {
-    
-    @Bean
-    public Job productDataProcessingJob() {
-        return jobBuilderFactory.get("productDataProcessingJob")
-            .start(readProductDataStep())
-            .next(validateProductDataStep())
-            .next(saveProductDataStep())
-            .build();
-    }
-    
-    @Bean
-    public Step readProductDataStep() {
-        return stepBuilderFactory.get("readProductDataStep")
-            .<ProductData, ProductData>chunk(1000)
-            .reader(productDataReader())
-            .processor(productDataProcessor())
-            .writer(productDataWriter())
-            .build();
-    }
-}
-```
+Spring Batch의 핵심인 Job-Step 계층 구조를 활용하여 데이터 처리 워크플로우를 구성했습니다:
+
+**Job 설계 원칙:**
+- 논리적으로 관련된 Step들을 하나의 Job으로 그룹핑
+- 각 Step은 독립적이면서도 순차적 실행 보장
+- Step 간 데이터 전달을 위한 JobExecutionContext 활용
+
+**Step 구성 전략:**
+- Reader-Processor-Writer 패턴 적용
+- 청크 단위 트랜잭션 처리
+- 단위 테스트 가능한 컴포넌트 분리
 
 #### 2. 청크 기반 처리
-- 메모리 효율성을 위한 청크 단위 데이터 처리 (1000건씩)
-- OutOfMemory 방지 및 성능 최적화
+대용량 데이터 처리를 위한 청크 기반 아키텍처를 채택했습니다:
 
-#### 3. 오류 처리
-```java
-@Bean
-public Step productDataStep() {
-    return stepBuilderFactory.get("productDataStep")
-        .<ProductData, ProductData>chunk(1000)
-        .reader(reader())
-        .processor(processor())
-        .writer(writer())
-        .faultTolerant()
-        .retryLimit(3)
-        .retry(Exception.class)
-        .skipLimit(10)
-        .skip(ValidationException.class)
-        .build();
-}
-```
+**메모리 효율성:**
+- 전체 데이터를 메모리에 로드하지 않고 설정된 청크 크기만큼 처리
+- OutOfMemory 방지 및 일정한 메모리 사용량 유지
+- 청크 크기 조정을 통한 성능 튜닝 가능
+
+**트랜잭션 관리:**
+- 청크 단위 트랜잭션으로 부분 실패 시에도 처리된 데이터 보존
+- 실패 지점부터 재시작 가능한 구조
+
+#### 3. 오류 처리 및 복구
+안정적인 배치 처리를 위한 다양한 오류 처리 전략을 구현했습니다:
+
+**Retry 메커니즘:**
+- 일시적 오류(네트워크, DB 연결 등)에 대한 자동 재시도
+- 재시도 횟수 제한으로 무한 루프 방지
+
+**Skip 전략:**
+- 특정 예외에 대해서는 해당 아이템만 건너뛰고 계속 처리
+- 데이터 품질 문제로 인한 전체 배치 실패 방지
 
 ## 📊 구현 결과
 
@@ -111,23 +98,15 @@ public Step productDataStep() {
 
 ### 배치 작업 모니터링
 
-```java
-@Component
-public class JobExecutionListener implements org.springframework.batch.core.JobExecutionListener {
-    
-    @Override
-    public void beforeJob(JobExecution jobExecution) {
-        log.info("Job Started: {}", jobExecution.getJobInstance().getJobName());
-    }
-    
-    @Override
-    public void afterJob(JobExecution jobExecution) {
-        log.info("Job Finished: {} with status: {}", 
-                jobExecution.getJobInstance().getJobName(), 
-                jobExecution.getStatus());
-    }
-}
-```
+**JobExecutionListener 구현:**
+- 배치 작업의 시작과 종료 시점 추적
+- 실행 시간, 처리 건수, 오류 통계 수집
+- 실패 시 알림 및 로그 기록
+
+**메트릭 수집:**
+- 각 Step별 처리 시간 및 처리량 측정
+- 오류율 및 재시도 횟수 모니터링
+- 시스템 리소스 사용량 추적
 
 ---
 

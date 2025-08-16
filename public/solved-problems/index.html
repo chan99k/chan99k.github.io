@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>주요 성과 | 김찬규 | Backend Developer</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="주요 발견 문제 및 해결 🏆
+
+QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보
+#querydsl #jpa #typesafety
+동적 검색 요구사항
+WashFit 서비스에서는 사용자가 다양한 조건으로 세차 용품을 검색할 수 있어야 했습니다. 제품명, 브랜드, 카테고리, 성분 등 복합적인 검색 조건을 처리해야 하는 상황이었습니다.
+기술적 해결 방안
+기존 JPQL이나 Criteria API 대신 QueryDSL을 도입하여 다음과 같은 이점을 확보했습니다:
+
+컴파일 시점 오류 검증: 쿼리 오타나 잘못된 필드 참조를 런타임이 아닌 컴파일 시점에 발견
+동적 쿼리 작성 용이성: 조건에 따라 WHERE 절을 동적으로 구성하는 코드를 깔끔하게 작성
+타입 안정성: 엔티티 필드의 타입 변경 시 관련 쿼리도 함께 오류로 감지되어 일관성 유지
+
+구현 결과
+복잡한 검색 조건을 처리하는 동적 쿼리를 안전하고 유지보수하기 쉬운 코드로 구현할 수 있었습니다. 특히 멀티 모듈 프로젝트에서 도메인 모델이 변경될 때 관련 쿼리들이 함께 검증되어 코드의 안정성을 크게 향상시켰습니다.">
+    <meta name="generator" content="Hugo 0.148.2">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    <meta name="author" content="김찬규">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+
+    
+
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/solved-problems/">
+    
+
+    <meta property="og:url" content="http://localhost:1313/solved-problems/">
+  <meta property="og:site_name" content="김찬규 | Backend Developer">
+  <meta property="og:title" content="주요 성과">
+  <meta property="og:description" content="주요 발견 문제 및 해결 🏆 QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보 #querydsl #jpa #typesafety
+동적 검색 요구사항 WashFit 서비스에서는 사용자가 다양한 조건으로 세차 용품을 검색할 수 있어야 했습니다. 제품명, 브랜드, 카테고리, 성분 등 복합적인 검색 조건을 처리해야 하는 상황이었습니다.
+기술적 해결 방안 기존 JPQL이나 Criteria API 대신 QueryDSL을 도입하여 다음과 같은 이점을 확보했습니다:
+컴파일 시점 오류 검증: 쿼리 오타나 잘못된 필드 참조를 런타임이 아닌 컴파일 시점에 발견 동적 쿼리 작성 용이성: 조건에 따라 WHERE 절을 동적으로 구성하는 코드를 깔끔하게 작성 타입 안정성: 엔티티 필드의 타입 변경 시 관련 쿼리도 함께 오류로 감지되어 일관성 유지 구현 결과 복잡한 검색 조건을 처리하는 동적 쿼리를 안전하고 유지보수하기 쉬운 코드로 구현할 수 있었습니다. 특히 멀티 모듈 프로젝트에서 도메인 모델이 변경될 때 관련 쿼리들이 함께 검증되어 코드의 안정성을 크게 향상시켰습니다.">
+  <meta property="og:locale" content="ko">
+  <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2025-08-16T10:00:00+09:00">
+    <meta property="article:modified_time" content="2025-08-16T10:00:00+09:00">
+
+  <meta itemprop="name" content="주요 성과">
+  <meta itemprop="description" content="주요 발견 문제 및 해결 🏆 QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보 #querydsl #jpa #typesafety
+동적 검색 요구사항 WashFit 서비스에서는 사용자가 다양한 조건으로 세차 용품을 검색할 수 있어야 했습니다. 제품명, 브랜드, 카테고리, 성분 등 복합적인 검색 조건을 처리해야 하는 상황이었습니다.
+기술적 해결 방안 기존 JPQL이나 Criteria API 대신 QueryDSL을 도입하여 다음과 같은 이점을 확보했습니다:
+컴파일 시점 오류 검증: 쿼리 오타나 잘못된 필드 참조를 런타임이 아닌 컴파일 시점에 발견 동적 쿼리 작성 용이성: 조건에 따라 WHERE 절을 동적으로 구성하는 코드를 깔끔하게 작성 타입 안정성: 엔티티 필드의 타입 변경 시 관련 쿼리도 함께 오류로 감지되어 일관성 유지 구현 결과 복잡한 검색 조건을 처리하는 동적 쿼리를 안전하고 유지보수하기 쉬운 코드로 구현할 수 있었습니다. 특히 멀티 모듈 프로젝트에서 도메인 모델이 변경될 때 관련 쿼리들이 함께 검증되어 코드의 안정성을 크게 향상시켰습니다.">
+  <meta itemprop="datePublished" content="2025-08-16T10:00:00+09:00">
+  <meta itemprop="dateModified" content="2025-08-16T10:00:00+09:00">
+  <meta itemprop="wordCount" content="1159">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="주요 성과">
+  <meta name="twitter:description" content="주요 발견 문제 및 해결 🏆 QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보 #querydsl #jpa #typesafety
+동적 검색 요구사항 WashFit 서비스에서는 사용자가 다양한 조건으로 세차 용품을 검색할 수 있어야 했습니다. 제품명, 브랜드, 카테고리, 성분 등 복합적인 검색 조건을 처리해야 하는 상황이었습니다.
+기술적 해결 방안 기존 JPQL이나 Criteria API 대신 QueryDSL을 도입하여 다음과 같은 이점을 확보했습니다:
+컴파일 시점 오류 검증: 쿼리 오타나 잘못된 필드 참조를 런타임이 아닌 컴파일 시점에 발견 동적 쿼리 작성 용이성: 조건에 따라 WHERE 절을 동적으로 구성하는 코드를 깔끔하게 작성 타입 안정성: 엔티티 필드의 타입 변경 시 관련 쿼리도 함께 오류로 감지되어 일관성 유지 구현 결과 복잡한 검색 조건을 처리하는 동적 쿼리를 안전하고 유지보수하기 쉬운 코드로 구현할 수 있었습니다. 특히 멀티 모듈 프로젝트에서 도메인 모델이 변경될 때 관련 쿼리들이 함께 검증되어 코드의 안정성을 크게 향상시켰습니다.">
+
+	
+  </head><body class="ma0 avenir bg-near-white development">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        김찬규 | Backend Developer
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/portfolio/" title="Portfolio page">
+              Portfolio
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/posts/" title="Posts page">
+              Posts
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/about/" title="About Me page">
+              About Me
+            </a>
+          </li>
+          
+        </ul>
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  
+  <article class="flex-l mw8 center ph3 flex-wrap justify-between">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        김찬규 | Backend Developer
+      </aside><div id="sharing" class="mt3 ananke-socials"></div>
+<h1 class="f1 athelas mt3 mb1">주요 성과</h1>
+      
+      <p class="tracked"><strong>김찬규</strong>
+      </p>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2025-08-16T10:00:00+09:00">August 16, 2025</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="주요-발견-문제-및-해결-">주요 발견 문제 및 해결 🏆</h1>
+<hr>
+<h2 id="querydsl을-활용한-동적-쿼리-및-타입-안정성-확보">QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보</h2>
+<p><em>#querydsl #jpa #typesafety</em></p>
+<h4 id="동적-검색-요구사항">동적 검색 요구사항</h4>
+<p>WashFit 서비스에서는 사용자가 다양한 조건으로 세차 용품을 검색할 수 있어야 했습니다. 제품명, 브랜드, 카테고리, 성분 등 복합적인 검색 조건을 처리해야 하는 상황이었습니다.</p>
+<h4 id="기술적-해결-방안">기술적 해결 방안</h4>
+<p>기존 JPQL이나 Criteria API 대신 <strong>QueryDSL</strong>을 도입하여 다음과 같은 이점을 확보했습니다:</p>
+<ul>
+<li><strong>컴파일 시점 오류 검증</strong>: 쿼리 오타나 잘못된 필드 참조를 런타임이 아닌 컴파일 시점에 발견</li>
+<li><strong>동적 쿼리 작성 용이성</strong>: 조건에 따라 WHERE 절을 동적으로 구성하는 코드를 깔끔하게 작성</li>
+<li><strong>타입 안정성</strong>: 엔티티 필드의 타입 변경 시 관련 쿼리도 함께 오류로 감지되어 일관성 유지</li>
+</ul>
+<h4 id="구현-결과">구현 결과</h4>
+<p>복잡한 검색 조건을 처리하는 동적 쿼리를 안전하고 유지보수하기 쉬운 코드로 구현할 수 있었습니다. 특히 멀티 모듈 프로젝트에서 도메인 모델이 변경될 때 관련 쿼리들이 함께 검증되어 코드의 안정성을 크게 향상시켰습니다.</p>
+<hr>
+<h2 id="spring-batch-모듈-설계를-통한-데이터-처리-아키텍처-구축">Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축</h2>
+<p><em>#springbatch #architecture #modularity</em></p>
+<h4 id="데이터-처리-요구사항">데이터 처리 요구사항</h4>
+<p>WashFit 서비스는 세차 용품의 안전 정보를 제공하기 위해 대량의 데이터를 처리해야 했습니다. 이를 위해서는 안정적이고 확장 가능한 데이터 처리 아키텍처가 필요했습니다.</p>
+<h4 id="멀티-모듈-아키텍처-내의-배치-시스템">멀티 모듈 아키텍처 내의 배치 시스템</h4>
+<p><strong>module-batch</strong>를 별도 모듈로 분리하여 다음과 같은 이점을 확보했습니다:</p>
+<ul>
+<li><strong>관심사 분리</strong>: API 처리 로직과 배치 처리 로직을 완전히 분리</li>
+<li><strong>독립적 배포</strong>: 배치 작업의 변경이 API 서버에 영향을 주지 않음</li>
+<li><strong>확장성</strong>: 배치 처리 성능이 필요할 때 배치 모듈만 독립적으로 스케일링 가능</li>
+</ul>
+<h4 id="spring-batch-아키텍처-설계">Spring Batch 아키텍처 설계</h4>
+<p>Spring Batch의 표준 아키텍처를 따라 다음과 같이 구성했습니다:</p>
+<ul>
+<li><strong>Job과 Step 분리</strong>: 각 데이터 처리 작업을 독립적인 Job과 Step으로 구성</li>
+<li><strong>청크 기반 처리</strong>: 메모리 효율성을 위한 청크 단위 데이터 처리</li>
+<li><strong>오류 처리</strong>: 배치 작업 중 발생할 수 있는 예외 상황에 대한 처리 로직 구현</li>
+</ul>
+<h4 id="아키텍처적-이점">아키텍처적 이점</h4>
+<p>이러한 설계를 통해 <strong>유지보수성이 높고 확장 가능한 데이터 처리 시스템</strong>을 구축할 수 있었습니다. 특히 멀티 모듈 구조 내에서 배치 처리 로직이 독립적으로 관리되어 전체 시스템의 안정성을 향상시켰습니다.</p>
+<hr>
+<h2 id="redis를-활용한-캐싱-및-세션-관리-구현">Redis를 활용한 캐싱 및 세션 관리 구현</h2>
+<p><em>#redis #caching #session</em></p>
+<h4 id="redis-도입-배경">Redis 도입 배경</h4>
+<p>WashFit 서비스에서는 사용자 세션 관리와 데이터 캐싱을 위해 In-Memory 데이터 저장소가 필요했습니다. 특히 다음과 같은 요구사항이 있었습니다:</p>
+<ul>
+<li><strong>세션 관리</strong>: 사용자 로그인 상태의 효율적인 관리</li>
+<li><strong>캐싱</strong>: 자주 조회되는 데이터의 응답 속도 향상</li>
+<li><strong>임시 데이터 저장</strong>: 인증 토큰 등 시간 제한이 있는 데이터의 관리</li>
+</ul>
+<h4 id="redis-기술적-구현">Redis 기술적 구현</h4>
+<p><strong>spring-boot-starter-data-redis</strong> 의존성을 활용하여 다음과 같이 구현했습니다:</p>
+<ul>
+<li><strong>세션 스토어</strong>: 사용자 세션 정보를 Redis에 저장하여 분산 환경에서도 일관된 세션 관리 가능</li>
+<li><strong>캐시 전략</strong>: 자주 조회되는 제품 정보를 Redis에 캐싱하여 데이터베이스 부하 감소</li>
+<li><strong>TTL 활용</strong>: Redis의 TTL(Time To Live) 기능을 통한 임시 데이터의 자동 만료 처리</li>
+</ul>
+<h4 id="성능-및-확장성-이점">성능 및 확장성 이점</h4>
+<p>Redis 도입을 통해 다음과 같은 이점을 확보했습니다:</p>
+<ul>
+<li><strong>응답 속도 향상</strong>: 메모리 기반 데이터 접근으로 빠른 응답 시간 확보</li>
+<li><strong>데이터베이스 부하 감소</strong>: 캐시 히트를 통한 PostgreSQL 쿼리 횟수 감소</li>
+<li><strong>확장성</strong>: 애플리케이션 서버가 여러 대로 확장되어도 일관된 세션 관리 가능</li>
+</ul>
+<hr>
+<h2 id="멀티-모듈-프로젝트-아키텍처-설계-및-구현">멀티 모듈 프로젝트 아키텍처 설계 및 구현</h2>
+<p><em>#architecture #multimodule #scalability</em></p>
+<h4 id="프로젝트-구조-설계">프로젝트 구조 설계</h4>
+<p>WashFit 프로젝트는 확장성과 유지보수성을 고려하여 <strong>멀티 모듈 아키텍처</strong>로 설계되었습니다. 각 모듈은 명확한 역할과 책임을 가지도록 구성했습니다.</p>
+<h4 id="모듈-구조-및-역할">모듈 구조 및 역할</h4>
+<ul>
+<li><strong>module-api</strong>: REST API 엔드포인트 및 웹 계층 처리</li>
+<li><strong>module-batch</strong>: Spring Batch 기반 데이터 처리 작업</li>
+<li><strong>module-domain</strong>: 엔티티, 리포지토리 등 도메인 로직</li>
+<li><strong>module-common</strong>: 공통 유틸리티 및 설정</li>
+<li><strong>module-admin</strong>: 관리자 기능 (별도 컨텍스트)</li>
+</ul>
+<h4 id="아키텍처적-이점-1">아키텍처적 이점</h4>
+<p>이러한 모듈 분리를 통해 다음과 같은 이점을 확보했습니다:</p>
+<ul>
+<li><strong>관심사 분리</strong>: 각 모듈이 명확한 책임을 가져 코드의 응집도 향상</li>
+<li><strong>독립적 개발</strong>: 팀원들이 서로 다른 모듈에서 동시에 작업 가능</li>
+<li><strong>선택적 배포</strong>: 변경이 필요한 모듈만 독립적으로 배포 가능</li>
+<li><strong>테스트 용이성</strong>: 모듈별 단위 테스트 및 통합 테스트 구성 용이</li>
+</ul>
+<h4 id="확장성-확보">확장성 확보</h4>
+<p>멀티 모듈 구조를 통해 <strong>시스템의 복잡도가 증가해도 각 모듈의 역할이 명확히 분리</strong>되어 있어, 새로운 기능 추가나 기존 기능 수정 시에도 영향 범위를 최소화할 수 있었습니다.</p>
+<hr>
+<h2 id="mysql-fulltext를-활용한-효율적인-검색-기능-구현">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h2>
+<p><em>#search #mysql #fulltext #performance</em></p>
+<h4 id="검색-기능-요구사항">검색 기능 요구사항</h4>
+<p>KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 다양한 검색 기술 중에서 프로젝트 규모와 요구사항에 적합한 솔루션을 선택해야 했습니다.</p>
+<h4 id="기술적-고려사항">기술적 고려사항</h4>
+<p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
+<ul>
+<li><strong>MySQL LIKE 검색</strong>: 단순하지만 성능 제한이 있는 방식</li>
+<li><strong>MySQL FULLTEXT 검색</strong>: 내장된 전문 검색 기능 활용</li>
+<li><strong>Elasticsearch</strong>: 고도화된 검색 엔진 (향후 도입 계획)</li>
+</ul>
+<h4 id="mysql-fulltext-선택-이유">MySQL FULLTEXT 선택 이유</h4>
+<p>프로젝트의 초기 단계에서는 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
+<ul>
+<li><strong>개발 효율성</strong>: 기존 MySQL 데이터베이스 인프라 활용으로 추가 시스템 도입 없음</li>
+<li><strong>성능 최적화</strong>: FULLTEXT 인덱스를 통한 빠른 텍스트 검색 가능</li>
+<li><strong>단순성</strong>: 복잡한 검색 엔진 운영 부담 없이 필요한 검색 기능 제공</li>
+</ul>
+<h4 id="구현-결과-1">구현 결과</h4>
+<p>MySQL FULLTEXT 기반 검색 시스템을 통해 다음과 같은 성과를 달성했습니다:</p>
+<ul>
+<li><strong>안정적인 검색 성능</strong>: 인덱스 기반의 일관된 검색 응답 속도 확보</li>
+<li><strong>유지보수 용이성</strong>: 기존 데이터베이스 내에서 검색 기능 관리</li>
+<li><strong>확장 가능한 구조</strong>: 향후 Elasticsearch 도입 시 마이그레이션 가능한 아키텍처 설계</li>
+</ul>
+<p>이러한 단계적 접근을 통해 <strong>프로젝트 초기에는 실용적인 검색 기능을 빠르게 구현</strong>하고, 향후 서비스 성장에 따라 더 고도화된 검색 엔진으로 발전시킬 수 있는 기반을 마련했습니다.</p>
+<hr>
+<h2 id="rss-파서를-활용한-블로그-크롤링-시스템-구현">RSS 파서를 활용한 블로그 크롤링 시스템 구현</h2>
+<p><em>#crawler #rss #jsoup #automation</em></p>
+<h4 id="데이터-수집의-중요성">데이터 수집의 중요성</h4>
+<p>KernelEngine 서비스의 핵심 가치는 <strong>다양한 기술 블로그의 최신 게시글을 한 곳에서 검색</strong>할 수 있게 하는 것이었습니다. 이를 위해서는 여러 블로그로부터 지속적으로 새로운 게시글을 수집하는 시스템이 필요했습니다.</p>
+<h4 id="기술적-구현-방식">기술적 구현 방식</h4>
+<p><strong>Jsoup 라이브러리와 RSS 파서</strong>를 활용하여 블로그 크롤링 시스템을 구현했습니다:</p>
+<ul>
+<li><strong>RSS 기반 수집</strong>: 표준화된 RSS 피드를 통한 안정적인 데이터 수집</li>
+<li><strong>HTML 파싱</strong>: Jsoup을 활용한 웹 페이지 내용 추출</li>
+<li><strong>Spring Batch 통합</strong>: 배치 처리를 통한 주기적 크롤링 작업 관리</li>
+</ul>
+<h4 id="크롤링-아키텍처">크롤링 아키텍처</h4>
+<p>크롤링 시스템은 다음과 같이 설계되었습니다:</p>
+<ol>
+<li><strong>RSS 피드 파싱</strong>: 등록된 블로그의 RSS URL에서 최신 게시글 목록 수집</li>
+<li><strong>중복 검사</strong>: 이미 수집된 게시글은 제외하는 중복 방지 로직</li>
+<li><strong>메타데이터 추출</strong>: 제목, 작성일, 요약, 태그 등 핵심 정보 추출</li>
+<li><strong>데이터베이스 저장</strong>: MySQL에 구조화된 형태로 게시글 정보 저장</li>
+</ol>
+<h4 id="배치-처리를-통한-자동화">배치 처리를 통한 자동화</h4>
+<p><strong>Spring Batch</strong>와 연계하여 다음과 같은 자동화 기능을 구현했습니다:</p>
+<ul>
+<li><strong>주기적 실행</strong>: 설정된 주기에 따라 자동으로 크롤링 작업 실행</li>
+<li><strong>오류 처리</strong>: 네트워크 오류나 파싱 실패 시 재시도 로직</li>
+<li><strong>성능 최적화</strong>: 청크 단위 처리를 통한 메모리 효율적인 데이터 처리</li>
+</ul>
+<p>이를 통해 <strong>사용자가 수동으로 블로그를 확인하지 않아도 항상 최신 기술 게시글을 검색할 수 있는 환경</strong>을 제공할 수 있었습니다.</p>
+<hr>
+<h2 id="spring-batch를-활용한-데이터-처리-및-통계-관리-시스템">Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템</h2>
+<p><em>#springbatch #automation #statistics</em></p>
+<h4 id="대용량-데이터-처리의-필요성">대용량 데이터 처리의 필요성</h4>
+<p>KernelEngine 서비스에서는 다음과 같은 데이터 처리 작업들이 필요했습니다:</p>
+<ol>
+<li><strong>대량 블로그 게시글 수집</strong>: 여러 블로그의 게시글을 일괄 처리</li>
+<li><strong>사용자 통계 생성</strong>: 일간 가입자 수, 인기 게시글 등 서비스 지표 계산</li>
+<li><strong>데이터 정제</strong>: 수집된 데이터의 품질 관리 및 중복 제거</li>
+</ol>
+<p>이러한 작업들은 실시간 API 처리와는 다른 특성을 가지므로 별도의 배치 처리 시스템이 필요했습니다.</p>
+<h4 id="spring-batch-아키텍처">Spring Batch 아키텍처</h4>
+<p><strong>Spring Batch 프레임워크</strong>를 활용하여 견고한 배치 처리 시스템을 구축했습니다:</p>
+<ul>
+<li><strong>Job과 Step 분리</strong>: 각 데이터 처리 작업을 독립적인 Job으로 구성</li>
+<li><strong>청크 기반 처리</strong>: 메모리 효율성을 위한 청크 단위 데이터 처리</li>
+<li><strong>트랜잭션 관리</strong>: 배치 작업의 안정성을 위한 트랜잭션 처리</li>
+</ul>
+<h4 id="구현된-배치-작업들">구현된 배치 작업들</h4>
+<ol>
+<li>
+<p><strong>크롤링 배치 작업</strong>:</p>
+<ul>
+<li>RSS 피드에서 새로운 게시글을 읽어와 데이터베이스에 저장</li>
+<li>실패한 크롤링 작업에 대한 재시도 로직 포함</li>
+</ul>
+</li>
+<li>
+<p><strong>통계 집계 배치 작업</strong>:</p>
+<ul>
+<li>일간 사용자 가입 통계 계산</li>
+<li>인기 게시글 랭킹 생성</li>
+<li>검색 키워드 통계 분석</li>
+</ul>
+</li>
+</ol>
+<h4 id="배치-처리의-이점">배치 처리의 이점</h4>
+<p>Spring Batch 도입을 통해 다음과 같은 이점을 확보했습니다:</p>
+<ul>
+<li><strong>안정성</strong>: 대용량 데이터 처리 중 오류 발생 시 재시작 및 복구 기능</li>
+<li><strong>성능</strong>: 청크 단위 처리로 메모리 사용량 최적화</li>
+<li><strong>모니터링</strong>: 배치 작업의 실행 상태 및 결과 추적 가능</li>
+<li><strong>확장성</strong>: 데이터량 증가에 따른 배치 작업 성능 튜닝 가능</li>
+</ul>
+<p>이를 통해 <strong>API 서버의 성능에 영향을 주지 않으면서도 필요한 데이터 처리 작업을 안정적으로 수행</strong>할 수 있는 시스템을 구축했습니다.</p>
+<hr>
+<h4 id="tags">Tags</h4>
+<p>#achievements #portfolio #backend #java #springboot #querydsl #springbatch #redis #mysql #architecture #multimodule #performance #search #crawler #automation</p>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="http://localhost:1313/" >
+    &copy;  김찬규 | Backend Developer 2025 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>
