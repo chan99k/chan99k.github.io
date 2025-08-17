@@ -1,0 +1,245 @@
+/* Portfolio Page Custom Styles */
+
+/* Portfolio Introduction */
+.portfolio-intro {
+    text-align: center;
+    margin: 2rem 0 3rem 0;
+    padding: 2rem;
+    background: var(--entry);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Project Header Styles */
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--entry);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.project-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.project-period,
+.project-team {
+    font-size: 0.9rem;
+    color: var(--secondary);
+    font-weight: 500;
+}
+
+.project-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--theme);
+    color: var(--primary);
+    text-decoration: none;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.github-link:hover {
+    background: var(--secondary);
+    color: var(--theme);
+    text-decoration: none;
+}
+
+/* Project Tags Styles */
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--code-bg);
+    color: var(--primary);
+    font-size: 0.8rem;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    font-family: monospace;
+    font-weight: 500;
+}
+
+/* Problem Cards Container */
+.problem-cards-container {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding: 1rem 0;
+    margin: 1rem 0;
+    scroll-behavior: smooth;
+}
+
+/* Individual Problem Card */
+.problem-card {
+    flex: 0 0 320px;
+    min-height: 280px;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.problem-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--tertiary);
+}
+
+.card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-content h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.card-content h4 a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.card-content h4 a:hover {
+    color: var(--tertiary);
+}
+
+.card-content p {
+    flex: 1;
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--secondary);
+}
+
+/* Card Tags */
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.mini-tag {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    background: var(--code-bg);
+    color: var(--primary);
+    font-size: 0.7rem;
+    border-radius: 12px;
+    font-family: monospace;
+    font-weight: 500;
+    border: 1px solid var(--border);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .project-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .project-meta {
+        order: 1;
+    }
+    
+    .project-links {
+        order: 2;
+        width: 100%;
+    }
+    
+    .github-link {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .problem-cards-container {
+        gap: 1rem;
+    }
+    
+    .problem-card {
+        flex: 0 0 280px;
+        min-height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .problem-card {
+        flex: 0 0 260px;
+        padding: 1rem;
+    }
+    
+    .project-header {
+        padding: 0.75rem;
+    }
+}
+
+/* Scrollbar for horizontal scroll */
+.problem-cards-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.problem-cards-container::-webkit-scrollbar-track {
+    background: var(--code-bg);
+    border-radius: 4px;
+}
+
+.problem-cards-container::-webkit-scrollbar-thumb {
+    background: var(--tertiary);
+    border-radius: 4px;
+}
+
+.problem-cards-container::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary);
+}
+
+/* Dark mode enhancements */
+.dark .problem-card:hover {
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
+}
+
+.dark .tag {
+    background: var(--code-block-bg);
+}
+
+.dark .mini-tag {
+    background: var(--code-block-bg);
+}

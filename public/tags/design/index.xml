@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Design on 김찬규 | Backend Developer</title>
-    <link>http://localhost:1313/tags/design/</link>
-    <description>Recent content in Design on 김찬규 | Backend Developer</description>
-    <generator>Hugo</generator>
+    <title>Design on chan99k&#39;s</title>
+    <link>http://localhost:57694/tags/design/</link>
+    <description>Recent content in Design on chan99k&#39;s</description>
+    <generator>Hugo -- 0.148.2</generator>
     <language>ko</language>
     <lastBuildDate>Sat, 16 Aug 2025 10:00:00 +0900</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/design/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:57694/tags/design/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>멀티 모듈 프로젝트 아키텍처 설계 및 구현</title>
-      <link>http://localhost:1313/problems/washfit/multimodule-architecture/</link>
+      <link>http://localhost:57694/problems/washfit/multimodule-architecture/</link>
       <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
-      <guid>http://localhost:1313/problems/washfit/multimodule-architecture/</guid>
-      <description>&lt;h1 id=&#34;멀티-모듈-프로젝트-아키텍처-설계-및-구현&#34;&gt;멀티 모듈 프로젝트 아키텍처 설계 및 구현&lt;/h1&gt;&#xA;&lt;h2 id=&#34;-문제-상황&#34;&gt;🔍 문제 상황&lt;/h2&gt;&#xA;&lt;h3 id=&#34;프로젝트-구조-설계-요구사항&#34;&gt;프로젝트 구조 설계 요구사항&lt;/h3&gt;&#xA;&lt;p&gt;WashFit 프로젝트는 확장성과 유지보수성을 고려하여 &lt;strong&gt;멀티 모듈 아키텍처&lt;/strong&gt;로 설계되었습니다. 단일 모듈 구조로는 다음과 같은 한계가 있었습니다:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;코드 복잡도 증가&lt;/strong&gt;: 모든 기능이 하나의 모듈에 집중&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;빌드 시간 증가&lt;/strong&gt;: 작은 변경에도 전체 프로젝트 빌드 필요&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;팀 협업 어려움&lt;/strong&gt;: 여러 개발자가 동일한 코드베이스에서 충돌 발생&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;배포 복잡성&lt;/strong&gt;: 부분적 배포 불가능&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;-기술적-해결-방안&#34;&gt;🛠️ 기술적 해결 방안&lt;/h2&gt;&#xA;&lt;h3 id=&#34;모듈-구조-및-역할&#34;&gt;모듈 구조 및 역할&lt;/h3&gt;&#xA;&lt;p&gt;각 모듈은 명확한 역할과 책임을 가지도록 구성했습니다:&lt;/p&gt;</description>
+      <guid>http://localhost:57694/problems/washfit/multimodule-architecture/</guid>
+      <description>&lt;h1 id=&#34;멀티-모듈-프로젝트-아키텍처-설계-및-구현&#34;&gt;멀티 모듈 프로젝트 아키텍처 설계 및 구현&lt;/h1&gt;
+&lt;h2 id=&#34;-문제-상황&#34;&gt;🔍 문제 상황&lt;/h2&gt;
+&lt;h3 id=&#34;프로젝트-구조-설계-요구사항&#34;&gt;프로젝트 구조 설계 요구사항&lt;/h3&gt;
+&lt;p&gt;WashFit 프로젝트는 확장성과 유지보수성을 고려하여 &lt;strong&gt;멀티 모듈 아키텍처&lt;/strong&gt;로 설계되었습니다. 단일 모듈 구조로는 다음과 같은 한계가 있었습니다:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;코드 복잡도 증가&lt;/strong&gt;: 모든 기능이 하나의 모듈에 집중&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;빌드 시간 증가&lt;/strong&gt;: 작은 변경에도 전체 프로젝트 빌드 필요&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;팀 협업 어려움&lt;/strong&gt;: 여러 개발자가 동일한 코드베이스에서 충돌 발생&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;배포 복잡성&lt;/strong&gt;: 부분적 배포 불가능&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;-기술적-해결-방안&#34;&gt;🛠️ 기술적 해결 방안&lt;/h2&gt;
+&lt;h3 id=&#34;모듈-구조-및-역할&#34;&gt;모듈 구조 및 역할&lt;/h3&gt;
+&lt;p&gt;각 모듈은 명확한 역할과 책임을 가지도록 구성했습니다:&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
