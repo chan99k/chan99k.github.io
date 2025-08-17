@@ -545,26 +545,24 @@
     <span class="f6 db">Problems</span>
     <h1 class="f3 near-black">
       <a href="/problems/kernelengine/mysql-fulltext-search/" class="link black dim">
-        MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현
+        프로젝트 상황에 맞는 검색 기술 도입 및 성능 비교 분석
       </a>
     </h1>
     <div class="nested-links f5 lh-copy nested-copy-line-height">
-      <h1 id="mysql-fulltext를-활용한-효율적인-검색-기능-구현">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h1>
+      <h1 id="프로젝트-상황에-맞는-검색-기술-도입-및-성능-비교-분석">프로젝트 상황에 맞는 검색 기술 도입 및 성능 비교 분석</h1>
 <h2 id="-문제-상황">🔍 문제 상황</h2>
 <h3 id="검색-기능-요구사항">검색 기능 요구사항</h3>
-<p>KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 처음엔 단순하게 생각하여 LIKE 검색을 사용하려고 했지만, 검색 성능이 그다지 좋지 않다는 점을 테스트 와중 발견하였습니다.</p>
+<p>KernelEngine은 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 처음엔 단순하게 생각하여 LIKE 검색을 사용하려고 했지만, 검색 성능이 그다지 좋지 않다는 점을 테스트 와중 발견하였습니다.</p>
 <h3 id="기술적-고려사항">기술적 고려사항</h3>
 <p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
 <h4 id="1-mysql-like-검색">1. MySQL LIKE 검색</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> title <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span> <span style="color:#66d9ef">OR</span> content <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">쿼리</span> <span style="color:#960050;background-color:#1e0010">예시</span> <span style="color:#960050;background-color:#1e0010">추가</span> <span style="color:#960050;background-color:#1e0010">필요</span>
 </span></span></code></pre></div><ul>
 <li><strong>장점</strong>: 구현이 간단, 추가 인프라 불필요</li>
 <li><strong>단점</strong>: 성능이 느림, 복잡한 검색 불가능</li>
 </ul>
 <h4 id="2-mysql-fulltext-검색">2. MySQL FULLTEXT 검색</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">MATCH</span>(title, content) AGAINST(<span style="color:#e6db74">&#39;Spring Boot&#39;</span> <span style="color:#66d9ef">IN</span> <span style="color:#66d9ef">NATURAL</span> <span style="color:#66d9ef">LANGUAGE</span> <span style="color:#66d9ef">MODE</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">쿼리</span> <span style="color:#960050;background-color:#1e0010">예시</span> <span style="color:#960050;background-color:#1e0010">추가</span> <span style="color:#960050;background-color:#1e0010">필요</span> 
 </span></span></code></pre></div><ul>
 <li><strong>장점</strong>: 내장된 전문 검색 기능, 관련도 점수 제공</li>
 <li><strong>단점</strong>: 기능이 제한적, 고급 검색 기능 부족</li>
@@ -574,9 +572,8 @@
 <li><strong>장점</strong>: 고도화된 검색 기능, 분석 기능</li>
 <li><strong>단점</strong>: 추가 인프라 필요, 운영 복잡도 증가</li>
 </ul>
-<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
-<h3 id="mysql-fulltext-선택-이유">MySQL FULLTEXT 선택 이유</h3>
-<p>프로젝트의 초기 단계에서는 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
+<h2 id="-선택한-해결-방안">🛠️ 선택한 해결 방안</h2>
+<p>프로젝트의 초기 단계에서 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
     </div>
     <a href="/problems/kernelengine/mysql-fulltext-search/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
   </div>
@@ -771,26 +768,24 @@
     <span class="f6 db">Problems</span>
     <h1 class="f3 near-black">
       <a href="/problems/kernelengine/mysql-fulltext-search/" class="link black dim">
-        MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현
+        프로젝트 상황에 맞는 검색 기술 도입 및 성능 비교 분석
       </a>
     </h1>
     <div class="nested-links f5 lh-copy nested-copy-line-height">
-      <h1 id="mysql-fulltext를-활용한-효율적인-검색-기능-구현">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h1>
+      <h1 id="프로젝트-상황에-맞는-검색-기술-도입-및-성능-비교-분석">프로젝트 상황에 맞는 검색 기술 도입 및 성능 비교 분석</h1>
 <h2 id="-문제-상황">🔍 문제 상황</h2>
 <h3 id="검색-기능-요구사항">검색 기능 요구사항</h3>
-<p>KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 처음엔 단순하게 생각하여 LIKE 검색을 사용하려고 했지만, 검색 성능이 그다지 좋지 않다는 점을 테스트 와중 발견하였습니다.</p>
+<p>KernelEngine은 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 처음엔 단순하게 생각하여 LIKE 검색을 사용하려고 했지만, 검색 성능이 그다지 좋지 않다는 점을 테스트 와중 발견하였습니다.</p>
 <h3 id="기술적-고려사항">기술적 고려사항</h3>
 <p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
 <h4 id="1-mysql-like-검색">1. MySQL LIKE 검색</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> title <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span> <span style="color:#66d9ef">OR</span> content <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">쿼리</span> <span style="color:#960050;background-color:#1e0010">예시</span> <span style="color:#960050;background-color:#1e0010">추가</span> <span style="color:#960050;background-color:#1e0010">필요</span>
 </span></span></code></pre></div><ul>
 <li><strong>장점</strong>: 구현이 간단, 추가 인프라 불필요</li>
 <li><strong>단점</strong>: 성능이 느림, 복잡한 검색 불가능</li>
 </ul>
 <h4 id="2-mysql-fulltext-검색">2. MySQL FULLTEXT 검색</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">MATCH</span>(title, content) AGAINST(<span style="color:#e6db74">&#39;Spring Boot&#39;</span> <span style="color:#66d9ef">IN</span> <span style="color:#66d9ef">NATURAL</span> <span style="color:#66d9ef">LANGUAGE</span> <span style="color:#66d9ef">MODE</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">쿼리</span> <span style="color:#960050;background-color:#1e0010">예시</span> <span style="color:#960050;background-color:#1e0010">추가</span> <span style="color:#960050;background-color:#1e0010">필요</span> 
 </span></span></code></pre></div><ul>
 <li><strong>장점</strong>: 내장된 전문 검색 기능, 관련도 점수 제공</li>
 <li><strong>단점</strong>: 기능이 제한적, 고급 검색 기능 부족</li>
@@ -800,9 +795,8 @@
 <li><strong>장점</strong>: 고도화된 검색 기능, 분석 기능</li>
 <li><strong>단점</strong>: 추가 인프라 필요, 운영 복잡도 증가</li>
 </ul>
-<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
-<h3 id="mysql-fulltext-선택-이유">MySQL FULLTEXT 선택 이유</h3>
-<p>프로젝트의 초기 단계에서는 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
+<h2 id="-선택한-해결-방안">🛠️ 선택한 해결 방안</h2>
+<p>프로젝트의 초기 단계에서 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
     </div>
     <a href="/problems/kernelengine/mysql-fulltext-search/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
   </div>
@@ -815,49 +809,6 @@
             Tag: Performance
           </a>
         </h2>
-        
-          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
-  <div class="mb3 pa4 gray overflow-hidden bg-white">
-    <span class="f6 db">Problems</span>
-    <h1 class="f3 near-black">
-      <a href="/problems/kernelengine/mysql-fulltext-search/" class="link black dim">
-        MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현
-      </a>
-    </h1>
-    <div class="nested-links f5 lh-copy nested-copy-line-height">
-      <h1 id="mysql-fulltext를-활용한-효율적인-검색-기능-구현">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h1>
-<h2 id="-문제-상황">🔍 문제 상황</h2>
-<h3 id="검색-기능-요구사항">검색 기능 요구사항</h3>
-<p>KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 처음엔 단순하게 생각하여 LIKE 검색을 사용하려고 했지만, 검색 성능이 그다지 좋지 않다는 점을 테스트 와중 발견하였습니다.</p>
-<h3 id="기술적-고려사항">기술적 고려사항</h3>
-<p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
-<h4 id="1-mysql-like-검색">1. MySQL LIKE 검색</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> title <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span> <span style="color:#66d9ef">OR</span> content <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span>;
-</span></span></code></pre></div><ul>
-<li><strong>장점</strong>: 구현이 간단, 추가 인프라 불필요</li>
-<li><strong>단점</strong>: 성능이 느림, 복잡한 검색 불가능</li>
-</ul>
-<h4 id="2-mysql-fulltext-검색">2. MySQL FULLTEXT 검색</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">MATCH</span>(title, content) AGAINST(<span style="color:#e6db74">&#39;Spring Boot&#39;</span> <span style="color:#66d9ef">IN</span> <span style="color:#66d9ef">NATURAL</span> <span style="color:#66d9ef">LANGUAGE</span> <span style="color:#66d9ef">MODE</span>);
-</span></span></code></pre></div><ul>
-<li><strong>장점</strong>: 내장된 전문 검색 기능, 관련도 점수 제공</li>
-<li><strong>단점</strong>: 기능이 제한적, 고급 검색 기능 부족</li>
-</ul>
-<h4 id="3-elasticsearch">3. Elasticsearch</h4>
-<ul>
-<li><strong>장점</strong>: 고도화된 검색 기능, 분석 기능</li>
-<li><strong>단점</strong>: 추가 인프라 필요, 운영 복잡도 증가</li>
-</ul>
-<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
-<h3 id="mysql-fulltext-선택-이유">MySQL FULLTEXT 선택 이유</h3>
-<p>프로젝트의 초기 단계에서는 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
-    </div>
-    <a href="/problems/kernelengine/mysql-fulltext-search/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
-  </div>
-</div>
-
         
           <div class="w-100 mb4 nested-copy-line-height relative bg-white">
   <div class="mb3 pa4 gray overflow-hidden bg-white">
@@ -887,6 +838,46 @@
 <p><strong>spring-boot-starter-data-redis</strong> 의존성을 활용하여 다음과 같이 구현했습니다:</p>
     </div>
     <a href="/problems/washfit/redis-caching/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+  </div>
+</div>
+
+        
+          <div class="w-100 mb4 nested-copy-line-height relative bg-white">
+  <div class="mb3 pa4 gray overflow-hidden bg-white">
+    <span class="f6 db">Problems</span>
+    <h1 class="f3 near-black">
+      <a href="/problems/kernelengine/mysql-fulltext-search/" class="link black dim">
+        프로젝트 상황에 맞는 검색 기술 도입 및 성능 비교 분석
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      <h1 id="프로젝트-상황에-맞는-검색-기술-도입-및-성능-비교-분석">프로젝트 상황에 맞는 검색 기술 도입 및 성능 비교 분석</h1>
+<h2 id="-문제-상황">🔍 문제 상황</h2>
+<h3 id="검색-기능-요구사항">검색 기능 요구사항</h3>
+<p>KernelEngine은 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 처음엔 단순하게 생각하여 LIKE 검색을 사용하려고 했지만, 검색 성능이 그다지 좋지 않다는 점을 테스트 와중 발견하였습니다.</p>
+<h3 id="기술적-고려사항">기술적 고려사항</h3>
+<p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
+<h4 id="1-mysql-like-검색">1. MySQL LIKE 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">쿼리</span> <span style="color:#960050;background-color:#1e0010">예시</span> <span style="color:#960050;background-color:#1e0010">추가</span> <span style="color:#960050;background-color:#1e0010">필요</span>
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 구현이 간단, 추가 인프라 불필요</li>
+<li><strong>단점</strong>: 성능이 느림, 복잡한 검색 불가능</li>
+</ul>
+<h4 id="2-mysql-fulltext-검색">2. MySQL FULLTEXT 검색</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">쿼리</span> <span style="color:#960050;background-color:#1e0010">예시</span> <span style="color:#960050;background-color:#1e0010">추가</span> <span style="color:#960050;background-color:#1e0010">필요</span> 
+</span></span></code></pre></div><ul>
+<li><strong>장점</strong>: 내장된 전문 검색 기능, 관련도 점수 제공</li>
+<li><strong>단점</strong>: 기능이 제한적, 고급 검색 기능 부족</li>
+</ul>
+<h4 id="3-elasticsearch">3. Elasticsearch</h4>
+<ul>
+<li><strong>장점</strong>: 고도화된 검색 기능, 분석 기능</li>
+<li><strong>단점</strong>: 추가 인프라 필요, 운영 복잡도 증가</li>
+</ul>
+<h2 id="-선택한-해결-방안">🛠️ 선택한 해결 방안</h2>
+<p>프로젝트의 초기 단계에서 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
+    </div>
+    <a href="/problems/kernelengine/mysql-fulltext-search/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
   </div>
 </div>
 
@@ -1047,26 +1038,24 @@
     <span class="f6 db">Problems</span>
     <h1 class="f3 near-black">
       <a href="/problems/kernelengine/mysql-fulltext-search/" class="link black dim">
-        MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현
+        프로젝트 상황에 맞는 검색 기술 도입 및 성능 비교 분석
       </a>
     </h1>
     <div class="nested-links f5 lh-copy nested-copy-line-height">
-      <h1 id="mysql-fulltext를-활용한-효율적인-검색-기능-구현">MySQL FULLTEXT를 활용한 효율적인 검색 기능 구현</h1>
+      <h1 id="프로젝트-상황에-맞는-검색-기술-도입-및-성능-비교-분석">프로젝트 상황에 맞는 검색 기술 도입 및 성능 비교 분석</h1>
 <h2 id="-문제-상황">🔍 문제 상황</h2>
 <h3 id="검색-기능-요구사항">검색 기능 요구사항</h3>
-<p>KernelEngine 서비스는 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 처음엔 단순하게 생각하여 LIKE 검색을 사용하려고 했지만, 검색 성능이 그다지 좋지 않다는 점을 테스트 와중 발견하였습니다.</p>
+<p>KernelEngine은 수집된 기술 블로그 게시글에서 사용자가 원하는 정보를 빠르게 찾을 수 있는 검색 기능이 핵심이었습니다. 처음엔 단순하게 생각하여 LIKE 검색을 사용하려고 했지만, 검색 성능이 그다지 좋지 않다는 점을 테스트 와중 발견하였습니다.</p>
 <h3 id="기술적-고려사항">기술적 고려사항</h3>
 <p>검색 기능 구현을 위해 다음과 같은 옵션들을 검토했습니다:</p>
 <h4 id="1-mysql-like-검색">1. MySQL LIKE 검색</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> title <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span> <span style="color:#66d9ef">OR</span> content <span style="color:#66d9ef">LIKE</span> <span style="color:#e6db74">&#39;%Spring%&#39;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">쿼리</span> <span style="color:#960050;background-color:#1e0010">예시</span> <span style="color:#960050;background-color:#1e0010">추가</span> <span style="color:#960050;background-color:#1e0010">필요</span>
 </span></span></code></pre></div><ul>
 <li><strong>장점</strong>: 구현이 간단, 추가 인프라 불필요</li>
 <li><strong>단점</strong>: 성능이 느림, 복잡한 검색 불가능</li>
 </ul>
 <h4 id="2-mysql-fulltext-검색">2. MySQL FULLTEXT 검색</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> posts 
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">MATCH</span>(title, content) AGAINST(<span style="color:#e6db74">&#39;Spring Boot&#39;</span> <span style="color:#66d9ef">IN</span> <span style="color:#66d9ef">NATURAL</span> <span style="color:#66d9ef">LANGUAGE</span> <span style="color:#66d9ef">MODE</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">쿼리</span> <span style="color:#960050;background-color:#1e0010">예시</span> <span style="color:#960050;background-color:#1e0010">추가</span> <span style="color:#960050;background-color:#1e0010">필요</span> 
 </span></span></code></pre></div><ul>
 <li><strong>장점</strong>: 내장된 전문 검색 기능, 관련도 점수 제공</li>
 <li><strong>단점</strong>: 기능이 제한적, 고급 검색 기능 부족</li>
@@ -1076,9 +1065,8 @@
 <li><strong>장점</strong>: 고도화된 검색 기능, 분석 기능</li>
 <li><strong>단점</strong>: 추가 인프라 필요, 운영 복잡도 증가</li>
 </ul>
-<h2 id="-기술적-해결-방안">🛠️ 기술적 해결 방안</h2>
-<h3 id="mysql-fulltext-선택-이유">MySQL FULLTEXT 선택 이유</h3>
-<p>프로젝트의 초기 단계에서는 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
+<h2 id="-선택한-해결-방안">🛠️ 선택한 해결 방안</h2>
+<p>프로젝트의 초기 단계에서 <strong>MySQL FULLTEXT 인덱스</strong>를 활용한 검색 기능을 구현했습니다:</p>
     </div>
     <a href="/problems/kernelengine/mysql-fulltext-search/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
   </div>
