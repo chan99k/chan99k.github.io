@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Typesafety on chan99k&#39;s</title>
-    <link>http://localhost:57694/tags/typesafety/</link>
+    <link>http://localhost:1313/tags/typesafety/</link>
     <description>Recent content in Typesafety on chan99k&#39;s</description>
     <generator>Hugo -- 0.148.2</generator>
     <language>ko</language>
     <lastBuildDate>Sat, 16 Aug 2025 10:00:00 +0900</lastBuildDate>
-    <atom:link href="http://localhost:57694/tags/typesafety/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/typesafety/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보</title>
-      <link>http://localhost:57694/problems/washfit/querydsl-dynamic-queries/</link>
+      <link>http://localhost:1313/problems/washfit/querydsl-dynamic-queries/</link>
       <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
-      <guid>http://localhost:57694/problems/washfit/querydsl-dynamic-queries/</guid>
+      <guid>http://localhost:1313/problems/washfit/querydsl-dynamic-queries/</guid>
       <description>&lt;h1 id=&#34;querydsl을-활용한-동적-쿼리-및-타입-안정성-확보&#34;&gt;QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보&lt;/h1&gt;
 &lt;h2 id=&#34;-문제-상황&#34;&gt;🔍 문제 상황&lt;/h2&gt;
 &lt;h3 id=&#34;동적-검색-요구사항&#34;&gt;동적 검색 요구사항&lt;/h3&gt;

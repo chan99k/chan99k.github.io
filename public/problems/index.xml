@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>문제 해결 사례 on chan99k&#39;s</title>
-    <link>http://localhost:57694/problems/</link>
+    <link>http://localhost:1313/problems/</link>
     <description>Recent content in 문제 해결 사례 on chan99k&#39;s</description>
     <generator>Hugo -- 0.148.2</generator>
     <language>ko</language>
     <lastBuildDate>Sat, 16 Aug 2025 10:00:00 +0900</lastBuildDate>
-    <atom:link href="http://localhost:57694/problems/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/problems/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보</title>
-      <link>http://localhost:57694/problems/washfit/querydsl-dynamic-queries/</link>
+      <link>http://localhost:1313/problems/washfit/querydsl-dynamic-queries/</link>
       <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
-      <guid>http://localhost:57694/problems/washfit/querydsl-dynamic-queries/</guid>
+      <guid>http://localhost:1313/problems/washfit/querydsl-dynamic-queries/</guid>
       <description>&lt;h1 id=&#34;querydsl을-활용한-동적-쿼리-및-타입-안정성-확보&#34;&gt;QueryDSL을 활용한 동적 쿼리 및 타입 안정성 확보&lt;/h1&gt;
 &lt;h2 id=&#34;-문제-상황&#34;&gt;🔍 문제 상황&lt;/h2&gt;
 &lt;h3 id=&#34;동적-검색-요구사항&#34;&gt;동적 검색 요구사항&lt;/h3&gt;
@@ -29,9 +29,9 @@
     </item>
     <item>
       <title>RSS 파서를 활용한 블로그 크롤링 시스템 구현</title>
-      <link>http://localhost:57694/problems/kernelengine/rss-crawler-system/</link>
+      <link>http://localhost:1313/problems/kernelengine/rss-crawler-system/</link>
       <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
-      <guid>http://localhost:57694/problems/kernelengine/rss-crawler-system/</guid>
+      <guid>http://localhost:1313/problems/kernelengine/rss-crawler-system/</guid>
       <description>&lt;h1 id=&#34;rss-파서를-활용한-블로그-크롤링-시스템-구현&#34;&gt;RSS 파서를 활용한 블로그 크롤링 시스템 구현&lt;/h1&gt;
 &lt;h2 id=&#34;-문제-상황&#34;&gt;🔍 문제 상황&lt;/h2&gt;
 &lt;h3 id=&#34;데이터-수집의-중요성&#34;&gt;데이터 수집의 중요성&lt;/h3&gt;
@@ -48,9 +48,9 @@
     </item>
     <item>
       <title>Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축</title>
-      <link>http://localhost:57694/problems/washfit/spring-batch-architecture/</link>
+      <link>http://localhost:1313/problems/washfit/spring-batch-architecture/</link>
       <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
-      <guid>http://localhost:57694/problems/washfit/spring-batch-architecture/</guid>
+      <guid>http://localhost:1313/problems/washfit/spring-batch-architecture/</guid>
       <description>&lt;h1 id=&#34;spring-batch-모듈-설계를-통한-데이터-처리-아키텍처-구축&#34;&gt;Spring Batch 모듈 설계를 통한 데이터 처리 아키텍처 구축&lt;/h1&gt;
 &lt;h2 id=&#34;-문제-상황&#34;&gt;🔍 문제 상황&lt;/h2&gt;
 &lt;h3 id=&#34;데이터-처리-요구사항&#34;&gt;데이터 처리 요구사항&lt;/h3&gt;
@@ -67,9 +67,9 @@
     </item>
     <item>
       <title>Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템</title>
-      <link>http://localhost:57694/problems/kernelengine/spring-batch-data-processing/</link>
+      <link>http://localhost:1313/problems/kernelengine/spring-batch-data-processing/</link>
       <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
-      <guid>http://localhost:57694/problems/kernelengine/spring-batch-data-processing/</guid>
+      <guid>http://localhost:1313/problems/kernelengine/spring-batch-data-processing/</guid>
       <description>&lt;h1 id=&#34;spring-batch를-활용한-데이터-처리-및-통계-관리-시스템&#34;&gt;Spring Batch를 활용한 데이터 처리 및 통계 관리 시스템&lt;/h1&gt;
 &lt;h2 id=&#34;-문제-상황&#34;&gt;🔍 문제 상황&lt;/h2&gt;
 &lt;h3 id=&#34;대용량-데이터-처리의-필요성&#34;&gt;대용량 데이터 처리의 필요성&lt;/h3&gt;
@@ -89,9 +89,9 @@
     </item>
     <item>
       <title>멀티 모듈 프로젝트 아키텍처 설계 및 구현</title>
-      <link>http://localhost:57694/problems/washfit/multimodule-architecture/</link>
+      <link>http://localhost:1313/problems/washfit/multimodule-architecture/</link>
       <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
-      <guid>http://localhost:57694/problems/washfit/multimodule-architecture/</guid>
+      <guid>http://localhost:1313/problems/washfit/multimodule-architecture/</guid>
       <description>&lt;h1 id=&#34;멀티-모듈-프로젝트-아키텍처-설계-및-구현&#34;&gt;멀티 모듈 프로젝트 아키텍처 설계 및 구현&lt;/h1&gt;
 &lt;h2 id=&#34;-문제-상황&#34;&gt;🔍 문제 상황&lt;/h2&gt;
 &lt;h3 id=&#34;프로젝트-구조-설계-요구사항&#34;&gt;프로젝트 구조 설계 요구사항&lt;/h3&gt;
@@ -108,9 +108,9 @@
     </item>
     <item>
       <title>프로젝트 상황에 맞는 검색 기술 도입 및 성능 비교 분석</title>
-      <link>http://localhost:57694/problems/kernelengine/mysql-fulltext-search/</link>
+      <link>http://localhost:1313/problems/kernelengine/mysql-fulltext-search/</link>
       <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
-      <guid>http://localhost:57694/problems/kernelengine/mysql-fulltext-search/</guid>
+      <guid>http://localhost:1313/problems/kernelengine/mysql-fulltext-search/</guid>
       <description>&lt;h1 id=&#34;프로젝트-상황에-맞는-검색-기술-도입-및-성능-비교-분석&#34;&gt;프로젝트 상황에 맞는 검색 기술 도입 및 성능 비교 분석&lt;/h1&gt;
 &lt;h2 id=&#34;-문제-상황&#34;&gt;🔍 문제 상황&lt;/h2&gt;
 &lt;h3 id=&#34;검색-기능-요구사항&#34;&gt;검색 기능 요구사항&lt;/h3&gt;

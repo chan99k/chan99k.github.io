@@ -1,6 +1,6 @@
 ---
 # 기본 페이지 정보
-#title: "포트폴리오"                          # 페이지 제목 (필수)
+title: "Portfolio"                          # 페이지 제목 (필수)
 date: 2025-08-16T10:00:00+09:00           # 게시 날짜 (YYYY-MM-DD 형식)
 lastmod: 2025-08-17T15:30:00+09:00        # 마지막 수정 날짜
 publishDate: 2025-08-16T10:00:00+09:00    # 게시 예약 날짜
@@ -20,12 +20,11 @@ authors: ["chan99k"]                      # 복수 작성자 (배열)
 
 # 분류 및 태그
 categories: ["portfolio", "projects"]     # 카테고리 분류
-tags: ["backend", "java", "spring", "washfit", "kernelengine", "querydsl", "springbatch"]  # 태그
+tags: ["backend", "java", "spring", "querydsl", "springbatch"]  # 태그
 series: ["development-portfolio"]         # 시리즈 분류
 
 # 페이지 표시 설정
 weight: 1                                 # 페이지 정렬 순서 (낮을수록 앞)
-menu: "main"                              # 메뉴 그룹
 url: "/portfolio/"                        # 커스텀 URL
 slug: "portfolio"                         # URL 슬러그
 aliases: ["/projects/", "/work/"]         # 별칭 URL들
@@ -44,7 +43,7 @@ ShowReadingTime: false                    # 읽기 시간 표시 안함
 ShowWordCount: false                      # 단어 수 표시 안함
 ShowShareButtons: false                   # 공유 버튼 표시 안함
 ShowPostNavLinks: true                    # 이전/다음 게시물 링크 표시
-ShowBreadCrumbs: true                     # 브레드크럼 표시
+ShowBreadCrumbs: false                     # 브레드크럼 표시 - 브레드 크럼 네비게이션
 ShowCodeCopyButtons: true                 # 코드 복사 버튼 표시
 ShowToc: false                            # 목차 표시 안함
 TocOpen: false                            # 목차 펼침 상태
@@ -72,14 +71,9 @@ images: ["/images/portfolio-og.jpg"]      # 소셜 미디어 미리보기 이미
 # 사용자 정의 변수
 custom:
     projects_count: 2                     # 프로젝트 개수
-    tech_stack: ["Java", "Spring Boot", "PostgreSQL", "MySQL", "Redis"]  # 주요 기술 스택
+    tech_stack: ["Java", "Spring Boot", "MySQL", "Redis"]  # 주요 기술 스택
     featured_project: "WashFit"           # 대표 프로젝트
 ---
-
-<div class="portfolio-intro">
-
-각 프로젝트에서 마주한 **문제**와 **해결 과정**을 상세히 기록했습니다.
-</div>
 
 # 🚀 WashFit
 

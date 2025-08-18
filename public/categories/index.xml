@@ -2,17 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Categories on chan99k&#39;s</title>
-    <link>http://localhost:57694/categories/</link>
+    <link>http://localhost:1313/categories/</link>
     <description>Recent content in Categories on chan99k&#39;s</description>
     <generator>Hugo -- 0.148.2</generator>
     <language>ko</language>
-    <lastBuildDate>Sat, 16 Aug 2025 10:00:00 +0900</lastBuildDate>
-    <atom:link href="http://localhost:57694/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Aug 2025 15:30:00 +0900</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Blog</title>
-      <link>http://localhost:57694/categories/blog/</link>
+      <link>http://localhost:1313/categories/blog/</link>
       <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
-      <guid>http://localhost:57694/categories/blog/</guid>
+      <guid>http://localhost:1313/categories/blog/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Portfolio</title>
+      <link>http://localhost:1313/categories/portfolio/</link>
+      <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
+      <guid>http://localhost:1313/categories/portfolio/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Projects</title>
+      <link>http://localhost:1313/categories/projects/</link>
+      <pubDate>Sat, 16 Aug 2025 10:00:00 +0900</pubDate>
+      <guid>http://localhost:1313/categories/projects/</guid>
       <description></description>
     </item>
   </channel>
