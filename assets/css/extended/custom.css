@@ -1,15 +1,81 @@
-/* Portfolio Page Custom Styles */
+/* Portfolio Page Custom Styles - Meelo Inspired Design */
+
+/* Global Typography and Colors */
+:root {
+    --meelo-soft-blue: #e3e3ff;
+    --meelo-light-blue: #f0f0ff;
+    --meelo-accent: #6366f1;
+    --meelo-text-primary: #1f2937;
+    --meelo-text-secondary: #6b7280;
+    --meelo-border: #e5e7eb;
+    --meelo-card-bg: #ffffff;
+    --meelo-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --meelo-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --meelo-radius: 16px;
+    --meelo-radius-lg: 24px;
+}
+
+.dark {
+    --meelo-soft-blue: #1e1b4b;
+    --meelo-light-blue: #312e81;
+    --meelo-accent: #818cf8;
+    --meelo-text-primary: #f9fafb;
+    --meelo-text-secondary: #d1d5db;
+    --meelo-border: #374151;
+    --meelo-card-bg: #1f2937;
+    --meelo-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --meelo-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* Main Portfolio Container */
+.portfolio-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
 
 /* Portfolio Introduction */
 .portfolio-intro {
     text-align: center;
-    margin: 2rem 0 3rem 0;
-    padding: 2rem;
-    background: var(--entry);
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    font-size: 1.1rem;
-    line-height: 1.6;
+    margin: 3rem 0 4rem 0;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, var(--meelo-soft-blue) 0%, var(--meelo-light-blue) 100%);
+    border-radius: var(--meelo-radius-lg);
+    border: 2px solid var(--meelo-border);
+    font-size: 1.25rem;
+    line-height: 1.7;
+    color: var(--meelo-text-primary);
+    font-weight: 500;
+    box-shadow: var(--meelo-shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.portfolio-intro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Project Section */
+.project-section {
+    margin: 4rem 0;
+    background: var(--meelo-card-bg);
+    border-radius: var(--meelo-radius-lg);
+    border: 2px solid var(--meelo-border);
+    box-shadow: var(--meelo-shadow-lg);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-section:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Project Header Styles */
@@ -18,25 +84,27 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    background: var(--entry);
-    border-radius: 8px;
-    border: 1px solid var(--border);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--meelo-soft-blue) 0%, transparent 100%);
+    border-bottom: 2px solid var(--meelo-border);
 }
 
 .project-meta {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .project-period,
 .project-team {
-    font-size: 0.9rem;
-    color: var(--secondary);
-    font-weight: 500;
+    font-size: 1rem;
+    color: var(--meelo-text-secondary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .project-links {
@@ -47,77 +115,133 @@
 .github-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: var(--theme);
-    color: var(--primary);
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--meelo-accent);
+    color: white;
     text-decoration: none;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
+    border-radius: var(--meelo-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--meelo-shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.github-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
 }
 
 .github-link:hover {
-    background: var(--secondary);
-    color: var(--theme);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
     text-decoration: none;
+}
+
+.github-link:hover::before {
+    left: 100%;
+}
+
+/* Project Content Area */
+.project-content {
+    padding: 2rem;
+}
+
+.project-description {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--meelo-text-primary);
+    margin-bottom: 2rem;
+    font-weight: 500;
 }
 
 /* Project Tags Styles */
 .project-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    padding: 0 2rem;
 }
 
 .tag {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background: var(--code-bg);
-    color: var(--primary);
-    font-size: 0.8rem;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    font-family: monospace;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--meelo-light-blue), var(--meelo-soft-blue));
+    color: var(--meelo-accent);
+    font-size: 0.875rem;
+    border-radius: var(--meelo-radius);
+    border: 2px solid var(--meelo-border);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-transform: lowercase;
+}
+
+.tag:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--meelo-shadow);
 }
 
 /* Problem Cards Container */
 .problem-cards-container {
-    display: flex;
-    gap: 1.5rem;
-    overflow-x: auto;
-    padding: 1rem 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
     margin: 1rem 0;
-    scroll-behavior: smooth;
 }
 
 /* Individual Problem Card */
 .problem-card {
-    flex: 0 0 320px;
-    min-height: 280px;
-    background: var(--entry);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: all 0.3s ease;
+    background: var(--meelo-card-bg);
+    border: 2px solid var(--meelo-border);
+    border-radius: var(--meelo-radius-lg);
+    padding: 2rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     display: flex;
     flex-direction: column;
+    box-shadow: var(--meelo-shadow);
+    overflow: hidden;
+}
+
+.problem-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--meelo-accent), var(--meelo-soft-blue));
 }
 
 .problem-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    border-color: var(--tertiary);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--meelo-shadow-lg);
+    border-color: var(--meelo-accent);
 }
 
 .card-icon {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    display: block;
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    background: linear-gradient(135deg, var(--meelo-soft-blue), var(--meelo-light-blue));
+    border-radius: 50%;
+    box-shadow: var(--meelo-shadow);
 }
 
 .card-content {
@@ -127,58 +251,123 @@
 }
 
 .card-content h4 {
-    margin: 0 0 1rem 0;
-    font-size: 1.1rem;
-    line-height: 1.4;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    font-weight: 700;
+    color: var(--meelo-text-primary);
 }
 
 .card-content h4 a {
-    color: var(--primary);
+    color: var(--meelo-text-primary);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.card-content h4 a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--meelo-accent);
+    transition: width 0.3s ease;
 }
 
 .card-content h4 a:hover {
-    color: var(--tertiary);
+    color: var(--meelo-accent);
+}
+
+.card-content h4 a:hover::after {
+    width: 100%;
 }
 
 .card-content p {
     flex: 1;
-    margin: 0 0 1rem 0;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    color: var(--secondary);
+    margin: 0 0 1.5rem 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--meelo-text-secondary);
+    font-weight: 400;
 }
 
 /* Card Tags */
 .card-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.75rem;
     margin-top: auto;
 }
 
 .mini-tag {
-    display: inline-block;
-    padding: 0.2rem 0.5rem;
-    background: var(--code-bg);
-    color: var(--primary);
-    font-size: 0.7rem;
-    border-radius: 12px;
-    font-family: monospace;
-    font-weight: 500;
-    border: 1px solid var(--border);
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    background: linear-gradient(135deg, var(--meelo-light-blue), var(--meelo-soft-blue));
+    color: var(--meelo-accent);
+    font-size: 0.75rem;
+    border-radius: var(--meelo-radius);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-weight: 600;
+    border: 1px solid var(--meelo-border);
+    transition: all 0.2s ease;
+    text-transform: lowercase;
+}
+
+.mini-tag:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--meelo-shadow);
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .portfolio-container {
+        padding: 1.5rem;
+    }
+    
+    .problem-cards-container {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+}
+
 @media (max-width: 768px) {
+    .portfolio-container {
+        padding: 1rem;
+    }
+    
+    .portfolio-intro {
+        margin: 2rem 0 3rem 0;
+        padding: 2rem 1.5rem;
+        font-size: 1.125rem;
+    }
+    
+    .project-section {
+        margin: 3rem 0;
+    }
+    
     .project-header {
         flex-direction: column;
         align-items: flex-start;
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+    
+    .project-content {
+        padding: 1.5rem;
+    }
+    
+    .project-tags {
+        padding: 0 1.5rem;
+        gap: 0.5rem;
     }
     
     .project-meta {
         order: 1;
+        width: 100%;
     }
     
     .project-links {
@@ -189,57 +378,119 @@
     .github-link {
         flex: 1;
         justify-content: center;
+        padding: 0.875rem 1.5rem;
     }
     
     .problem-cards-container {
-        gap: 1rem;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.5rem;
     }
     
     .problem-card {
-        flex: 0 0 280px;
-        min-height: 250px;
+        padding: 1.5rem;
+    }
+    
+    .card-icon {
+        width: 3.5rem;
+        height: 3.5rem;
+        font-size: 2.5rem;
     }
 }
 
 @media (max-width: 480px) {
-    .problem-card {
-        flex: 0 0 260px;
-        padding: 1rem;
+    .portfolio-container {
+        padding: 0.75rem;
+    }
+    
+    .portfolio-intro {
+        padding: 1.5rem 1rem;
+        font-size: 1rem;
     }
     
     .project-header {
-        padding: 0.75rem;
+        padding: 1rem;
+    }
+    
+    .project-content {
+        padding: 1rem;
+    }
+    
+    .project-tags {
+        padding: 0 1rem;
+    }
+    
+    .problem-cards-container {
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .problem-card {
+        padding: 1rem;
+    }
+    
+    .card-icon {
+        width: 3rem;
+        height: 3rem;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .card-content h4 {
+        font-size: 1.125rem;
+    }
+    
+    .card-content p {
+        font-size: 0.875rem;
     }
 }
 
-/* Scrollbar for horizontal scroll */
-.problem-cards-container::-webkit-scrollbar {
-    height: 8px;
+/* Typography Improvements */
+h1, h2, h3, h4, h5, h6 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.025em;
 }
 
-.problem-cards-container::-webkit-scrollbar-track {
-    background: var(--code-bg);
-    border-radius: 4px;
+/* Section Dividers */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--meelo-border), transparent);
+    margin: 4rem 0;
 }
 
-.problem-cards-container::-webkit-scrollbar-thumb {
-    background: var(--tertiary);
-    border-radius: 4px;
+/* Smooth Transitions */
+* {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-.problem-cards-container::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary);
+/* Focus States for Accessibility */
+.github-link:focus,
+.card-content h4 a:focus,
+.tag:focus,
+.mini-tag:focus {
+    outline: 2px solid var(--meelo-accent);
+    outline-offset: 2px;
 }
 
-/* Dark mode enhancements */
-.dark .problem-card:hover {
-    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
-}
-
-.dark .tag {
-    background: var(--code-block-bg);
-}
-
-.dark .mini-tag {
-    background: var(--code-block-bg);
+/* Print Styles */
+@media print {
+    .problem-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .github-link {
+        background: transparent !important;
+        color: #000 !important;
+        border: 1px solid #000;
+    }
+    
+    .portfolio-intro {
+        background: transparent !important;
+        border: 1px solid #000;
+    }
 }

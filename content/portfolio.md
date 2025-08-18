@@ -75,6 +75,10 @@ custom:
     featured_project: "WashFit"           # 대표 프로젝트
 ---
 
+<div class="portfolio-container">
+
+<div class="project-section">
+
 # 🚀 WashFit
 
 <div class="project-header">
@@ -97,7 +101,10 @@ custom:
 <span class="tag">#docker</span>
 </div>
 
-**세차 용품의 성분 및 안전 정보를 제공하여 사용자의 안전한 제품 선택을 돕는 웹 서비스**
+<div class="project-content">
+<div class="project-description">
+세차 용품의 성분 및 안전 정보를 제공하여 사용자의 안전한 제품 선택을 돕는 웹 서비스
+</div>
 
 ### ⚙️ 기술 스택
 - **Backend**: Java 17, Spring Boot 3.2.0, Spring Data JPA, Spring Batch
@@ -153,7 +160,13 @@ custom:
   </div>
 </div>
 
----
+</div>
+
+</div>
+
+</div>
+
+<div class="project-section">
 
 # 🔍 KernelEngine
 
@@ -177,7 +190,10 @@ custom:
 <span class="tag">#crawler</span>
 </div>
 
-**기술 블로그 게시글을 주기적으로 수집하고 키워드 검색 기능을 제공하여 정보를 효율적으로 탐색할 수 있도록 돕는 웹 서비스**
+<div class="project-content">
+<div class="project-description">
+기술 블로그 게시글을 주기적으로 수집하고 키워드 검색 기능을 제공하여 정보를 효율적으로 탐색할 수 있도록 돕는 웹 서비스
+</div>
 
 ### ⚙️ 기술 스택
 - **Backend**: Java 11, Spring Boot 2.7.17, Spring Data JPA, Spring Security, Spring Batch
@@ -232,6 +248,12 @@ custom:
       </div>
     </div>
   </div>
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 ---
