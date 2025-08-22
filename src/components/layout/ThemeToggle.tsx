@@ -8,7 +8,7 @@ export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch
+  // 하이드레이션 불일치 방지
   useEffect(() => {
     setMounted(true);
   }, []);

@@ -17,7 +17,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo/Brand */}
+          {/* 로고/브랜드 */}
           <Link 
             href="/" 
             className="flex items-center space-x-2 font-bold text-xl hover:text-primary transition-colors"
@@ -25,7 +25,7 @@ export function Header() {
             <span>{SITE_CONFIG.name}</span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* 데스크톱 네비게이션 */}
           <nav className="hidden md:flex items-center space-x-6">
             {NAVIGATION_ITEMS.map((item) => (
               <Link
@@ -42,12 +42,12 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Desktop Theme Toggle */}
+          {/* 데스크톱 테마 토글 */}
           <div className="hidden md:flex items-center">
             <ThemeToggle />
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* 모바일 메뉴 버튼 */}
           <div className="flex items-center space-x-2 md:hidden">
             <ThemeToggle />
             <button
@@ -60,7 +60,7 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* 모바일 네비게이션 */}
         {isMenuOpen && (
           <div className="md:hidden border-t bg-background">
             <nav className="flex flex-col space-y-1 py-4">

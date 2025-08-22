@@ -1,4 +1,4 @@
-// Site configuration constants
+// 사이트 설정 상수
 
 export const SITE_CONFIG = {
   name: 'Personal Website',

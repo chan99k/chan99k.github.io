@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { ImageOptimizer } from './image-optimization';
 
-// Install zod for validation
+// 유효성 검사를 위한 zod 설치
 // npm install zod
 
-// Base frontmatter schema
+// 기본 frontmatter 스키마
 const baseFrontmatterSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional(),
@@ -18,7 +18,7 @@ const baseFrontmatterSchema = z.object({
   tags: z.array(z.string()).default([]),
 });
 
-// Blog post frontmatter schema
+// 블로그 포스트 frontmatter 스키마
 export const blogFrontmatterSchema = baseFrontmatterSchema.extend({
   category: z.string().default('general'),
   featured: z.boolean().default(false),
@@ -34,7 +34,7 @@ export const blogFrontmatterSchema = baseFrontmatterSchema.extend({
   }).optional(),
 });
 
-// Restaurant review frontmatter schema
+// 레스토랑 리뷰 frontmatter 스키마
 export const restaurantFrontmatterSchema = baseFrontmatterSchema.extend({
   name: z.string().min(1, 'Restaurant name is required'),
   location: z.object({
@@ -75,7 +75,7 @@ export const restaurantFrontmatterSchema = baseFrontmatterSchema.extend({
   }).default({ naver: '', kakao: '', google: '' }),
 });
 
-// Portfolio frontmatter schema
+// 포트폴리오 frontmatter 스키마
 export const portfolioFrontmatterSchema = z.object({
   personalInfo: z.object({
     name: z.string().min(1, 'Name is required'),
@@ -132,21 +132,21 @@ export const portfolioFrontmatterSchema = z.object({
   })).default([]),
 });
 
-// Validation result type
+// 유효성 검사 결과 타입
 export interface ValidationResult {
   success: boolean;
   data?: Record<string, unknown>;
   errors?: string[];
 }
 
-// Content type enum
+// 콘텐츠 타입 열거형
 export enum ContentType {
   BLOG = 'blog',
   RESTAURANT = 'restaurant',
   PORTFOLIO = 'portfolio',
 }
 
-// Frontmatter validator class
+// Frontmatter 유효성 검사 클래스
 export class FrontmatterValidator {
   static validateBlogFrontmatter(frontmatter: Record<string, unknown>): ValidationResult {
     try {
@@ -219,7 +219,7 @@ export class FrontmatterValidator {
   }
 }
 
-// Helper function to determine content type from file path
+// 파일 경로에서 콘텐츠 타입을 결정하는 헬퍼 함수
 export function getContentTypeFromPath(filePath: string): ContentType | null {
   if (filePath.includes('/blog/')) return ContentType.BLOG;
   if (filePath.includes('/reviews/')) return ContentType.RESTAURANT;
@@ -227,7 +227,7 @@ export function getContentTypeFromPath(filePath: string): ContentType | null {
   return null;
 }
 
-// Helper function to validate frontmatter with detailed error reporting
+// 상세한 오류 보고와 함께 frontmatter를 검증하는 헬퍼 함수
 export function validateFrontmatterWithLogging(
   filePath: string,
   frontmatter: Record<string, unknown>
@@ -236,12 +236,12 @@ export function validateFrontmatterWithLogging(
   
   if (!contentType) {
     console.warn(`Could not determine content type for file: ${filePath}`);
-    return { success: true, data: frontmatter }; // Allow unknown types to pass through
+    return { success: true, data: frontmatter }; // 알 수 없는 타입은 통과시킴
   }
 
   const result = FrontmatterValidator.validateByContentType(contentType, frontmatter);
   
-  // Additional image validation for restaurant reviews
+  // 레스토랑 리뷰를 위한 추가 이미지 유효성 검사
   if (contentType === ContentType.RESTAURANT && frontmatter.images && Array.isArray(frontmatter.images)) {
     const imageValidation = ImageOptimizer.validateFrontmatterImages(
       frontmatter.images as unknown[],

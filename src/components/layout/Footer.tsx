@@ -9,12 +9,12 @@ export function Footer() {
     <footer className="border-t bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          {/* Copyright */}
+          {/* 저작권 */}
           <div className="text-sm text-muted-foreground">
             © {currentYear} {SITE_CONFIG.author.name}. All rights reserved.
           </div>
 
-          {/* Social Links */}
+          {/* 소셜 링크 */}
           <div className="flex items-center space-x-4">
             <Link
               href={SITE_CONFIG.social.github}
@@ -44,7 +44,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Additional Footer Links */}
+        {/* 추가 푸터 링크 */}
         <div className="mt-6 pt-6 border-t text-center">
           <div className="flex flex-wrap justify-center items-center space-x-6 text-sm text-muted-foreground">
             <Link 

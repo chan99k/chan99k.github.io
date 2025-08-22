@@ -4,7 +4,7 @@ import { FrontmatterValidator, ContentType } from '../frontmatter';
 import { ImageOptimizer } from '../image-optimization';
 import { validateMDXContent, extractExcerpt } from '../mdx-utils';
 
-// Mock file system for testing
+// 테스트를 위한 파일 시스템 모킹
 jest.mock('fs');
 jest.mock('path');
 
@@ -27,7 +27,7 @@ describe('Content Management System', () => {
 
     it('should reject invalid blog frontmatter', () => {
       const invalidBlogFrontmatter = {
-        // Missing required title
+        // 필수 제목 누락
         date: 'invalid-date',
         tags: 'not-an-array',
       };
@@ -165,10 +165,10 @@ This is the second paragraph that should not be included.`;
   });
 });
 
-// Integration test for the complete content loading system
+// 완전한 콘텐츠 로딩 시스템을 위한 통합 테스트
 describe('Content Loading Integration', () => {
   it('should handle missing directories gracefully', async () => {
-    // Mock fs.existsSync to return false
+    // fs.existsSync가 false를 반환하도록 모킹
     const fs = jest.requireActual('fs');
     jest.spyOn(fs, 'existsSync').mockReturnValue(false);
 
@@ -179,8 +179,8 @@ describe('Content Loading Integration', () => {
   });
 
   it('should process valid content files', async () => {
-    // This would require more complex mocking of the file system
-    // For now, we'll just test that the method exists and can be called
+    // 이것은 파일 시스템의 더 복잡한 모킹이 필요함
+    // 지금은 메서드가 존재하고 호출할 수 있는지만 테스트
     expect(typeof ContentLoader.loadBlogPosts).toBe('function');
     expect(typeof ContentLoader.loadRestaurantReviews).toBe('function');
     expect(typeof ContentLoader.loadPortfolioData).toBe('function');

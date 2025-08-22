@@ -2,12 +2,12 @@ import path from 'path';
 import fs from 'fs';
 import { ImageData } from '@/types';
 
-// Image configuration
+// 이미지 설정
 export const IMAGE_CONFIG = {
-  // Supported formats
+  // 지원되는 형식
   supportedFormats: ['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.svg'],
   
-  // Image sizes for responsive images
+  // 반응형 이미지를 위한 이미지 크기
   sizes: {
     thumbnail: 150,
     small: 320,
@@ -17,14 +17,14 @@ export const IMAGE_CONFIG = {
     xxlarge: 1600,
   },
   
-  // Quality settings
+  // 품질 설정
   quality: {
     thumbnail: 70,
     default: 85,
     high: 95,
   },
   
-  // Directories
+  // 디렉토리
   directories: {
     blog: 'public/images/blog',
     portfolio: 'public/images/portfolio',
@@ -33,7 +33,7 @@ export const IMAGE_CONFIG = {
   },
 } as const;
 
-// Image metadata interface
+// 이미지 메타데이터 인터페이스
 export interface ImageMetadata {
   src: string;
   alt: string;
@@ -44,17 +44,17 @@ export interface ImageMetadata {
   optimized?: boolean;
 }
 
-// Image optimization utilities
+// 이미지 최적화 유틸리티
 export class ImageOptimizer {
   private static readonly publicDir = path.join(process.cwd(), 'public');
 
-  // Check if image exists
+  // 이미지가 존재하는지 확인
   static imageExists(imagePath: string): boolean {
     const fullPath = path.join(this.publicDir, imagePath.replace(/^\//, ''));
     return fs.existsSync(fullPath);
   }
 
-  // Get image metadata
+  // 이미지 메타데이터 가져오기
   static getImageMetadata(imagePath: string): ImageMetadata | null {
     const fullPath = path.join(this.publicDir, imagePath.replace(/^\//, ''));
     
@@ -71,7 +71,7 @@ export class ImageOptimizer {
         alt: path.basename(imagePath, ext),
         format: ext.replace('.', ''),
         size: stats.size,
-        optimized: false, // Will be true if processed by Next.js Image
+        optimized: false, // Next.js Image로 처리되면 true가 됨
       };
     } catch (error) {
       console.error(`Error getting image metadata for ${imagePath}:`, error);
@@ -79,13 +79,13 @@ export class ImageOptimizer {
     }
   }
 
-  // Validate image format
+  // 이미지 형식 유효성 검사
   static isValidImageFormat(filePath: string): boolean {
     const ext = path.extname(filePath).toLowerCase();
     return IMAGE_CONFIG.supportedFormats.includes(ext as typeof IMAGE_CONFIG.supportedFormats[number]);
   }
 
-  // Generate responsive image sizes configuration
+  // 반응형 이미지 크기 설정 생성
   static getResponsiveSizes(breakpoints?: string[]): string {
     const defaultBreakpoints = [
       '(max-width: 640px) 100vw',
@@ -96,7 +96,7 @@ export class ImageOptimizer {
     return (breakpoints || defaultBreakpoints).join(', ');
   }
 
-  // Get optimized image props for Next.js Image component
+  // Next.js Image 컴포넌트를 위한 최적화된 이미지 props 가져오기
   static getOptimizedImageProps(
     src: string,
     alt: string,
@@ -118,7 +118,7 @@ export class ImageOptimizer {
       fill = false,
     } = options;
 
-    // Ensure src starts with /
+    // src가 /로 시작하는지 확인
     const normalizedSrc = src.startsWith('/') ? src : `/${src}`;
 
     const props = {
@@ -142,7 +142,7 @@ export class ImageOptimizer {
     return props;
   }
 
-  // Generate image path for content type
+  // 콘텐츠 타입에 대한 이미지 경로 생성
   static generateImagePath(
     contentType: 'blog' | 'portfolio' | 'reviews' | 'icons',
     filename: string,
@@ -153,7 +153,7 @@ export class ImageOptimizer {
     return `/${baseDir}/${subPath}${filename}`;
   }
 
-  // Validate and process image data array
+  // 이미지 데이터 배열 유효성 검사 및 처리
   static processImageDataArray(
     images: (string | ImageData)[],
     contentType: 'blog' | 'portfolio' | 'reviews' = 'blog',
@@ -161,7 +161,7 @@ export class ImageOptimizer {
   ): ImageData[] {
     return images.map((image, index) => {
       if (typeof image === 'string') {
-        // Convert string to ImageData
+        // 문자열을 ImageData로 변환
         const imagePath = image.startsWith('/') 
           ? image 
           : this.generateImagePath(contentType, image, subfolder);
@@ -175,7 +175,7 @@ export class ImageOptimizer {
           height: metadata?.height,
         };
       } else {
-        // Validate existing ImageData
+        // 기존 ImageData 유효성 검사
         const imagePath = image.src.startsWith('/') 
           ? image.src 
           : this.generateImagePath(contentType, image.src, subfolder);
@@ -187,7 +187,7 @@ export class ImageOptimizer {
         };
       }
     }).filter(image => {
-      // Filter out images that don't exist or have invalid formats
+      // 존재하지 않거나 유효하지 않은 형식의 이미지 필터링
       if (!this.isValidImageFormat(image.src)) {
         console.warn(`Invalid image format: ${image.src}`);
         return false;
@@ -202,7 +202,7 @@ export class ImageOptimizer {
     });
   }
 
-  // Get placeholder image for missing images
+  // 누락된 이미지를 위한 플레이스홀더 이미지 가져오기
   static getPlaceholderImage(
     width: number = 400,
     height: number = 300,
@@ -216,7 +216,7 @@ export class ImageOptimizer {
     };
   }
 
-  // Generate image gallery data
+  // 이미지 갤러리 데이터 생성
   static generateGalleryData(
     images: (string | ImageData)[],
     contentType: 'blog' | 'portfolio' | 'reviews' = 'blog',
@@ -224,17 +224,17 @@ export class ImageOptimizer {
   ): ImageData[] {
     const processedImages = this.processImageDataArray(images, contentType, subfolder);
     
-    // Add gallery-specific metadata
+    // 갤러리 전용 메타데이터 추가
     return processedImages.map((image, index) => ({
       ...image,
-      // Add gallery index for navigation
+      // 네비게이션을 위한 갤러리 인덱스 추가
       galleryIndex: index,
-      // Generate thumbnail if needed
-      thumbnail: image.src, // In a real implementation, you might generate actual thumbnails
+      // 필요시 썸네일 생성
+      thumbnail: image.src, // 실제 구현에서는 실제 썸네일을 생성할 수 있음
     }));
   }
 
-  // Validate image in frontmatter
+  // frontmatter에서 이미지 유효성 검사
   static validateFrontmatterImages(
     images: unknown[],
     contentType: 'blog' | 'portfolio' | 'reviews',
@@ -276,7 +276,7 @@ export class ImageOptimizer {
   }
 }
 
-// Image component props helper
+// 이미지 컴포넌트 props 헬퍼
 export interface OptimizedImageProps {
   src: string;
   alt: string;
@@ -291,7 +291,7 @@ export interface OptimizedImageProps {
   blurDataURL?: string;
 }
 
-// Helper function to create optimized image props
+// 최적화된 이미지 props를 생성하는 헬퍼 함수
 export function createOptimizedImageProps(
   src: string,
   alt: string,
@@ -306,7 +306,7 @@ export function createOptimizedImageProps(
   } as OptimizedImageProps;
 }
 
-// Helper function for blog images
+// 블로그 이미지를 위한 헬퍼 함수
 export function createBlogImageProps(
   src: string,
   alt: string,
@@ -324,7 +324,7 @@ export function createBlogImageProps(
   });
 }
 
-// Helper function for portfolio images
+// 포트폴리오 이미지를 위한 헬퍼 함수
 export function createPortfolioImageProps(
   src: string,
   alt: string,
@@ -337,7 +337,7 @@ export function createPortfolioImageProps(
   });
 }
 
-// Helper function for restaurant review images
+// 레스토랑 리뷰 이미지를 위한 헬퍼 함수
 export function createReviewImageProps(
   src: string,
   alt: string,

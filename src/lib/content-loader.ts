@@ -12,7 +12,7 @@ import {
 
 const contentDirectory = path.join(process.cwd(), 'content');
 
-// Content loading result interface
+// 콘텐츠 로딩 결과 인터페이스
 export interface ContentLoadResult<T> {
   success: boolean;
   data?: T;
@@ -20,7 +20,7 @@ export interface ContentLoadResult<T> {
   warnings?: string[];
 }
 
-// Content file interface
+// 콘텐츠 파일 인터페이스
 export interface ContentFile {
   filePath: string;
   relativePath: string;
@@ -30,11 +30,11 @@ export interface ContentFile {
   contentType: ContentType | null;
 }
 
-// Enhanced content loader class
+// 향상된 콘텐츠 로더 클래스
 export class ContentLoader {
   private static logErrors = process.env.NODE_ENV === 'development';
 
-  // Get all markdown files recursively
+  // 모든 마크다운 파일을 재귀적으로 가져오기
   static getAllMarkdownFiles(dir: string): string[] {
     const files: string[] = [];
     

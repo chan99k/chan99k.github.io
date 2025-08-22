@@ -1,11 +1,11 @@
-// Compile MDX content (simplified version for static generation)
+// MDX 콘텐츠 컴파일 (정적 생성을 위한 간소화된 버전)
 export async function compileMDXContent(
   content: string,
   _components: Record<string, React.ComponentType<unknown>> = {}
 ) {
   try {
-    // For static generation, we rely on Next.js built-in MDX processing
-    // This function provides a consistent interface for future enhancements
+    // 정적 생성을 위해 Next.js 내장 MDX 처리에 의존
+    // 이 함수는 향후 개선을 위한 일관된 인터페이스를 제공
     return {
       content: content,
       frontmatter: {},
@@ -22,7 +22,7 @@ export async function compileMDXContent(
   }
 }
 
-// Extract headings from MDX content for table of contents
+// 목차를 위해 MDX 콘텐츠에서 제목 추출
 export function extractHeadings(content: string): Array<{
   id: string;
   title: string;
@@ -46,7 +46,7 @@ export function extractHeadings(content: string): Array<{
   return headings;
 }
 
-// Generate table of contents from headings
+// 제목들로부터 목차 생성
 export function generateTableOfContents(headings: Array<{
   id: string;
   title: string;
@@ -73,7 +73,7 @@ export function generateTableOfContents(headings: Array<{
   
   headings.forEach(heading => {
     if (heading.level === 1) {
-      // Skip H1 as it's usually the page title
+      // H1은 보통 페이지 제목이므로 건너뜀
       return;
     }
     
@@ -83,32 +83,32 @@ export function generateTableOfContents(headings: Array<{
     } else if (heading.level === 3 && currentH2) {
       currentH2.children.push(heading);
     }
-    // For simplicity, we only handle H2 and H3 levels
+    // 단순화를 위해 H2와 H3 레벨만 처리
   });
   
   return toc;
 }
 
-// Estimate reading time from content
+// 콘텐츠로부터 읽기 시간 추정
 export function estimateReadingTime(content: string): number {
   const wordsPerMinute = 200;
   const words = content.trim().split(/\s+/).length;
   return Math.ceil(words / wordsPerMinute);
 }
 
-// Extract excerpt from MDX content
+// MDX 콘텐츠에서 발췌문 추출
 export function extractExcerpt(content: string, maxLength: number = 160): string {
-  // Remove MDX/markdown syntax
+  // MDX/마크다운 문법 제거
   const plainText = content
-    .replace(/^---[\s\S]*?---/, '') // Remove frontmatter
-    .replace(/#{1,6}\s+/g, '') // Remove headers
-    .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
-    .replace(/\*(.*?)\*/g, '$1') // Remove italic
-    .replace(/`(.*?)`/g, '$1') // Remove inline code
-    .replace(/```[\s\S]*?```/g, '') // Remove code blocks
-    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Remove links
-    .replace(/<[^>]*>/g, '') // Remove HTML tags
-    .replace(/\n+/g, ' ') // Replace newlines with spaces
+    .replace(/^---[\s\S]*?---/, '') // frontmatter 제거
+    .replace(/#{1,6}\s+/g, '') // 헤더 제거
+    .replace(/\*\*(.*?)\*\*/g, '$1') // 굵은 글씨 제거
+    .replace(/\*(.*?)\*/g, '$1') // 기울임 글씨 제거
+    .replace(/`(.*?)`/g, '$1') // 인라인 코드 제거
+    .replace(/```[\s\S]*?```/g, '') // 코드 블록 제거
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // 링크 제거
+    .replace(/<[^>]*>/g, '') // HTML 태그 제거
+    .replace(/\n+/g, ' ') // 줄바꿈을 공백으로 교체
     .trim();
 
   if (plainText.length <= maxLength) {
@@ -118,7 +118,7 @@ export function extractExcerpt(content: string, maxLength: number = 160): string
   return plainText.slice(0, maxLength).trim() + '...';
 }
 
-// Validate MDX content
+// MDX 콘텐츠 유효성 검사
 export function validateMDXContent(content: string): {
   isValid: boolean;
   errors: string[];
@@ -127,21 +127,21 @@ export function validateMDXContent(content: string): {
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  // Check for common MDX issues
+  // 일반적인 MDX 문제 확인
   
-  // Check for unclosed code blocks
+  // 닫히지 않은 코드 블록 확인
   const codeBlockMatches = content.match(/```/g);
   if (codeBlockMatches && codeBlockMatches.length % 2 !== 0) {
     errors.push('Unclosed code block detected');
   }
 
-  // Check for malformed frontmatter
+  // 잘못된 형식의 frontmatter 확인
   const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
   if (content.startsWith('---') && !frontmatterMatch) {
     errors.push('Malformed frontmatter detected');
   }
 
-  // Check for broken image references
+  // 깨진 이미지 참조 확인
   const imageMatches = content.match(/!\[.*?\]\((.*?)\)/g);
   if (imageMatches) {
     imageMatches.forEach(match => {
@@ -155,7 +155,7 @@ export function validateMDXContent(content: string): {
     });
   }
 
-  // Check for broken link references
+  // 깨진 링크 참조 확인
   const linkMatches = content.match(/\[.*?\]\((.*?)\)/g);
   if (linkMatches) {
     linkMatches.forEach(match => {

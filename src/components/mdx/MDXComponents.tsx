@@ -4,10 +4,10 @@ import { ReactNode } from 'react';
 import { createBlogImageProps } from '@/lib/image-optimization';
 import { cn } from '@/lib/utils';
 
-// Import React types
+// React 타입 가져오기
 import React from 'react';
 
-// Custom Image component for MDX
+// MDX를 위한 커스텀 이미지 컴포넌트
 interface MDXImageProps {
   src: string;
   alt: string;
@@ -42,7 +42,7 @@ function MDXImage({ src, alt, width, height, caption, priority = false }: MDXIma
   );
 }
 
-// Custom Link component for MDX
+// MDX를 위한 커스텀 링크 컴포넌트
 interface MDXLinkProps {
   href: string;
   children: ReactNode;
@@ -96,7 +96,7 @@ function MDXLink({ href, children, className }: MDXLinkProps) {
   );
 }
 
-// Custom Code Block component
+// 커스텀 코드 블록 컴포넌트
 interface MDXCodeProps {
   children: ReactNode;
   className?: string;
@@ -115,7 +115,7 @@ function MDXCode({ children, className }: MDXCodeProps) {
   );
 }
 
-// Custom Pre component for code blocks
+// 코드 블록을 위한 커스텀 Pre 컴포넌트
 function MDXPre({ children, ...props }: { children: ReactNode;[key: string]: unknown }) {
   return (
     <pre
@@ -127,7 +127,7 @@ function MDXPre({ children, ...props }: { children: ReactNode;[key: string]: unk
   );
 }
 
-// Custom Blockquote component
+// 커스텀 인용구 컴포넌트
 function MDXBlockquote({ children }: { children: ReactNode }) {
   return (
     <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-700 dark:text-gray-300 my-6">
@@ -136,7 +136,7 @@ function MDXBlockquote({ children }: { children: ReactNode }) {
   );
 }
 
-// Custom Table components
+// 커스텀 테이블 컴포넌트
 function MDXTable({ children }: { children: ReactNode }) {
   return (
     <div className="overflow-x-auto my-6">
@@ -179,7 +179,7 @@ function MDXTd({ children }: { children: ReactNode }) {
   );
 }
 
-// Custom Heading components with anchor links
+// 앵커 링크가 있는 커스텀 제목 컴포넌트
 function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
   const HeadingComponent = ({ children, id, ...props }: { children: ReactNode; id?: string;[key: string]: unknown }) => {
     const Tag = `h${level}` as keyof React.JSX.IntrinsicElements;
@@ -211,7 +211,7 @@ function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
   return HeadingComponent;
 }
 
-// Custom List components
+// 커스텀 리스트 컴포넌트
 function MDXUl({ children }: { children: ReactNode }) {
   return (
     <ul className="list-disc list-inside space-y-2 my-4 text-gray-700 dark:text-gray-300">
@@ -236,7 +236,7 @@ function MDXLi({ children }: { children: ReactNode }) {
   );
 }
 
-// Custom Paragraph component
+// 커스텀 단락 컴포넌트
 function MDXParagraph({ children }: { children: ReactNode }) {
   return (
     <p className="text-gray-700 dark:text-gray-300 leading-relaxed my-4">
@@ -245,16 +245,16 @@ function MDXParagraph({ children }: { children: ReactNode }) {
   );
 }
 
-// Custom HR component
+// 커스텀 구분선 컴포넌트
 function MDXHr() {
   return (
     <hr className="border-gray-200 dark:border-gray-700 my-8" />
   );
 }
 
-// Export MDX components
+// MDX 컴포넌트 내보내기
 export const mdxComponents = {
-  // Typography
+  // 타이포그래피
   h1: createHeading(1),
   h2: createHeading(2),
   h3: createHeading(3),
@@ -263,28 +263,28 @@ export const mdxComponents = {
   h6: createHeading(6),
   p: MDXParagraph,
 
-  // Links and media
+  // 링크와 미디어
   a: MDXLink,
   img: MDXImage,
   Image: MDXImage,
 
-  // Code
+  // 코드
   code: MDXCode,
   pre: MDXPre,
 
-  // Lists
+  // 리스트
   ul: MDXUl,
   ol: MDXOl,
   li: MDXLi,
 
-  // Tables
+  // 테이블
   table: MDXTable,
   thead: MDXThead,
   tbody: MDXTbody,
   th: MDXTh,
   td: MDXTd,
 
-  // Other elements
+  // 기타 요소
   blockquote: MDXBlockquote,
   hr: MDXHr,
 };
