@@ -65,5 +65,4 @@ assets/
 out*/
 
 # Kiro
-.kiro/*
-!.kiro/specs/
+.kiro/
