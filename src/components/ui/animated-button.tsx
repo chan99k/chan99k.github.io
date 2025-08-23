@@ -38,9 +38,9 @@ export const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>
     };
     
     const sizeClasses = {
-      sm: 'h-9 px-3 text-sm',
-      md: 'h-10 px-4 py-2',
-      lg: 'h-11 px-8 text-lg',
+      sm: 'h-10 sm:h-9 px-4 sm:px-3 text-sm touch-target',
+      md: 'h-11 sm:h-10 px-5 sm:px-4 py-2 text-base sm:text-sm touch-target',
+      lg: 'h-12 sm:h-11 px-8 text-lg touch-target-large',
     };
 
     const hoverAnimation = {
@@ -151,9 +151,9 @@ export function IconButton({
   variant = 'ghost'
 }: IconButtonProps) {
   const sizeClasses = {
-    sm: 'h-8 w-8',
-    md: 'h-10 w-10',
-    lg: 'h-12 w-12',
+    sm: 'h-10 w-10 sm:h-8 sm:w-8 touch-target',
+    md: 'h-11 w-11 sm:h-10 sm:w-10 touch-target',
+    lg: 'h-12 w-12 touch-target-large',
   };
 
   const variantClasses = {

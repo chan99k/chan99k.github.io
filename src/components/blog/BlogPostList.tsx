@@ -154,9 +154,9 @@ export function BlogPostList({ posts }: BlogPostListProps) {
 
       {/* 블로그 포스트 그리드 */}
       {paginatedPosts.length > 0 ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {paginatedPosts.map((post) => (
-            <BlogPostCard key={post.slug} post={post} />
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {paginatedPosts.map((post, index) => (
+            <BlogPostCard key={post.slug} post={post} index={index} />
           ))}
         </div>
       ) : (

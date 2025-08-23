@@ -18,7 +18,7 @@ interface PortfolioPageProps {
 export function PortfolioPage({ data, blogPosts = [], onProblemClick }: PortfolioPageProps) {
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="container-responsive py-6 sm:py-8 lg:py-12 max-w-6xl space-y-8 sm:space-y-12 lg:space-y-16">
         {/* Personal Information Section */}
         <PersonalInfoSection personalInfo={data.personalInfo} />
         
