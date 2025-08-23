@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ReactNode } from 'react';
-import { createBlogImageProps } from '@/lib/image-optimization';
+// Remove server-side image optimization import for client components
 import { cn } from '@/lib/utils';
 
 // React 타입 가져오기
@@ -18,19 +18,20 @@ interface MDXImageProps {
 }
 
 function MDXImage({ src, alt, width, height, caption, priority = false }: MDXImageProps) {
-  const imageProps = createBlogImageProps(src, alt, {
-    width,
-    height,
-    priority,
-  });
+  // Simple client-side image handling without server-side optimization
+  const imageSrc = src.startsWith('/') ? src : `/images/blog/${src}`;
 
   return (
     <figure className="my-8">
       <div className="relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
         <Image
-          {...imageProps}
-          className="w-full h-auto"
+          src={imageSrc}
           alt={alt}
+          width={width || 800}
+          height={height || 600}
+          priority={priority}
+          className="w-full h-auto"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
         />
       </div>
       {caption && (

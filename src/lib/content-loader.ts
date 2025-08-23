@@ -86,7 +86,12 @@ export class ContentLoader {
       
       const contentType = getContentTypeFromPath(filePath);
       const relativePath = path.relative(contentDirectory, filePath);
-      const slug = relativePath.replace(/\.mdx?$/, '').replace(/\\/g, '/');
+      
+      // For blog posts, use only the filename as slug (without directory path)
+      let slug = relativePath.replace(/\.mdx?$/, '').replace(/\\/g, '/');
+      if (contentType === 'blog') {
+        slug = path.basename(slug);
+      }
 
       // Validate frontmatter if content type is known
       const warnings: string[] = [];
