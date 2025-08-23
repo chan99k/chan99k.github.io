@@ -34,7 +34,7 @@ export function BlogFilters({
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
       <div className="flex flex-col lg:flex-row gap-4">
-        {/* Search input */}
+        {/* 검색 입력 */}
         <div className="flex-1">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -48,7 +48,7 @@ export function BlogFilters({
           </div>
         </div>
 
-        {/* Category filter */}
+        {/* 카테고리 필터 */}
         <div className="relative">
           <button
             onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
@@ -92,7 +92,7 @@ export function BlogFilters({
           )}
         </div>
 
-        {/* Tag filter */}
+        {/* 태그 필터 */}
         <div className="relative">
           <button
             onClick={() => setShowTagDropdown(!showTagDropdown)}
@@ -136,7 +136,7 @@ export function BlogFilters({
           )}
         </div>
 
-        {/* Clear filters button */}
+        {/* 필터 지우기 버튼 */}
         {hasActiveFilters && (
           <button
             onClick={onClearFilters}
@@ -148,7 +148,7 @@ export function BlogFilters({
         )}
       </div>
 
-      {/* Active filters display */}
+      {/* 활성 필터 표시 */}
       {hasActiveFilters && (
         <div className="mt-4 flex flex-wrap gap-2">
           {selectedCategory && (

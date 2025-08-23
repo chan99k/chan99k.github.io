@@ -11,7 +11,7 @@ interface BlogPostHeaderProps {
 export function BlogPostHeader({ post }: BlogPostHeaderProps) {
   return (
     <header className="space-y-6">
-      {/* Back to blog link */}
+      {/* 블로그로 돌아가기 링크 */}
       <div>
         <Link
           href="/blog"
@@ -22,7 +22,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
         </Link>
       </div>
 
-      {/* Cover image */}
+      {/* 커버 이미지 */}
       {post.coverImage && (
         <div className="relative h-64 md:h-80 w-full rounded-lg overflow-hidden">
           <Image
@@ -36,9 +36,9 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
         </div>
       )}
 
-      {/* Title and metadata */}
+      {/* 제목 및 메타데이터 */}
       <div className="space-y-4">
-        {/* Category and badges */}
+        {/* 카테고리 및 배지 */}
         <div className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
             {post.category}
@@ -55,17 +55,17 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
           )}
         </div>
 
-        {/* Title */}
+        {/* 제목 */}
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-100 leading-tight">
           {post.title}
         </h1>
 
-        {/* Description */}
+        {/* 설명 */}
         <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
           {post.description}
         </p>
 
-        {/* Metadata */}
+        {/* 메타데이터 */}
         <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
           <div className="flex items-center gap-1">
             <User className="w-4 h-4" />
@@ -91,7 +91,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
           </div>
         </div>
 
-        {/* Tags */}
+        {/* 태그 */}
         {post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {post.tags.map((tag) => (
@@ -107,7 +107,7 @@ export function BlogPostHeader({ post }: BlogPostHeaderProps) {
           </div>
         )}
 
-        {/* Problem-solution metadata */}
+        {/* 문제-해결 메타데이터 */}
         {post.isProblemSolution && post.problemSolutionMeta && (
           <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
             <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">

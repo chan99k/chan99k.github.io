@@ -32,7 +32,7 @@ export function generateSEOMetadata({
   const fullUrl = url ? `${SITE_CONFIG.url}${url}` : SITE_CONFIG.url;
   const imageUrl = image ? `${SITE_CONFIG.url}${image}` : undefined;
 
-  // Combine default keywords with page-specific ones
+  // 기본 키워드와 페이지별 키워드 결합
   const allKeywords = [
     'portfolio',
     'blog',
@@ -114,7 +114,7 @@ export function generateSEOMetadata({
       },
     },
     verification: {
-      // Add verification codes if needed
+      // 필요시 검증 코드 추가
       // google: 'your-google-verification-code',
       // yandex: 'your-yandex-verification-code',
       // yahoo: 'your-yahoo-verification-code',
@@ -124,7 +124,7 @@ export function generateSEOMetadata({
   return metadata;
 }
 
-// Specific metadata generators for different page types
+// 다양한 페이지 타입을 위한 특정 메타데이터 생성기
 export function generateBlogPostMetadata({
   title,
   description,
@@ -185,7 +185,7 @@ export function generateRestaurantReviewsMetadata(): Metadata {
   });
 }
 
-// JSON-LD structured data generators
+// JSON-LD 구조화된 데이터 생성기
 export function generateBlogPostJsonLd({
   title,
   description,

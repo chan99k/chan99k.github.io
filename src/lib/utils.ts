@@ -34,15 +34,15 @@ export function truncate(text: string, length: number): string {
 }
 
 export function generateExcerpt(content: string, length: number = 160): string {
-  // Remove markdown syntax and HTML tags
+  // 마크다운 문법과 HTML 태그 제거
   const plainText = content
-    .replace(/#{1,6}\s+/g, '') // Remove headers
-    .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
-    .replace(/\*(.*?)\*/g, '$1') // Remove italic
-    .replace(/`(.*?)`/g, '$1') // Remove inline code
-    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Remove links
-    .replace(/<[^>]*>/g, '') // Remove HTML tags
-    .replace(/\n+/g, ' ') // Replace newlines with spaces
+    .replace(/#{1,6}\s+/g, '') // 헤더 제거
+    .replace(/\*\*(.*?)\*\*/g, '$1') // 볼드 제거
+    .replace(/\*(.*?)\*/g, '$1') // 이탤릭 제거
+    .replace(/`(.*?)`/g, '$1') // 인라인 코드 제거
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // 링크 제거
+    .replace(/<[^>]*>/g, '') // HTML 태그 제거
+    .replace(/\n+/g, ' ') // 줄바꿈을 공백으로 변경
     .trim();
 
   return truncate(plainText, length);

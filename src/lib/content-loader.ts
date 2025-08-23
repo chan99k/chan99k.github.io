@@ -71,7 +71,7 @@ export class ContentLoader {
     return files;
   }
 
-  // Parse a single content file
+  // 단일 콘텐츠 파일 파싱
   static parseContentFile(filePath: string): ContentLoadResult<ContentFile> {
     try {
       if (!fs.existsSync(filePath)) {
@@ -87,13 +87,13 @@ export class ContentLoader {
       const contentType = getContentTypeFromPath(filePath);
       const relativePath = path.relative(contentDirectory, filePath);
       
-      // For blog posts, use only the filename as slug (without directory path)
+      // 블로그 포스트의 경우 디렉토리 경로 없이 파일명만 슬러그로 사용
       let slug = relativePath.replace(/\.mdx?$/, '').replace(/\\/g, '/');
       if (contentType === 'blog') {
         slug = path.basename(slug);
       }
 
-      // Validate frontmatter if content type is known
+      // 콘텐츠 타입이 알려진 경우 frontmatter 유효성 검사
       const warnings: string[] = [];
       if (contentType) {
         const validation = validateFrontmatterWithLogging(filePath, frontmatter);
@@ -123,7 +123,7 @@ export class ContentLoader {
     }
   }
 
-  // Load all blog posts with validation
+  // 유효성 검사와 함께 모든 블로그 포스트 로드
   static async loadBlogPosts(): Promise<ContentLoadResult<BlogPost[]>> {
     const blogDir = path.join(contentDirectory, 'blog');
     
@@ -150,18 +150,18 @@ export class ContentLoader {
 
       const { content, frontmatter, slug } = parseResult.data;
       
-      // Add any parsing warnings
+      // 파싱 경고 추가
       if (parseResult.warnings) {
         warnings.push(...parseResult.warnings);
       }
 
-      // Validate blog-specific frontmatter
+      // 블로그 전용 frontmatter 유효성 검사
       const validation = FrontmatterValidator.validateBlogFrontmatter(frontmatter);
       
       if (!validation.success) {
         warnings.push(`Blog frontmatter validation failed for ${filePath}`);
         validation.errors?.forEach(error => warnings.push(`  - ${error}`));
-        // Continue with default values for invalid frontmatter
+        // 유효하지 않은 frontmatter에 대해 기본값으로 계속 진행
       }
 
       const validatedData = validation.success ? validation.data : frontmatter;
@@ -186,7 +186,7 @@ export class ContentLoader {
           problemSolutionMeta: validatedData?.problemSolutionMeta as BlogPost['problemSolutionMeta'],
         };
 
-        // Skip draft posts in production
+        // 프로덕션에서 초안 포스트 건너뛰기
         if (process.env.NODE_ENV === 'production' && post.draft) {
           continue;
         }
@@ -197,7 +197,7 @@ export class ContentLoader {
       }
     }
 
-    // Sort posts by date (newest first)
+    // 날짜순으로 포스트 정렬 (최신순)
     posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return {
@@ -208,11 +208,11 @@ export class ContentLoader {
     };
   }
 
-  // Load a single blog post with validation
+  // 유효성 검사와 함께 단일 블로그 포스트 로드
   static async loadBlogPost(slug: string): Promise<ContentLoadResult<{ post: BlogPost; content: string }>> {
     const blogDir = path.join(contentDirectory, 'blog');
     
-    // Try both .md and .mdx extensions
+    // .md와 .mdx 확장자 모두 시도
     const possiblePaths = [
       path.join(blogDir, `${slug}.md`),
       path.join(blogDir, `${slug}.mdx`),
@@ -244,7 +244,7 @@ export class ContentLoader {
 
     const { content, frontmatter } = parseResult.data;
     
-    // Validate blog-specific frontmatter
+    // 블로그 전용 frontmatter 유효성 검사
     const validation = FrontmatterValidator.validateBlogFrontmatter(frontmatter);
     const validatedData = validation.success ? validation.data : frontmatter;
 
@@ -291,7 +291,7 @@ export class ContentLoader {
     }
   }
 
-  // Load all restaurant reviews with validation
+  // 유효성 검사와 함께 모든 레스토랑 리뷰 로드
   static async loadRestaurantReviews(): Promise<ContentLoadResult<RestaurantReview[]>> {
     const reviewsDir = path.join(contentDirectory, 'reviews');
     
@@ -318,18 +318,18 @@ export class ContentLoader {
 
       const { content, frontmatter, slug } = parseResult.data;
       
-      // Add any parsing warnings
+      // 파싱 경고 추가
       if (parseResult.warnings) {
         warnings.push(...parseResult.warnings);
       }
 
-      // Validate restaurant-specific frontmatter
+      // 레스토랑 전용 frontmatter 유효성 검사
       const validation = FrontmatterValidator.validateRestaurantFrontmatter(frontmatter);
       
       if (!validation.success) {
         warnings.push(`Restaurant frontmatter validation failed for ${filePath}`);
         validation.errors?.forEach(error => warnings.push(`  - ${error}`));
-        // Continue with default values for invalid frontmatter
+        // 유효하지 않은 frontmatter에 대해 기본값으로 계속 진행
       }
 
       const validatedData = validation.success ? validation.data : frontmatter;
@@ -359,7 +359,7 @@ export class ContentLoader {
       }
     }
 
-    // Sort reviews by visit date (newest first)
+    // 방문일순으로 리뷰 정렬 (최신순)
     reviews.sort((a, b) => new Date(b.visitDate).getTime() - new Date(a.visitDate).getTime());
 
     return {
@@ -370,7 +370,7 @@ export class ContentLoader {
     };
   }
 
-  // Load portfolio data with validation
+  // 유효성 검사와 함께 포트폴리오 데이터 로드
   static async loadPortfolioData(): Promise<ContentLoadResult<PortfolioData>> {
     const portfolioPath = path.join(contentDirectory, 'portfolio', 'portfolio.md');
     
@@ -392,7 +392,7 @@ export class ContentLoader {
 
     const { frontmatter } = parseResult.data;
     
-    // Validate portfolio-specific frontmatter
+    // 포트폴리오 전용 frontmatter 유효성 검사
     const validation = FrontmatterValidator.validatePortfolioFrontmatter(frontmatter);
     
     const warnings: string[] = [];
@@ -435,7 +435,7 @@ export class ContentLoader {
     }
   }
 
-  // Get content statistics
+  // 콘텐츠 통계 가져오기
   static async getContentStats(): Promise<{
     blogPosts: number;
     restaurantReviews: number;
@@ -455,7 +455,7 @@ export class ContentLoader {
   }
 }
 
-// Backward compatibility exports (wrapper functions for existing API)
+// 하위 호환성 내보내기 (기존 API를 위한 래퍼 함수)
 export async function getBlogPosts(): Promise<BlogPost[]> {
   const result = await ContentLoader.loadBlogPosts();
   

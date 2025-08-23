@@ -15,7 +15,7 @@ export function BlogPostMeta({ post }: BlogPostMetaProps) {
       </h3>
 
       <div className="space-y-4">
-        {/* Author */}
+        {/* 작성자 */}
         <div className="flex items-center gap-3">
           <User className="w-4 h-4 text-gray-400" />
           <div>
@@ -28,7 +28,7 @@ export function BlogPostMeta({ post }: BlogPostMetaProps) {
           </div>
         </div>
 
-        {/* Published date */}
+        {/* 게시 날짜 */}
         <div className="flex items-center gap-3">
           <Calendar className="w-4 h-4 text-gray-400" />
           <div>
@@ -41,7 +41,7 @@ export function BlogPostMeta({ post }: BlogPostMetaProps) {
           </div>
         </div>
 
-        {/* Last modified */}
+        {/* 최종 수정 */}
         {post.lastModified && post.lastModified !== post.date && (
           <div className="flex items-center gap-3">
             <Calendar className="w-4 h-4 text-gray-400" />
@@ -56,7 +56,7 @@ export function BlogPostMeta({ post }: BlogPostMetaProps) {
           </div>
         )}
 
-        {/* Reading time */}
+        {/* 읽기 시간 */}
         <div className="flex items-center gap-3">
           <Clock className="w-4 h-4 text-gray-400" />
           <div>
@@ -69,7 +69,7 @@ export function BlogPostMeta({ post }: BlogPostMetaProps) {
           </div>
         </div>
 
-        {/* Category */}
+        {/* 카테고리 */}
         <div className="flex items-center gap-3">
           <Tag className="w-4 h-4 text-gray-400" />
           <div>
@@ -85,7 +85,7 @@ export function BlogPostMeta({ post }: BlogPostMetaProps) {
           </div>
         </div>
 
-        {/* Tags */}
+        {/* 태그 */}
         {post.tags.length > 0 && (
           <div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
@@ -105,7 +105,7 @@ export function BlogPostMeta({ post }: BlogPostMetaProps) {
           </div>
         )}
 
-        {/* Related project */}
+        {/* 관련 프로젝트 */}
         {post.relatedProject && (
           <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
@@ -121,7 +121,7 @@ export function BlogPostMeta({ post }: BlogPostMetaProps) {
           </div>
         )}
 
-        {/* Problem-solution indicator */}
+        {/* 문제-해결 표시기 */}
         {post.isProblemSolution && (
           <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">

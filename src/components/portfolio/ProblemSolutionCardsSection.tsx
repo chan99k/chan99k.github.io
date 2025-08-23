@@ -21,13 +21,13 @@ export function ProblemSolutionCardsSection({
   blogPosts, 
   onProblemClick 
 }: ProblemSolutionCardsSectionProps) {
-  // Get all problem solutions from projects
+  // 프로젝트에서 모든 문제 해결책 가져오기
   const allProblemSolutions = useMemo(() => 
     BlogPortfolioIntegrator.getAllProblemSolutions(projects), 
     [projects]
   );
   
-  // Filter state
+  // 필터 상태
   const [filters, setFilters] = useState<ProblemSolutionFilters>({
     searchTerm: '',
     selectedTechnology: '',
@@ -37,19 +37,19 @@ export function ProblemSolutionCardsSection({
   
   const [showFilters, setShowFilters] = useState(false);
   
-  // Get filter options
+  // 필터 옵션 가져오기
   const filterOptions = useMemo(() => 
     ProblemSolutionFilterManager.getFilterOptions(allProblemSolutions, projects),
     [allProblemSolutions, projects]
   );
   
-  // Apply filters
+  // 필터 적용
   const filteredProblemSolutions = useMemo(() => 
     ProblemSolutionFilterManager.applyFilters(allProblemSolutions, filters, blogPosts),
     [allProblemSolutions, filters, blogPosts]
   );
   
-  // Enrich with blog post data
+  // 블로그 포스트 데이터로 풍부하게 만들기
   const enrichedProblemSolutions = useMemo(() => 
     BlogPortfolioIntegrator.enrichProblemSolutionsWithBlogPosts(
       filteredProblemSolutions, 
@@ -58,13 +58,13 @@ export function ProblemSolutionCardsSection({
     [filteredProblemSolutions, blogPosts]
   );
   
-  // Statistics
+  // 통계
   const stats = useMemo(() => 
     BlogPortfolioIntegrator.generateProblemSolutionStats(allProblemSolutions, blogPosts),
     [allProblemSolutions, blogPosts]
   );
   
-  // Clear all filters
+  // 모든 필터 지우기
   const clearFilters = () => {
     setFilters({
       searchTerm: '',
@@ -74,7 +74,7 @@ export function ProblemSolutionCardsSection({
     });
   };
   
-  // Check if any filters are active
+  // 활성화된 필터가 있는지 확인
   const hasActiveFilters = filters.searchTerm || 
     filters.selectedTechnology || 
     filters.selectedProject || 
@@ -86,7 +86,7 @@ export function ProblemSolutionCardsSection({
   
   return (
     <section className="mb-16">
-      {/* Section Header */}
+      {/* 섹션 헤더 */}
       <div className="mb-8">
         <div className="flex justify-between items-start mb-4">
           <div>
@@ -98,7 +98,7 @@ export function ProblemSolutionCardsSection({
             </p>
           </div>
           
-          {/* Statistics */}
+          {/* 통계 */}
           <div className="hidden md:flex space-x-4 text-sm text-muted-foreground">
             <div className="flex items-center space-x-1">
               <Code className="w-4 h-4" />
@@ -111,9 +111,9 @@ export function ProblemSolutionCardsSection({
           </div>
         </div>
         
-        {/* Search and Filter Controls */}
+        {/* 검색 및 필터 컨트롤 */}
         <div className="space-y-4">
-          {/* Search Bar */}
+          {/* 검색 바 */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <input
@@ -125,7 +125,7 @@ export function ProblemSolutionCardsSection({
             />
           </div>
           
-          {/* Filter Toggle */}
+          {/* 필터 토글 */}
           <div className="flex justify-between items-center">
             <button
               onClick={() => setShowFilters(!showFilters)}
@@ -151,11 +151,11 @@ export function ProblemSolutionCardsSection({
             )}
           </div>
           
-          {/* Filter Panel */}
+          {/* 필터 패널 */}
           {showFilters && (
             <div className="bg-card border border-border rounded-lg p-4 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Technology Filter */}
+                {/* 기술 필터 */}
                 <div>
                   <label className="block text-sm font-medium text-card-foreground mb-2">
                     Technology
@@ -172,7 +172,7 @@ export function ProblemSolutionCardsSection({
                   </select>
                 </div>
                 
-                {/* Project Filter */}
+                {/* 프로젝트 필터 */}
                 <div>
                   <label className="block text-sm font-medium text-card-foreground mb-2">
                     Project
@@ -189,7 +189,7 @@ export function ProblemSolutionCardsSection({
                   </select>
                 </div>
                 
-                {/* Blog Post Filter */}
+                {/* 블로그 포스트 필터 */}
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -208,7 +208,7 @@ export function ProblemSolutionCardsSection({
         </div>
       </div>
       
-      {/* Results Count */}
+      {/* 결과 개수 */}
       <div className="mb-6 text-sm text-muted-foreground">
         Showing {filteredProblemSolutions.length} of {allProblemSolutions.length} problem-solution cards
         {hasActiveFilters && (
@@ -218,7 +218,7 @@ export function ProblemSolutionCardsSection({
         )}
       </div>
       
-      {/* Problem Solution Cards Grid */}
+      {/* 문제 해결책 카드 그리드 */}
       {enrichedProblemSolutions.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {enrichedProblemSolutions.map((problem) => (

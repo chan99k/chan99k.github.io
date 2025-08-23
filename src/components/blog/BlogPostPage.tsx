@@ -4,6 +4,7 @@ import { BlogPostContent } from './BlogPostContent';
 import { BlogPostNavigation } from './BlogPostNavigation';
 import { BlogPostMeta } from './BlogPostMeta';
 import { TableOfContents } from './TableOfContents';
+import { CommentSection } from './CommentSection';
 import { extractHeadings, generateTableOfContents } from '@/lib/mdx-utils';
 
 interface BlogPostPageProps {
@@ -37,6 +38,15 @@ export function BlogPostPage({ post, content, previousPost, nextPost }: BlogPost
               {/* Post navigation */}
               <div className="mt-8">
                 <BlogPostNavigation previousPost={previousPost} nextPost={nextPost} />
+              </div>
+
+              {/* Comments section */}
+              <div className="mt-8">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                  <div className="p-8">
+                    <CommentSection postSlug={post.slug} />
+                  </div>
+                </div>
               </div>
             </div>
 

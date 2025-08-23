@@ -22,7 +22,7 @@ export function BlogPostList({ posts }: BlogPostListProps) {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  // Initialize state from URL parameters
+  // URL 매개변수에서 상태 초기화
   useEffect(() => {
     const category = searchParams.get('category') || undefined;
     const tag = searchParams.get('tag') || undefined;
@@ -35,7 +35,7 @@ export function BlogPostList({ posts }: BlogPostListProps) {
     setCurrentPage(page);
   }, [searchParams]);
 
-  // Extract unique categories and tags
+  // 고유한 카테고리와 태그 추출
   const categories = useMemo(() => {
     const categorySet = new Set(posts.map(post => post.category));
     return Array.from(categorySet).sort();
@@ -46,7 +46,7 @@ export function BlogPostList({ posts }: BlogPostListProps) {
     return Array.from(tagSet).sort();
   }, [posts]);
 
-  // Filter posts based on current filters
+  // 현재 필터를 기반으로 포스트 필터링
   const filteredPosts = useMemo(() => {
     return posts.filter(post => {
       const matchesCategory = !selectedCategory || post.category === selectedCategory;
@@ -60,14 +60,14 @@ export function BlogPostList({ posts }: BlogPostListProps) {
     });
   }, [posts, selectedCategory, selectedTag, searchQuery]);
 
-  // Paginate filtered posts
+  // 필터링된 포스트 페이지네이션
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
   const paginatedPosts = useMemo(() => {
     const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
     return filteredPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
   }, [filteredPosts, currentPage]);
 
-  // Update URL when filters change
+  // 필터 변경 시 URL 업데이트
   const updateURL = (newCategory?: string, newTag?: string, newSearch?: string, newPage?: number) => {
     const params = new URLSearchParams();
     
@@ -130,7 +130,7 @@ export function BlogPostList({ posts }: BlogPostListProps) {
         hasActiveFilters={hasActiveFilters}
       />
 
-      {/* Results summary */}
+      {/* 결과 요약 */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-600 dark:text-gray-400">
           {filteredPosts.length === 0 ? (
@@ -152,7 +152,7 @@ export function BlogPostList({ posts }: BlogPostListProps) {
         )}
       </div>
 
-      {/* Blog posts grid */}
+      {/* 블로그 포스트 그리드 */}
       {paginatedPosts.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {paginatedPosts.map((post) => (
@@ -175,7 +175,7 @@ export function BlogPostList({ posts }: BlogPostListProps) {
         </div>
       )}
 
-      {/* Pagination */}
+      {/* 페이지네이션 */}
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}

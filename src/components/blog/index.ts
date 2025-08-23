@@ -10,3 +10,5 @@ export { BlogPostNavigation } from './BlogPostNavigation';
 export { BlogPostMeta } from './BlogPostMeta';
 export { TableOfContents } from './TableOfContents';
 export { CodeBlock } from './CodeBlock';
+export { CommentSection } from './CommentSection';
+export { AnonymousCommentGuide } from './AnonymousCommentGuide';

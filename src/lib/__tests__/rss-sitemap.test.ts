@@ -6,7 +6,7 @@ import { GET as rssHandler } from '../../app/rss.xml/route';
 import sitemap from '../../app/sitemap';
 import robots from '../../app/robots';
 
-// Mock the content functions
+// 콘텐츠 함수 모킹
 jest.mock('../content', () => ({
   getBlogPosts: jest.fn(() => Promise.resolve([
     {
@@ -67,7 +67,7 @@ describe('RSS Feed and Sitemap Generation', () => {
       expect(Array.isArray(sitemapData)).toBe(true);
       expect(sitemapData.length).toBeGreaterThan(0);
       
-      // Check for main pages
+      // 메인 페이지 확인
       const urls = sitemapData.map(item => item.url);
       expect(urls).toContain('http://localhost:3000');
       expect(urls).toContain('http://localhost:3000/portfolio');

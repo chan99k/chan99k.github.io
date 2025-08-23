@@ -17,13 +17,13 @@ export function BlogPortfolioIntegration({
   projects, 
   maxItems = 6 
 }: BlogPortfolioIntegrationProps) {
-  // Get problem-solution blog posts
+  // 문제-해결 블로그 포스트 가져오기
   const problemSolutionPosts = useMemo(() => 
     blogPosts.filter(post => post.isProblemSolution),
     [blogPosts]
   );
   
-  // Link blog posts to projects
+  // 블로그 포스트를 프로젝트에 연결
   const projectBlogMap = useMemo(() => 
     BlogPortfolioIntegrator.linkBlogPostsToProjects(blogPosts, projects),
     [blogPosts, projects]

@@ -10,14 +10,14 @@ interface ProjectCardProps {
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <div className="bg-card rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border">
-      {/* Card Header */}
+      {/* 카드 헤더 */}
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-xl font-semibold text-card-foreground">
             {project.title}
           </h3>
           
-          {/* Action Links */}
+          {/* 액션 링크 */}
           <div className="flex space-x-2 ml-4">
             {project.githubUrl && (
               <a
@@ -45,12 +45,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
         
-        {/* Project Description */}
+        {/* 프로젝트 설명 */}
         <p className="text-muted-foreground mb-4">
           {project.description}
         </p>
         
-        {/* Project Meta Information */}
+        {/* 프로젝트 메타 정보 */}
         <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
           <div className="flex items-center space-x-1">
             <Calendar className="w-4 h-4" />
@@ -63,7 +63,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
         
-        {/* Technology Stack */}
+        {/* 기술 스택 */}
         <div className="mb-4">
           <h4 className="text-sm font-medium text-card-foreground mb-2">
             Tech Stack
@@ -80,7 +80,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
         
-        {/* Problem Solutions Count */}
+        {/* 문제 해결책 개수 */}
         {project.problems.length > 0 && (
           <div className="pt-4 border-t border-border">
             <p className="text-sm text-muted-foreground">

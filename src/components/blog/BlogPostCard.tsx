@@ -11,7 +11,7 @@ interface BlogPostCardProps {
 export function BlogPostCard({ post }: BlogPostCardProps) {
   return (
     <article className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-      {/* Cover image */}
+      {/* 커버 이미지 */}
       {post.coverImage && (
         <div className="relative h-48 w-full">
           <Image
@@ -25,7 +25,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
       )}
 
       <div className="p-6">
-        {/* Category and featured badge */}
+        {/* 카테고리 및 추천 배지 */}
         <div className="flex items-center justify-between mb-3">
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
             {post.category}
@@ -37,7 +37,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
           )}
         </div>
 
-        {/* Title and description */}
+        {/* 제목 및 설명 */}
         <div className="mb-4">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 line-clamp-2">
             <Link 
@@ -52,7 +52,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
           </p>
         </div>
 
-        {/* Metadata */}
+        {/* 메타데이터 */}
         <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 mb-4">
           <div className="flex items-center gap-1">
             <Calendar className="w-3 h-3" />
@@ -70,7 +70,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
           </div>
         </div>
 
-        {/* Tags */}
+        {/* 태그 */}
         {post.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-4">
             {post.tags.slice(0, 3).map((tag) => (
@@ -91,7 +91,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
           </div>
         )}
 
-        {/* Problem-solution indicator */}
+        {/* 문제-해결 표시기 */}
         {post.isProblemSolution && (
           <div className="mb-4">
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
@@ -100,7 +100,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
           </div>
         )}
 
-        {/* Read more link */}
+        {/* 더 읽기 링크 */}
         <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
           <Link
             href={`/blog/${post.slug}`}

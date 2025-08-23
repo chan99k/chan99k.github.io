@@ -1,11 +1,11 @@
 import { BlogPost, Project, ProblemSolution } from '@/types';
 
 /**
- * Content linking utilities to connect blog posts with portfolio projects
+ * 블로그 포스트와 포트폴리오 프로젝트를 연결하는 콘텐츠 링킹 유틸리티
  */
 export class BlogPortfolioIntegrator {
   /**
-   * Link blog posts to projects based on relatedProject field and problem-solution metadata
+   * relatedProject 필드와 문제-해결 메타데이터를 기반으로 블로그 포스트를 프로젝트에 연결
    */
   static linkBlogPostsToProjects(
     blogPosts: BlogPost[], 
@@ -13,12 +13,12 @@ export class BlogPortfolioIntegrator {
   ): Map<string, BlogPost[]> {
     const projectBlogMap = new Map<string, BlogPost[]>();
     
-    // Initialize map with all project IDs
+    // 모든 프로젝트 ID로 맵 초기화
     projects.forEach(project => {
       projectBlogMap.set(project.id, []);
     });
     
-    // Link blog posts to projects
+    // 블로그 포스트를 프로젝트에 연결
     blogPosts.forEach(post => {
       if (post.relatedProject) {
         const existingPosts = projectBlogMap.get(post.relatedProject) || [];
@@ -30,7 +30,7 @@ export class BlogPortfolioIntegrator {
   }
   
   /**
-   * Get problem-solution blog posts for a specific project
+   * 특정 프로젝트의 문제-해결 블로그 포스트 가져오기
    */
   static getProblemSolutionPostsForProject(
     projectId: string, 
@@ -43,14 +43,14 @@ export class BlogPortfolioIntegrator {
   }
   
   /**
-   * Find blog post by slug
+   * 슬러그로 블로그 포스트 찾기
    */
   static getBlogPostBySlug(slug: string, blogPosts: BlogPost[]): BlogPost | null {
     return blogPosts.find(post => post.slug === slug) || null;
   }
   
   /**
-   * Link problem solutions to their corresponding blog posts
+   * 문제 해결책을 해당 블로그 포스트에 연결
    */
   static linkProblemSolutionsToBlogPosts(
     problemSolutions: ProblemSolution[], 
@@ -71,14 +71,14 @@ export class BlogPortfolioIntegrator {
   }
   
   /**
-   * Get all problem solutions from all projects
+   * 모든 프로젝트에서 모든 문제 해결책 가져오기
    */
   static getAllProblemSolutions(projects: Project[]): ProblemSolution[] {
     return projects.flatMap(project => project.problems);
   }
   
   /**
-   * Filter problem solutions by technology
+   * 기술별로 문제 해결책 필터링
    */
   static filterProblemSolutionsByTechnology(
     problemSolutions: ProblemSolution[], 
@@ -92,7 +92,7 @@ export class BlogPortfolioIntegrator {
   }
   
   /**
-   * Filter problem solutions by project
+   * 프로젝트별로 문제 해결책 필터링
    */
   static filterProblemSolutionsByProject(
     problemSolutions: ProblemSolution[], 
@@ -102,7 +102,7 @@ export class BlogPortfolioIntegrator {
   }
   
   /**
-   * Search problem solutions by title, problem, or solution content
+   * 제목, 문제, 또는 해결책 내용으로 문제 해결책 검색
    */
   static searchProblemSolutions(
     problemSolutions: ProblemSolution[], 
@@ -119,7 +119,7 @@ export class BlogPortfolioIntegrator {
   }
   
   /**
-   * Get unique technologies from all problem solutions
+   * 모든 문제 해결책에서 고유한 기술들 가져오기
    */
   static getUniqueTechnologies(problemSolutions: ProblemSolution[]): string[] {
     const technologies = new Set<string>();
@@ -132,7 +132,7 @@ export class BlogPortfolioIntegrator {
   }
   
   /**
-   * Get problem solutions with blog post details
+   * 블로그 포스트 세부 정보와 함께 문제 해결책 가져오기
    */
   static enrichProblemSolutionsWithBlogPosts(
     problemSolutions: ProblemSolution[], 
@@ -151,7 +151,7 @@ export class BlogPortfolioIntegrator {
   }
   
   /**
-   * Generate problem solution statistics
+   * 문제 해결책 통계 생성
    */
   static generateProblemSolutionStats(
     problemSolutions: ProblemSolution[], 
@@ -177,7 +177,7 @@ export class BlogPortfolioIntegrator {
 }
 
 /**
- * Hook-like utility for filtering and searching problem solutions
+ * 문제 해결책 필터링 및 검색을 위한 훅 형태의 유틸리티
  */
 export interface ProblemSolutionFilters {
   searchTerm: string;
@@ -194,7 +194,7 @@ export class ProblemSolutionFilterManager {
   ): ProblemSolution[] {
     let filtered = [...problemSolutions];
     
-    // Apply search filter
+    // 검색 필터 적용
     if (filters.searchTerm.trim()) {
       filtered = BlogPortfolioIntegrator.searchProblemSolutions(
         filtered, 
@@ -202,7 +202,7 @@ export class ProblemSolutionFilterManager {
       );
     }
     
-    // Apply technology filter
+    // 기술 필터 적용
     if (filters.selectedTechnology) {
       filtered = BlogPortfolioIntegrator.filterProblemSolutionsByTechnology(
         filtered, 
@@ -210,7 +210,7 @@ export class ProblemSolutionFilterManager {
       );
     }
     
-    // Apply project filter
+    // 프로젝트 필터 적용
     if (filters.selectedProject) {
       filtered = BlogPortfolioIntegrator.filterProblemSolutionsByProject(
         filtered, 
@@ -218,7 +218,7 @@ export class ProblemSolutionFilterManager {
       );
     }
     
-    // Apply blog post filter
+    // 블로그 포스트 필터 적용
     if (filters.showOnlyWithBlogPosts) {
       filtered = filtered.filter(problem => 
         problem.blogPostSlug && 

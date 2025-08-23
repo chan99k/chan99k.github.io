@@ -26,14 +26,14 @@ export function ProblemSolutionCard({
       className="bg-card rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border cursor-pointer group"
       onClick={handleCardClick}
     >
-      {/* Card Header */}
+      {/* 카드 헤더 */}
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-lg font-semibold text-card-foreground group-hover:text-primary transition-colors">
             {problemSolution.title}
           </h3>
           
-          {/* Status Indicators */}
+          {/* 상태 표시기 */}
           <div className="flex space-x-2 ml-4">
             {problemSolution.isDetailedInBlog && (
               <div className="flex items-center space-x-1 text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
@@ -44,7 +44,7 @@ export function ProblemSolutionCard({
           </div>
         </div>
         
-        {/* Problem Section */}
+        {/* 문제 섹션 */}
         <div className="mb-4">
           <div className="flex items-center space-x-2 mb-2">
             <Lightbulb className="w-4 h-4 text-amber-500" />
@@ -55,7 +55,7 @@ export function ProblemSolutionCard({
           </p>
         </div>
         
-        {/* Solution Preview */}
+        {/* 해결책 미리보기 */}
         <div className="mb-4">
           <div className="flex items-center space-x-2 mb-2">
             <Code className="w-4 h-4 text-green-500" />
@@ -66,7 +66,7 @@ export function ProblemSolutionCard({
           </p>
         </div>
         
-        {/* Technologies */}
+        {/* 기술들 */}
         <div className="mb-4">
           <h4 className="text-xs font-medium text-card-foreground mb-2 uppercase tracking-wide">
             Technologies
@@ -83,7 +83,7 @@ export function ProblemSolutionCard({
           </div>
         </div>
         
-        {/* Related Blog Post Link */}
+        {/* 관련 블로그 포스트 링크 */}
         {relatedBlogPost && (
           <div className="pt-4 border-t border-border">
             <Link 
@@ -100,7 +100,7 @@ export function ProblemSolutionCard({
           </div>
         )}
         
-        {/* External Blog Link */}
+        {/* 외부 블로그 링크 */}
         {problemSolution.blogPostSlug && !relatedBlogPost && (
           <div className="pt-4 border-t border-border">
             <Link 
