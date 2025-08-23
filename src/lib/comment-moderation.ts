@@ -141,6 +141,7 @@ export const contentFilter = {
 
   /**
    * 부적절한 부분을 제거하거나 대체하여 콘텐츠를 정화합니다
+   * @deprecated Use sanitizeInput from @/lib/security/input-sanitization instead
    */
   sanitizeContent(text: string): string {
     let sanitized = text;
@@ -240,6 +241,32 @@ export function moderateComment(
   let confidence = 0;
   let sanitizedContent = content;
 
+  // Enhanced sanitization using the new security system
+  if (sanitize) {
+    try {
+      // Use the enhanced sanitization system
+      const { sanitizeInput, SANITIZATION_PRESETS } = require('@/lib/security/input-sanitization');
+      const sanitizationResult = sanitizeInput(content, SANITIZATION_PRESETS.comment);
+      
+      sanitizedContent = sanitizationResult.sanitized;
+      
+      // If too much content was removed, it might be malicious
+      if (sanitizationResult.wasModified && sanitizedContent.length < content.length * 0.3) {
+        isAllowed = false;
+        reason = 'Content contains too much potentially harmful material';
+        confidence = Math.max(confidence, 0.9);
+      }
+      
+      // Add warnings from sanitization
+      if (sanitizationResult.warnings.length > 0) {
+        confidence = Math.max(confidence, 0.3);
+      }
+    } catch (error) {
+      // Fallback to legacy sanitization
+      sanitizedContent = contentFilter.sanitizeContent(content);
+    }
+  }
+
   // 스팸 탐지
   if (checkSpam) {
     const spamAnalysis = spamDetection.analyzeForSpam(content);
@@ -252,18 +279,14 @@ export function moderateComment(
 
   // 부적절한 콘텐츠 확인
   if (checkInappropriate && contentFilter.hasInappropriateContent(content)) {
-    if (sanitize) {
-      sanitizedContent = contentFilter.sanitizeContent(content);
-      // If sanitization removes too much content, reject it
-      if (sanitizedContent.length < content.length * 0.5) {
-        isAllowed = false;
-        reason = 'Content contains too much inappropriate material';
-        confidence = Math.max(confidence, 0.8);
-      }
-    } else {
+    if (!sanitize) {
       isAllowed = false;
       reason = 'Content contains inappropriate material';
       confidence = Math.max(confidence, 0.7);
+    } else if (sanitizedContent.length < content.length * 0.5) {
+      isAllowed = false;
+      reason = 'Content contains too much inappropriate material';
+      confidence = Math.max(confidence, 0.8);
     }
   }
 

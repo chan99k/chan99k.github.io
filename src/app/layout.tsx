@@ -1,14 +1,11 @@
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
-import { ThemeProvider } from 'next-themes';
+
 import './globals.css';
 import { SITE_CONFIG } from '@/lib/constants';
 import { MainLayout } from '@/components/layout';
 import { generateSEOMetadata, generateWebsiteJsonLd } from '@/lib/seo';
-import {
-  PerformanceProvider,
-  PerformanceDebugger,
-} from '@/components/providers/PerformanceProvider';
+
 
 const inter = Inter({
   variable: '--font-sans',
@@ -48,19 +45,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
-        <PerformanceProvider
-          enableAnalytics={process.env.NODE_ENV === 'production'}
-        >
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-          >
-            <MainLayout>{children}</MainLayout>
-            <PerformanceDebugger />
-          </ThemeProvider>
-        </PerformanceProvider>
+        <MainLayout>{children}</MainLayout>
       </body>
     </html>
   );

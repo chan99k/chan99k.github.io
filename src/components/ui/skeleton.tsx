@@ -2,13 +2,13 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
-  as?: keyof JSX.IntrinsicElements;
+  className?: string;
 }
 
 export const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
-  ({ className, as: Component = 'div', ...props }, ref) => {
+  ({ className, ...props }, ref) => {
     return (
-      <Component
+      <div
         ref={ref}
         data-testid="skeleton"
         className={cn(

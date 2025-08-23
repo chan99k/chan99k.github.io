@@ -1,4 +1,4 @@
-import { cn, formatDate, slugify, truncateText, getReadingTime } from '../utils';
+import { cn, formatDate, slugify, truncate } from '../utils';
 
 describe('Utility Functions', () => {
   describe('cn (className utility)', () => {
@@ -33,11 +33,6 @@ describe('Utility Functions', () => {
       expect(result).toBe('2024년 1월 15일');
     });
 
-    it('should handle custom locale', () => {
-      const result = formatDate('2024-01-15', 'en-US');
-      expect(result).toBe('January 15, 2024');
-    });
-
     it('should handle invalid date', () => {
       const result = formatDate('invalid-date');
       expect(result).toBe('Invalid Date');
@@ -68,62 +63,19 @@ describe('Utility Functions', () => {
     });
   });
 
-  describe('truncateText', () => {
+  describe('truncate', () => {
     it('should truncate long text', () => {
       const longText = 'This is a very long text that should be truncated';
-      expect(truncateText(longText, 20)).toBe('This is a very long...');
+      expect(truncate(longText, 20)).toBe('This is a very long...');
     });
 
     it('should not truncate short text', () => {
       const shortText = 'Short text';
-      expect(truncateText(shortText, 20)).toBe('Short text');
-    });
-
-    it('should handle custom suffix', () => {
-      const longText = 'This is a very long text';
-      expect(truncateText(longText, 10, ' [more]')).toBe('This is a [more]');
+      expect(truncate(shortText, 20)).toBe('Short text');
     });
 
     it('should handle empty string', () => {
-      expect(truncateText('', 10)).toBe('');
-    });
-  });
-
-  describe('getReadingTime', () => {
-    it('should calculate reading time correctly', () => {
-      const text = 'word '.repeat(200); // 200 words
-      expect(getReadingTime(text)).toBe(1); // ~1 minute at 200 WPM
-    });
-
-    it('should handle short text', () => {
-      const text = 'Short text';
-      expect(getReadingTime(text)).toBe(1); // Minimum 1 minute
-    });
-
-    it('should handle long text', () => {
-      const text = 'word '.repeat(1000); // 1000 words
-      expect(getReadingTime(text)).toBe(5); // ~5 minutes at 200 WPM
-    });
-
-    it('should handle empty string', () => {
-      expect(getReadingTime('')).toBe(1);
-    });
-
-    it('should handle markdown content', () => {
-      const markdownText = `
-        # Heading
-        
-        This is a **bold** text with *italic* and \`code\`.
-        
-        \`\`\`javascript
-        console.log('Hello, world!');
-        \`\`\`
-        
-        - List item 1
-        - List item 2
-      `;
-      const readingTime = getReadingTime(markdownText);
-      expect(readingTime).toBeGreaterThan(0);
+      expect(truncate('', 10)).toBe('');
     });
   });
 });

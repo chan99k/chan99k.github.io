@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { PageTransition } from '@/components/ui';
-import { ScrollToTop } from '@/components/ui/scroll-to-top';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -13,10 +11,9 @@ export function MainLayout({ children }: MainLayoutProps) {
     <div className='min-h-screen-safe flex flex-col touch-manipulation'>
       <Header />
       <main className='flex-1 relative'>
-        <PageTransition>{children}</PageTransition>
+        {children}
       </main>
       <Footer />
-      <ScrollToTop />
     </div>
   );
 }
