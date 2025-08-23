@@ -122,7 +122,7 @@ export function RestaurantCard({ review, className = '' }: RestaurantCardProps) 
         )}
 
         {/* Map Links */}
-        <div className="flex space-x-2">
+        <div className="flex flex-wrap gap-2">
           {review.mapLinks.naver && (
             <a
               href={review.mapLinks.naver}
