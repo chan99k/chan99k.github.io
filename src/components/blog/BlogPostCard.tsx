@@ -3,26 +3,41 @@ import Image from 'next/image';
 import { BlogPost } from '@/types';
 import { formatDate } from '@/lib/utils';
 import { Clock, Calendar, Tag, User } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { AnimatedCard } from '@/components/ui';
+import { fadeInUp } from '@/components/ui/animations';
 
 interface BlogPostCardProps {
   post: BlogPost;
+  index?: number;
 }
 
-export function BlogPostCard({ post }: BlogPostCardProps) {
+export function BlogPostCard({ post, index = 0 }: BlogPostCardProps) {
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-      {/* 커버 이미지 */}
-      {post.coverImage && (
-        <div className="relative h-48 w-full">
-          <Image
-            src={post.coverImage}
-            alt={post.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-        </div>
-      )}
+    <motion.article
+      variants={fadeInUp}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={{ delay: index * 0.1 }}
+    >
+      <AnimatedCard className="bg-white dark:bg-gray-800 overflow-hidden" hover>
+        {/* 커버 이미지 */}
+        {post.coverImage && (
+          <motion.div 
+            className="relative h-48 w-full overflow-hidden"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Image
+              src={post.coverImage}
+              alt={post.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </motion.div>
+        )}
 
       <div className="p-6">
         {/* 카테고리 및 추천 배지 */}
@@ -73,15 +88,22 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         {/* 태그 */}
         {post.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-4">
-            {post.tags.slice(0, 3).map((tag) => (
-              <Link
+            {post.tags.slice(0, 3).map((tag, tagIndex) => (
+              <motion.div
                 key={tag}
-                href={`/blog?tag=${encodeURIComponent(tag)}`}
-                className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: (index * 0.1) + (tagIndex * 0.05) }}
+                whileHover={{ scale: 1.05 }}
               >
-                <Tag className="w-2.5 h-2.5" />
-                {tag}
-              </Link>
+                <Link
+                  href={`/blog?tag=${encodeURIComponent(tag)}`}
+                  className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                >
+                  <Tag className="w-2.5 h-2.5" />
+                  {tag}
+                </Link>
+              </motion.div>
             ))}
             {post.tags.length > 3 && (
               <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -123,6 +145,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
           </Link>
         </div>
       </div>
-    </article>
+      </AnimatedCard>
+    </motion.article>
   );
 }
