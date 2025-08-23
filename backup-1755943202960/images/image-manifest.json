@@ -1,0 +1,79 @@
+{
+  "timestamp": "2025-08-23T09:58:16.186Z",
+  "images": {
+    "very-large-test-image.jpg": {
+      "contentType": "blog",
+      "variants": [
+        {
+          "path": "/images/optimized/blog/blog/very-large-test-image-1200w.jpg",
+          "format": "jpg",
+          "width": 1200,
+          "size": 335986
+        },
+        {
+          "path": "/images/optimized/blog/blog/very-large-test-image-1600w.jpg",
+          "format": "jpg",
+          "width": 1600,
+          "size": 720180
+        },
+        {
+          "path": "/images/optimized/blog/blog/very-large-test-image-400w.jpg",
+          "format": "jpg",
+          "width": 400,
+          "size": 14740
+        },
+        {
+          "path": "/images/optimized/blog/blog/very-large-test-image-800w.jpg",
+          "format": "jpg",
+          "width": 800,
+          "size": 114445
+        }
+      ]
+    },
+    "very-large-test-image.webp": {
+      "contentType": "blog",
+      "variants": [
+        {
+          "path": "/images/optimized/blog/blog/very-large-test-image-1200w.webp",
+          "format": "webp",
+          "width": 1200,
+          "size": 449822
+        },
+        {
+          "path": "/images/optimized/blog/blog/very-large-test-image-1600w.webp",
+          "format": "webp",
+          "width": 1600,
+          "size": 911486
+        },
+        {
+          "path": "/images/optimized/blog/blog/very-large-test-image-400w.webp",
+          "format": "webp",
+          "width": 400,
+          "size": 23924
+        },
+        {
+          "path": "/images/optimized/blog/blog/very-large-test-image-800w.webp",
+          "format": "webp",
+          "width": 800,
+          "size": 171764
+        }
+      ]
+    }
+  },
+  "settings": {
+    "quality": 85,
+    "progressive": true,
+    "sizes": [
+      400,
+      800,
+      1200,
+      1600
+    ],
+    "formats": [
+      "webp",
+      "jpg"
+    ],
+    "maxWidth": 1920,
+    "maxHeight": 1080
+  }
+}

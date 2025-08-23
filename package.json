@@ -16,7 +16,12 @@
     "test:watch": "jest --watch",
     "perf:audit": "node scripts/performance-audit.js",
     "perf:lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-report.html",
-    "bundle:analyze": "npx @next/bundle-analyzer"
+    "bundle:analyze": "npx @next/bundle-analyzer",
+    "migrate": "node scripts/run-migration.js",
+    "migrate:content": "node scripts/migrate-content.js",
+    "migrate:validate": "node scripts/validate-content.js",
+    "migrate:images": "node scripts/optimize-images.js",
+    "migrate:test": "node scripts/test-migration.js"
   },
   "dependencies": {
     "@giscus/react": "^3.1.0",

@@ -1,0 +1,68 @@
+{
+  "timestamp": "2025-08-23T10:00:02.973Z",
+  "summary": {
+    "total": 6,
+    "successful": 6,
+    "failed": 0,
+    "byType": {
+      "backup": {
+        "success": 1,
+        "error": 0
+      },
+      "blog": {
+        "success": 2,
+        "error": 0
+      },
+      "portfolio": {
+        "success": 1,
+        "error": 0
+      },
+      "review": {
+        "success": 2,
+        "error": 0
+      }
+    }
+  },
+  "logs": [
+    {
+      "type": "backup",
+      "status": "success",
+      "message": "Backup created at backup-1755943202960",
+      "timestamp": "2025-08-23T10:00:02.964Z"
+    },
+    {
+      "type": "blog",
+      "status": "success",
+      "file": "hello-world.md",
+      "message": "Blog post migrated successfully",
+      "timestamp": "2025-08-23T10:00:02.968Z"
+    },
+    {
+      "type": "blog",
+      "status": "success",
+      "file": "static-site-dynamic-content.md",
+      "message": "Blog post migrated successfully",
+      "timestamp": "2025-08-23T10:00:02.969Z"
+    },
+    {
+      "type": "portfolio",
+      "status": "success",
+      "message": "Portfolio content validated and migrated",
+      "timestamp": "2025-08-23T10:00:02.971Z"
+    },
+    {
+      "type": "review",
+      "status": "success",
+      "file": "sample-japanese-restaurant.md",
+      "message": "Restaurant review migrated successfully",
+      "timestamp": "2025-08-23T10:00:02.972Z"
+    },
+    {
+      "type": "review",
+      "status": "success",
+      "file": "sample-korean-restaurant.md",
+      "message": "Restaurant review migrated successfully",
+      "timestamp": "2025-08-23T10:00:02.972Z"
+    }
+  ]
+}

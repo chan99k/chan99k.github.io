@@ -1,32 +1,18 @@
 ---
-title: Static Site Generation with Dynamic Content - A Next.js Solution
-description: >-
-  How I solved the challenge of combining static site performance with dynamic
-  content capabilities using Next.js and MDX
-date: '2024-01-15'
-tags:
-  - nextjs
-  - static-site
-  - mdx
-  - performance
-category: web-development
-author: Chan99K
+title: "Static Site Generation with Dynamic Content - A Next.js Solution"
+description: "How I solved the challenge of combining static site performance with dynamic content capabilities using Next.js and MDX"
+date: "2024-01-15"
+tags: ["nextjs", "static-site", "mdx", "performance"]
+category: "web-development"
+author: "Chan99K"
 draft: false
 featured: true
 isProblemSolution: true
-relatedProject: project1
+relatedProject: "project1"
 problemSolutionMeta:
-  problem: >-
-    Need to generate static pages while supporting dynamic content loading and
-    MDX processing
-  solution: >-
-    Implemented a hybrid approach using Next.js static generation with dynamic
-    imports for MDX content
-  technologies:
-    - Next.js
-    - MDX
-    - TypeScript
-    - React
+  problem: "Need to generate static pages while supporting dynamic content loading and MDX processing"
+  solution: "Implemented a hybrid approach using Next.js static generation with dynamic imports for MDX content"
+  technologies: ["Next.js", "MDX", "TypeScript", "React"]
 ---
 
 # Static Site Generation with Dynamic Content

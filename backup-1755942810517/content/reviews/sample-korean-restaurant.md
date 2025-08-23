@@ -1,30 +1,25 @@
 ---
-name: 할머니 손맛 김치찌개
+name: "할머니 손맛 김치찌개"
 location:
-  address: 서울시 강남구 테헤란로 123
+  address: "서울시 강남구 테헤란로 123"
   coordinates:
     lat: 37.5665
-    lng: 126.978
-  region: 강남구
+    lng: 126.9780
+  region: "강남구"
 rating: 4
-visitDate: '2024-01-15'
-cuisine: korean
+visitDate: "2024-01-15"
+cuisine: "korean"
 priceRange: 2
-tags:
-  - 김치찌개
-  - 한식
-  - 맛집
-  - 점심
-  - 가성비
+tags: ["김치찌개", "한식", "맛집", "점심", "가성비"]
 mapLinks:
-  naver: 'https://naver.me/example'
-  kakao: 'https://place.map.kakao.com/example'
-  google: 'https://maps.google.com/example'
+  naver: "https://naver.me/example"
+  kakao: "https://place.map.kakao.com/example"
+  google: "https://maps.google.com/example"
 images:
-  - src: /images/reviews/sample-korean-1.jpg
-    alt: 김치찌개 사진
-  - src: /images/reviews/sample-korean-2.jpg
-    alt: 반찬 사진
+  - src: "/images/reviews/sample-korean-1.jpg"
+    alt: "김치찌개 사진"
+  - src: "/images/reviews/sample-korean-2.jpg"
+    alt: "반찬 사진"
 ---
 
 # 할머니 손맛 김치찌개 리뷰

@@ -1,12 +1,10 @@
 ---
-title: Hello World - Welcome to My Blog
-description: Introduction to my personal blog and what you can expect to find here.
-date: '2024-01-01'
-tags:
-  - introduction
-  - blog
-category: general
-author: Chan99K
+title: "Hello World - Welcome to My Blog"
+description: "Introduction to my personal blog and what you can expect to find here."
+date: "2024-01-01"
+tags: ["introduction", "blog"]
+category: "general"
+author: "Chan99K"
 draft: false
 featured: true
 isProblemSolution: false
