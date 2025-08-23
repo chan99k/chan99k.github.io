@@ -158,7 +158,7 @@ export interface GiscusConfig {
   repoId: string;
   category: string;
   categoryId: string;
-  mapping: string;
+  mapping: 'pathname' | 'url' | 'title' | 'og:title' | 'specific' | 'number';
   reactionsEnabled: boolean;
   emitMetadata: boolean;
   inputPosition: 'top' | 'bottom';
