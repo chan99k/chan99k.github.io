@@ -15,45 +15,49 @@ interface PortfolioPageProps {
   onProblemClick?: (problem: ProblemSolution) => void;
 }
 
-export function PortfolioPage({ data, blogPosts = [], onProblemClick }: PortfolioPageProps) {
+export function PortfolioPage({
+  data,
+  blogPosts = [],
+  onProblemClick,
+}: PortfolioPageProps) {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container-responsive py-6 sm:py-8 lg:py-12 max-w-6xl space-y-8 sm:space-y-12 lg:space-y-16">
+    <div className='min-h-screen bg-background'>
+      <div className='container-responsive py-6 sm:py-8 lg:py-12 max-w-6xl space-y-8 sm:space-y-12 lg:space-y-16'>
         {/* Personal Information Section */}
         <PersonalInfoSection personalInfo={data.personalInfo} />
-        
+
         {/* Projects Section */}
         {data.projects.length > 0 && (
           <ProjectsSection projects={data.projects} />
         )}
-        
+
         {/* Problem-Solution Cards Section */}
         {data.projects.length > 0 && (
-          <ProblemSolutionCardsSection 
-            projects={data.projects} 
+          <ProblemSolutionCardsSection
+            projects={data.projects}
             blogPosts={blogPosts}
             onProblemClick={onProblemClick}
           />
         )}
-        
+
         {/* Blog-Portfolio Integration Section */}
         {blogPosts.length > 0 && data.projects.length > 0 && (
-          <BlogPortfolioIntegration 
+          <BlogPortfolioIntegration
             blogPosts={blogPosts}
             projects={data.projects}
           />
         )}
-        
+
         {/* Experience Section */}
         {data.experience.length > 0 && (
           <ExperienceSection experience={data.experience} />
         )}
-        
+
         {/* Education Section */}
         {data.education.length > 0 && (
           <EducationSection education={data.education} />
         )}
-        
+
         {/* Certifications Section */}
         {data.certifications.length > 0 && (
           <CertificationsSection certifications={data.certifications} />

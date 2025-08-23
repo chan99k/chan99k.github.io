@@ -15,13 +15,14 @@ export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
   const preRef = useRef<HTMLPreElement>(null);
 
   // Extract language from className (e.g., "language-javascript" -> "javascript")
-  const language = className?.replace(/language-/, '') || props['data-language'] || 'text';
+  const language =
+    className?.replace(/language-/, '') || props['data-language'] || 'text';
 
   const copyToClipboard = async () => {
     if (!preRef.current) return;
 
     const code = preRef.current.textContent || '';
-    
+
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
@@ -45,25 +46,25 @@ export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
   };
 
   return (
-    <div className="relative group">
+    <div className='relative group'>
       {/* Language label and copy button */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800 dark:bg-gray-900 text-gray-300 text-sm border-b border-gray-700">
-        <span className="font-mono text-xs uppercase tracking-wide">
+      <div className='flex items-center justify-between px-4 py-2 bg-gray-800 dark:bg-gray-900 text-gray-300 text-sm border-b border-gray-700'>
+        <span className='font-mono text-xs uppercase tracking-wide'>
           {language}
         </span>
         <button
           onClick={copyToClipboard}
-          className="flex items-center gap-1 px-2 py-1 text-xs bg-gray-700 hover:bg-gray-600 rounded transition-colors opacity-0 group-hover:opacity-100"
-          title="Copy code"
+          className='flex items-center gap-1 px-2 py-1 text-xs bg-gray-700 hover:bg-gray-600 rounded transition-colors opacity-0 group-hover:opacity-100'
+          title='Copy code'
         >
           {copied ? (
             <>
-              <Check className="w-3 h-3" />
+              <Check className='w-3 h-3' />
               Copied!
             </>
           ) : (
             <>
-              <Copy className="w-3 h-3" />
+              <Copy className='w-3 h-3' />
               Copy
             </>
           )}
@@ -81,7 +82,7 @@ export function CodeBlock({ children, className, ...props }: CodeBlockProps) {
 
       {/* Copy success indicator */}
       {copied && (
-        <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded text-xs">
+        <div className='absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded text-xs'>
           Copied!
         </div>
       )}

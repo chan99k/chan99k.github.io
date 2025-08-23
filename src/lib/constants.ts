@@ -3,9 +3,10 @@
 export const SITE_CONFIG = {
   name: 'Personal Website',
   description: 'Portfolio, Blog, and Restaurant Reviews',
-  url: process.env.NODE_ENV === 'production' 
-    ? 'https://chan99k.github.io' 
-    : 'http://localhost:3000',
+  url:
+    process.env.NODE_ENV === 'production'
+      ? 'https://chan99k.github.io'
+      : 'http://localhost:3000',
   author: {
     name: 'Chan99K',
     email: 'your-email@example.com',

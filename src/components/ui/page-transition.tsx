@@ -38,14 +38,14 @@ export function PageTransition({ children }: PageTransitionProps) {
   const pathname = usePathname();
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode='wait' initial={false}>
       <motion.div
         key={pathname}
         variants={pageVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        className="min-h-screen"
+        initial='initial'
+        animate='animate'
+        exit='exit'
+        className='min-h-screen'
       >
         {children}
       </motion.div>
@@ -82,19 +82,22 @@ interface SlideTransitionProps {
   direction?: number;
 }
 
-export function SlideTransition({ children, direction = 1 }: SlideTransitionProps) {
+export function SlideTransition({
+  children,
+  direction = 1,
+}: SlideTransitionProps) {
   const pathname = usePathname();
 
   return (
-    <AnimatePresence mode="wait" custom={direction}>
+    <AnimatePresence mode='wait' custom={direction}>
       <motion.div
         key={pathname}
         custom={direction}
         variants={slideVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        className="w-full"
+        initial='initial'
+        animate='animate'
+        exit='exit'
+        className='w-full'
       >
         {children}
       </motion.div>
@@ -127,13 +130,13 @@ export function FadeTransition({ children }: PageTransitionProps) {
   const pathname = usePathname();
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode='wait'>
       <motion.div
         key={pathname}
         variants={fadeVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        initial='initial'
+        animate='animate'
+        exit='exit'
       >
         {children}
       </motion.div>
@@ -169,13 +172,13 @@ export function ScaleTransition({ children }: PageTransitionProps) {
   const pathname = usePathname();
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode='wait'>
       <motion.div
         key={pathname}
         variants={scaleVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        initial='initial'
+        animate='animate'
+        exit='exit'
       >
         {children}
       </motion.div>

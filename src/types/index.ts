@@ -101,7 +101,7 @@ export interface ImageData {
   height?: number;
 }
 
-export type CuisineType = 
+export type CuisineType =
   | 'korean'
   | 'japanese'
   | 'chinese'

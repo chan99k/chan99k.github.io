@@ -1,0 +1,114 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history for better blame information
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint -- --format=@eslint/eslintrc --output-file=eslint-report.json
+        continue-on-error: true
+
+      - name: Run Prettier check
+        run: npm run format:check
+
+      - name: Run TypeScript compiler
+        run: npm run type-check
+
+      - name: Upload ESLint report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eslint-report
+          path: eslint-report.json
+          retention-days: 30
+
+      - name: Comment PR with code quality results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Read ESLint report if it exists
+            let eslintResults = '';
+            try {
+              const eslintReport = JSON.parse(fs.readFileSync('eslint-report.json', 'utf8'));
+              const totalErrors = eslintReport.reduce((sum, file) => sum + file.errorCount, 0);
+              const totalWarnings = eslintReport.reduce((sum, file) => sum + file.warningCount, 0);
+              
+              eslintResults = `
+              ## 📊 Code Quality Report
+              
+              - **ESLint Errors:** ${totalErrors}
+              - **ESLint Warnings:** ${totalWarnings}
+              - **TypeScript:** ✅ Type checking passed
+              - **Prettier:** ✅ Code formatting is consistent
+              `;
+            } catch (error) {
+              eslintResults = '## 📊 Code Quality Report\n\nUnable to generate detailed report.';
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: eslintResults
+            });
+
+  # Auto-fix formatting issues
+  auto-fix:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Auto-fix ESLint issues
+        run: npm run lint:fix
+        continue-on-error: true
+
+      - name: Auto-format with Prettier
+        run: npm run format
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git diff --staged --quiet || git commit -m "style: auto-fix code formatting and linting issues"
+          git push

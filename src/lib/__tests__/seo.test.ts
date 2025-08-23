@@ -1,11 +1,16 @@
-import { generateSEOMetadata, generateBlogPostMetadata, generateBlogPostJsonLd, generateWebsiteJsonLd } from '../seo';
+import {
+  generateSEOMetadata,
+  generateBlogPostMetadata,
+  generateBlogPostJsonLd,
+  generateWebsiteJsonLd,
+} from '../seo';
 import { SITE_CONFIG } from '../constants';
 
 describe('SEO Utilities', () => {
   describe('generateSEOMetadata', () => {
     it('should generate basic SEO metadata with defaults', () => {
       const metadata = generateSEOMetadata();
-      
+
       expect(metadata.title).toBe(SITE_CONFIG.name);
       expect(metadata.description).toBe(SITE_CONFIG.description);
       expect(metadata.keywords).toContain('portfolio');
@@ -18,14 +23,14 @@ describe('SEO Utilities', () => {
       const customTitle = 'Custom Page Title';
       const customDescription = 'Custom page description';
       const customKeywords = ['custom', 'keywords'];
-      
+
       const metadata = generateSEOMetadata({
         title: customTitle,
         description: customDescription,
         keywords: customKeywords,
         url: '/custom-page',
       });
-      
+
       expect(metadata.title).toBe(`${customTitle} | ${SITE_CONFIG.name}`);
       expect(metadata.description).toBe(customDescription);
       expect(metadata.keywords).toEqual(expect.arrayContaining(customKeywords));
@@ -40,7 +45,7 @@ describe('SEO Utilities', () => {
         authors: ['Test Author'],
         tags: ['tag1', 'tag2'],
       });
-      
+
       expect(metadata.openGraph?.type).toBe('article');
       expect(metadata.openGraph?.publishedTime).toBe('2024-01-01');
       expect(metadata.openGraph?.authors).toEqual(['Test Author']);
@@ -58,13 +63,15 @@ describe('SEO Utilities', () => {
         tags: ['test', 'blog'],
         author: 'Test Author',
       };
-      
+
       const metadata = generateBlogPostMetadata(blogData);
-      
+
       expect(metadata.title).toBe(`${blogData.title} | ${SITE_CONFIG.name}`);
       expect(metadata.description).toBe(blogData.description);
       expect(metadata.openGraph?.type).toBe('article');
-      expect(metadata.openGraph?.url).toBe(`${SITE_CONFIG.url}/blog/${blogData.slug}`);
+      expect(metadata.openGraph?.url).toBe(
+        `${SITE_CONFIG.url}/blog/${blogData.slug}`
+      );
       expect(metadata.openGraph?.publishedTime).toBe(blogData.date);
     });
   });
@@ -78,9 +85,9 @@ describe('SEO Utilities', () => {
         date: '2024-01-01',
         author: 'Test Author',
       };
-      
+
       const jsonLd = generateBlogPostJsonLd(blogData);
-      
+
       expect(jsonLd['@context']).toBe('https://schema.org');
       expect(jsonLd['@type']).toBe('BlogPosting');
       expect(jsonLd.headline).toBe(blogData.title);
@@ -98,9 +105,9 @@ describe('SEO Utilities', () => {
         date: '2024-01-01',
         coverImage: '/images/blog/test-image.jpg',
       };
-      
+
       const jsonLd = generateBlogPostJsonLd(blogData);
-      
+
       expect(jsonLd.image).toBeDefined();
       expect(jsonLd.image.url).toBe(`${SITE_CONFIG.url}${blogData.coverImage}`);
     });
@@ -109,7 +116,7 @@ describe('SEO Utilities', () => {
   describe('generateWebsiteJsonLd', () => {
     it('should generate valid website JSON-LD', () => {
       const jsonLd = generateWebsiteJsonLd();
-      
+
       expect(jsonLd['@context']).toBe('https://schema.org');
       expect(jsonLd['@type']).toBe('WebSite');
       expect(jsonLd.name).toBe(SITE_CONFIG.name);

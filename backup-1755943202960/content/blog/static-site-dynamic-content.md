@@ -43,6 +43,7 @@ Static sites are incredibly fast and SEO-friendly, but they traditionally lack t
 - Complex content relationships
 
 I needed a solution that would give me:
+
 - ⚡ Fast static site performance
 - 🎨 Rich interactive components
 - 📝 MDX support for enhanced markdown
@@ -58,7 +59,7 @@ I implemented a hybrid approach using Next.js 14 with the following architecture
 // pages/blog/[slug].tsx
 export async function getStaticProps({ params }) {
   const { post, content } = await getBlogPost(params.slug);
-  
+
   return {
     props: {
       post,
@@ -70,7 +71,7 @@ export async function getStaticProps({ params }) {
 
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
-  
+
   return {
     paths: posts.map(post => ({ params: { slug: post.slug } })),
     fallback: 'blocking',

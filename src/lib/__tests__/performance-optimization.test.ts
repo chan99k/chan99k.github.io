@@ -2,16 +2,16 @@
  * Performance optimization tests
  */
 
-import { 
-  generateImageSizes, 
-  generateBlurDataURL, 
+import {
+  generateImageSizes,
+  generateBlurDataURL,
   getOptimalImageFormat,
-  IMAGE_CONFIGS 
+  IMAGE_CONFIGS,
 } from '../image-optimization';
-import { 
-  WebVitalsTracker, 
-  ResourceMonitor, 
-  MemoryMonitor 
+import {
+  WebVitalsTracker,
+  ResourceMonitor,
+  MemoryMonitor,
 } from '../performance-monitoring';
 
 // Mock window and performance APIs
@@ -109,12 +109,15 @@ describe('Image Optimization', () => {
     it('should return webp as fallback when AVIF is not supported', () => {
       // Mock canvas toDataURL to simulate WebP support but not AVIF
       const mockCanvas = {
-        toDataURL: jest.fn()
+        toDataURL: jest
+          .fn()
           .mockReturnValueOnce('data:image/png') // AVIF not supported
           .mockReturnValueOnce('data:image/webp'), // WebP supported
       };
 
-      jest.spyOn(document, 'createElement').mockReturnValue(mockCanvas as HTMLCanvasElement);
+      jest
+        .spyOn(document, 'createElement')
+        .mockReturnValue(mockCanvas as HTMLCanvasElement);
 
       const format = getOptimalImageFormat();
       expect(format).toBe('webp');

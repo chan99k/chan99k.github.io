@@ -35,7 +35,7 @@ export function useResponsive(): ResponsiveState {
   useEffect(() => {
     const updateResponsiveState = () => {
       const width = window.innerWidth;
-      
+
       // Determine breakpoint
       let breakpoint: ResponsiveState['breakpoint'] = 'xs';
       if (width >= BREAKPOINTS['2xl']) breakpoint = '2xl';
@@ -43,14 +43,14 @@ export function useResponsive(): ResponsiveState {
       else if (width >= BREAKPOINTS.lg) breakpoint = 'lg';
       else if (width >= BREAKPOINTS.md) breakpoint = 'md';
       else if (width >= BREAKPOINTS.sm) breakpoint = 'sm';
-      
+
       // Determine device types
       const isMobile = width < BREAKPOINTS.md;
       const isTablet = width >= BREAKPOINTS.md && width < BREAKPOINTS.lg;
       const isDesktop = width >= BREAKPOINTS.lg;
-      
+
       // Detect touch device
-      const isTouchDevice = 
+      const isTouchDevice =
         'ontouchstart' in window ||
         navigator.maxTouchPoints > 0 ||
         // @ts-expect-error - msMaxTouchPoints is not in standard types
@@ -71,7 +71,7 @@ export function useResponsive(): ResponsiveState {
 
     // Listen for resize events
     window.addEventListener('resize', updateResponsiveState);
-    
+
     // Listen for orientation change on mobile
     window.addEventListener('orientationchange', () => {
       // Delay to allow for orientation change to complete
@@ -90,9 +90,18 @@ export function useResponsive(): ResponsiveState {
 /**
  * Hook to get responsive grid columns based on screen size and item count
  */
-export function useResponsiveColumns(itemCount: number, maxColumns?: { xs?: number; sm?: number; md?: number; lg?: number; xl?: number }) {
+export function useResponsiveColumns(
+  itemCount: number,
+  maxColumns?: {
+    xs?: number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+  }
+) {
   const { breakpoint } = useResponsive();
-  
+
   const defaultMaxColumns = {
     xs: 1,
     sm: 2,
@@ -101,10 +110,10 @@ export function useResponsiveColumns(itemCount: number, maxColumns?: { xs?: numb
     xl: 4,
     '2xl': 4,
   };
-  
+
   const maxCols = { ...defaultMaxColumns, ...maxColumns };
   const maxForBreakpoint = maxCols[breakpoint] || maxCols.lg;
-  
+
   return Math.min(itemCount, maxForBreakpoint);
 }
 
@@ -113,7 +122,7 @@ export function useResponsiveColumns(itemCount: number, maxColumns?: { xs?: numb
  */
 export function useResponsiveSpacing() {
   const { breakpoint } = useResponsive();
-  
+
   const spacing = {
     xs: { container: 'px-4', gap: 'gap-4', section: 'py-8' },
     sm: { container: 'px-6', gap: 'gap-6', section: 'py-12' },
@@ -122,7 +131,7 @@ export function useResponsiveSpacing() {
     xl: { container: 'px-8', gap: 'gap-8', section: 'py-24' },
     '2xl': { container: 'px-8', gap: 'gap-8', section: 'py-24' },
   };
-  
+
   return spacing[breakpoint];
 }
 
@@ -131,7 +140,7 @@ export function useResponsiveSpacing() {
  */
 export function useTouchFriendlySize(baseSize: 'sm' | 'md' | 'lg') {
   const { isTouchDevice } = useResponsive();
-  
+
   if (!isTouchDevice) {
     return {
       sm: 'h-8 px-3 text-sm',
@@ -139,7 +148,7 @@ export function useTouchFriendlySize(baseSize: 'sm' | 'md' | 'lg') {
       lg: 'h-12 px-6 text-lg',
     }[baseSize];
   }
-  
+
   // Touch-friendly sizes (minimum 44px touch target)
   return {
     sm: 'h-11 px-4 text-sm min-w-11',

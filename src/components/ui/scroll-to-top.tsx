@@ -36,10 +36,10 @@ export function ScrollToTop() {
       {isVisible && (
         <FloatingActionButton
           onClick={scrollToTop}
-          className="bottom-6 right-6"
-          size="md"
+          className='bottom-6 right-6'
+          size='md'
         >
-          <ChevronUp className="w-6 h-6" />
+          <ChevronUp className='w-6 h-6' />
         </FloatingActionButton>
       )}
     </AnimatePresence>

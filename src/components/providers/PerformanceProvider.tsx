@@ -1,12 +1,18 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { 
-  WebVitalsTracker, 
-  PerformanceMetric, 
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
+import {
+  WebVitalsTracker,
+  PerformanceMetric,
   WebVitalsMetrics,
   ResourceMonitor,
-  MemoryMonitor 
+  MemoryMonitor,
 } from '@/lib/performance-monitoring';
 
 interface PerformanceContextType {
@@ -25,16 +31,19 @@ interface PerformanceProviderProps {
   analyticsEndpoint?: string;
 }
 
-export function PerformanceProvider({ 
-  children, 
+export function PerformanceProvider({
+  children,
   enableAnalytics = false,
-  analyticsEndpoint 
+  analyticsEndpoint,
 }: PerformanceProviderProps) {
   const [metrics, setMetrics] = useState<WebVitalsMetrics>({});
   const [score, setScore] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [resourceTimings, setResourceTimings] = useState<ReturnType<typeof ResourceMonitor.getResourceTimings>>([]);
-  const [memoryUsage, setMemoryUsage] = useState<ReturnType<typeof MemoryMonitor.getMemoryUsage>>(null);
+  const [resourceTimings, setResourceTimings] = useState<
+    ReturnType<typeof ResourceMonitor.getResourceTimings>
+  >([]);
+  const [memoryUsage, setMemoryUsage] =
+    useState<ReturnType<typeof MemoryMonitor.getMemoryUsage>>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -44,7 +53,7 @@ export function PerformanceProvider({
         ...prev,
         [metric.name]: metric,
       }));
-      
+
       // Update score when new metrics come in
       setTimeout(() => {
         setScore(tracker.getPerformanceScore());
@@ -114,18 +123,24 @@ export function PerformanceDebugger() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 bg-black/80 text-white p-4 rounded-lg text-xs max-w-sm z-50">
-      <div className="mb-2 font-bold">Performance Score: {score}/100</div>
-      
-      <div className="space-y-1">
+    <div className='fixed bottom-4 right-4 bg-black/80 text-white p-4 rounded-lg text-xs max-w-sm z-50'>
+      <div className='mb-2 font-bold'>Performance Score: {score}/100</div>
+
+      <div className='space-y-1'>
         {Object.entries(metrics).map(([key, metric]) => (
-          <div key={key} className="flex justify-between">
+          <div key={key} className='flex justify-between'>
             <span>{key}:</span>
-            <span className={`
-              ${metric.rating === 'good' ? 'text-green-400' : 
-                metric.rating === 'needs-improvement' ? 'text-yellow-400' : 
-                'text-red-400'}
-            `}>
+            <span
+              className={`
+              ${
+                metric.rating === 'good'
+                  ? 'text-green-400'
+                  : metric.rating === 'needs-improvement'
+                    ? 'text-yellow-400'
+                    : 'text-red-400'
+              }
+            `}
+            >
               {Math.round(metric.value)}ms
             </span>
           </div>
@@ -133,15 +148,16 @@ export function PerformanceDebugger() {
       </div>
 
       {memoryUsage && (
-        <div className="mt-2 pt-2 border-t border-gray-600">
-          <div className="text-xs">
-            Memory: {Math.round(memoryUsage.used / 1024 / 1024)}MB ({memoryUsage.percentage}%)
+        <div className='mt-2 pt-2 border-t border-gray-600'>
+          <div className='text-xs'>
+            Memory: {Math.round(memoryUsage.used / 1024 / 1024)}MB (
+            {memoryUsage.percentage}%)
           </div>
         </div>
       )}
 
-      <div className="mt-2 pt-2 border-t border-gray-600">
-        <div className="text-xs">
+      <div className='mt-2 pt-2 border-t border-gray-600'>
+        <div className='text-xs'>
           Resources: {resourceTimings.length} loaded
         </div>
       </div>

@@ -17,25 +17,32 @@ interface MDXImageProps {
   priority?: boolean;
 }
 
-function MDXImage({ src, alt, width, height, caption, priority = false }: MDXImageProps) {
+function MDXImage({
+  src,
+  alt,
+  width,
+  height,
+  caption,
+  priority = false,
+}: MDXImageProps) {
   // Simple client-side image handling without server-side optimization
   const imageSrc = src.startsWith('/') ? src : `/images/blog/${src}`;
 
   return (
-    <figure className="my-8">
-      <div className="relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
+    <figure className='my-8'>
+      <div className='relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800'>
         <Image
           src={imageSrc}
           alt={alt}
           width={width || 800}
           height={height || 600}
           priority={priority}
-          className="w-full h-auto"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw"
+          className='w-full h-auto'
+          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 60vw'
         />
       </div>
       {caption && (
-        <figcaption className="mt-2 text-sm text-gray-600 dark:text-gray-400 text-center italic">
+        <figcaption className='mt-2 text-sm text-gray-600 dark:text-gray-400 text-center italic'>
           {caption}
         </figcaption>
       )}
@@ -58,8 +65,8 @@ function MDXLink({ href, children, className }: MDXLinkProps) {
     return (
       <a
         href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+        target='_blank'
+        rel='noopener noreferrer'
         className={cn(
           'text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline underline-offset-2',
           className
@@ -117,10 +124,16 @@ function MDXCode({ children, className }: MDXCodeProps) {
 }
 
 // 코드 블록을 위한 커스텀 Pre 컴포넌트
-function MDXPre({ children, ...props }: { children: ReactNode;[key: string]: unknown }) {
+function MDXPre({
+  children,
+  ...props
+}: {
+  children: ReactNode;
+  [key: string]: unknown;
+}) {
   return (
     <pre
-      className="overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100 my-6"
+      className='overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100 my-6'
       {...props}
     >
       {children}
@@ -131,7 +144,7 @@ function MDXPre({ children, ...props }: { children: ReactNode;[key: string]: unk
 // 커스텀 인용구 컴포넌트
 function MDXBlockquote({ children }: { children: ReactNode }) {
   return (
-    <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-700 dark:text-gray-300 my-6">
+    <blockquote className='border-l-4 border-blue-500 pl-4 italic text-gray-700 dark:text-gray-300 my-6'>
       {children}
     </blockquote>
   );
@@ -140,8 +153,8 @@ function MDXBlockquote({ children }: { children: ReactNode }) {
 // 커스텀 테이블 컴포넌트
 function MDXTable({ children }: { children: ReactNode }) {
   return (
-    <div className="overflow-x-auto my-6">
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+    <div className='overflow-x-auto my-6'>
+      <table className='min-w-full divide-y divide-gray-200 dark:divide-gray-700'>
         {children}
       </table>
     </div>
@@ -149,16 +162,12 @@ function MDXTable({ children }: { children: ReactNode }) {
 }
 
 function MDXThead({ children }: { children: ReactNode }) {
-  return (
-    <thead className="bg-gray-50 dark:bg-gray-800">
-      {children}
-    </thead>
-  );
+  return <thead className='bg-gray-50 dark:bg-gray-800'>{children}</thead>;
 }
 
 function MDXTbody({ children }: { children: ReactNode }) {
   return (
-    <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+    <tbody className='bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700'>
       {children}
     </tbody>
   );
@@ -166,7 +175,7 @@ function MDXTbody({ children }: { children: ReactNode }) {
 
 function MDXTh({ children }: { children: ReactNode }) {
   return (
-    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+    <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider'>
       {children}
     </th>
   );
@@ -174,7 +183,7 @@ function MDXTh({ children }: { children: ReactNode }) {
 
 function MDXTd({ children }: { children: ReactNode }) {
   return (
-    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+    <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100'>
       {children}
     </td>
   );
@@ -182,7 +191,15 @@ function MDXTd({ children }: { children: ReactNode }) {
 
 // 앵커 링크가 있는 커스텀 제목 컴포넌트
 function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
-  const HeadingComponent = ({ children, id, ...props }: { children: ReactNode; id?: string;[key: string]: unknown }) => {
+  const HeadingComponent = ({
+    children,
+    id,
+    ...props
+  }: {
+    children: ReactNode;
+    id?: string;
+    [key: string]: unknown;
+  }) => {
     const Tag = `h${level}` as keyof React.JSX.IntrinsicElements;
     const sizes = {
       1: 'text-3xl font-bold',
@@ -215,7 +232,7 @@ function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
 // 커스텀 리스트 컴포넌트
 function MDXUl({ children }: { children: ReactNode }) {
   return (
-    <ul className="list-disc list-inside space-y-2 my-4 text-gray-700 dark:text-gray-300">
+    <ul className='list-disc list-inside space-y-2 my-4 text-gray-700 dark:text-gray-300'>
       {children}
     </ul>
   );
@@ -223,24 +240,20 @@ function MDXUl({ children }: { children: ReactNode }) {
 
 function MDXOl({ children }: { children: ReactNode }) {
   return (
-    <ol className="list-decimal list-inside space-y-2 my-4 text-gray-700 dark:text-gray-300">
+    <ol className='list-decimal list-inside space-y-2 my-4 text-gray-700 dark:text-gray-300'>
       {children}
     </ol>
   );
 }
 
 function MDXLi({ children }: { children: ReactNode }) {
-  return (
-    <li className="text-gray-700 dark:text-gray-300">
-      {children}
-    </li>
-  );
+  return <li className='text-gray-700 dark:text-gray-300'>{children}</li>;
 }
 
 // 커스텀 단락 컴포넌트
 function MDXParagraph({ children }: { children: ReactNode }) {
   return (
-    <p className="text-gray-700 dark:text-gray-300 leading-relaxed my-4">
+    <p className='text-gray-700 dark:text-gray-300 leading-relaxed my-4'>
       {children}
     </p>
   );
@@ -248,9 +261,7 @@ function MDXParagraph({ children }: { children: ReactNode }) {
 
 // 커스텀 구분선 컴포넌트
 function MDXHr() {
-  return (
-    <hr className="border-gray-200 dark:border-gray-700 my-8" />
-  );
+  return <hr className='border-gray-200 dark:border-gray-700 my-8' />;
 }
 
 // MDX 컴포넌트 내보내기

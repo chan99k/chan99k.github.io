@@ -16,9 +16,7 @@ export function MDXProvider({ children, components = {} }: MDXProviderProps) {
   };
 
   return (
-    <BaseMDXProvider components={mergedComponents}>
-      {children}
-    </BaseMDXProvider>
+    <BaseMDXProvider components={mergedComponents}>{children}</BaseMDXProvider>
   );
 }
 

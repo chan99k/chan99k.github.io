@@ -19,8 +19,8 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             setActiveId(entry.target.id);
           }
@@ -33,17 +33,20 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     );
 
     // Observe all headings
-    const headingElements = headings.flatMap(heading => [
-      document.getElementById(heading.id),
-      ...(heading.children?.map(child => document.getElementById(child.id)) || [])
-    ]).filter(Boolean) as Element[];
+    const headingElements = headings
+      .flatMap(heading => [
+        document.getElementById(heading.id),
+        ...(heading.children?.map(child => document.getElementById(child.id)) ||
+          []),
+      ])
+      .filter(Boolean) as Element[];
 
-    headingElements.forEach((element) => {
+    headingElements.forEach(element => {
       observer.observe(element);
     });
 
     return () => {
-      headingElements.forEach((element) => {
+      headingElements.forEach(element => {
         observer.unobserve(element);
       });
     };
@@ -64,16 +67,16 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <List className="w-4 h-4 text-gray-400" />
-        <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+    <div className='bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6'>
+      <div className='flex items-center gap-2 mb-4'>
+        <List className='w-4 h-4 text-gray-400' />
+        <h3 className='font-semibold text-gray-900 dark:text-gray-100'>
           Table of Contents
         </h3>
       </div>
 
-      <nav className="space-y-1">
-        {headings.map((heading) => (
+      <nav className='space-y-1'>
+        {headings.map(heading => (
           <div key={heading.id}>
             {/* Main heading */}
             <button
@@ -89,8 +92,8 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
             {/* Sub-headings */}
             {heading.children && heading.children.length > 0 && (
-              <div className="ml-4 space-y-1">
-                {heading.children.map((child) => (
+              <div className='ml-4 space-y-1'>
+                {heading.children.map(child => (
                   <button
                     key={child.id}
                     onClick={() => scrollToHeading(child.id)}

@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
 
 // Mock matchMedia for next-themes (only in jsdom environment)
 if (typeof window !== 'undefined') {

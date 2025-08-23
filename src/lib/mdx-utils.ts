@@ -30,7 +30,7 @@ export function extractHeadings(content: string): Array<{
 }> {
   const headingRegex = /^(#{1,6})\s+(.+)$/gm;
   const headings: Array<{ id: string; title: string; level: number }> = [];
-  
+
   let match;
   while ((match = headingRegex.exec(content)) !== null) {
     const level = match[1].length;
@@ -39,19 +39,21 @@ export function extractHeadings(content: string): Array<{
       .toLowerCase()
       .replace(/[^\w\s-]/g, '')
       .replace(/\s+/g, '-');
-    
+
     headings.push({ id, title, level });
   }
-  
+
   return headings;
 }
 
 // 제목들로부터 목차 생성
-export function generateTableOfContents(headings: Array<{
-  id: string;
-  title: string;
-  level: number;
-}>): Array<{
+export function generateTableOfContents(
+  headings: Array<{
+    id: string;
+    title: string;
+    level: number;
+  }>
+): Array<{
   id: string;
   title: string;
   level: number;
@@ -63,20 +65,20 @@ export function generateTableOfContents(headings: Array<{
     level: number;
     children?: Array<{ id: string; title: string; level: number }>;
   }> = [];
-  
+
   let currentH2: {
     id: string;
     title: string;
     level: number;
     children: Array<{ id: string; title: string; level: number }>;
   } | null = null;
-  
+
   headings.forEach(heading => {
     if (heading.level === 1) {
       // H1은 보통 페이지 제목이므로 건너뜀
       return;
     }
-    
+
     if (heading.level === 2) {
       currentH2 = { ...heading, children: [] };
       toc.push(currentH2);
@@ -85,7 +87,7 @@ export function generateTableOfContents(headings: Array<{
     }
     // 단순화를 위해 H2와 H3 레벨만 처리
   });
-  
+
   return toc;
 }
 
@@ -97,7 +99,10 @@ export function estimateReadingTime(content: string): number {
 }
 
 // MDX 콘텐츠에서 발췌문 추출
-export function extractExcerpt(content: string, maxLength: number = 160): string {
+export function extractExcerpt(
+  content: string,
+  maxLength: number = 160
+): string {
   // MDX/마크다운 문법 제거
   const plainText = content
     .replace(/^---[\s\S]*?---/, '') // frontmatter 제거
@@ -128,7 +133,7 @@ export function validateMDXContent(content: string): {
   const warnings: string[] = [];
 
   // 일반적인 MDX 문제 확인
-  
+
   // 닫히지 않은 코드 블록 확인
   const codeBlockMatches = content.match(/```/g);
   if (codeBlockMatches && codeBlockMatches.length % 2 !== 0) {
@@ -148,7 +153,11 @@ export function validateMDXContent(content: string): {
       const srcMatch = match.match(/!\[.*?\]\((.*?)\)/);
       if (srcMatch && srcMatch[1]) {
         const src = srcMatch[1];
-        if (!src.startsWith('http') && !src.startsWith('/') && !src.startsWith('./')) {
+        if (
+          !src.startsWith('http') &&
+          !src.startsWith('/') &&
+          !src.startsWith('./')
+        ) {
           warnings.push(`Potentially broken image reference: ${src}`);
         }
       }

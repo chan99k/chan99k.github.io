@@ -13,30 +13,37 @@ interface AnimatedCardProps extends Omit<MotionProps, 'children'> {
 }
 
 export const AnimatedCard = forwardRef<HTMLDivElement, AnimatedCardProps>(
-  ({ 
-    children, 
-    className, 
-    hover = true, 
-    clickable = false,
-    onClick,
-    ...motionProps 
-  }, ref) => {
-    const hoverAnimation = hover ? {
-      y: -4,
-      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-      transition: {
-        duration: 0.2,
-        ease: [0.0, 0.0, 0.2, 1.0] as const,
-      },
-    } : {};
+  (
+    {
+      children,
+      className,
+      hover = true,
+      clickable = false,
+      onClick,
+      ...motionProps
+    },
+    ref
+  ) => {
+    const hoverAnimation = hover
+      ? {
+          y: -4,
+          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+          transition: {
+            duration: 0.2,
+            ease: [0.0, 0.0, 0.2, 1.0] as const,
+          },
+        }
+      : {};
 
-    const tapAnimation = clickable ? {
-      scale: 0.98,
-      transition: {
-        duration: 0.1,
-        ease: [0.4, 0.0, 0.2, 1.0] as const,
-      },
-    } : {};
+    const tapAnimation = clickable
+      ? {
+          scale: 0.98,
+          transition: {
+            duration: 0.1,
+            ease: [0.4, 0.0, 0.2, 1.0] as const,
+          },
+        }
+      : {};
 
     return (
       <motion.div
@@ -66,7 +73,11 @@ interface GlassCardProps {
   blur?: boolean;
 }
 
-export function GlassCard({ children, className, blur = true }: GlassCardProps) {
+export function GlassCard({
+  children,
+  className,
+  blur = true,
+}: GlassCardProps) {
   return (
     <motion.div
       className={cn(
@@ -93,7 +104,11 @@ interface FeatureCardProps {
   featured?: boolean;
 }
 
-export function FeatureCard({ children, className, featured = false }: FeatureCardProps) {
+export function FeatureCard({
+  children,
+  className,
+  featured = false,
+}: FeatureCardProps) {
   return (
     <motion.div
       className={cn(
@@ -106,8 +121,8 @@ export function FeatureCard({ children, className, featured = false }: FeatureCa
       exit={{ opacity: 0, y: 20 }}
       whileHover={{
         y: -2,
-        boxShadow: featured 
-          ? '0 20px 40px rgba(0, 0, 0, 0.1)' 
+        boxShadow: featured
+          ? '0 20px 40px rgba(0, 0, 0, 0.1)'
           : '0 10px 25px rgba(0, 0, 0, 0.1)',
         transition: { duration: 0.2 },
       }}
@@ -125,11 +140,11 @@ interface InteractiveCardProps {
   expandOnHover?: boolean;
 }
 
-export function InteractiveCard({ 
-  children, 
-  className, 
+export function InteractiveCard({
+  children,
+  className,
   onClick,
-  expandOnHover = false 
+  expandOnHover = false,
 }: InteractiveCardProps) {
   return (
     <motion.div
@@ -163,11 +178,11 @@ interface RevealCardProps {
   delay?: number;
 }
 
-export function RevealCard({ 
-  children, 
-  className, 
+export function RevealCard({
+  children,
+  className,
   direction = 'up',
-  delay = 0 
+  delay = 0,
 }: RevealCardProps) {
   const directionVariants = {
     up: { y: 30, opacity: 0 },

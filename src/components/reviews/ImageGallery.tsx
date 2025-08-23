@@ -11,7 +11,11 @@ interface ImageGalleryProps {
   className?: string;
 }
 
-export function ImageGallery({ images, restaurantName, className = '' }: ImageGalleryProps) {
+export function ImageGallery({
+  images,
+  restaurantName,
+  className = '',
+}: ImageGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,11 +24,11 @@ export function ImageGallery({ images, restaurantName, className = '' }: ImageGa
   }
 
   const nextImage = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
+    setCurrentIndex(prev => (prev + 1) % images.length);
   };
 
   const prevImage = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentIndex(prev => (prev - 1 + images.length) % images.length);
   };
 
   const openModal = (index: number) => {
@@ -40,16 +44,19 @@ export function ImageGallery({ images, restaurantName, className = '' }: ImageGa
     <>
       {/* Gallery Thumbnail */}
       <div className={`relative ${className}`}>
-        <div className="relative w-full h-full cursor-pointer" onClick={() => openModal(0)}>
+        <div
+          className='relative w-full h-full cursor-pointer'
+          onClick={() => openModal(0)}
+        >
           <Image
             src={images[0].src}
             alt={images[0].alt || `${restaurantName} 음식 사진`}
             fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className='object-cover'
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           />
           {images.length > 1 && (
-            <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white px-2 py-1 rounded text-xs">
+            <div className='absolute top-2 right-2 bg-black bg-opacity-60 text-white px-2 py-1 rounded text-xs'>
               +{images.length - 1}
             </div>
           )}
@@ -58,14 +65,14 @@ export function ImageGallery({ images, restaurantName, className = '' }: ImageGa
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4">
-          <div className="relative max-w-4xl max-h-full w-full h-full flex items-center justify-center">
+        <div className='fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center p-4'>
+          <div className='relative max-w-4xl max-h-full w-full h-full flex items-center justify-center'>
             {/* Close Button */}
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 z-10 text-white hover:text-gray-300 transition-colors"
+              className='absolute top-4 right-4 z-10 text-white hover:text-gray-300 transition-colors'
             >
-              <X className="w-8 h-8" />
+              <X className='w-8 h-8' />
             </button>
 
             {/* Navigation Buttons */}
@@ -73,41 +80,44 @@ export function ImageGallery({ images, restaurantName, className = '' }: ImageGa
               <>
                 <button
                   onClick={prevImage}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 text-white hover:text-gray-300 transition-colors"
+                  className='absolute left-4 top-1/2 transform -translate-y-1/2 z-10 text-white hover:text-gray-300 transition-colors'
                 >
-                  <ChevronLeft className="w-8 h-8" />
+                  <ChevronLeft className='w-8 h-8' />
                 </button>
                 <button
                   onClick={nextImage}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 text-white hover:text-gray-300 transition-colors"
+                  className='absolute right-4 top-1/2 transform -translate-y-1/2 z-10 text-white hover:text-gray-300 transition-colors'
                 >
-                  <ChevronRight className="w-8 h-8" />
+                  <ChevronRight className='w-8 h-8' />
                 </button>
               </>
             )}
 
             {/* Main Image */}
-            <div className="relative w-full h-full max-w-3xl max-h-[80vh]">
+            <div className='relative w-full h-full max-w-3xl max-h-[80vh]'>
               <Image
                 src={images[currentIndex].src}
-                alt={images[currentIndex].alt || `${restaurantName} 음식 사진 ${currentIndex + 1}`}
+                alt={
+                  images[currentIndex].alt ||
+                  `${restaurantName} 음식 사진 ${currentIndex + 1}`
+                }
                 fill
-                className="object-contain"
-                sizes="90vw"
+                className='object-contain'
+                sizes='90vw'
                 priority
               />
             </div>
 
             {/* Image Counter */}
             {images.length > 1 && (
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-60 text-white px-3 py-1 rounded text-sm">
+              <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-60 text-white px-3 py-1 rounded text-sm'>
                 {currentIndex + 1} / {images.length}
               </div>
             )}
 
             {/* Thumbnail Navigation */}
             {images.length > 1 && (
-              <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2 max-w-full overflow-x-auto px-4">
+              <div className='absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2 max-w-full overflow-x-auto px-4'>
                 {images.map((image, index) => (
                   <button
                     key={index}
@@ -122,8 +132,8 @@ export function ImageGallery({ images, restaurantName, className = '' }: ImageGa
                       src={image.src}
                       alt={image.alt || `썸네일 ${index + 1}`}
                       fill
-                      className="object-cover"
-                      sizes="64px"
+                      className='object-cover'
+                      sizes='64px'
                     />
                   </button>
                 ))}

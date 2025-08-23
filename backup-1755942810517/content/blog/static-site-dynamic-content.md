@@ -1,18 +1,18 @@
 ---
-title: "Static Site Generation with Dynamic Content - A Next.js Solution"
-description: "How I solved the challenge of combining static site performance with dynamic content capabilities using Next.js and MDX"
-date: "2024-01-15"
-tags: ["nextjs", "static-site", "mdx", "performance"]
-category: "web-development"
-author: "Chan99K"
+title: 'Static Site Generation with Dynamic Content - A Next.js Solution'
+description: 'How I solved the challenge of combining static site performance with dynamic content capabilities using Next.js and MDX'
+date: '2024-01-15'
+tags: ['nextjs', 'static-site', 'mdx', 'performance']
+category: 'web-development'
+author: 'Chan99K'
 draft: false
 featured: true
 isProblemSolution: true
-relatedProject: "project1"
+relatedProject: 'project1'
 problemSolutionMeta:
-  problem: "Need to generate static pages while supporting dynamic content loading and MDX processing"
-  solution: "Implemented a hybrid approach using Next.js static generation with dynamic imports for MDX content"
-  technologies: ["Next.js", "MDX", "TypeScript", "React"]
+  problem: 'Need to generate static pages while supporting dynamic content loading and MDX processing'
+  solution: 'Implemented a hybrid approach using Next.js static generation with dynamic imports for MDX content'
+  technologies: ['Next.js', 'MDX', 'TypeScript', 'React']
 ---
 
 # Static Site Generation with Dynamic Content
@@ -29,6 +29,7 @@ Static sites are incredibly fast and SEO-friendly, but they traditionally lack t
 - Complex content relationships
 
 I needed a solution that would give me:
+
 - ⚡ Fast static site performance
 - 🎨 Rich interactive components
 - 📝 MDX support for enhanced markdown
@@ -44,7 +45,7 @@ I implemented a hybrid approach using Next.js 14 with the following architecture
 // pages/blog/[slug].tsx
 export async function getStaticProps({ params }) {
   const { post, content } = await getBlogPost(params.slug);
-  
+
   return {
     props: {
       post,
@@ -56,7 +57,7 @@ export async function getStaticProps({ params }) {
 
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
-  
+
   return {
     paths: posts.map(post => ({ params: { slug: post.slug } })),
     fallback: 'blocking',

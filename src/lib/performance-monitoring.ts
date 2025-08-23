@@ -74,31 +74,31 @@ export class WebVitalsTracker {
   private initializeTracking() {
     // Track Largest Contentful Paint (LCP)
     this.trackLCP();
-    
+
     // Track First Input Delay (FID)
     this.trackFID();
-    
+
     // Track Cumulative Layout Shift (CLS)
     this.trackCLS();
-    
+
     // Track First Contentful Paint (FCP)
     this.trackFCP();
-    
+
     // Track Time to First Byte (TTFB)
     this.trackTTFB();
-    
+
     // Track Interaction to Next Paint (INP)
     this.trackINP();
   }
 
   private trackLCP() {
     if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1] as PerformanceEntry & {
           startTime: number;
         };
-        
+
         if (lastEntry) {
           const metric = createMetric('LCP', lastEntry.startTime);
           this.metrics.LCP = metric;
@@ -113,14 +113,14 @@ export class WebVitalsTracker {
 
   private trackFID() {
     if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         const entries = list.getEntries();
-        entries.forEach((entry) => {
+        entries.forEach(entry => {
           const fidEntry = entry as PerformanceEntry & {
             processingStart: number;
             startTime: number;
           };
-          
+
           const fid = fidEntry.processingStart - fidEntry.startTime;
           const metric = createMetric('FID', fid);
           this.metrics.FID = metric;
@@ -139,19 +139,19 @@ export class WebVitalsTracker {
       let sessionValue = 0;
       let sessionEntries: PerformanceEntry[] = [];
 
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         const entries = list.getEntries();
-        
-        entries.forEach((entry) => {
+
+        entries.forEach(entry => {
           const layoutShiftEntry = entry as PerformanceEntry & {
             value: number;
             hadRecentInput: boolean;
           };
-          
+
           if (!layoutShiftEntry.hadRecentInput) {
             const firstSessionEntry = sessionEntries[0];
             const lastSessionEntry = sessionEntries[sessionEntries.length - 1];
-            
+
             if (
               sessionValue &&
               entry.startTime - lastSessionEntry.startTime < 1000 &&
@@ -163,7 +163,7 @@ export class WebVitalsTracker {
               sessionValue = layoutShiftEntry.value;
               sessionEntries = [entry];
             }
-            
+
             if (sessionValue > clsValue) {
               clsValue = sessionValue;
               const metric = createMetric('CLS', clsValue);
@@ -181,9 +181,9 @@ export class WebVitalsTracker {
 
   private trackFCP() {
     if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         const entries = list.getEntries();
-        entries.forEach((entry) => {
+        entries.forEach(entry => {
           if (entry.name === 'first-contentful-paint') {
             const metric = createMetric('FCP', entry.startTime);
             this.metrics.FCP = metric;
@@ -212,15 +212,15 @@ export class WebVitalsTracker {
 
   private trackINP() {
     if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         const entries = list.getEntries();
-        entries.forEach((entry) => {
+        entries.forEach(entry => {
           const eventEntry = entry as PerformanceEntry & {
             processingStart: number;
             processingEnd: number;
             startTime: number;
           };
-          
+
           const inp = eventEntry.processingEnd - eventEntry.startTime;
           const metric = createMetric('INP', inp);
           this.metrics.INP = metric;
@@ -247,16 +247,23 @@ export class WebVitalsTracker {
     const metrics = Object.values(this.metrics);
     if (metrics.length === 0) return 0;
 
-    const scores = metrics.map((metric) => {
+    const scores = metrics.map(metric => {
       switch (metric.rating) {
-        case 'good': return 100;
-        case 'needs-improvement': return 50;
-        case 'poor': return 0;
-        default: return 0;
+        case 'good':
+          return 100;
+        case 'needs-improvement':
+          return 50;
+        case 'poor':
+          return 0;
+        default:
+          return 0;
       }
     });
 
-    return Math.round(scores.reduce((sum: number, score: number) => sum + score, 0) / scores.length);
+    return Math.round(
+      scores.reduce((sum: number, score: number) => sum + score, 0) /
+        scores.length
+    );
   }
 
   /**
@@ -265,7 +272,7 @@ export class WebVitalsTracker {
   sendToAnalytics(endpoint?: string) {
     const metrics = this.getMetrics();
     const score = this.getPerformanceScore();
-    
+
     const data = {
       metrics,
       score,
@@ -306,7 +313,7 @@ export function usePerformanceMonitoring(
   if (typeof window === 'undefined') return null;
 
   const tracker = new WebVitalsTracker(onMetric);
-  
+
   // Cleanup on page unload
   window.addEventListener('beforeunload', () => {
     tracker.sendToAnalytics();
@@ -325,7 +332,7 @@ export class ResourceMonitor {
       return [];
     }
 
-    return performance.getEntriesByType('resource').map((entry) => {
+    return performance.getEntriesByType('resource').map(entry => {
       const resourceEntry = entry as PerformanceResourceTiming;
       return {
         name: resourceEntry.name,
@@ -367,14 +374,24 @@ export class MemoryMonitor {
       return null;
     }
 
-    const memory = (performance as { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
+    const memory = (
+      performance as {
+        memory?: {
+          usedJSHeapSize: number;
+          totalJSHeapSize: number;
+          jsHeapSizeLimit: number;
+        };
+      }
+    ).memory;
     if (!memory) return null;
 
     return {
       used: memory.usedJSHeapSize,
       total: memory.totalJSHeapSize,
       limit: memory.jsHeapSizeLimit,
-      percentage: Math.round((memory.usedJSHeapSize / memory.totalJSHeapSize) * 100),
+      percentage: Math.round(
+        (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100
+      ),
     };
   }
 

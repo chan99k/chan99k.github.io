@@ -9,7 +9,7 @@ export const ANIMATION_CONFIG = {
     slow: 0.5,
     slower: 0.8,
   },
-  
+
   // Easing functions
   ease: {
     easeOut: [0.0, 0.0, 0.2, 1.0],
@@ -18,14 +18,14 @@ export const ANIMATION_CONFIG = {
     spring: { type: 'spring', stiffness: 300, damping: 30 },
     bouncy: { type: 'spring', stiffness: 400, damping: 10 },
   },
-  
+
   // Stagger settings
   stagger: {
     fast: 0.05,
     normal: 0.1,
     slow: 0.2,
   },
-  
+
   // Responsive breakpoints
   breakpoints: {
     mobile: 768,
@@ -42,69 +42,69 @@ export const COMMON_VARIANTS = {
     animate: { opacity: 1 },
     exit: { opacity: 0 },
   } as Variants,
-  
+
   fadeInUp: {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -20 },
   } as Variants,
-  
+
   fadeInDown: {
     initial: { opacity: 0, y: -20 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: 20 },
   } as Variants,
-  
+
   fadeInLeft: {
     initial: { opacity: 0, x: -20 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: 20 },
   } as Variants,
-  
+
   fadeInRight: {
     initial: { opacity: 0, x: 20 },
     animate: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: -20 },
   } as Variants,
-  
+
   // Scale animations
   scaleIn: {
     initial: { opacity: 0, scale: 0.9 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.9 },
   } as Variants,
-  
+
   scaleInCenter: {
     initial: { opacity: 0, scale: 0 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0 },
   } as Variants,
-  
+
   // Slide animations
   slideInUp: {
     initial: { y: '100%' },
     animate: { y: 0 },
     exit: { y: '100%' },
   } as Variants,
-  
+
   slideInDown: {
     initial: { y: '-100%' },
     animate: { y: 0 },
     exit: { y: '-100%' },
   } as Variants,
-  
+
   slideInLeft: {
     initial: { x: '-100%' },
     animate: { x: 0 },
     exit: { x: '-100%' },
   } as Variants,
-  
+
   slideInRight: {
     initial: { x: '100%' },
     animate: { x: 0 },
     exit: { x: '100%' },
   } as Variants,
-  
+
   // Container animations
   staggerContainer: {
     initial: {},
@@ -121,22 +121,22 @@ export const COMMON_VARIANTS = {
       },
     },
   } as Variants,
-  
+
   // Page transitions
   pageTransition: {
     initial: { opacity: 0, y: 20, scale: 0.98 },
-    animate: { 
-      opacity: 1, 
-      y: 0, 
+    animate: {
+      opacity: 1,
+      y: 0,
       scale: 1,
       transition: {
         duration: ANIMATION_CONFIG.duration.slow,
         ease: ANIMATION_CONFIG.ease.easeOut,
       },
     },
-    exit: { 
-      opacity: 0, 
-      y: -20, 
+    exit: {
+      opacity: 0,
+      y: -20,
       scale: 0.98,
       transition: {
         duration: ANIMATION_CONFIG.duration.normal,
@@ -155,7 +155,7 @@ export const HOVER_ANIMATIONS = {
       ease: ANIMATION_CONFIG.ease.easeOut,
     },
   },
-  
+
   scale: {
     scale: 1.05,
     transition: {
@@ -163,7 +163,7 @@ export const HOVER_ANIMATIONS = {
       ease: ANIMATION_CONFIG.ease.easeOut,
     },
   },
-  
+
   glow: {
     boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
     transition: {
@@ -171,7 +171,7 @@ export const HOVER_ANIMATIONS = {
       ease: ANIMATION_CONFIG.ease.easeOut,
     },
   },
-  
+
   rotate: {
     rotate: 5,
     transition: {
@@ -190,7 +190,7 @@ export const TAP_ANIMATIONS = {
       ease: ANIMATION_CONFIG.ease.easeInOut,
     },
   },
-  
+
   press: {
     scale: 0.98,
     y: 1,
@@ -211,7 +211,7 @@ export const LOADING_ANIMATIONS = {
       ease: 'linear',
     },
   },
-  
+
   pulse: {
     scale: [1, 1.1, 1],
     opacity: [1, 0.7, 1],
@@ -221,7 +221,7 @@ export const LOADING_ANIMATIONS = {
       ease: ANIMATION_CONFIG.ease.easeInOut,
     },
   },
-  
+
   bounce: {
     y: [0, -10, 0],
     transition: {
@@ -230,7 +230,7 @@ export const LOADING_ANIMATIONS = {
       ease: ANIMATION_CONFIG.ease.easeInOut,
     },
   },
-  
+
   dots: {
     scale: [1, 1.2, 1],
     opacity: [0.7, 1, 0.7],
@@ -257,13 +257,13 @@ export const RESPONSIVE_VARIANTS = {
       exit: { opacity: 0, scale: 0.95 },
     },
   },
-  
+
   tablet: {
     // Standard animations for tablet
     fadeInUp: COMMON_VARIANTS.fadeInUp,
     scaleIn: COMMON_VARIANTS.scaleIn,
   },
-  
+
   desktop: {
     // Enhanced animations for desktop
     fadeInUp: {

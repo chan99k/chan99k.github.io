@@ -1,27 +1,27 @@
 ---
-name: "스시 마스터"
+name: '스시 마스터'
 location:
-  address: "서울시 서초구 서초대로 456"
+  address: '서울시 서초구 서초대로 456'
   coordinates:
     lat: 37.4979
     lng: 127.0276
-  region: "서초구"
+  region: '서초구'
 rating: 5
-visitDate: "2024-02-20"
-cuisine: "japanese"
+visitDate: '2024-02-20'
+cuisine: 'japanese'
 priceRange: 4
-tags: ["스시", "일식", "고급", "오마카세", "신선한 회"]
+tags: ['스시', '일식', '고급', '오마카세', '신선한 회']
 mapLinks:
-  naver: "https://naver.me/sushi-master"
-  kakao: "https://place.map.kakao.com/sushi-master"
-  google: "https://maps.google.com/sushi-master"
+  naver: 'https://naver.me/sushi-master'
+  kakao: 'https://place.map.kakao.com/sushi-master'
+  google: 'https://maps.google.com/sushi-master'
 images:
-  - src: "/images/reviews/sample-japanese-1.jpg"
-    alt: "오마카세 스시 세트"
-  - src: "/images/reviews/sample-japanese-2.jpg"
-    alt: "참치 사시미"
-  - src: "/images/reviews/sample-japanese-3.jpg"
-    alt: "레스토랑 내부"
+  - src: '/images/reviews/sample-japanese-1.jpg'
+    alt: '오마카세 스시 세트'
+  - src: '/images/reviews/sample-japanese-2.jpg'
+    alt: '참치 사시미'
+  - src: '/images/reviews/sample-japanese-3.jpg'
+    alt: '레스토랑 내부'
 ---
 
 # 스시 마스터 오마카세 리뷰

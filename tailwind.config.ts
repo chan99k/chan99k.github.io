@@ -9,11 +9,11 @@ const config: Config = {
   ],
   theme: {
     screens: {
-      'xs': '475px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
+      xs: '475px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
       '2xl': '1536px',
     },
     extend: {
@@ -74,7 +74,8 @@ const config: Config = {
         '128': '32rem',
       },
       minHeight: {
-        'screen-safe': 'calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+        'screen-safe':
+          'calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
       },
       maxWidth: {
         '8xl': '88rem',
@@ -120,9 +121,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [require('@tailwindcss/typography')],
   darkMode: ['class'],
 };
 

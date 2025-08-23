@@ -19,9 +19,11 @@ export const defaultGiscusConfig: GiscusConfig = {
 /**
  * Validates if the Giscus configuration is complete
  */
-export function isGiscusConfigValid(config: Partial<GiscusConfig> = {}): boolean {
+export function isGiscusConfigValid(
+  config: Partial<GiscusConfig> = {}
+): boolean {
   const finalConfig = { ...defaultGiscusConfig, ...config };
-  
+
   return !!(
     finalConfig.repo &&
     finalConfig.repoId &&
@@ -33,7 +35,9 @@ export function isGiscusConfigValid(config: Partial<GiscusConfig> = {}): boolean
 /**
  * Gets the complete Giscus configuration with environment variables
  */
-export function getGiscusConfig(overrides: Partial<GiscusConfig> = {}): GiscusConfig {
+export function getGiscusConfig(
+  overrides: Partial<GiscusConfig> = {}
+): GiscusConfig {
   return {
     ...defaultGiscusConfig,
     ...overrides,
@@ -85,19 +89,22 @@ export const anonymousCommentingGuide = {
     {
       step: 1,
       title: 'GitHub 계정 생성',
-      description: 'GitHub에서 무료 계정을 생성하세요. 실명을 사용할 필요는 없습니다.',
+      description:
+        'GitHub에서 무료 계정을 생성하세요. 실명을 사용할 필요는 없습니다.',
       link: 'https://github.com/signup',
     },
     {
       step: 2,
       title: 'GitHub Discussions 접근',
-      description: '이 블로그의 GitHub 저장소 Discussions 섹션에 직접 접근할 수 있습니다.',
+      description:
+        '이 블로그의 GitHub 저장소 Discussions 섹션에 직접 접근할 수 있습니다.',
       link: process.env.NEXT_PUBLIC_GITHUB_DISCUSSIONS_URL || '#',
     },
     {
       step: 3,
       title: '댓글 작성',
-      description: '해당 포스트의 Discussion에서 댓글을 작성하면 자동으로 블로그에 표시됩니다.',
+      description:
+        '해당 포스트의 Discussion에서 댓글을 작성하면 자동으로 블로그에 표시됩니다.',
     },
   ],
   note: 'GitHub 계정은 익명성을 보장하며, 개인정보를 공개할 필요가 없습니다.',

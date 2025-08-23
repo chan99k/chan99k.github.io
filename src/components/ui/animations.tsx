@@ -181,19 +181,19 @@ interface AnimatedContainerProps {
   delay?: number;
 }
 
-export function AnimatedContainer({ 
-  children, 
-  className = '', 
+export function AnimatedContainer({
+  children,
+  className = '',
   variants = fadeInUp,
-  delay = 0 
+  delay = 0,
 }: AnimatedContainerProps) {
   return (
     <motion.div
       className={className}
       variants={variants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
+      initial='initial'
+      animate='animate'
+      exit='exit'
       transition={{ delay }}
     >
       {children}
@@ -206,14 +206,17 @@ interface StaggeredContainerProps {
   className?: string;
 }
 
-export function StaggeredContainer({ children, className = '' }: StaggeredContainerProps) {
+export function StaggeredContainer({
+  children,
+  className = '',
+}: StaggeredContainerProps) {
   return (
     <motion.div
       className={className}
       variants={staggerContainer}
-      initial="initial"
-      animate="animate"
-      exit="exit"
+      initial='initial'
+      animate='animate'
+      exit='exit'
     >
       {children}
     </motion.div>
@@ -225,14 +228,17 @@ interface PageTransitionProps {
   className?: string;
 }
 
-export function PageTransition({ children, className = '' }: PageTransitionProps) {
+export function PageTransition({
+  children,
+  className = '',
+}: PageTransitionProps) {
   return (
     <motion.div
       className={className}
       variants={pageTransition}
-      initial="initial"
-      animate="animate"
-      exit="exit"
+      initial='initial'
+      animate='animate'
+      exit='exit'
     >
       {children}
     </motion.div>

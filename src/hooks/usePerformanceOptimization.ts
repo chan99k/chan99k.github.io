@@ -14,14 +14,16 @@ export function usePerformanceOptimization() {
 
   useEffect(() => {
     // Detect low-end device based on memory and hardware concurrency
-    const isLowEnd = 
+    const isLowEnd =
       (memoryUsage && memoryUsage.total < 2 * 1024 * 1024 * 1024) || // Less than 2GB
       navigator.hardwareConcurrency <= 2; // 2 or fewer CPU cores
 
     setIsLowEndDevice(isLowEnd);
 
     // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
     setShouldReduceAnimations(prefersReducedMotion || isLowEnd);
   }, [memoryUsage]);
 
@@ -47,8 +49,8 @@ export function useLazyLoad<T extends HTMLElement>(
     if (!element || isLoaded) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting && !isLoaded) {
             callback();
             setIsLoaded(true);
@@ -87,15 +89,18 @@ export function usePrefetchOnHover() {
     link.rel = 'prefetch';
     link.href = url;
     document.head.appendChild(link);
-    
+
     prefetchedUrls.current.add(url);
   }, []);
 
-  const handleMouseEnter = useCallback((url: string) => {
-    // Add small delay to avoid prefetching on accidental hovers
-    const timeoutId = setTimeout(() => prefetch(url), 100);
-    return () => clearTimeout(timeoutId);
-  }, [prefetch]);
+  const handleMouseEnter = useCallback(
+    (url: string) => {
+      // Add small delay to avoid prefetching on accidental hovers
+      const timeoutId = setTimeout(() => prefetch(url), 100);
+      return () => clearTimeout(timeoutId);
+    },
+    [prefetch]
+  );
 
   return { handleMouseEnter };
 }
@@ -152,8 +157,8 @@ export function useVisibilityOptimization<T extends HTMLElement>() {
     if (!element) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           setIsVisible(entry.isIntersecting);
           if (entry.isIntersecting && !hasBeenVisible) {
             setHasBeenVisible(true);
@@ -193,8 +198,17 @@ export function useAdaptiveLoading() {
 
   useEffect(() => {
     if ('connection' in navigator) {
-      const connection = (navigator as { connection?: { effectiveType: string; saveData: boolean; addEventListener: (event: string, handler: () => void) => void; removeEventListener: (event: string, handler: () => void) => void } }).connection;
-      
+      const connection = (
+        navigator as {
+          connection?: {
+            effectiveType: string;
+            saveData: boolean;
+            addEventListener: (event: string, handler: () => void) => void;
+            removeEventListener: (event: string, handler: () => void) => void;
+          };
+        }
+      ).connection;
+
       if (connection) {
         const updateNetworkInfo = () => {
           setNetworkInfo({
@@ -213,18 +227,21 @@ export function useAdaptiveLoading() {
     }
   }, []);
 
-  const shouldLoadHighQuality = 
+  const shouldLoadHighQuality =
     networkInfo.effectiveType === '4g' && !networkInfo.saveData;
-  
-  const shouldPreload = 
-    (networkInfo.effectiveType === '4g' || networkInfo.effectiveType === '3g') && 
+
+  const shouldPreload =
+    (networkInfo.effectiveType === '4g' ||
+      networkInfo.effectiveType === '3g') &&
     !networkInfo.saveData;
 
   return {
     networkInfo,
     shouldLoadHighQuality,
     shouldPreload,
-    isSlowConnection: networkInfo.effectiveType === 'slow-2g' || networkInfo.effectiveType === '2g',
+    isSlowConnection:
+      networkInfo.effectiveType === 'slow-2g' ||
+      networkInfo.effectiveType === '2g',
   };
 }
 

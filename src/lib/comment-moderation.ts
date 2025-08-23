@@ -23,9 +23,23 @@ export interface CommentAnalysis {
 export const spamDetection = {
   // 일반적인 스팸 키워드
   spamKeywords: [
-    'viagra', 'cialis', 'casino', 'poker', 'lottery', 'winner', 'congratulations',
-    'click here', 'visit now', 'buy now', 'limited time', 'act now', 'free money',
-    'make money fast', 'work from home', 'guaranteed income', 'no experience needed'
+    'viagra',
+    'cialis',
+    'casino',
+    'poker',
+    'lottery',
+    'winner',
+    'congratulations',
+    'click here',
+    'visit now',
+    'buy now',
+    'limited time',
+    'act now',
+    'free money',
+    'make money fast',
+    'work from home',
+    'guaranteed income',
+    'no experience needed',
   ],
 
   // 의심스러운 URL 패턴
@@ -47,7 +61,11 @@ export const spamDetection = {
   /**
    * 텍스트에서 스팸 지표를 분석
    */
-  analyzeForSpam(text: string): { isSpam: boolean; confidence: number; reasons: string[] } {
+  analyzeForSpam(text: string): {
+    isSpam: boolean;
+    confidence: number;
+    reasons: string[];
+  } {
     const reasons: string[] = [];
     let spamScore = 0;
 
@@ -99,7 +117,7 @@ export const spamDetection = {
     const isSpam = confidence >= 0.3;
 
     return { isSpam, confidence, reasons };
-  }
+  },
 };
 
 /**
@@ -128,18 +146,30 @@ export const contentFilter = {
     let sanitized = text;
 
     // 스크립트 태그 및 기타 잠재적으로 해로운 HTML 제거
-    sanitized = sanitized.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-    sanitized = sanitized.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '');
-    sanitized = sanitized.replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '');
-    sanitized = sanitized.replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '');
+    sanitized = sanitized.replace(
+      /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+      ''
+    );
+    sanitized = sanitized.replace(
+      /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
+      ''
+    );
+    sanitized = sanitized.replace(
+      /<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi,
+      ''
+    );
+    sanitized = sanitized.replace(
+      /<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi,
+      ''
+    );
 
     // 부적절한 단어를 별표로 대체
     this.inappropriatePatterns.forEach(pattern => {
-      sanitized = sanitized.replace(pattern, (match) => '*'.repeat(match.length));
+      sanitized = sanitized.replace(pattern, match => '*'.repeat(match.length));
     });
 
     return sanitized.trim();
-  }
+  },
 };
 
 /**
@@ -152,13 +182,17 @@ export const rateLimiting = {
   /**
    * 사용자가 빈도 제한에 걸렸는지 확인합니다
    */
-  isRateLimited(userId: string, maxSubmissions: number = 5, timeWindow: number = 300000): boolean {
+  isRateLimited(
+    userId: string,
+    maxSubmissions: number = 5,
+    timeWindow: number = 300000
+  ): boolean {
     const now = Date.now();
     const userSubmissions = this.recentSubmissions.get(userId) || [];
 
     // 시간 윈도우 밖의 오래된 제출 기록 제거
-    const recentSubmissions = userSubmissions.filter(timestamp =>
-      now - timestamp < timeWindow
+    const recentSubmissions = userSubmissions.filter(
+      timestamp => now - timestamp < timeWindow
     );
 
     // 저장된 제출 기록 업데이트
@@ -175,7 +209,7 @@ export const rateLimiting = {
     const userSubmissions = this.recentSubmissions.get(userId) || [];
     userSubmissions.push(now);
     this.recentSubmissions.set(userId, userSubmissions);
-  }
+  },
 };
 
 /**
@@ -190,12 +224,15 @@ export function moderateComment(
     checkRateLimit?: boolean;
     sanitize?: boolean;
   } = {}
-): ModerationResult & { sanitizedContent?: string; analysis?: CommentAnalysis } {
+): ModerationResult & {
+  sanitizedContent?: string;
+  analysis?: CommentAnalysis;
+} {
   const {
     checkSpam = true,
     checkInappropriate = true,
     checkRateLimit = true,
-    sanitize = true
+    sanitize = true,
   } = options;
 
   let isAllowed = true;
@@ -233,7 +270,8 @@ export function moderateComment(
   // Rate limiting check
   if (checkRateLimit && userId && rateLimiting.isRateLimited(userId)) {
     isAllowed = false;
-    reason = 'Rate limit exceeded. Please wait before submitting another comment.';
+    reason =
+      'Rate limit exceeded. Please wait before submitting another comment.';
     confidence = 1.0;
   }
 
@@ -242,14 +280,18 @@ export function moderateComment(
     rateLimiting.recordSubmission(userId);
   }
 
-  const spamAnalysis = checkSpam ? spamDetection.analyzeForSpam(content) : { isSpam: false, confidence: 0 };
+  const spamAnalysis = checkSpam
+    ? spamDetection.analyzeForSpam(content)
+    : { isSpam: false, confidence: 0 };
   const analysis: CommentAnalysis = {
     isSpam: spamAnalysis.isSpam,
-    hasInappropriateContent: checkInappropriate ? contentFilter.hasInappropriateContent(content) : false,
+    hasInappropriateContent: checkInappropriate
+      ? contentFilter.hasInappropriateContent(content)
+      : false,
     hasExcessiveLinks: (content.match(/https?:\/\/[^\s]+/g) || []).length > 3,
     hasRepeatedContent: /(.)\1{10,}/.test(content),
     sentiment: 'neutral', // This would require more sophisticated analysis
-    confidence: Math.max(confidence, spamAnalysis.confidence)
+    confidence: Math.max(confidence, spamAnalysis.confidence),
   };
 
   return {
@@ -257,6 +299,6 @@ export function moderateComment(
     reason,
     confidence,
     sanitizedContent: sanitize ? sanitizedContent : undefined,
-    analysis
+    analysis,
   };
 }

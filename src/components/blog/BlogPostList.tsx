@@ -16,8 +16,10 @@ const POSTS_PER_PAGE = 6;
 export function BlogPostList({ posts }: BlogPostListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+
+  const [selectedCategory, setSelectedCategory] = useState<
+    string | undefined
+  >();
   const [selectedTag, setSelectedTag] = useState<string | undefined>();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -49,12 +51,16 @@ export function BlogPostList({ posts }: BlogPostListProps) {
   // 현재 필터를 기반으로 포스트 필터링
   const filteredPosts = useMemo(() => {
     return posts.filter(post => {
-      const matchesCategory = !selectedCategory || post.category === selectedCategory;
+      const matchesCategory =
+        !selectedCategory || post.category === selectedCategory;
       const matchesTag = !selectedTag || post.tags.includes(selectedTag);
-      const matchesSearch = !searchQuery || 
+      const matchesSearch =
+        !searchQuery ||
         post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+        post.tags.some(tag =>
+          tag.toLowerCase().includes(searchQuery.toLowerCase())
+        );
 
       return matchesCategory && matchesTag && matchesSearch;
     });
@@ -68,9 +74,14 @@ export function BlogPostList({ posts }: BlogPostListProps) {
   }, [filteredPosts, currentPage]);
 
   // 필터 변경 시 URL 업데이트
-  const updateURL = (newCategory?: string, newTag?: string, newSearch?: string, newPage?: number) => {
+  const updateURL = (
+    newCategory?: string,
+    newTag?: string,
+    newSearch?: string,
+    newPage?: number
+  ) => {
     const params = new URLSearchParams();
-    
+
     if (newCategory) params.set('category', newCategory);
     if (newTag) params.set('tag', newTag);
     if (newSearch) params.set('search', newSearch);
@@ -78,7 +89,7 @@ export function BlogPostList({ posts }: BlogPostListProps) {
 
     const queryString = params.toString();
     const newURL = queryString ? `/blog?${queryString}` : '/blog';
-    
+
     router.push(newURL, { scroll: false });
   };
 
@@ -116,7 +127,7 @@ export function BlogPostList({ posts }: BlogPostListProps) {
   const hasActiveFilters = !!(selectedCategory || selectedTag || searchQuery);
 
   return (
-    <div className="space-y-8">
+    <div className='space-y-8'>
       <BlogFilters
         categories={categories}
         tags={tags}
@@ -131,21 +142,23 @@ export function BlogPostList({ posts }: BlogPostListProps) {
       />
 
       {/* 결과 요약 */}
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+      <div className='flex items-center justify-between'>
+        <p className='text-sm text-gray-600 dark:text-gray-400'>
           {filteredPosts.length === 0 ? (
             'No posts found'
           ) : (
             <>
-              Showing {((currentPage - 1) * POSTS_PER_PAGE) + 1}-{Math.min(currentPage * POSTS_PER_PAGE, filteredPosts.length)} of {filteredPosts.length} posts
+              Showing {(currentPage - 1) * POSTS_PER_PAGE + 1}-
+              {Math.min(currentPage * POSTS_PER_PAGE, filteredPosts.length)} of{' '}
+              {filteredPosts.length} posts
             </>
           )}
         </p>
-        
+
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+            className='text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300'
           >
             Clear all filters
           </button>
@@ -154,20 +167,20 @@ export function BlogPostList({ posts }: BlogPostListProps) {
 
       {/* 블로그 포스트 그리드 */}
       {paginatedPosts.length > 0 ? (
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <div className='grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'>
           {paginatedPosts.map((post, index) => (
             <BlogPostCard key={post.slug} post={post} index={index} />
           ))}
         </div>
       ) : (
-        <div className="text-center py-12">
-          <p className="text-gray-500 dark:text-gray-400 text-lg">
+        <div className='text-center py-12'>
+          <p className='text-gray-500 dark:text-gray-400 text-lg'>
             No posts match your current filters.
           </p>
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="mt-4 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+              className='mt-4 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300'
             >
               Clear filters to see all posts
             </button>

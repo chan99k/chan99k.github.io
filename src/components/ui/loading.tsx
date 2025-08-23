@@ -9,7 +9,10 @@ interface LoadingSpinnerProps {
   className?: string;
 }
 
-export function LoadingSpinner({ size = 'md', className }: LoadingSpinnerProps) {
+export function LoadingSpinner({
+  size = 'md',
+  className,
+}: LoadingSpinnerProps) {
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-6 w-6',
@@ -38,10 +41,10 @@ interface LoadingDotsProps {
 export function LoadingDots({ className }: LoadingDotsProps) {
   return (
     <div className={cn('flex space-x-1', className)}>
-      {[0, 1, 2].map((index) => (
+      {[0, 1, 2].map(index => (
         <motion.div
           key={index}
-          className="w-2 h-2 bg-primary rounded-full"
+          className='w-2 h-2 bg-primary rounded-full'
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.7, 1, 0.7],
@@ -85,24 +88,24 @@ interface LoadingOverlayProps {
   loadingText?: string;
 }
 
-export function LoadingOverlay({ 
-  isLoading, 
-  children, 
-  loadingText = 'Loading...' 
+export function LoadingOverlay({
+  isLoading,
+  children,
+  loadingText = 'Loading...',
 }: LoadingOverlayProps) {
   return (
-    <div className="relative">
+    <div className='relative'>
       {children}
       {isLoading && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50"
+          className='absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50'
         >
-          <div className="flex flex-col items-center space-y-4">
-            <LoadingSpinner size="lg" />
-            <p className="text-sm text-muted-foreground">{loadingText}</p>
+          <div className='flex flex-col items-center space-y-4'>
+            <LoadingSpinner size='lg' />
+            <p className='text-sm text-muted-foreground'>{loadingText}</p>
           </div>
         </motion.div>
       )}
@@ -116,23 +119,23 @@ interface ProgressBarProps {
   showPercentage?: boolean;
 }
 
-export function ProgressBar({ 
-  progress, 
-  className, 
-  showPercentage = false 
+export function ProgressBar({
+  progress,
+  className,
+  showPercentage = false,
 }: ProgressBarProps) {
   return (
     <div className={cn('w-full', className)}>
-      <div className="flex justify-between items-center mb-2">
+      <div className='flex justify-between items-center mb-2'>
         {showPercentage && (
-          <span className="text-sm text-muted-foreground">
+          <span className='text-sm text-muted-foreground'>
             {Math.round(progress)}%
           </span>
         )}
       </div>
-      <div className="w-full bg-muted rounded-full h-2">
+      <div className='w-full bg-muted rounded-full h-2'>
         <motion.div
-          className="bg-primary h-2 rounded-full"
+          className='bg-primary h-2 rounded-full'
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.5, ease: 'easeOut' }}

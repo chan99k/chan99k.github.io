@@ -3,7 +3,11 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import { ResponsiveContainer, ResponsiveGrid, ResponsiveStack } from '@/components/layout';
+import {
+  ResponsiveContainer,
+  ResponsiveGrid,
+  ResponsiveStack,
+} from '@/components/layout';
 
 // Mock window.innerWidth for responsive tests
 const mockInnerWidth = (width: number) => {
@@ -19,7 +23,7 @@ describe('Responsive Design Components', () => {
   describe('ResponsiveContainer', () => {
     it('should render with correct container classes', () => {
       render(
-        <ResponsiveContainer data-testid="container">
+        <ResponsiveContainer data-testid='container'>
           <div>Test content</div>
         </ResponsiveContainer>
       );
@@ -30,7 +34,7 @@ describe('Responsive Design Components', () => {
 
     it('should apply correct padding classes', () => {
       render(
-        <ResponsiveContainer padding="lg" data-testid="container">
+        <ResponsiveContainer padding='lg' data-testid='container'>
           <div>Test content</div>
         </ResponsiveContainer>
       );
@@ -41,7 +45,7 @@ describe('Responsive Design Components', () => {
 
     it('should render as different HTML elements', () => {
       const { rerender } = render(
-        <ResponsiveContainer as="section" data-testid="container">
+        <ResponsiveContainer as='section' data-testid='container'>
           <div>Test content</div>
         </ResponsiveContainer>
       );
@@ -49,7 +53,7 @@ describe('Responsive Design Components', () => {
       expect(screen.getByTestId('container').tagName).toBe('SECTION');
 
       rerender(
-        <ResponsiveContainer as="main" data-testid="container">
+        <ResponsiveContainer as='main' data-testid='container'>
           <div>Test content</div>
         </ResponsiveContainer>
       );
@@ -61,34 +65,41 @@ describe('Responsive Design Components', () => {
   describe('ResponsiveGrid', () => {
     it('should render with default grid classes', () => {
       render(
-        <ResponsiveGrid data-testid="grid">
+        <ResponsiveGrid data-testid='grid'>
           <div>Item 1</div>
           <div>Item 2</div>
         </ResponsiveGrid>
       );
 
       const grid = screen.getByTestId('grid');
-      expect(grid).toHaveClass('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3');
+      expect(grid).toHaveClass(
+        'grid',
+        'grid-cols-1',
+        'sm:grid-cols-2',
+        'lg:grid-cols-3'
+      );
     });
 
     it('should apply custom column configuration', () => {
       render(
-        <ResponsiveGrid 
-          columns={{ xs: 1, md: 2, xl: 4 }}
-          data-testid="grid"
-        >
+        <ResponsiveGrid columns={{ xs: 1, md: 2, xl: 4 }} data-testid='grid'>
           <div>Item 1</div>
           <div>Item 2</div>
         </ResponsiveGrid>
       );
 
       const grid = screen.getByTestId('grid');
-      expect(grid).toHaveClass('grid', 'grid-cols-1', 'md:grid-cols-2', 'xl:grid-cols-4');
+      expect(grid).toHaveClass(
+        'grid',
+        'grid-cols-1',
+        'md:grid-cols-2',
+        'xl:grid-cols-4'
+      );
     });
 
     it('should apply correct gap classes', () => {
       render(
-        <ResponsiveGrid gap="lg" data-testid="grid">
+        <ResponsiveGrid gap='lg' data-testid='grid'>
           <div>Item 1</div>
         </ResponsiveGrid>
       );
@@ -101,7 +112,7 @@ describe('Responsive Design Components', () => {
   describe('ResponsiveStack', () => {
     it('should render with default flex classes', () => {
       render(
-        <ResponsiveStack data-testid="stack">
+        <ResponsiveStack data-testid='stack'>
           <div>Item 1</div>
           <div>Item 2</div>
         </ResponsiveStack>
@@ -113,9 +124,9 @@ describe('Responsive Design Components', () => {
 
     it('should apply custom direction configuration', () => {
       render(
-        <ResponsiveStack 
+        <ResponsiveStack
           direction={{ xs: 'row', lg: 'col' }}
-          data-testid="stack"
+          data-testid='stack'
         >
           <div>Item 1</div>
           <div>Item 2</div>
@@ -128,11 +139,7 @@ describe('Responsive Design Components', () => {
 
     it('should apply alignment and justification classes', () => {
       render(
-        <ResponsiveStack 
-          align="center"
-          justify="between"
-          data-testid="stack"
-        >
+        <ResponsiveStack align='center' justify='between' data-testid='stack'>
           <div>Item 1</div>
           <div>Item 2</div>
         </ResponsiveStack>
@@ -147,7 +154,7 @@ describe('Responsive Design Components', () => {
 describe('Touch-friendly Design', () => {
   it('should apply touch-target classes to interactive elements', () => {
     render(
-      <button className="touch-target" data-testid="button">
+      <button className='touch-target' data-testid='button'>
         Click me
       </button>
     );
@@ -158,7 +165,7 @@ describe('Touch-friendly Design', () => {
 
   it('should apply touch-target-large classes for important buttons', () => {
     render(
-      <button className="touch-target-large" data-testid="button">
+      <button className='touch-target-large' data-testid='button'>
         Important Action
       </button>
     );
@@ -171,18 +178,26 @@ describe('Touch-friendly Design', () => {
 describe('Mobile-first Responsive Classes', () => {
   it('should have mobile-first responsive text sizing', () => {
     render(
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl" data-testid="heading">
+      <h1
+        className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl'
+        data-testid='heading'
+      >
         Responsive Heading
       </h1>
     );
 
     const heading = screen.getByTestId('heading');
-    expect(heading).toHaveClass('text-3xl', 'sm:text-4xl', 'md:text-5xl', 'lg:text-6xl');
+    expect(heading).toHaveClass(
+      'text-3xl',
+      'sm:text-4xl',
+      'md:text-5xl',
+      'lg:text-6xl'
+    );
   });
 
   it('should have mobile-first responsive spacing', () => {
     render(
-      <div className="py-12 sm:py-16 lg:py-20" data-testid="section">
+      <div className='py-12 sm:py-16 lg:py-20' data-testid='section'>
         Content
       </div>
     );
@@ -193,7 +208,10 @@ describe('Mobile-first Responsive Classes', () => {
 
   it('should have mobile-first responsive grid layouts', () => {
     render(
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" data-testid="grid">
+      <div
+        className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+        data-testid='grid'
+      >
         <div>Item 1</div>
         <div>Item 2</div>
         <div>Item 3</div>
@@ -201,14 +219,19 @@ describe('Mobile-first Responsive Classes', () => {
     );
 
     const grid = screen.getByTestId('grid');
-    expect(grid).toHaveClass('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3');
+    expect(grid).toHaveClass(
+      'grid',
+      'grid-cols-1',
+      'sm:grid-cols-2',
+      'lg:grid-cols-3'
+    );
   });
 });
 
 describe('Safe Area Support', () => {
   it('should apply safe area classes for mobile devices', () => {
     render(
-      <div className="safe-top safe-bottom" data-testid="safe-area">
+      <div className='safe-top safe-bottom' data-testid='safe-area'>
         Content with safe area
       </div>
     );
@@ -221,8 +244,9 @@ describe('Safe Area Support', () => {
 describe('Line Clamp Utilities', () => {
   it('should apply line clamp classes for text truncation', () => {
     render(
-      <p className="line-clamp-3" data-testid="text">
-        This is a long text that should be truncated after three lines to ensure consistent layout across different screen sizes and content lengths.
+      <p className='line-clamp-3' data-testid='text'>
+        This is a long text that should be truncated after three lines to ensure
+        consistent layout across different screen sizes and content lengths.
       </p>
     );
 

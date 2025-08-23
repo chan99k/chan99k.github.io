@@ -16,27 +16,35 @@ interface AnimatedButtonProps extends Omit<MotionProps, 'children'> {
   type?: 'button' | 'submit' | 'reset';
 }
 
-export const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
-  ({ 
-    children, 
-    variant = 'primary', 
-    size = 'md', 
-    isLoading = false,
-    disabled = false,
-    className,
-    onClick,
-    type = 'button',
-    ...motionProps 
-  }, ref) => {
-    const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
-    
+export const AnimatedButton = forwardRef<
+  HTMLButtonElement,
+  AnimatedButtonProps
+>(
+  (
+    {
+      children,
+      variant = 'primary',
+      size = 'md',
+      isLoading = false,
+      disabled = false,
+      className,
+      onClick,
+      type = 'button',
+      ...motionProps
+    },
+    ref
+  ) => {
+    const baseClasses =
+      'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
+
     const variantClasses = {
       primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
       secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-      outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+      outline:
+        'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
       ghost: 'hover:bg-accent hover:text-accent-foreground',
     };
-    
+
     const sizeClasses = {
       sm: 'h-10 sm:h-9 px-4 sm:px-3 text-sm touch-target',
       md: 'h-11 sm:h-10 px-5 sm:px-4 py-2 text-base sm:text-sm touch-target',
@@ -75,9 +83,7 @@ export const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>
         onClick={onClick}
         {...motionProps}
       >
-        {isLoading && (
-          <LoadingSpinner size="sm" className="mr-2" />
-        )}
+        {isLoading && <LoadingSpinner size='sm' className='mr-2' />}
         {children}
       </motion.button>
     );
@@ -94,11 +100,11 @@ interface FloatingActionButtonProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export function FloatingActionButton({ 
-  children, 
-  onClick, 
+export function FloatingActionButton({
+  children,
+  onClick,
   className,
-  size = 'md' 
+  size = 'md',
 }: FloatingActionButtonProps) {
   const sizeClasses = {
     sm: 'h-12 w-12',
@@ -143,12 +149,12 @@ interface IconButtonProps {
   variant?: 'ghost' | 'outline';
 }
 
-export function IconButton({ 
-  children, 
-  onClick, 
+export function IconButton({
+  children,
+  onClick,
   className,
   size = 'md',
-  variant = 'ghost'
+  variant = 'ghost',
 }: IconButtonProps) {
   const sizeClasses = {
     sm: 'h-10 w-10 sm:h-8 sm:w-8 touch-target',

@@ -35,7 +35,7 @@ async function runPerformanceAudit() {
     // 2. Start the server
     console.log('🌐 Starting server...');
     const serverProcess = execSync('npm run start &', { stdio: 'pipe' });
-    
+
     // Wait for server to start
     await new Promise(resolve => setTimeout(resolve, 5000));
 
@@ -48,7 +48,7 @@ async function runPerformanceAudit() {
       '--output=html',
       '--output-path=./lighthouse-report',
       '--chrome-flags="--headless --no-sandbox"',
-      '--quiet'
+      '--quiet',
     ].join(' ');
 
     execSync(lighthouseCmd, { stdio: 'inherit' });
@@ -70,7 +70,6 @@ async function runPerformanceAudit() {
     console.log('  - lighthouse-report.report.html');
     console.log('  - lighthouse-report.report.json');
     console.log('  - performance-report.json');
-
   } catch (error) {
     console.error('❌ Performance audit failed:', error.message);
     process.exit(1);
@@ -86,7 +85,7 @@ async function runPerformanceAudit() {
 
 function generatePerformanceReport(lighthouseResults) {
   const { audits, categories } = lighthouseResults;
-  
+
   const performanceMetrics = {
     timestamp: new Date().toISOString(),
     scores: {
@@ -99,34 +98,50 @@ function generatePerformanceReport(lighthouseResults) {
       FCP: {
         value: audits['first-contentful-paint'].numericValue,
         score: Math.round(audits['first-contentful-paint'].score * 100),
-        rating: getPerformanceRating('FCP', audits['first-contentful-paint'].numericValue),
+        rating: getPerformanceRating(
+          'FCP',
+          audits['first-contentful-paint'].numericValue
+        ),
       },
       LCP: {
         value: audits['largest-contentful-paint'].numericValue,
         score: Math.round(audits['largest-contentful-paint'].score * 100),
-        rating: getPerformanceRating('LCP', audits['largest-contentful-paint'].numericValue),
+        rating: getPerformanceRating(
+          'LCP',
+          audits['largest-contentful-paint'].numericValue
+        ),
       },
       CLS: {
         value: audits['cumulative-layout-shift'].numericValue,
         score: Math.round(audits['cumulative-layout-shift'].score * 100),
-        rating: getPerformanceRating('CLS', audits['cumulative-layout-shift'].numericValue),
+        rating: getPerformanceRating(
+          'CLS',
+          audits['cumulative-layout-shift'].numericValue
+        ),
       },
       TBT: {
         value: audits['total-blocking-time'].numericValue,
         score: Math.round(audits['total-blocking-time'].score * 100),
-        rating: getPerformanceRating('TBT', audits['total-blocking-time'].numericValue),
+        rating: getPerformanceRating(
+          'TBT',
+          audits['total-blocking-time'].numericValue
+        ),
       },
     },
-    opportunities: audits['diagnostics'] ? 
-      Object.keys(audits)
-        .filter(key => audits[key].details && audits[key].details.type === 'opportunity')
-        .map(key => ({
-          audit: key,
-          title: audits[key].title,
-          description: audits[key].description,
-          score: audits[key].score,
-          numericValue: audits[key].numericValue,
-        })) : [],
+    opportunities: audits['diagnostics']
+      ? Object.keys(audits)
+          .filter(
+            key =>
+              audits[key].details && audits[key].details.type === 'opportunity'
+          )
+          .map(key => ({
+            audit: key,
+            title: audits[key].title,
+            description: audits[key].description,
+            score: audits[key].score,
+            numericValue: audits[key].numericValue,
+          }))
+      : [],
   };
 
   // Write performance report
@@ -137,31 +152,45 @@ function generatePerformanceReport(lighthouseResults) {
 
   // Log summary
   console.log('\n📊 Performance Summary:');
-  console.log(`  Performance Score: ${performanceMetrics.scores.performance}/100`);
-  console.log(`  Accessibility Score: ${performanceMetrics.scores.accessibility}/100`);
-  console.log(`  Best Practices Score: ${performanceMetrics.scores.bestPractices}/100`);
+  console.log(
+    `  Performance Score: ${performanceMetrics.scores.performance}/100`
+  );
+  console.log(
+    `  Accessibility Score: ${performanceMetrics.scores.accessibility}/100`
+  );
+  console.log(
+    `  Best Practices Score: ${performanceMetrics.scores.bestPractices}/100`
+  );
   console.log(`  SEO Score: ${performanceMetrics.scores.seo}/100`);
-  
+
   console.log('\n🎯 Core Web Vitals:');
   Object.entries(performanceMetrics.coreWebVitals).forEach(([metric, data]) => {
     const unit = metric === 'CLS' ? '' : 'ms';
-    console.log(`  ${metric}: ${Math.round(data.value)}${unit} (${data.rating})`);
+    console.log(
+      `  ${metric}: ${Math.round(data.value)}${unit} (${data.rating})`
+    );
   });
 
   // Check if performance meets thresholds
   const performanceThreshold = 90;
-  const coreWebVitalsPass = Object.values(performanceMetrics.coreWebVitals)
-    .every(metric => metric.rating === 'good');
+  const coreWebVitalsPass = Object.values(
+    performanceMetrics.coreWebVitals
+  ).every(metric => metric.rating === 'good');
 
   if (performanceMetrics.scores.performance < performanceThreshold) {
-    console.log(`\n⚠️  Performance score (${performanceMetrics.scores.performance}) is below threshold (${performanceThreshold})`);
+    console.log(
+      `\n⚠️  Performance score (${performanceMetrics.scores.performance}) is below threshold (${performanceThreshold})`
+    );
   }
 
   if (!coreWebVitalsPass) {
     console.log('\n⚠️  Some Core Web Vitals metrics need improvement');
   }
 
-  if (performanceMetrics.scores.performance >= performanceThreshold && coreWebVitalsPass) {
+  if (
+    performanceMetrics.scores.performance >= performanceThreshold &&
+    coreWebVitalsPass
+  ) {
     console.log('\n🎉 All performance metrics are within acceptable ranges!');
   }
 }

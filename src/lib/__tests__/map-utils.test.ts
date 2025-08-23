@@ -6,7 +6,7 @@ import {
   getBestMapProvider,
   formatCoordinates,
   calculateDistance,
-  getRegionFromCoordinates
+  getRegionFromCoordinates,
 } from '../map-utils';
 import { RestaurantReview } from '@/types';
 
@@ -18,9 +18,9 @@ const mockSeoulRestaurant: RestaurantReview = {
     address: '서울시 강남구 테헤란로 123',
     coordinates: {
       lat: 37.5665,
-      lng: 126.9780
+      lng: 126.978,
     },
-    region: '강남구'
+    region: '강남구',
   },
   rating: 4,
   visitDate: '2024-01-15',
@@ -32,8 +32,8 @@ const mockSeoulRestaurant: RestaurantReview = {
   mapLinks: {
     naver: '',
     kakao: '',
-    google: ''
-  }
+    google: '',
+  },
 };
 
 const mockInternationalRestaurant: RestaurantReview = {
@@ -43,9 +43,9 @@ const mockInternationalRestaurant: RestaurantReview = {
     address: 'New York, NY, USA',
     coordinates: {
       lat: 40.7128,
-      lng: -74.0060
+      lng: -74.006,
     },
-    region: 'New York'
+    region: 'New York',
   },
   rating: 5,
   visitDate: '2024-02-01',
@@ -57,24 +57,26 @@ const mockInternationalRestaurant: RestaurantReview = {
   mapLinks: {
     naver: '',
     kakao: '',
-    google: ''
-  }
+    google: '',
+  },
 };
 
 describe('Map Utils', () => {
   describe('generateMapLinks', () => {
     it('should generate correct map links for Seoul restaurant', () => {
       const links = generateMapLinks(mockSeoulRestaurant);
-      
+
       expect(links.naver).toContain('map.naver.com');
-      expect(links.naver).toContain(encodeURIComponent(mockSeoulRestaurant.name));
+      expect(links.naver).toContain(
+        encodeURIComponent(mockSeoulRestaurant.name)
+      );
       expect(links.kakao).toContain('map.kakao.com');
       expect(links.google).toContain('google.com/maps');
     });
 
     it('should include coordinates in map links', () => {
       const links = generateMapLinks(mockSeoulRestaurant);
-      
+
       expect(links.naver).toContain('126.978,37.5665');
       expect(links.kakao).toContain('37.5665,126.978');
       expect(links.google).toContain('37.5665,126.978');
@@ -84,7 +86,7 @@ describe('Map Utils', () => {
   describe('generateNavigationLinks', () => {
     it('should generate navigation app links', () => {
       const navLinks = generateNavigationLinks(mockSeoulRestaurant);
-      
+
       expect(navLinks.naverApp).toContain('nmap://');
       expect(navLinks.kakaoApp).toContain('kakaomap://');
       expect(navLinks.googleApp).toContain('comgooglemaps://');
@@ -92,7 +94,7 @@ describe('Map Utils', () => {
 
     it('should include coordinates in navigation links', () => {
       const navLinks = generateNavigationLinks(mockSeoulRestaurant);
-      
+
       expect(navLinks.naverApp).toContain('lat=37.5665');
       expect(navLinks.naverApp).toContain('lng=126.978');
       expect(navLinks.kakaoApp).toContain('37.5665,126.978');
@@ -102,7 +104,7 @@ describe('Map Utils', () => {
 
   describe('validateCoordinates', () => {
     it('should validate correct coordinates', () => {
-      expect(validateCoordinates(37.5665, 126.9780)).toBe(true);
+      expect(validateCoordinates(37.5665, 126.978)).toBe(true);
       expect(validateCoordinates(-90, -180)).toBe(true);
       expect(validateCoordinates(90, 180)).toBe(true);
     });
@@ -119,7 +121,7 @@ describe('Map Utils', () => {
 
   describe('isInSouthKorea', () => {
     it('should identify Seoul coordinates as in South Korea', () => {
-      expect(isInSouthKorea(37.5665, 126.9780)).toBe(true);
+      expect(isInSouthKorea(37.5665, 126.978)).toBe(true);
     });
 
     it('should identify Busan coordinates as in South Korea', () => {
@@ -127,7 +129,7 @@ describe('Map Utils', () => {
     });
 
     it('should identify international coordinates as not in South Korea', () => {
-      expect(isInSouthKorea(40.7128, -74.0060)).toBe(false); // New York
+      expect(isInSouthKorea(40.7128, -74.006)).toBe(false); // New York
       expect(isInSouthKorea(35.6762, 139.6503)).toBe(false); // Tokyo
     });
   });
@@ -146,12 +148,12 @@ describe('Map Utils', () => {
 
   describe('formatCoordinates', () => {
     it('should format coordinates with default precision', () => {
-      const formatted = formatCoordinates(37.5665, 126.9780);
+      const formatted = formatCoordinates(37.5665, 126.978);
       expect(formatted).toBe('37.566500, 126.978000');
     });
 
     it('should format coordinates with custom precision', () => {
-      const formatted = formatCoordinates(37.5665, 126.9780, 2);
+      const formatted = formatCoordinates(37.5665, 126.978, 2);
       expect(formatted).toBe('37.57, 126.98');
     });
   });
@@ -159,26 +161,31 @@ describe('Map Utils', () => {
   describe('calculateDistance', () => {
     it('should calculate distance between Seoul and Busan', () => {
       const seoulLat = 37.5665;
-      const seoulLng = 126.9780;
+      const seoulLng = 126.978;
       const busanLat = 35.1796;
       const busanLng = 129.0756;
-      
-      const distance = calculateDistance(seoulLat, seoulLng, busanLat, busanLng);
-      
+
+      const distance = calculateDistance(
+        seoulLat,
+        seoulLng,
+        busanLat,
+        busanLng
+      );
+
       // Distance between Seoul and Busan is approximately 325km
       expect(distance).toBeGreaterThan(300);
       expect(distance).toBeLessThan(350);
     });
 
     it('should return 0 for same coordinates', () => {
-      const distance = calculateDistance(37.5665, 126.9780, 37.5665, 126.9780);
+      const distance = calculateDistance(37.5665, 126.978, 37.5665, 126.978);
       expect(distance).toBeCloseTo(0, 5);
     });
   });
 
   describe('getRegionFromCoordinates', () => {
     it('should identify Seoul region', () => {
-      const region = getRegionFromCoordinates(37.5665, 126.9780);
+      const region = getRegionFromCoordinates(37.5665, 126.978);
       expect(region).toBe('서울');
     });
 
@@ -188,7 +195,7 @@ describe('Map Utils', () => {
     });
 
     it('should return 해외 for international coordinates', () => {
-      const region = getRegionFromCoordinates(40.7128, -74.0060);
+      const region = getRegionFromCoordinates(40.7128, -74.006);
       expect(region).toBe('해외');
     });
 

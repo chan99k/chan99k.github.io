@@ -5,7 +5,10 @@ import './globals.css';
 import { SITE_CONFIG } from '@/lib/constants';
 import { MainLayout } from '@/components/layout';
 import { generateSEOMetadata, generateWebsiteJsonLd } from '@/lib/seo';
-import { PerformanceProvider, PerformanceDebugger } from '@/components/providers/PerformanceProvider';
+import {
+  PerformanceProvider,
+  PerformanceDebugger,
+} from '@/components/providers/PerformanceProvider';
 
 const inter = Inter({
   variable: '--font-sans',
@@ -30,22 +33,24 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <head>
         <script
-          type="application/ld+json"
+          type='application/ld+json'
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(websiteJsonLd),
           }}
         />
         <link
-          rel="alternate"
-          type="application/rss+xml"
+          rel='alternate'
+          type='application/rss+xml'
           title={`${SITE_CONFIG.name} RSS Feed`}
-          href="/rss.xml"
+          href='/rss.xml'
         />
       </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
-        <PerformanceProvider enableAnalytics={process.env.NODE_ENV === 'production'}>
+        <PerformanceProvider
+          enableAnalytics={process.env.NODE_ENV === 'production'}
+        >
           <ThemeProvider
             attribute='class'
             defaultTheme='system'

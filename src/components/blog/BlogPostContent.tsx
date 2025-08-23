@@ -21,7 +21,9 @@ const blogMdxComponents = {
 };
 
 export function BlogPostContent({ content }: BlogPostContentProps) {
-  const [mdxSource, setMdxSource] = useState<MDXRemoteSerializeResult | null>(null);
+  const [mdxSource, setMdxSource] = useState<MDXRemoteSerializeResult | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -78,7 +80,9 @@ export function BlogPostContent({ content }: BlogPostContentProps) {
         setMdxSource(mdxSource);
       } catch (err) {
         console.error('Error processing MDX:', err);
-        setError(err instanceof Error ? err.message : 'Failed to process content');
+        setError(
+          err instanceof Error ? err.message : 'Failed to process content'
+        );
       } finally {
         setIsLoading(false);
       }
@@ -89,36 +93,36 @@ export function BlogPostContent({ content }: BlogPostContentProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-3 text-gray-600 dark:text-gray-400">Loading content...</span>
+      <div className='flex items-center justify-center py-12'>
+        <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600'></div>
+        <span className='ml-3 text-gray-600 dark:text-gray-400'>
+          Loading content...
+        </span>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
-        <h3 className="text-red-800 dark:text-red-200 font-semibold mb-2">
+      <div className='bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6'>
+        <h3 className='text-red-800 dark:text-red-200 font-semibold mb-2'>
           Error Loading Content
         </h3>
-        <p className="text-red-600 dark:text-red-400 text-sm">
-          {error}
-        </p>
+        <p className='text-red-600 dark:text-red-400 text-sm'>{error}</p>
       </div>
     );
   }
 
   if (!mdxSource) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-500 dark:text-gray-400">No content available</p>
+      <div className='text-center py-12'>
+        <p className='text-gray-500 dark:text-gray-400'>No content available</p>
       </div>
     );
   }
 
   return (
-    <div className="prose prose-lg dark:prose-invert max-w-none">
+    <div className='prose prose-lg dark:prose-invert max-w-none'>
       <MDXRemote {...mdxSource} components={blogMdxComponents} />
     </div>
   );

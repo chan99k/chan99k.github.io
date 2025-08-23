@@ -3,16 +3,8 @@
   "settings": {
     "quality": 85,
     "progressive": true,
-    "sizes": [
-      400,
-      800,
-      1200,
-      1600
-    ],
-    "formats": [
-      "webp",
-      "jpg"
-    ],
+    "sizes": [400, 800, 1200, 1600],
+    "formats": ["webp", "jpg"],
     "maxWidth": 1920,
     "maxHeight": 1080
   },

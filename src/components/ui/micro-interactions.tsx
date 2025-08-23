@@ -11,7 +11,11 @@ interface HoverLiftProps {
   liftHeight?: number;
 }
 
-export function HoverLift({ children, className, liftHeight = 4 }: HoverLiftProps) {
+export function HoverLift({
+  children,
+  className,
+  liftHeight = 4,
+}: HoverLiftProps) {
   return (
     <motion.div
       className={className}
@@ -30,7 +34,11 @@ interface HoverScaleProps {
   scale?: number;
 }
 
-export function HoverScale({ children, className, scale = 1.05 }: HoverScaleProps) {
+export function HoverScale({
+  children,
+  className,
+  scale = 1.05,
+}: HoverScaleProps) {
   return (
     <motion.div
       className={className}
@@ -49,7 +57,11 @@ interface TapFeedbackProps {
   scale?: number;
 }
 
-export function TapFeedback({ children, className, scale = 0.95 }: TapFeedbackProps) {
+export function TapFeedback({
+  children,
+  className,
+  scale = 0.95,
+}: TapFeedbackProps) {
   return (
     <motion.div
       className={className}
@@ -111,11 +123,15 @@ export function Pulse({ children, className, continuous = false }: PulseProps) {
     <motion.div
       className={className}
       animate={continuous ? { scale: [1, 1.05, 1] } : {}}
-      transition={continuous ? { 
-        duration: 2, 
-        repeat: Infinity, 
-        ease: 'easeInOut' 
-      } : {}}
+      transition={
+        continuous
+          ? {
+              duration: 2,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }
+          : {}
+      }
     >
       {children}
     </motion.div>
@@ -157,7 +173,11 @@ interface MagneticProps {
   strength?: number;
 }
 
-export function Magnetic({ children, className, strength = 0.3 }: MagneticProps) {
+export function Magnetic({
+  children,
+  className,
+  strength = 0.3,
+}: MagneticProps) {
   return (
     <motion.div
       className={className}
@@ -176,10 +196,10 @@ interface RevealOnScrollProps {
   direction?: 'up' | 'down' | 'left' | 'right';
 }
 
-export function RevealOnScroll({ 
-  children, 
-  className, 
-  direction = 'up' 
+export function RevealOnScroll({
+  children,
+  className,
+  direction = 'up',
 }: RevealOnScrollProps) {
   const directionVariants = {
     up: { y: 50, opacity: 0 },
@@ -214,7 +234,7 @@ export function Typewriter({ text, className, speed = 50 }: TypewriterProps) {
       className={className}
       initial={{ width: 0 }}
       animate={{ width: 'auto' }}
-      transition={{ duration: text.length * speed / 1000, ease: 'linear' }}
+      transition={{ duration: (text.length * speed) / 1000, ease: 'linear' }}
       style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}
     >
       {text}

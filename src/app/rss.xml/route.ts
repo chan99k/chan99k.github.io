@@ -5,16 +5,16 @@ export const dynamic = 'force-static';
 
 export async function GET() {
   const posts = await getBlogPosts();
-  
+
   // Filter out draft posts in production
   const publishedPosts = posts.filter(post => !post.draft);
-  
+
   const rssItems = publishedPosts
     .slice(0, 20) // Limit to 20 most recent posts
     .map(post => {
       const postUrl = `${SITE_CONFIG.url}/blog/${post.slug}`;
       const pubDate = new Date(post.date).toUTCString();
-      
+
       return `
     <item>
       <title><![CDATA[${post.title}]]></title>

@@ -6,7 +6,7 @@ export const dynamic = 'force-static';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_CONFIG.url;
-  
+
   // Get all blog posts and restaurant reviews
   const [blogPosts, restaurantReviews] = await Promise.all([
     getBlogPosts(),
@@ -32,13 +32,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/blog`,
-      lastModified: publishedPosts.length > 0 ? new Date(publishedPosts[0].date) : new Date(),
+      lastModified:
+        publishedPosts.length > 0
+          ? new Date(publishedPosts[0].date)
+          : new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/reviews`,
-      lastModified: restaurantReviews.length > 0 ? new Date(restaurantReviews[0].visitDate) : new Date(),
+      lastModified:
+        restaurantReviews.length > 0
+          ? new Date(restaurantReviews[0].visitDate)
+          : new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     },

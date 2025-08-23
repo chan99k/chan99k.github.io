@@ -25,12 +25,14 @@ export function useResponsiveAnimation(
   config: ResponsiveAnimationConfig,
   breakpoints: BreakpointConfig = defaultBreakpoints
 ) {
-  const [currentVariants, setCurrentVariants] = useState<Variants>(config.mobile);
+  const [currentVariants, setCurrentVariants] = useState<Variants>(
+    config.mobile
+  );
 
   useEffect(() => {
     const updateVariants = () => {
       const width = window.innerWidth;
-      
+
       if (width < breakpoints.mobile) {
         setCurrentVariants(config.mobile);
       } else if (width < breakpoints.tablet) {

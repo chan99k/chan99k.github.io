@@ -20,28 +20,27 @@ export function generateImageSizes(breakpoints: {
   desktop?: number;
   wide?: number;
 }): string {
-  const {
-    mobile = 100,
-    tablet = 50,
-    desktop = 33,
-    wide = 25
-  } = breakpoints;
+  const { mobile = 100, tablet = 50, desktop = 33, wide = 25 } = breakpoints;
 
   return [
     `(max-width: 640px) ${mobile}vw`,
     `(max-width: 768px) ${tablet}vw`,
     `(max-width: 1024px) ${desktop}vw`,
-    `${wide}vw`
+    `${wide}vw`,
   ].join(', ');
 }
 
 /**
  * Generate blur placeholder for images
  */
-export function generateBlurDataURL(width: number = 10, height: number = 10): string {
+export function generateBlurDataURL(
+  width: number = 10,
+  height: number = 10
+): string {
   // Fallback for SSR and test environments
-  const fallbackDataURL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q==';
-  
+  const fallbackDataURL =
+    'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q==';
+
   if (typeof window === 'undefined') {
     return fallbackDataURL;
   }
@@ -51,7 +50,7 @@ export function generateBlurDataURL(width: number = 10, height: number = 10): st
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
-    
+
     if (ctx) {
       // Create a simple gradient blur effect
       const gradient = ctx.createLinearGradient(0, 0, width, height);
@@ -76,11 +75,19 @@ export function getOptimalImageFormat(): 'webp' | 'avif' | 'jpeg' {
   if (typeof window === 'undefined') return 'webp';
 
   // Check for AVIF support
-  const avifSupport = document.createElement('canvas').toDataURL('image/avif').indexOf('data:image/avif') === 0;
+  const avifSupport =
+    document
+      .createElement('canvas')
+      .toDataURL('image/avif')
+      .indexOf('data:image/avif') === 0;
   if (avifSupport) return 'avif';
 
   // Check for WebP support
-  const webpSupport = document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  const webpSupport =
+    document
+      .createElement('canvas')
+      .toDataURL('image/webp')
+      .indexOf('data:image/webp') === 0;
   if (webpSupport) return 'webp';
 
   return 'jpeg';
@@ -89,16 +96,19 @@ export function getOptimalImageFormat(): 'webp' | 'avif' | 'jpeg' {
 /**
  * Preload critical images
  */
-export function preloadImage(src: string, priority: boolean = false): Promise<void> {
+export function preloadImage(
+  src: string,
+  priority: boolean = false
+): Promise<void> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve();
     img.onerror = reject;
-    
+
     if (priority) {
       img.fetchPriority = 'high';
     }
-    
+
     img.src = src;
   });
 }
@@ -121,7 +131,7 @@ export function createImageObserver(
     ...options,
   };
 
-  return new IntersectionObserver((entries) => {
+  return new IntersectionObserver(entries => {
     entries.forEach(callback);
   }, defaultOptions);
 }
@@ -161,9 +171,7 @@ export const IMAGE_CONFIGS = {
  * Generate srcSet for responsive images
  */
 export function generateSrcSet(baseSrc: string, sizes: number[]): string {
-  return sizes
-    .map(size => `${baseSrc}?w=${size}&q=85 ${size}w`)
-    .join(', ');
+  return sizes.map(size => `${baseSrc}?w=${size}&q=85 ${size}w`).join(', ');
 }
 
 /**
@@ -174,15 +182,29 @@ export class ImageOptimizer {
    * Validate if file has a valid image format
    */
   static isValidImageFormat(filename: string): boolean {
-    const validExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.svg'];
-    const extension = filename.toLowerCase().substring(filename.lastIndexOf('.'));
+    const validExtensions = [
+      '.jpg',
+      '.jpeg',
+      '.png',
+      '.webp',
+      '.avif',
+      '.gif',
+      '.svg',
+    ];
+    const extension = filename
+      .toLowerCase()
+      .substring(filename.lastIndexOf('.'));
     return validExtensions.includes(extension);
   }
 
   /**
    * Generate image path for different content types
    */
-  static generateImagePath(contentType: string, filename: string, subfolder?: string): string {
+  static generateImagePath(
+    contentType: string,
+    filename: string,
+    subfolder?: string
+  ): string {
     const basePath = '/public/images';
     const subfolderPath = subfolder ? `/${subfolder}` : '';
     return `${basePath}/${contentType}${subfolderPath}/${filename}`;
@@ -192,8 +214,8 @@ export class ImageOptimizer {
    * Get optimized image props for Next.js Image component
    */
   static getOptimizedImageProps(
-    src: string, 
-    alt: string, 
+    src: string,
+    alt: string,
     options: {
       width?: number;
       height?: number;
@@ -207,7 +229,7 @@ export class ImageOptimizer {
       height = 600,
       quality = 85,
       priority = false,
-      configType = 'card'
+      configType = 'card',
     } = options;
 
     const config = IMAGE_CONFIGS[configType];
@@ -240,9 +262,10 @@ export class ImageOptimizer {
   /**
    * Validate frontmatter images array
    */
-  static validateFrontmatterImages(
-    images: unknown[]
-  ): { isValid: boolean; errors: string[] } {
+  static validateFrontmatterImages(images: unknown[]): {
+    isValid: boolean;
+    errors: string[];
+  } {
     const errors: string[] = [];
 
     if (!Array.isArray(images)) {
@@ -260,7 +283,9 @@ export class ImageOptimizer {
         if (!imageObj.src || typeof imageObj.src !== 'string') {
           errors.push(`Image at index ${index} missing or invalid src`);
         } else if (!this.isValidImageFormat(imageObj.src)) {
-          errors.push(`Image at index ${index} has invalid format: ${imageObj.src}`);
+          errors.push(
+            `Image at index ${index} has invalid format: ${imageObj.src}`
+          );
         }
         if (!imageObj.alt || typeof imageObj.alt !== 'string') {
           errors.push(`Image at index ${index} missing or invalid alt text`);

@@ -85,9 +85,9 @@ export function useIsTouchDevice() {
     const checkTouchDevice = () => {
       setIsTouchDevice(
         'ontouchstart' in window ||
-        navigator.maxTouchPoints > 0 ||
-        // @ts-expect-error - msMaxTouchPoints is not in standard types
-        navigator.msMaxTouchPoints > 0
+          navigator.maxTouchPoints > 0 ||
+          // @ts-expect-error - msMaxTouchPoints is not in standard types
+          navigator.msMaxTouchPoints > 0
       );
     };
 

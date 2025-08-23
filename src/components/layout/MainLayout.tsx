@@ -10,12 +10,10 @@ interface MainLayoutProps {
 
 export function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="min-h-screen-safe flex flex-col touch-manipulation">
+    <div className='min-h-screen-safe flex flex-col touch-manipulation'>
       <Header />
-      <main className="flex-1 relative">
-        <PageTransition>
-          {children}
-        </PageTransition>
+      <main className='flex-1 relative'>
+        <PageTransition>{children}</PageTransition>
       </main>
       <Footer />
       <ScrollToTop />

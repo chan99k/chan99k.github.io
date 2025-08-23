@@ -20,7 +20,8 @@ describe('Content Management System', () => {
         author: 'Test Author',
       };
 
-      const result = FrontmatterValidator.validateBlogFrontmatter(validBlogFrontmatter);
+      const result =
+        FrontmatterValidator.validateBlogFrontmatter(validBlogFrontmatter);
       expect(result.success).toBe(true);
       expect(result.data).toBeDefined();
     });
@@ -32,7 +33,9 @@ describe('Content Management System', () => {
         tags: 'not-an-array',
       };
 
-      const result = FrontmatterValidator.validateBlogFrontmatter(invalidBlogFrontmatter);
+      const result = FrontmatterValidator.validateBlogFrontmatter(
+        invalidBlogFrontmatter
+      );
       expect(result.success).toBe(false);
       expect(result.errors).toBeDefined();
       expect(result.errors!.length).toBeGreaterThan(0);
@@ -45,7 +48,7 @@ describe('Content Management System', () => {
         name: 'Test Restaurant',
         location: {
           address: '123 Test St',
-          coordinates: { lat: 37.5665, lng: 126.9780 },
+          coordinates: { lat: 37.5665, lng: 126.978 },
           region: 'Seoul',
         },
         rating: 4,
@@ -60,7 +63,9 @@ describe('Content Management System', () => {
         },
       };
 
-      const result = FrontmatterValidator.validateRestaurantFrontmatter(validRestaurantFrontmatter);
+      const result = FrontmatterValidator.validateRestaurantFrontmatter(
+        validRestaurantFrontmatter
+      );
       expect(result.success).toBe(true);
     });
   });
@@ -74,19 +79,32 @@ describe('Content Management System', () => {
     });
 
     it('should generate correct image paths', () => {
-      const blogImagePath = ImageOptimizer.generateImagePath('blog', 'test.jpg');
+      const blogImagePath = ImageOptimizer.generateImagePath(
+        'blog',
+        'test.jpg'
+      );
       expect(blogImagePath).toBe('/public/images/blog/test.jpg');
 
-      const portfolioImagePath = ImageOptimizer.generateImagePath('portfolio', 'project.png', 'subfolder');
-      expect(portfolioImagePath).toBe('/public/images/portfolio/subfolder/project.png');
+      const portfolioImagePath = ImageOptimizer.generateImagePath(
+        'portfolio',
+        'project.png',
+        'subfolder'
+      );
+      expect(portfolioImagePath).toBe(
+        '/public/images/portfolio/subfolder/project.png'
+      );
     });
 
     it('should create optimized image props', () => {
-      const props = ImageOptimizer.getOptimizedImageProps('/test.jpg', 'Test image', {
-        width: 800,
-        height: 600,
-        priority: true,
-      });
+      const props = ImageOptimizer.getOptimizedImageProps(
+        '/test.jpg',
+        'Test image',
+        {
+          width: 800,
+          height: 600,
+          priority: true,
+        }
+      );
 
       expect(props.src).toBe('/test.jpg');
       expect(props.alt).toBe('Test image');
@@ -149,17 +167,25 @@ This is the first paragraph that should be used as excerpt.
 This is the second paragraph that should not be included.`;
 
       const excerpt = extractExcerpt(content, 50);
-      expect(excerpt).toBe('Heading This is the first paragraph that should...');
+      expect(excerpt).toBe(
+        'Heading This is the first paragraph that should...'
+      );
     });
   });
 
   describe('Content Type Detection', () => {
     it('should detect content type from file path', () => {
       const { getContentTypeFromPath } = jest.requireActual('../frontmatter');
-      
-      expect(getContentTypeFromPath('/content/blog/test.md')).toBe(ContentType.BLOG);
-      expect(getContentTypeFromPath('/content/reviews/restaurant.md')).toBe(ContentType.RESTAURANT);
-      expect(getContentTypeFromPath('/content/portfolio/portfolio.md')).toBe(ContentType.PORTFOLIO);
+
+      expect(getContentTypeFromPath('/content/blog/test.md')).toBe(
+        ContentType.BLOG
+      );
+      expect(getContentTypeFromPath('/content/reviews/restaurant.md')).toBe(
+        ContentType.RESTAURANT
+      );
+      expect(getContentTypeFromPath('/content/portfolio/portfolio.md')).toBe(
+        ContentType.PORTFOLIO
+      );
       expect(getContentTypeFromPath('/other/file.md')).toBe(null);
     });
   });

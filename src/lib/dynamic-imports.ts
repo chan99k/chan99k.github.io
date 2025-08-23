@@ -29,12 +29,16 @@ const DynamicError = () => {
     React.createElement(
       'div',
       null,
-      React.createElement('p', { className: 'text-muted-foreground mb-2' }, 'Failed to load component'),
+      React.createElement(
+        'p',
+        { className: 'text-muted-foreground mb-2' },
+        'Failed to load component'
+      ),
       React.createElement(
         'button',
         {
           onClick: () => window.location.reload(),
-          className: 'text-primary hover:underline'
+          className: 'text-primary hover:underline',
         },
         'Retry'
       )
@@ -53,10 +57,7 @@ export function createDynamicComponent<T = Record<string, unknown>>(
     ssr?: boolean;
   } = {}
 ) {
-  const {
-    loading = DynamicLoading,
-    ssr = false,
-  } = options;
+  const { loading = DynamicLoading, ssr = false } = options;
 
   return dynamic(importFn, {
     loading,
@@ -74,18 +75,12 @@ function createDynamicFromNamed(
     ssr?: boolean;
   } = {}
 ) {
-  const {
-    loading = DynamicLoading,
-    ssr = false,
-  } = options;
+  const { loading = DynamicLoading, ssr = false } = options;
 
-  return dynamic(
-    () => importFn().then(mod => ({ default: mod[exportName] })),
-    {
-      loading,
-      ssr,
-    }
-  );
+  return dynamic(() => importFn().then(mod => ({ default: mod[exportName] })), {
+    loading,
+    ssr,
+  });
 }
 
 /**
@@ -94,85 +89,115 @@ function createDynamicFromNamed(
 
 // Blog components (heavy due to MDX processing)
 export const LazyCommentSection = dynamic(
-  () => import('@/components/blog/CommentSection').then(mod => ({ default: mod.CommentSection })),
-  { 
+  () =>
+    import('@/components/blog/CommentSection').then(mod => ({
+      default: mod.CommentSection,
+    })),
+  {
     loading: DynamicLoading,
-    ssr: false 
+    ssr: false,
   }
 );
 
 export const LazyCodeBlock = dynamic(
-  () => import('@/components/blog/CodeBlock').then(mod => ({ default: mod.CodeBlock })),
-  { 
+  () =>
+    import('@/components/blog/CodeBlock').then(mod => ({
+      default: mod.CodeBlock,
+    })),
+  {
     loading: DynamicLoading,
-    ssr: false 
+    ssr: false,
   }
 );
 
 export const LazyTableOfContents = dynamic(
-  () => import('@/components/blog/TableOfContents').then(mod => ({ default: mod.TableOfContents })),
-  { 
+  () =>
+    import('@/components/blog/TableOfContents').then(mod => ({
+      default: mod.TableOfContents,
+    })),
+  {
     loading: DynamicLoading,
-    ssr: false 
+    ssr: false,
   }
 );
 
 // Portfolio components (heavy due to animations)
 export const LazyProblemSolutionCard = dynamic(
-  () => import('@/components/portfolio/ProblemSolutionCard').then(mod => ({ default: mod.ProblemSolutionCard })),
-  { 
+  () =>
+    import('@/components/portfolio/ProblemSolutionCard').then(mod => ({
+      default: mod.ProblemSolutionCard,
+    })),
+  {
     loading: DynamicLoading,
-    ssr: false 
+    ssr: false,
   }
 );
 
 export const LazyProjectCard = dynamic(
-  () => import('@/components/portfolio/ProjectCard').then(mod => ({ default: mod.ProjectCard })),
-  { 
+  () =>
+    import('@/components/portfolio/ProjectCard').then(mod => ({
+      default: mod.ProjectCard,
+    })),
+  {
     loading: DynamicLoading,
-    ssr: false 
+    ssr: false,
   }
 );
 
 // Review components (heavy due to map integration)
 export const LazyMapIntegration = dynamic(
-  () => import('@/components/reviews/MapIntegration').then(mod => ({ default: mod.MapIntegration })),
-  { 
+  () =>
+    import('@/components/reviews/MapIntegration').then(mod => ({
+      default: mod.MapIntegration,
+    })),
+  {
     loading: DynamicLoading,
-    ssr: false 
+    ssr: false,
   }
 );
 
 export const LazyRestaurantMap = dynamic(
-  () => import('@/components/reviews/RestaurantMap').then(mod => ({ default: mod.RestaurantMap })),
-  { 
+  () =>
+    import('@/components/reviews/RestaurantMap').then(mod => ({
+      default: mod.RestaurantMap,
+    })),
+  {
     loading: DynamicLoading,
-    ssr: false 
+    ssr: false,
   }
 );
 
 export const LazyImageGallery = dynamic(
-  () => import('@/components/reviews/ImageGallery').then(mod => ({ default: mod.ImageGallery })),
-  { 
+  () =>
+    import('@/components/reviews/ImageGallery').then(mod => ({
+      default: mod.ImageGallery,
+    })),
+  {
     loading: DynamicLoading,
-    ssr: false 
+    ssr: false,
   }
 );
 
 // UI components (heavy due to animations)
 export const LazyAnimatedCard = dynamic(
-  () => import('@/components/ui/animated-card').then(mod => ({ default: mod.AnimatedCard })),
-  { 
+  () =>
+    import('@/components/ui/animated-card').then(mod => ({
+      default: mod.AnimatedCard,
+    })),
+  {
     loading: DynamicLoading,
-    ssr: false 
+    ssr: false,
   }
 );
 
 export const LazyPageTransition = dynamic(
-  () => import('@/components/ui/page-transition').then(mod => ({ default: mod.PageTransition })),
-  { 
+  () =>
+    import('@/components/ui/page-transition').then(mod => ({
+      default: mod.PageTransition,
+    })),
+  {
     loading: DynamicLoading,
-    ssr: false 
+    ssr: false,
   }
 );
 
@@ -205,24 +230,33 @@ export const preloadComponents = {
  */
 export const LazyPages = {
   Portfolio: dynamic(
-    () => import('@/components/portfolio/PortfolioPage').then(mod => ({ default: mod.PortfolioPage })),
-    { 
+    () =>
+      import('@/components/portfolio/PortfolioPage').then(mod => ({
+        default: mod.PortfolioPage,
+      })),
+    {
       loading: DynamicLoading,
-      ssr: true 
+      ssr: true,
     }
   ),
   BlogPost: dynamic(
-    () => import('@/components/blog/BlogPostPage').then(mod => ({ default: mod.BlogPostPage })),
-    { 
+    () =>
+      import('@/components/blog/BlogPostPage').then(mod => ({
+        default: mod.BlogPostPage,
+      })),
+    {
       loading: DynamicLoading,
-      ssr: true 
+      ssr: true,
     }
   ),
   Reviews: dynamic(
-    () => import('@/components/reviews/RestaurantReviewsList').then(mod => ({ default: mod.RestaurantReviewsList })),
-    { 
+    () =>
+      import('@/components/reviews/RestaurantReviewsList').then(mod => ({
+        default: mod.RestaurantReviewsList,
+      })),
+    {
       loading: DynamicLoading,
-      ssr: true 
+      ssr: true,
     }
   ),
 };
@@ -242,8 +276,8 @@ export function useLazyLoad<T extends HTMLElement>(
   };
 
   if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
           callback();
           observer.unobserve(entry.target);
@@ -274,24 +308,9 @@ export function prefetchOnHover(href: string) {
  */
 export const BUNDLE_CONFIG = {
   // Critical components that should be in main bundle
-  critical: [
-    'layout',
-    'navigation',
-    'footer',
-  ],
+  critical: ['layout', 'navigation', 'footer'],
   // Components that can be lazy loaded
-  lazy: [
-    'comments',
-    'maps',
-    'galleries',
-    'animations',
-  ],
+  lazy: ['comments', 'maps', 'galleries', 'animations'],
   // Vendor libraries that should be split
-  vendors: [
-    'react',
-    'react-dom',
-    'next',
-    'framer-motion',
-    'lucide-react',
-  ],
+  vendors: ['react', 'react-dom', 'next', 'framer-motion', 'lucide-react'],
 } as const;

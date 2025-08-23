@@ -15,7 +15,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <button className="p-2 text-muted-foreground">
+      <button className='p-2 text-muted-foreground'>
         <Sun size={18} />
       </button>
     );
@@ -24,8 +24,8 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="p-2 text-muted-foreground hover:text-primary transition-colors rounded-md hover:bg-accent"
-      aria-label="Toggle theme"
+      className='p-2 text-muted-foreground hover:text-primary transition-colors rounded-md hover:bg-accent'
+      aria-label='Toggle theme'
     >
       {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
     </button>

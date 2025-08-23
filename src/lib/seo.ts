@@ -46,12 +46,14 @@ export function generateSEOMetadata({
     title: fullTitle,
     description,
     keywords: allKeywords,
-    authors: authors ? authors.map(name => ({ name })) : [
-      {
-        name: SITE_CONFIG.author.name,
-        url: SITE_CONFIG.author.github,
-      },
-    ],
+    authors: authors
+      ? authors.map(name => ({ name }))
+      : [
+          {
+            name: SITE_CONFIG.author.name,
+            url: SITE_CONFIG.author.github,
+          },
+        ],
     creator: SITE_CONFIG.author.name,
     publisher: SITE_CONFIG.author.name,
     formatDetection: {
@@ -78,14 +80,16 @@ export function generateSEOMetadata({
       title: fullTitle,
       description,
       siteName: SITE_CONFIG.name,
-      images: imageUrl ? [
-        {
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-          alt: title || SITE_CONFIG.name,
-        },
-      ] : undefined,
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              width: 1200,
+              height: 630,
+              alt: title || SITE_CONFIG.name,
+            },
+          ]
+        : undefined,
       ...(type === 'article' && {
         publishedTime,
         modifiedTime,
@@ -161,8 +165,15 @@ export function generateBlogPostMetadata({
 export function generatePortfolioMetadata(): Metadata {
   return generateSEOMetadata({
     title: 'Portfolio',
-    description: 'Software developer portfolio showcasing projects, experience, and technical skills.',
-    keywords: ['portfolio', 'projects', 'experience', 'skills', 'software development'],
+    description:
+      'Software developer portfolio showcasing projects, experience, and technical skills.',
+    keywords: [
+      'portfolio',
+      'projects',
+      'experience',
+      'skills',
+      'software development',
+    ],
     url: '/portfolio',
   });
 }
@@ -170,8 +181,15 @@ export function generatePortfolioMetadata(): Metadata {
 export function generateBlogListMetadata(): Metadata {
   return generateSEOMetadata({
     title: 'Blog',
-    description: 'Technical blog posts about software development, programming, and technology.',
-    keywords: ['blog', 'technical writing', 'programming', 'software development', 'tutorials'],
+    description:
+      'Technical blog posts about software development, programming, and technology.',
+    keywords: [
+      'blog',
+      'technical writing',
+      'programming',
+      'software development',
+      'tutorials',
+    ],
     url: '/blog',
   });
 }
@@ -179,8 +197,15 @@ export function generateBlogListMetadata(): Metadata {
 export function generateRestaurantReviewsMetadata(): Metadata {
   return generateSEOMetadata({
     title: 'Restaurant Reviews',
-    description: 'Personal restaurant reviews and food recommendations with photos and ratings.',
-    keywords: ['restaurant reviews', 'food', 'dining', 'recommendations', 'cuisine'],
+    description:
+      'Personal restaurant reviews and food recommendations with photos and ratings.',
+    keywords: [
+      'restaurant reviews',
+      'food',
+      'dining',
+      'recommendations',
+      'cuisine',
+    ],
     url: '/reviews',
   });
 }
@@ -204,7 +229,7 @@ export function generateBlogPostJsonLd({
   coverImage?: string;
 }) {
   const url = `${SITE_CONFIG.url}/blog/${slug}`;
-  
+
   return {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -249,8 +274,6 @@ export function generateWebsiteJsonLd() {
       email: SITE_CONFIG.author.email,
       url: SITE_CONFIG.author.github,
     },
-    sameAs: [
-      SITE_CONFIG.author.github,
-    ],
+    sameAs: [SITE_CONFIG.author.github],
   };
 }

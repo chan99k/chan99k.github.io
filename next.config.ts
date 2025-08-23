@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
 import remarkGfm from 'remark-gfm';
 import remarkReadingTime from 'remark-reading-time';
@@ -62,10 +62,7 @@ const nextConfig: NextConfig = {
 
 const withMDX = createMDX({
   options: {
-    remarkPlugins: [
-      remarkGfm,
-      remarkReadingTime,
-    ],
+    remarkPlugins: [remarkGfm, remarkReadingTime],
     rehypePlugins: [
       rehypeRaw,
       rehypeHighlight,

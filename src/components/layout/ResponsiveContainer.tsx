@@ -102,7 +102,9 @@ export function ResponsiveGrid({
     columns.xl && `xl:${getGridCols(columns.xl)}`,
     columns['2xl'] && `2xl:${getGridCols(columns['2xl'])}`,
     gapClasses[gap],
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={cn(gridClasses, className)} {...props}>
@@ -166,7 +168,9 @@ export function ResponsiveStack({
     direction.sm && `sm:${getFlexDirection(direction.sm)}`,
     direction.md && `md:${getFlexDirection(direction.md)}`,
     direction.lg && `lg:${getFlexDirection(direction.lg)}`,
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div

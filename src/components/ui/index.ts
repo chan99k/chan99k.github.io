@@ -3,7 +3,12 @@ export * from './animations';
 export * from './animated-button';
 export * from './animated-card';
 export * from './animated-image';
-export { PageTransition, SlideTransition, FadeTransition, ScaleTransition } from './page-transition';
+export {
+  PageTransition,
+  SlideTransition,
+  FadeTransition,
+  ScaleTransition,
+} from './page-transition';
 export * from './micro-interactions';
 
 // Loading and skeleton components

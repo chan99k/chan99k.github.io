@@ -28,17 +28,19 @@ Next.js 14로 구축된 모던한 개인 웹사이트로, 포트폴리오 전시
 
 ### 필수 요구사항
 
-- Node.js 18+ 
+- Node.js 18+
 - npm 또는 yarn
 
 ### 설치
 
 1. 의존성 설치:
+
 ```bash
 npm install
 ```
 
 2. 개발 서버 실행:
+
 ```bash
 npm run dev
 ```

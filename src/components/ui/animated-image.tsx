@@ -5,7 +5,10 @@ import Image, { ImageProps } from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { LoadingSpinner } from './loading';
-import { usePerformanceOptimization, useAdaptiveLoading } from '@/hooks/usePerformanceOptimization';
+import {
+  usePerformanceOptimization,
+  useAdaptiveLoading,
+} from '@/hooks/usePerformanceOptimization';
 import { IMAGE_CONFIGS, generateBlurDataURL } from '@/lib/image-optimization';
 
 interface AnimatedImageProps extends Omit<ImageProps, 'onLoad' | 'onError'> {
@@ -32,14 +35,16 @@ export function AnimatedImage({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(props.src);
-  
+
   const { shouldReduceAnimations } = usePerformanceOptimization();
   const { shouldLoadHighQuality, isSlowConnection } = useAdaptiveLoading();
-  
+
   // Get optimized configuration
   const config = IMAGE_CONFIGS[configType];
-  const quality = adaptiveQuality 
-    ? (shouldLoadHighQuality ? config.quality : Math.max(config.quality - 20, 60))
+  const quality = adaptiveQuality
+    ? shouldLoadHighQuality
+      ? config.quality
+      : Math.max(config.quality - 20, 60)
     : config.quality;
 
   const handleLoad = () => {
@@ -61,26 +66,30 @@ export function AnimatedImage({
       <AnimatePresence>
         {isLoading && showLoader && (
           <motion.div
-            className="absolute inset-0 flex items-center justify-center bg-muted/50 z-10"
+            className='absolute inset-0 flex items-center justify-center bg-muted/50 z-10'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <LoadingSpinner size="md" />
+            <LoadingSpinner size='md' />
           </motion.div>
         )}
       </AnimatePresence>
 
       <motion.div
-        className="relative"
+        className='relative'
         initial={shouldReduceAnimations ? {} : { opacity: 0, scale: 0.95 }}
-        animate={{ 
-          opacity: isLoading ? 0.5 : 1, 
-          scale: 1 
+        animate={{
+          opacity: isLoading ? 0.5 : 1,
+          scale: 1,
         }}
-        transition={shouldReduceAnimations ? { duration: 0 } : { duration: 0.3 }}
-        whileHover={zoomOnHover && !shouldReduceAnimations ? { scale: 1.05 } : {}}
+        transition={
+          shouldReduceAnimations ? { duration: 0 } : { duration: 0.3 }
+        }
+        whileHover={
+          zoomOnHover && !shouldReduceAnimations ? { scale: 1.05 } : {}
+        }
       >
         <Image
           {...props}
@@ -89,7 +98,7 @@ export function AnimatedImage({
           quality={quality}
           sizes={config.sizes}
           priority={config.priority}
-          placeholder="blur"
+          placeholder='blur'
           blurDataURL={generateBlurDataURL()}
           className={cn(
             'transition-all duration-300',
@@ -104,14 +113,14 @@ export function AnimatedImage({
 
       {hasError && !fallbackSrc && (
         <motion.div
-          className="absolute inset-0 flex items-center justify-center bg-muted text-muted-foreground"
+          className='absolute inset-0 flex items-center justify-center bg-muted text-muted-foreground'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="text-center">
-            <div className="text-2xl mb-2">📷</div>
-            <p className="text-sm">Image not available</p>
+          <div className='text-center'>
+            <div className='text-2xl mb-2'>📷</div>
+            <p className='text-sm'>Image not available</p>
           </div>
         </motion.div>
       )}
@@ -130,10 +139,10 @@ interface ImageGalleryProps {
   columns?: number;
 }
 
-export function ImageGallery({ 
-  images, 
-  className, 
-  columns = 3 
+export function ImageGallery({
+  images,
+  className,
+  columns = 3,
 }: ImageGalleryProps) {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
@@ -146,11 +155,13 @@ export function ImageGallery({
 
   return (
     <>
-      <div className={cn(
-        'grid gap-4',
-        gridCols[columns as keyof typeof gridCols],
-        className
-      )}>
+      <div
+        className={cn(
+          'grid gap-4',
+          gridCols[columns as keyof typeof gridCols],
+          className
+        )}
+      >
         {images.map((image, index) => (
           <motion.div
             key={index}
@@ -158,20 +169,20 @@ export function ImageGallery({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
             whileHover={{ y: -4 }}
-            className="cursor-pointer"
+            className='cursor-pointer'
             onClick={() => setSelectedImage(index)}
           >
-            <div className="relative aspect-square rounded-lg overflow-hidden">
+            <div className='relative aspect-square rounded-lg overflow-hidden'>
               <AnimatedImage
                 src={image.src}
                 alt={image.alt}
                 fill
-                className="object-cover"
+                className='object-cover'
                 zoomOnHover
               />
             </div>
             {image.caption && (
-              <p className="text-sm text-muted-foreground mt-2 text-center">
+              <p className='text-sm text-muted-foreground mt-2 text-center'>
                 {image.caption}
               </p>
             )}
@@ -183,28 +194,28 @@ export function ImageGallery({
       <AnimatePresence>
         {selectedImage !== null && (
           <motion.div
-            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+            className='fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
           >
             <motion.div
-              className="relative max-w-4xl max-h-full"
+              className='relative max-w-4xl max-h-full'
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={e => e.stopPropagation()}
             >
               <AnimatedImage
                 src={images[selectedImage].src}
                 alt={images[selectedImage].alt}
                 width={800}
                 height={600}
-                className="max-w-full max-h-full object-contain"
+                className='max-w-full max-h-full object-contain'
               />
               <button
-                className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors"
+                className='absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors'
                 onClick={() => setSelectedImage(null)}
               >
                 ✕

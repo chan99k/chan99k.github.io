@@ -12,16 +12,18 @@ interface BlogPostPageProps {
 
 export async function generateStaticParams() {
   const posts = await getBlogPosts();
-  
-  return posts.map((post) => ({
+
+  return posts.map(post => ({
     slug: post.slug,
   }));
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
   const result = await getBlogPost(slug);
-  
+
   if (!result) {
     return {
       title: 'Post Not Found',
@@ -45,18 +47,19 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 export default async function BlogPost({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const result = await getBlogPost(slug);
-  
+
   if (!result) {
     notFound();
   }
 
   const { post, content } = result;
-  
+
   // Get all posts for navigation
   const allPosts = await getBlogPosts();
   const currentIndex = allPosts.findIndex(p => p.slug === slug);
   const previousPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
-  const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+  const nextPost =
+    currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 
   // Generate JSON-LD structured data
   const jsonLd = generateBlogPostJsonLd({
@@ -72,7 +75,7 @@ export default async function BlogPost({ params }: BlogPostPageProps) {
   return (
     <>
       <script
-        type="application/ld+json"
+        type='application/ld+json'
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(jsonLd),
         }}
