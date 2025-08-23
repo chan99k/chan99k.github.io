@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import 'jest-axe/extend-expect';
 
 // Mock matchMedia for next-themes (only in jsdom environment)
 if (typeof window !== 'undefined') {
@@ -15,4 +16,20 @@ if (typeof window !== 'undefined') {
       dispatchEvent: jest.fn(),
     })),
   });
+
+  // Mock IntersectionObserver
+  global.IntersectionObserver = class IntersectionObserver {
+    constructor() {}
+    observe() {}
+    disconnect() {}
+    unobserve() {}
+  };
+
+  // Mock ResizeObserver
+  global.ResizeObserver = class ResizeObserver {
+    constructor() {}
+    observe() {}
+    disconnect() {}
+    unobserve() {}
+  };
 }
