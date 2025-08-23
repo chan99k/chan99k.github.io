@@ -111,7 +111,7 @@ export const contentFilter = {
     /\b(fuck|fucking|shit|bullshit|damn|hell|bitch|asshole|bastard)\b/i,
     /\b(sex|porn|xxx|adult|nude)\b/i,
     // 한국어 패턴 (한국어는 단어 경계가 필요하지 않음)
-    /(씨발|개새끼|병신|좆|꺼져|씨1발)/i,ㅂ
+    /(씨발|개새끼|병신|좆|꺼져|씨1발)/i,
   ],
 
   /**
