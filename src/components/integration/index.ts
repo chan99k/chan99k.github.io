@@ -1,0 +1,1 @@
+export { BlogPortfolioIntegration } from './BlogPortfolioIntegration';

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { getPortfolioData } from '@/lib/content';
+import { getPortfolioData, getBlogPosts } from '@/lib/content';
 import { PortfolioPage } from '@/components/portfolio/PortfolioPage';
 import { SITE_CONFIG } from '@/lib/constants';
 
@@ -14,7 +14,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Portfolio() {
-  const portfolioData = await getPortfolioData();
+  const [portfolioData, blogPosts] = await Promise.all([
+    getPortfolioData(),
+    getBlogPosts(),
+  ]);
 
   if (!portfolioData) {
     return (
@@ -31,5 +34,5 @@ export default async function Portfolio() {
     );
   }
 
-  return <PortfolioPage data={portfolioData} />;
+  return <PortfolioPage data={portfolioData} blogPosts={blogPosts} />;
 }
