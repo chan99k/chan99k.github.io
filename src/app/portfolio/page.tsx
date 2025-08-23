@@ -1,17 +1,9 @@
 import { Metadata } from 'next';
 import { getPortfolioData, getBlogPosts } from '@/lib/content';
 import { PortfolioPage } from '@/components/portfolio/PortfolioPage';
-import { SITE_CONFIG } from '@/lib/constants';
+import { generatePortfolioMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Portfolio',
-  description: 'Software developer portfolio showcasing projects, experience, and skills',
-  openGraph: {
-    title: 'Portfolio | ' + SITE_CONFIG.name,
-    description: 'Software developer portfolio showcasing projects, experience, and skills',
-    type: 'website',
-  },
-};
+export const metadata: Metadata = generatePortfolioMetadata();
 
 export default async function Portfolio() {
   const [portfolioData, blogPosts] = await Promise.all([

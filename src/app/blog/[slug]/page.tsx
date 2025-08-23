@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getBlogPost, getBlogPosts } from '@/lib/content';
 import { BlogPostPage } from '@/components/blog/BlogPostPage';
-// SITE_CONFIG import removed as it's not used in this file
+import { generateBlogPostMetadata, generateBlogPostJsonLd } from '@/lib/seo';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -30,33 +30,16 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   const { post } = result;
 
-  return {
+  return generateBlogPostMetadata({
     title: post.title,
     description: post.description,
-    keywords: post.tags,
-    authors: [{ name: post.author }],
-    openGraph: {
-      title: post.title,
-      description: post.description,
-      type: 'article',
-      publishedTime: post.date,
-      modifiedTime: post.lastModified,
-      authors: [post.author],
-      tags: post.tags,
-      images: post.coverImage ? [
-        {
-          url: post.coverImage,
-          alt: post.title,
-        }
-      ] : undefined,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.description,
-      images: post.coverImage ? [post.coverImage] : undefined,
-    },
-  };
+    slug: post.slug,
+    date: post.date,
+    lastModified: post.lastModified,
+    tags: post.tags,
+    author: post.author,
+    coverImage: post.coverImage,
+  });
 }
 
 export default async function BlogPost({ params }: BlogPostPageProps) {
@@ -75,12 +58,31 @@ export default async function BlogPost({ params }: BlogPostPageProps) {
   const previousPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 
+  // Generate JSON-LD structured data
+  const jsonLd = generateBlogPostJsonLd({
+    title: post.title,
+    description: post.description,
+    slug: post.slug,
+    date: post.date,
+    lastModified: post.lastModified,
+    author: post.author,
+    coverImage: post.coverImage,
+  });
+
   return (
-    <BlogPostPage
-      post={post}
-      content={content}
-      previousPost={previousPost}
-      nextPost={nextPost}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd),
+        }}
+      />
+      <BlogPostPage
+        post={post}
+        content={content}
+        previousPost={previousPost}
+        nextPost={nextPost}
+      />
+    </>
   );
 }

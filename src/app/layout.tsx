@@ -4,6 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import './globals.css';
 import { SITE_CONFIG } from '@/lib/constants';
 import { MainLayout } from '@/components/layout';
+import { generateSEOMetadata, generateWebsiteJsonLd } from '@/lib/seo';
 
 const inter = Inter({
   variable: '--font-sans',
@@ -15,60 +16,31 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: SITE_CONFIG.name,
-    template: `%s | ${SITE_CONFIG.name}`,
-  },
-  description: SITE_CONFIG.description,
-  keywords: [
-    'portfolio',
-    'blog',
-    'software developer',
-    'web development',
-    'restaurant reviews',
-  ],
-  authors: [
-    {
-      name: SITE_CONFIG.author.name,
-      url: SITE_CONFIG.author.github,
-    },
-  ],
-  creator: SITE_CONFIG.author.name,
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: SITE_CONFIG.url,
-    title: SITE_CONFIG.name,
-    description: SITE_CONFIG.description,
-    siteName: SITE_CONFIG.name,
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: SITE_CONFIG.name,
-    description: SITE_CONFIG.description,
-    creator: '@chan99k',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-};
+export const metadata: Metadata = generateSEOMetadata();
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const websiteJsonLd = generateWebsiteJsonLd();
+
   return (
     <html lang='en' suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteJsonLd),
+          }}
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${SITE_CONFIG.name} RSS Feed`}
+          href="/rss.xml"
+        />
+      </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >

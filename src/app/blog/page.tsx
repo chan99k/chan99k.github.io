@@ -1,17 +1,9 @@
 import { Metadata } from 'next';
 import { getBlogPosts } from '@/lib/content';
 import { BlogPostListWrapper } from '@/components/blog/BlogPostListWrapper';
-import { SITE_CONFIG } from '@/lib/constants';
+import { generateBlogListMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Blog',
-  description: 'Technical blog posts about software development, problem-solving, and learning experiences.',
-  openGraph: {
-    title: 'Blog | ' + SITE_CONFIG.name,
-    description: 'Technical blog posts about software development, problem-solving, and learning experiences.',
-    type: 'website',
-  },
-};
+export const metadata: Metadata = generateBlogListMetadata();
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();
