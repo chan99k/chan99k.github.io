@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -12,7 +13,10 @@
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "perf:audit": "node scripts/performance-audit.js",
+    "perf:lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-report.html",
+    "bundle:analyze": "npx @next/bundle-analyzer"
   },
   "dependencies": {
     "@giscus/react": "^3.1.0",
@@ -20,6 +24,7 @@
     "@mdx-js/react": "^3.1.0",
     "@next/mdx": "^15.5.0",
     "clsx": "^2.1.1",
+    "critters": "^0.0.23",
     "framer-motion": "^12.23.12",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.541.0",
@@ -44,6 +49,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.5.0",
     "@tailwindcss/typography": "^0.5.16",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
@@ -59,6 +65,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
+    "lighthouse": "^12.2.1",
     "prettier": "^3.6.2",
     "tailwindcss": "^3.4.17",
     "ts-jest": "^29.4.1",

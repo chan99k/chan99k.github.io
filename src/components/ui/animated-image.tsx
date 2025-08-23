@@ -5,6 +5,8 @@ import Image, { ImageProps } from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { LoadingSpinner } from './loading';
+import { usePerformanceOptimization, useAdaptiveLoading } from '@/hooks/usePerformanceOptimization';
+import { IMAGE_CONFIGS, generateBlurDataURL } from '@/lib/image-optimization';
 
 interface AnimatedImageProps extends Omit<ImageProps, 'onLoad' | 'onError'> {
   className?: string;
@@ -12,6 +14,8 @@ interface AnimatedImageProps extends Omit<ImageProps, 'onLoad' | 'onError'> {
   showLoader?: boolean;
   fallbackSrc?: string;
   zoomOnHover?: boolean;
+  configType?: keyof typeof IMAGE_CONFIGS;
+  adaptiveQuality?: boolean;
 }
 
 export function AnimatedImage({
@@ -21,11 +25,22 @@ export function AnimatedImage({
   fallbackSrc,
   zoomOnHover = false,
   alt,
+  configType = 'card',
+  adaptiveQuality = true,
   ...props
 }: AnimatedImageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(props.src);
+  
+  const { shouldReduceAnimations } = usePerformanceOptimization();
+  const { shouldLoadHighQuality, isSlowConnection } = useAdaptiveLoading();
+  
+  // Get optimized configuration
+  const config = IMAGE_CONFIGS[configType];
+  const quality = adaptiveQuality 
+    ? (shouldLoadHighQuality ? config.quality : Math.max(config.quality - 20, 60))
+    : config.quality;
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -59,18 +74,23 @@ export function AnimatedImage({
 
       <motion.div
         className="relative"
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={shouldReduceAnimations ? {} : { opacity: 0, scale: 0.95 }}
         animate={{ 
           opacity: isLoading ? 0.5 : 1, 
           scale: 1 
         }}
-        transition={{ duration: 0.3 }}
-        whileHover={zoomOnHover ? { scale: 1.05 } : {}}
+        transition={shouldReduceAnimations ? { duration: 0 } : { duration: 0.3 }}
+        whileHover={zoomOnHover && !shouldReduceAnimations ? { scale: 1.05 } : {}}
       >
         <Image
           {...props}
           src={currentSrc}
           alt={alt}
+          quality={quality}
+          sizes={config.sizes}
+          priority={config.priority}
+          placeholder="blur"
+          blurDataURL={generateBlurDataURL()}
           className={cn(
             'transition-all duration-300',
             hasError && 'grayscale',
@@ -78,6 +98,7 @@ export function AnimatedImage({
           )}
           onLoad={handleLoad}
           onError={handleError}
+          loading={config.priority ? 'eager' : 'lazy'}
         />
       </motion.div>
 

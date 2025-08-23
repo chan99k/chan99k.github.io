@@ -244,9 +244,7 @@ export function validateFrontmatterWithLogging(
   // 레스토랑 리뷰를 위한 추가 이미지 유효성 검사
   if (contentType === ContentType.RESTAURANT && frontmatter.images && Array.isArray(frontmatter.images)) {
     const imageValidation = ImageOptimizer.validateFrontmatterImages(
-      frontmatter.images as unknown[],
-      'reviews',
-      filePath
+      frontmatter.images as unknown[]
     );
     
     if (imageValidation.errors.length > 0) {

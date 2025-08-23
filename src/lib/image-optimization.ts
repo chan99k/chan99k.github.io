@@ -1,356 +1,275 @@
-import path from 'path';
-import fs from 'fs';
-import { ImageData } from '@/types';
+/**
+ * Image optimization utilities for Next.js
+ */
 
-// 이미지 설정
-export const IMAGE_CONFIG = {
-  // 지원되는 형식
-  supportedFormats: ['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.svg'],
-  
-  // 반응형 이미지를 위한 이미지 크기
-  sizes: {
-    thumbnail: 150,
-    small: 320,
-    medium: 640,
-    large: 1024,
-    xlarge: 1280,
-    xxlarge: 1600,
-  },
-  
-  // 품질 설정
-  quality: {
-    thumbnail: 70,
-    default: 85,
-    high: 95,
-  },
-  
-  // 디렉토리
-  directories: {
-    blog: 'public/images/blog',
-    portfolio: 'public/images/portfolio',
-    reviews: 'public/images/reviews',
-    icons: 'public/icons',
-  },
-} as const;
-
-// 이미지 메타데이터 인터페이스
-export interface ImageMetadata {
-  src: string;
-  alt: string;
-  width?: number;
-  height?: number;
-  format?: string;
-  size?: number;
-  optimized?: boolean;
-}
-
-// 이미지 최적화 유틸리티
-export class ImageOptimizer {
-  private static readonly publicDir = path.join(process.cwd(), 'public');
-
-  // 이미지가 존재하는지 확인
-  static imageExists(imagePath: string): boolean {
-    const fullPath = path.join(this.publicDir, imagePath.replace(/^\//, ''));
-    return fs.existsSync(fullPath);
-  }
-
-  // 이미지 메타데이터 가져오기
-  static getImageMetadata(imagePath: string): ImageMetadata | null {
-    const fullPath = path.join(this.publicDir, imagePath.replace(/^\//, ''));
-    
-    if (!fs.existsSync(fullPath)) {
-      return null;
-    }
-
-    try {
-      const stats = fs.statSync(fullPath);
-      const ext = path.extname(imagePath).toLowerCase();
-      
-      return {
-        src: imagePath,
-        alt: path.basename(imagePath, ext),
-        format: ext.replace('.', ''),
-        size: stats.size,
-        optimized: false, // Next.js Image로 처리되면 true가 됨
-      };
-    } catch (error) {
-      console.error(`Error getting image metadata for ${imagePath}:`, error);
-      return null;
-    }
-  }
-
-  // 이미지 형식 유효성 검사
-  static isValidImageFormat(filePath: string): boolean {
-    const ext = path.extname(filePath).toLowerCase();
-    return IMAGE_CONFIG.supportedFormats.includes(ext as typeof IMAGE_CONFIG.supportedFormats[number]);
-  }
-
-  // 반응형 이미지 크기 설정 생성
-  static getResponsiveSizes(breakpoints?: string[]): string {
-    const defaultBreakpoints = [
-      '(max-width: 640px) 100vw',
-      '(max-width: 1024px) 50vw',
-      '33vw'
-    ];
-    
-    return (breakpoints || defaultBreakpoints).join(', ');
-  }
-
-  // Next.js Image 컴포넌트를 위한 최적화된 이미지 props 가져오기
-  static getOptimizedImageProps(
-    src: string,
-    alt: string,
-    options: {
-      width?: number;
-      height?: number;
-      priority?: boolean;
-      quality?: number;
-      sizes?: string;
-      fill?: boolean;
-    } = {}
-  ): { src: string; alt: string; quality: number; priority: boolean; [key: string]: unknown } {
-    const {
-      width,
-      height,
-      priority = false,
-      quality = IMAGE_CONFIG.quality.default,
-      sizes,
-      fill = false,
-    } = options;
-
-    // src가 /로 시작하는지 확인
-    const normalizedSrc = src.startsWith('/') ? src : `/${src}`;
-
-    const props = {
-      src: normalizedSrc,
-      alt,
-      quality,
-      priority,
-    } as { src: string; alt: string; quality: number; priority: boolean; [key: string]: unknown };
-
-    if (fill) {
-      props.fill = true;
-      props.sizes = sizes || this.getResponsiveSizes();
-    } else if (width && height) {
-      props.width = width;
-      props.height = height;
-      if (sizes) {
-        props.sizes = sizes;
-      }
-    }
-
-    return props;
-  }
-
-  // 콘텐츠 타입에 대한 이미지 경로 생성
-  static generateImagePath(
-    contentType: 'blog' | 'portfolio' | 'reviews' | 'icons',
-    filename: string,
-    subfolder?: string
-  ): string {
-    const baseDir = IMAGE_CONFIG.directories[contentType];
-    const subPath = subfolder ? `${subfolder}/` : '';
-    return `/${baseDir}/${subPath}${filename}`;
-  }
-
-  // 이미지 데이터 배열 유효성 검사 및 처리
-  static processImageDataArray(
-    images: (string | ImageData)[],
-    contentType: 'blog' | 'portfolio' | 'reviews' = 'blog',
-    subfolder?: string
-  ): ImageData[] {
-    return images.map((image, index) => {
-      if (typeof image === 'string') {
-        // 문자열을 ImageData로 변환
-        const imagePath = image.startsWith('/') 
-          ? image 
-          : this.generateImagePath(contentType, image, subfolder);
-        
-        const metadata = this.getImageMetadata(imagePath);
-        
-        return {
-          src: imagePath,
-          alt: metadata?.alt || `Image ${index + 1}`,
-          width: metadata?.width,
-          height: metadata?.height,
-        };
-      } else {
-        // 기존 ImageData 유효성 검사
-        const imagePath = image.src.startsWith('/') 
-          ? image.src 
-          : this.generateImagePath(contentType, image.src, subfolder);
-        
-        return {
-          ...image,
-          src: imagePath,
-          alt: image.alt || `Image ${index + 1}`,
-        };
-      }
-    }).filter(image => {
-      // 존재하지 않거나 유효하지 않은 형식의 이미지 필터링
-      if (!this.isValidImageFormat(image.src)) {
-        console.warn(`Invalid image format: ${image.src}`);
-        return false;
-      }
-      
-      if (!this.imageExists(image.src)) {
-        console.warn(`Image not found: ${image.src}`);
-        return false;
-      }
-      
-      return true;
-    });
-  }
-
-  // 누락된 이미지를 위한 플레이스홀더 이미지 가져오기
-  static getPlaceholderImage(
-    width: number = 400,
-    height: number = 300,
-    text: string = 'Image not found'
-  ): ImageData {
-    return {
-      src: `https://via.placeholder.com/${width}x${height}/e5e7eb/6b7280?text=${encodeURIComponent(text)}`,
-      alt: text,
-      width,
-      height,
-    };
-  }
-
-  // 이미지 갤러리 데이터 생성
-  static generateGalleryData(
-    images: (string | ImageData)[],
-    contentType: 'blog' | 'portfolio' | 'reviews' = 'blog',
-    subfolder?: string
-  ): ImageData[] {
-    const processedImages = this.processImageDataArray(images, contentType, subfolder);
-    
-    // 갤러리 전용 메타데이터 추가
-    return processedImages.map((image, index) => ({
-      ...image,
-      // 네비게이션을 위한 갤러리 인덱스 추가
-      galleryIndex: index,
-      // 필요시 썸네일 생성
-      thumbnail: image.src, // 실제 구현에서는 실제 썸네일을 생성할 수 있음
-    }));
-  }
-
-  // frontmatter에서 이미지 유효성 검사
-  static validateFrontmatterImages(
-    images: unknown[],
-    contentType: 'blog' | 'portfolio' | 'reviews',
-    filePath: string
-  ): { valid: ImageData[]; errors: string[] } {
-    const valid: ImageData[] = [];
-    const errors: string[] = [];
-
-    if (!Array.isArray(images)) {
-      errors.push(`Images must be an array in ${filePath}`);
-      return { valid, errors };
-    }
-
-    images.forEach((image, index) => {
-      try {
-        if (typeof image === 'string') {
-          const processedImage = this.processImageDataArray([image], contentType)[0];
-          if (processedImage) {
-            valid.push(processedImage);
-          } else {
-            errors.push(`Invalid image at index ${index} in ${filePath}: ${image}`);
-          }
-        } else if (typeof image === 'object' && image !== null && 'src' in image) {
-          const processedImage = this.processImageDataArray([image as ImageData], contentType)[0];
-          if (processedImage) {
-            valid.push(processedImage);
-          } else {
-            errors.push(`Invalid image object at index ${index} in ${filePath}`);
-          }
-        } else {
-          errors.push(`Invalid image format at index ${index} in ${filePath}`);
-        }
-      } catch (error) {
-        errors.push(`Error processing image at index ${index} in ${filePath}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      }
-    });
-
-    return { valid, errors };
-  }
-}
-
-// 이미지 컴포넌트 props 헬퍼
-export interface OptimizedImageProps {
-  src: string;
-  alt: string;
-  width?: number;
-  height?: number;
-  priority?: boolean;
+export interface OptimizedImageConfig {
   quality?: number;
+  format?: 'webp' | 'avif' | 'auto';
   sizes?: string;
-  fill?: boolean;
-  className?: string;
+  priority?: boolean;
   placeholder?: 'blur' | 'empty';
   blurDataURL?: string;
 }
 
-// 최적화된 이미지 props를 생성하는 헬퍼 함수
-export function createOptimizedImageProps(
-  src: string,
-  alt: string,
-  options: Partial<OptimizedImageProps> = {}
-): OptimizedImageProps {
-  const baseProps = ImageOptimizer.getOptimizedImageProps(src, alt, options);
-  return {
-    ...baseProps,
-    className: options.className,
-    placeholder: options.placeholder,
-    blurDataURL: options.blurDataURL,
-  } as OptimizedImageProps;
+/**
+ * Generate responsive image sizes string
+ */
+export function generateImageSizes(breakpoints: {
+  mobile?: number;
+  tablet?: number;
+  desktop?: number;
+  wide?: number;
+}): string {
+  const {
+    mobile = 100,
+    tablet = 50,
+    desktop = 33,
+    wide = 25
+  } = breakpoints;
+
+  return [
+    `(max-width: 640px) ${mobile}vw`,
+    `(max-width: 768px) ${tablet}vw`,
+    `(max-width: 1024px) ${desktop}vw`,
+    `${wide}vw`
+  ].join(', ');
 }
 
-// 블로그 이미지를 위한 헬퍼 함수
-export function createBlogImageProps(
-  src: string,
-  alt: string,
-  options: Partial<OptimizedImageProps> = {}
-): OptimizedImageProps {
-  const imagePath = ImageOptimizer.generateImagePath('blog', src);
-  return createOptimizedImageProps(imagePath, alt, {
-    quality: IMAGE_CONFIG.quality.high,
-    sizes: ImageOptimizer.getResponsiveSizes([
-      '(max-width: 768px) 100vw',
-      '(max-width: 1200px) 80vw',
-      '60vw'
-    ]),
-    ...options,
+/**
+ * Generate blur placeholder for images
+ */
+export function generateBlurDataURL(width: number = 10, height: number = 10): string {
+  // Fallback for SSR and test environments
+  const fallbackDataURL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q==';
+  
+  if (typeof window === 'undefined') {
+    return fallbackDataURL;
+  }
+
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    
+    if (ctx) {
+      // Create a simple gradient blur effect
+      const gradient = ctx.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, '#f3f4f6');
+      gradient.addColorStop(1, '#e5e7eb');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+      return canvas.toDataURL('image/jpeg', 0.1);
+    }
+  } catch {
+    // Canvas not supported or error occurred
+    console.warn('Canvas not supported, using fallback blur data URL');
+  }
+
+  return fallbackDataURL;
+}
+
+/**
+ * Image format detection and optimization
+ */
+export function getOptimalImageFormat(): 'webp' | 'avif' | 'jpeg' {
+  if (typeof window === 'undefined') return 'webp';
+
+  // Check for AVIF support
+  const avifSupport = document.createElement('canvas').toDataURL('image/avif').indexOf('data:image/avif') === 0;
+  if (avifSupport) return 'avif';
+
+  // Check for WebP support
+  const webpSupport = document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  if (webpSupport) return 'webp';
+
+  return 'jpeg';
+}
+
+/**
+ * Preload critical images
+ */
+export function preloadImage(src: string, priority: boolean = false): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = reject;
+    
+    if (priority) {
+      img.fetchPriority = 'high';
+    }
+    
+    img.src = src;
   });
 }
 
-// 포트폴리오 이미지를 위한 헬퍼 함수
-export function createPortfolioImageProps(
-  src: string,
-  alt: string,
-  options: Partial<OptimizedImageProps> = {}
-): OptimizedImageProps {
-  const imagePath = ImageOptimizer.generateImagePath('portfolio', src);
-  return createOptimizedImageProps(imagePath, alt, {
-    quality: IMAGE_CONFIG.quality.high,
+/**
+ * Lazy load images with intersection observer
+ */
+export function createImageObserver(
+  callback: (entry: IntersectionObserverEntry) => void,
+  options: IntersectionObserverInit = {}
+): IntersectionObserver | null {
+  if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+    return null;
+  }
+
+  const defaultOptions: IntersectionObserverInit = {
+    root: null,
+    rootMargin: '50px',
+    threshold: 0.1,
     ...options,
-  });
+  };
+
+  return new IntersectionObserver((entries) => {
+    entries.forEach(callback);
+  }, defaultOptions);
 }
 
-// 레스토랑 리뷰 이미지를 위한 헬퍼 함수
-export function createReviewImageProps(
-  src: string,
-  alt: string,
-  options: Partial<OptimizedImageProps> = {}
-): OptimizedImageProps {
-  const imagePath = ImageOptimizer.generateImagePath('reviews', src);
-  return createOptimizedImageProps(imagePath, alt, {
-    quality: IMAGE_CONFIG.quality.default,
-    sizes: ImageOptimizer.getResponsiveSizes([
-      '(max-width: 640px) 100vw',
-      '(max-width: 1024px) 50vw',
-      '25vw'
-    ]),
-    ...options,
-  });
+/**
+ * Image size configurations for different use cases
+ */
+export const IMAGE_CONFIGS = {
+  hero: {
+    sizes: generateImageSizes({ mobile: 100, tablet: 100, desktop: 100 }),
+    quality: 90,
+    priority: true,
+  },
+  card: {
+    sizes: generateImageSizes({ mobile: 100, tablet: 50, desktop: 33 }),
+    quality: 85,
+    priority: false,
+  },
+  thumbnail: {
+    sizes: generateImageSizes({ mobile: 50, tablet: 25, desktop: 20 }),
+    quality: 80,
+    priority: false,
+  },
+  gallery: {
+    sizes: generateImageSizes({ mobile: 100, tablet: 50, desktop: 33 }),
+    quality: 85,
+    priority: false,
+  },
+  avatar: {
+    sizes: '(max-width: 640px) 64px, 96px',
+    quality: 90,
+    priority: false,
+  },
+} as const;
+
+/**
+ * Generate srcSet for responsive images
+ */
+export function generateSrcSet(baseSrc: string, sizes: number[]): string {
+  return sizes
+    .map(size => `${baseSrc}?w=${size}&q=85 ${size}w`)
+    .join(', ');
+}
+
+/**
+ * Image optimizer utility class
+ */
+export class ImageOptimizer {
+  /**
+   * Validate if file has a valid image format
+   */
+  static isValidImageFormat(filename: string): boolean {
+    const validExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.svg'];
+    const extension = filename.toLowerCase().substring(filename.lastIndexOf('.'));
+    return validExtensions.includes(extension);
+  }
+
+  /**
+   * Generate image path for different content types
+   */
+  static generateImagePath(contentType: string, filename: string, subfolder?: string): string {
+    const basePath = '/public/images';
+    const subfolderPath = subfolder ? `/${subfolder}` : '';
+    return `${basePath}/${contentType}${subfolderPath}/${filename}`;
+  }
+
+  /**
+   * Get optimized image props for Next.js Image component
+   */
+  static getOptimizedImageProps(
+    src: string, 
+    alt: string, 
+    options: {
+      width?: number;
+      height?: number;
+      quality?: number;
+      priority?: boolean;
+      configType?: keyof typeof IMAGE_CONFIGS;
+    } = {}
+  ) {
+    const {
+      width = 800,
+      height = 600,
+      quality = 85,
+      priority = false,
+      configType = 'card'
+    } = options;
+
+    const config = IMAGE_CONFIGS[configType];
+
+    return {
+      src,
+      alt,
+      width,
+      height,
+      quality: quality,
+      priority: priority || config.priority,
+      sizes: config.sizes,
+      placeholder: 'blur' as const,
+      blurDataURL: generateBlurDataURL(),
+    };
+  }
+
+  /**
+   * Get responsive sizes string
+   */
+  static getResponsiveSizes(breakpoints?: {
+    mobile?: number;
+    tablet?: number;
+    desktop?: number;
+    wide?: number;
+  }): string {
+    return generateImageSizes(breakpoints || {});
+  }
+
+  /**
+   * Validate frontmatter images array
+   */
+  static validateFrontmatterImages(
+    images: unknown[]
+  ): { isValid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    if (!Array.isArray(images)) {
+      errors.push('Images must be an array');
+      return { isValid: false, errors };
+    }
+
+    images.forEach((image, index) => {
+      if (typeof image === 'string') {
+        if (!this.isValidImageFormat(image)) {
+          errors.push(`Image at index ${index} has invalid format: ${image}`);
+        }
+      } else if (typeof image === 'object' && image !== null) {
+        const imageObj = image as Record<string, unknown>;
+        if (!imageObj.src || typeof imageObj.src !== 'string') {
+          errors.push(`Image at index ${index} missing or invalid src`);
+        } else if (!this.isValidImageFormat(imageObj.src)) {
+          errors.push(`Image at index ${index} has invalid format: ${imageObj.src}`);
+        }
+        if (!imageObj.alt || typeof imageObj.alt !== 'string') {
+          errors.push(`Image at index ${index} missing or invalid alt text`);
+        }
+      } else {
+        errors.push(`Image at index ${index} must be string or object`);
+      }
+    });
+
+    return { isValid: errors.length === 0, errors };
+  }
 }

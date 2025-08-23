@@ -5,6 +5,7 @@ import './globals.css';
 import { SITE_CONFIG } from '@/lib/constants';
 import { MainLayout } from '@/components/layout';
 import { generateSEOMetadata, generateWebsiteJsonLd } from '@/lib/seo';
+import { PerformanceProvider, PerformanceDebugger } from '@/components/providers/PerformanceProvider';
 
 const inter = Inter({
   variable: '--font-sans',
@@ -44,14 +45,17 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <MainLayout>{children}</MainLayout>
-        </ThemeProvider>
+        <PerformanceProvider enableAnalytics={process.env.NODE_ENV === 'production'}>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <MainLayout>{children}</MainLayout>
+            <PerformanceDebugger />
+          </ThemeProvider>
+        </PerformanceProvider>
       </body>
     </html>
   );
