@@ -39,7 +39,9 @@
     "integration:cross-browser": "node scripts/cross-browser-test.js",
     "integration:deployment": "node scripts/deployment-validation.js",
     "integration:ux": "node scripts/user-experience-validation.js",
-    "integration:quick": "node scripts/quick-integration-test.js"
+    "integration:quick": "node scripts/quick-integration-test.js",
+    "cleanup": "node scripts/cleanup.js",
+    "cleanup:deep": "node scripts/cleanup.js --deep"
   },
   "dependencies": {
     "@giscus/react": "^3.1.0",
