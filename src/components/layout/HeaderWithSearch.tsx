@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { NAVIGATION_ITEMS, SITE_CONFIG } from '@/lib/constants';
 import { SearchWidget } from '@/components/search';
 import { BlogPost, RestaurantReview, PortfolioData } from '@/types';
 import { AdvancedThemeToggle } from './AdvancedThemeToggle';
+import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 
 interface HeaderWithSearchProps {
   blogPosts: BlogPost[];
@@ -20,6 +22,14 @@ export function HeaderWithSearch({
   portfolioData,
 }: HeaderWithSearchProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActivePath = (href: string) => {
+    if (href === '/') {
+      return pathname === '/';
+    }
+    return pathname.startsWith(href);
+  };
 
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -67,7 +77,11 @@ export function HeaderWithSearch({
               <Link
                 key={item.href}
                 href={item.href}
-                className='text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
+                className={`text-sm font-medium transition-colors ${
+                  isActivePath(item.href)
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                }`}
               >
                 {item.label}
               </Link>
@@ -95,6 +109,13 @@ export function HeaderWithSearch({
           </div>
         </div>
 
+        {/* Breadcrumbs */}
+        {pathname !== '/' && (
+          <div className="py-2 border-t border-gray-100 dark:border-gray-800">
+            <Breadcrumbs />
+          </div>
+        )}
+
         {/* Mobile Search (always visible on mobile) */}
         <div className='lg:hidden pb-4'>
           <SearchWidget
@@ -114,7 +135,11 @@ export function HeaderWithSearch({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className='block px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors'
+                  className={`block px-4 py-2 text-sm font-medium transition-colors ${
+                    isActivePath(item.href)
+                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                      : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.label}
