@@ -57,14 +57,188 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  /* High Contrast Light Theme */
+  .high-contrast-light {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 90%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 20%;
+    --accent: 0 0% 90%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 100% 40%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 80%;
+    --input: 0 0% 80%;
+    --ring: 0 0% 0%;
+  }
+
+  /* High Contrast Dark Theme */
+  .high-contrast-dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 80%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 60%;
+    --destructive-foreground: 0 0% 0%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 100%;
+  }
+
+  /* Sepia Theme */
+  .sepia {
+    --background: 48 100% 96%;
+    --foreground: 25 25% 15%;
+    --card: 48 100% 96%;
+    --card-foreground: 25 25% 15%;
+    --popover: 48 100% 96%;
+    --popover-foreground: 25 25% 15%;
+    --primary: 25 50% 25%;
+    --primary-foreground: 48 100% 96%;
+    --secondary: 48 50% 90%;
+    --secondary-foreground: 25 25% 15%;
+    --muted: 48 50% 90%;
+    --muted-foreground: 25 25% 45%;
+    --accent: 48 50% 90%;
+    --accent-foreground: 25 25% 15%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 48 100% 96%;
+    --border: 48 30% 85%;
+    --input: 48 30% 85%;
+    --ring: 25 50% 25%;
+  }
+
+  /* Custom Blue Theme */
+  .custom-blue {
+    --background: 210 100% 97%;
+    --foreground: 210 100% 15%;
+    --card: 210 100% 97%;
+    --card-foreground: 210 100% 15%;
+    --popover: 210 100% 97%;
+    --popover-foreground: 210 100% 15%;
+    --primary: 210 100% 25%;
+    --primary-foreground: 210 100% 97%;
+    --secondary: 210 100% 92%;
+    --secondary-foreground: 210 100% 15%;
+    --muted: 210 100% 92%;
+    --muted-foreground: 210 50% 45%;
+    --accent: 210 100% 92%;
+    --accent-foreground: 210 100% 15%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 100% 97%;
+    --border: 210 50% 85%;
+    --input: 210 50% 85%;
+    --ring: 210 100% 25%;
+  }
+
+  /* Custom Green Theme */
+  .custom-green {
+    --background: 120 60% 97%;
+    --foreground: 120 100% 15%;
+    --card: 120 60% 97%;
+    --card-foreground: 120 100% 15%;
+    --popover: 120 60% 97%;
+    --popover-foreground: 120 100% 15%;
+    --primary: 120 100% 25%;
+    --primary-foreground: 120 60% 97%;
+    --secondary: 120 60% 92%;
+    --secondary-foreground: 120 100% 15%;
+    --muted: 120 60% 92%;
+    --muted-foreground: 120 50% 45%;
+    --accent: 120 60% 92%;
+    --accent-foreground: 120 100% 15%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 120 60% 97%;
+    --border: 120 30% 85%;
+    --input: 120 30% 85%;
+    --ring: 120 100% 25%;
+  }
+
+  /* Custom Purple Theme */
+  .custom-purple {
+    --background: 270 60% 97%;
+    --foreground: 270 100% 15%;
+    --card: 270 60% 97%;
+    --card-foreground: 270 100% 15%;
+    --popover: 270 60% 97%;
+    --popover-foreground: 270 100% 15%;
+    --primary: 270 100% 25%;
+    --primary-foreground: 270 60% 97%;
+    --secondary: 270 60% 92%;
+    --secondary-foreground: 270 100% 15%;
+    --muted: 270 60% 92%;
+    --muted-foreground: 270 50% 45%;
+    --accent: 270 60% 92%;
+    --accent-foreground: 270 100% 15%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 270 60% 97%;
+    --border: 270 30% 85%;
+    --input: 270 30% 85%;
+    --ring: 270 100% 25%;
+  }
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Theme transition styles */
+  .theme-transitioning * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+  }
+
+  /* Reduced motion support */
+  .reduce-motion *,
+  .reduce-motion *::before,
+  .reduce-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* High contrast enhancements */
+  .high-contrast {
+    --border: 0 0% 50%;
+  }
+
+  .high-contrast button,
+  .high-contrast a,
+  .high-contrast [role="button"] {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .high-contrast button:focus,
+  .high-contrast a:focus,
+  .high-contrast [role="button"]:focus {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
   }
 }
 

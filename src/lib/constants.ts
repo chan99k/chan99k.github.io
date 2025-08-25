@@ -23,7 +23,7 @@ export const NAVIGATION_ITEMS = [
   { label: 'Portfolio', href: '/portfolio' },
   { label: 'Blog', href: '/blog' },
   { label: 'Reviews', href: '/reviews' },
-  { label: 'About', href: '/about' },
+  { label: 'Search', href: '/search' },
 ] as const;
 
 export const CONTENT_PATHS = {
