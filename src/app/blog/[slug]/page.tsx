@@ -54,7 +54,7 @@ export default async function BlogPost({ params }: BlogPostPageProps) {
 
   const { post, content } = result;
 
-  // Get all posts for navigation
+  // Get all posts for navigation and advanced features
   const allPosts = await getBlogPosts();
   const currentIndex = allPosts.findIndex(p => p.slug === slug);
   const previousPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
@@ -85,6 +85,7 @@ export default async function BlogPost({ params }: BlogPostPageProps) {
         content={content}
         previousPost={previousPost}
         nextPost={nextPost}
+        allPosts={allPosts}
       />
     </>
   );

@@ -6,3 +6,6 @@ export { usePWA } from './usePWA';
 export { useOfflineReading } from './useOfflineReading';
 export { useRecentlyViewed } from './useRecentlyViewed';
 export { useKeyboardShortcuts } from './useKeyboardShortcuts';
+export { useReadingProgress } from './useReadingProgress';
+export { useBookmarks } from './useBookmarks';
+export { useBlogSeries } from './useBlogSeries';

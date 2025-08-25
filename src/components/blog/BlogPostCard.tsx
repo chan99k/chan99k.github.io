@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { BlogPost } from '@/types';
 import { formatDate } from '@/lib/utils';
-import { Clock, Calendar, Tag, User } from 'lucide-react';
+import { Clock, Calendar, Tag, User, Layers } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AnimatedCard } from '@/components/ui';
 import { fadeInUp } from '@/components/ui/animations';
@@ -119,14 +119,21 @@ export function BlogPostCard({ post, index = 0 }: BlogPostCardProps) {
             </div>
           )}
 
-          {/* 문제-해결 표시기 */}
-          {post.isProblemSolution && (
-            <div className='mb-4'>
+          {/* 특별 표시기들 */}
+          <div className='mb-4 flex flex-wrap gap-2'>
+            {post.isProblemSolution && (
               <span className='inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'>
                 Problem-Solution
               </span>
-            </div>
-          )}
+            )}
+            
+            {post.series && (
+              <span className='inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'>
+                <Layers className='w-3 h-3' />
+                Series {post.seriesOrder ? `(${post.seriesOrder})` : ''}
+              </span>
+            )}
+          </div>
 
           {/* 더 읽기 링크 */}
           <div className='pt-4 border-t border-gray-200 dark:border-gray-700 mt-auto'>

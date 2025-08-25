@@ -7,6 +7,7 @@ import { ProblemSolutionCardsSection } from './ProblemSolutionCardsSection';
 import { ExperienceSection } from './ExperienceSection';
 import { EducationSection } from './EducationSection';
 import { CertificationsSection } from './CertificationsSection';
+import { TimelineSection } from './TimelineSection';
 import { BlogPortfolioIntegration } from '@/components/integration';
 
 interface PortfolioPageProps {
@@ -25,6 +26,9 @@ export function PortfolioPage({
       <div className='container-responsive py-6 sm:py-8 lg:py-12 max-w-6xl space-y-8 sm:space-y-12 lg:space-y-16'>
         {/* Personal Information Section */}
         <PersonalInfoSection personalInfo={data.personalInfo} />
+
+        {/* Interactive Timeline Section */}
+        <TimelineSection data={data} />
 
         {/* Projects Section */}
         {data.projects.length > 0 && (

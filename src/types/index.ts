@@ -63,6 +63,50 @@ export interface BlogPost {
     solution: string;
     technologies: string[];
   };
+  // Advanced blog features
+  series?: BlogSeries;
+  seriesOrder?: number;
+  relatedPosts?: string[]; // Array of related post slugs
+  bookmarked?: boolean; // Client-side state
+}
+
+export interface BlogSeries {
+  id: string;
+  title: string;
+  description: string;
+  posts: BlogSeriesPost[];
+  coverImage?: string;
+  totalParts: number;
+}
+
+export interface BlogSeriesPost {
+  slug: string;
+  title: string;
+  order: number;
+  published: boolean;
+}
+
+export interface ReadingProgress {
+  postSlug: string;
+  progress: number; // 0-100
+  lastReadAt: Date;
+  completed: boolean;
+}
+
+export interface BookmarkedPost {
+  slug: string;
+  title: string;
+  bookmarkedAt: Date;
+  tags: string[];
+  category: string;
+}
+
+export interface RelatedPostsConfig {
+  maxRelated: number;
+  tagWeight: number;
+  categoryWeight: number;
+  dateWeight: number;
+  minScore: number;
 }
 
 export interface RestaurantReview {

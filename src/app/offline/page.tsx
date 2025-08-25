@@ -3,6 +3,13 @@
  * Displayed when the user is offline and the requested content is not cached
  */
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Offline - My Personal Website',
+  description: 'This page is not available offline.',
+};
+
 export default function OfflinePage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">

@@ -194,6 +194,10 @@ export class ContentLoader {
             (validatedData?.isProblemSolution as boolean) || false,
           problemSolutionMeta:
             validatedData?.problemSolutionMeta as BlogPost['problemSolutionMeta'],
+          // Advanced blog features
+          series: validatedData?.series as BlogPost['series'],
+          seriesOrder: validatedData?.seriesOrder as number | undefined,
+          relatedPosts: (validatedData?.relatedPosts as string[]) || undefined,
         };
 
         // 프로덕션에서 초안 포스트 건너뛰기
@@ -296,6 +300,10 @@ export class ContentLoader {
           (validatedData?.isProblemSolution as boolean) || false,
         problemSolutionMeta:
           validatedData?.problemSolutionMeta as BlogPost['problemSolutionMeta'],
+        // Advanced blog features
+        series: validatedData?.series as BlogPost['series'],
+        seriesOrder: validatedData?.seriesOrder as number | undefined,
+        relatedPosts: (validatedData?.relatedPosts as string[]) || undefined,
       };
 
       return {

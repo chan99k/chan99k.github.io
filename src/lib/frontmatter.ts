@@ -37,6 +37,17 @@ export const blogFrontmatterSchema = baseFrontmatterSchema.extend({
       technologies: z.array(z.string()),
     })
     .optional(),
+  // Advanced blog features
+  series: z
+    .object({
+      id: z.string(),
+      title: z.string(),
+      description: z.string(),
+      coverImage: z.string().optional(),
+    })
+    .optional(),
+  seriesOrder: z.number().optional(),
+  relatedPosts: z.array(z.string()).optional(),
 });
 
 // 레스토랑 리뷰 frontmatter 스키마

@@ -12,3 +12,8 @@ export { TableOfContents } from './TableOfContents';
 export { CodeBlock } from './CodeBlock';
 export { CommentSection } from './CommentSection';
 export { AnonymousCommentGuide } from './AnonymousCommentGuide';
+export { ReadingProgressIndicator } from './ReadingProgressIndicator';
+export { BookmarkButton, BookmarkIndicator } from './BookmarkButton';
+export { BlogSeriesNavigation } from './BlogSeriesNavigation';
+export { RelatedPosts } from './RelatedPosts';
+export { BookmarksPage } from './BookmarksPage';

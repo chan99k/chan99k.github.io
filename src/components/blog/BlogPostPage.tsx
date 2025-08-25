@@ -5,6 +5,10 @@ import { BlogPostNavigation } from './BlogPostNavigation';
 import { BlogPostMeta } from './BlogPostMeta';
 import { TableOfContents } from './TableOfContents';
 import { CommentSection } from './CommentSection';
+import { ReadingProgressIndicator } from './ReadingProgressIndicator';
+import { BookmarkButton } from './BookmarkButton';
+import { BlogSeriesNavigation } from './BlogSeriesNavigation';
+import { RelatedPosts } from './RelatedPosts';
 import { extractHeadings, generateTableOfContents } from '@/lib/mdx-utils';
 
 interface BlogPostPageProps {
@@ -12,6 +16,7 @@ interface BlogPostPageProps {
   content: string;
   previousPost: BlogPost | null;
   nextPost: BlogPost | null;
+  allPosts?: BlogPost[]; // For related posts and series navigation
 }
 
 export function BlogPostPage({
@@ -19,6 +24,7 @@ export function BlogPostPage({
   content,
   previousPost,
   nextPost,
+  allPosts = [],
 }: BlogPostPageProps) {
   // Extract headings for table of contents
   const headings = extractHeadings(content);

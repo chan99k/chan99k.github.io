@@ -7,3 +7,6 @@ export { ProblemSolutionCardsSection } from './ProblemSolutionCardsSection';
 export { ExperienceSection } from './ExperienceSection';
 export { EducationSection } from './EducationSection';
 export { CertificationsSection } from './CertificationsSection';
+export { InteractiveTimeline } from './InteractiveTimeline';
+export { SkillProgressionTimeline } from './SkillProgressionTimeline';
+export { TimelineSection } from './TimelineSection';
