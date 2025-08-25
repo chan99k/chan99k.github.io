@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { HeaderWrapper } from './HeaderWrapper';
 import { Footer } from './Footer';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { PWAProvider } from '@/components/providers/PWAProvider';
 
 interface MainLayoutProps {
   children: ReactNode;

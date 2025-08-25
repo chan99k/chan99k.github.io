@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // PWA Configuration
+  generateBuildId: async () => {
+    // Generate a unique build ID for cache busting
+    return `build-${Date.now()}`;
+  },
   images: {
     unoptimized: true, // Required for static export
     formats: ['image/webp', 'image/avif'],

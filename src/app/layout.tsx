@@ -41,6 +41,15 @@ export default function RootLayout({
           title={`${SITE_CONFIG.name} RSS Feed`}
           href='/rss.xml'
         />
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Portfolio" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.svg" />
+        <meta name="msapplication-TileImage" content="/icons/icon-144x144.svg" />
+        <meta name="msapplication-TileColor" content="#000000" />
       </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}

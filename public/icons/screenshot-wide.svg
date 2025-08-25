@@ -1,0 +1,7 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="720" fill="#f8f9fa"/>
+  <rect x="0" y="0" width="1280" height="80" fill="#000000"/>
+  <text x="640" y="50" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Portfolio Website</text>
+  <rect x="20" y="100" width="1240" height="200" fill="#e9ecef" rx="8"/>
+  <text x="640" y="220" text-anchor="middle" fill="#495057" font-family="Arial, sans-serif" font-size="18">Personal Portfolio & Blog</text>
+</svg>
