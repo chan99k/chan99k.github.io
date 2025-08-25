@@ -7,7 +7,8 @@ import { Menu, X } from 'lucide-react';
 import { NAVIGATION_ITEMS, SITE_CONFIG } from '@/lib/constants';
 import { SearchWidget } from '@/components/search';
 import { BlogPost, RestaurantReview, PortfolioData } from '@/types';
-import { AdvancedThemeToggle } from './AdvancedThemeToggle';
+// import { AdvancedThemeToggle } from './AdvancedThemeToggle';
+import { ThemeToggle } from './ThemeToggle';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 
 interface HeaderWithSearchProps {
@@ -86,12 +87,12 @@ export function HeaderWithSearch({
                 {item.label}
               </Link>
             ))}
-            <AdvancedThemeToggle />
+            <ThemeToggle />
           </nav>
 
           {/* Mobile Menu Button */}
           <div className='md:hidden flex items-center space-x-2'>
-            <AdvancedThemeToggle />
+            <ThemeToggle />
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -109,12 +110,12 @@ export function HeaderWithSearch({
           </div>
         </div>
 
-        {/* Breadcrumbs */}
-        {pathname !== '/' && (
+        {/* Breadcrumbs - Temporarily disabled */}
+        {/* {pathname !== '/' && (
           <div className="py-2 border-t border-gray-100 dark:border-gray-800">
             <Breadcrumbs />
           </div>
-        )}
+        )} */}
 
         {/* Mobile Search (always visible on mobile) */}
         <div className='lg:hidden pb-4'>
