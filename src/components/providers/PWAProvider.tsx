@@ -14,9 +14,15 @@ interface PWAProviderProps {
 }
 
 export function PWAProvider({ children }: PWAProviderProps) {
+  const [isClient, setIsClient] = React.useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   useEffect(() => {
     // Register service worker on mount
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && isClient) {
       registerServiceWorker().then(registration => {
         if (registration) {
           console.log('PWA: Service Worker registered successfully');
@@ -88,11 +94,15 @@ export function PWAProvider({ children }: PWAProviderProps) {
     <>
       {children}
       
-      {/* PWA Components */}
-      <PWAInstallPrompt />
-      <div className="fixed top-4 right-4 z-40">
-        <OfflineIndicator />
-      </div>
+      {/* PWA Components - Only render on client */}
+      {isClient && (
+        <>
+          <PWAInstallPrompt />
+          <div className="fixed top-4 right-4 z-40">
+            <OfflineIndicator />
+          </div>
+        </>
+      )}
     </>
   );
 }

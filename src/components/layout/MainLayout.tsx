@@ -11,13 +11,15 @@ interface MainLayoutProps {
 export function MainLayout({ children }: MainLayoutProps) {
   return (
     <ThemeProvider>
-      <div className='min-h-screen-safe flex flex-col touch-manipulation'>
-        <HeaderWrapper />
-        <main className='flex-1 relative'>
-          {children}
-        </main>
-        <Footer />
-      </div>
+      <PWAProvider>
+        <div className='min-h-screen-safe flex flex-col touch-manipulation'>
+          <HeaderWrapper />
+          <main className='flex-1 relative'>
+            {children}
+          </main>
+          <Footer />
+        </div>
+      </PWAProvider>
     </ThemeProvider>
   );
 }

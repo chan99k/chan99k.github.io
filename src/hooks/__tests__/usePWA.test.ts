@@ -3,19 +3,18 @@
  */
 
 import { renderHook, act } from '@testing-library/react';
-import { usePWA } from '@/hooks/usePWA';
 
-// Mock PWA utils
-const mockPWAUtils = {
+// Mock PWA utils before importing the hook
+jest.mock('@/lib/pwa-utils', () => ({
   registerServiceWorker: jest.fn(),
   requestNotificationPermission: jest.fn(),
   subscribeToPushNotifications: jest.fn(),
   getPWACapabilities: jest.fn(),
   isPWA: jest.fn(),
   showNotification: jest.fn(),
-};
+}));
 
-jest.mock('@/lib/pwa-utils', () => mockPWAUtils);
+import { usePWA } from '@/hooks/usePWA';
 
 // Mock window events
 const mockAddEventListener = jest.fn();
@@ -35,6 +34,18 @@ Object.defineProperty(navigator, 'onLine', {
   writable: true,
   value: true,
 });
+
+// Mock Notification API
+Object.defineProperty(window, 'Notification', {
+  writable: true,
+  value: {
+    permission: 'default',
+    requestPermission: jest.fn().mockResolvedValue('granted'),
+  },
+});
+
+// Get the mocked functions
+const mockPWAUtils = require('@/lib/pwa-utils');
 
 describe('usePWA Hook', () => {
   beforeEach(() => {

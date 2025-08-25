@@ -2,11 +2,19 @@ import { Metadata } from 'next';
 import { getBlogPosts } from '@/lib/content';
 import { generateBlogListMetadata } from '@/lib/seo';
 import Link from 'next/link';
+import { BlogPWAFeatures } from '@/components/blog/BlogPWAFeatures';
 
 export const metadata: Metadata = generateBlogListMetadata();
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();
+
+  // Prepare blog posts data for offline content manager
+  const blogPostsForOffline = posts.map(post => ({
+    slug: post.slug,
+    title: post.title,
+    url: `/blog/${post.slug}`,
+  }));
 
   return (
     <div className='container mx-auto px-4 py-8'>
@@ -19,6 +27,11 @@ export default async function BlogPage() {
             Technical insights, problem-solving experiences, and learning
             journey in software development.
           </p>
+        </div>
+
+        {/* PWA Features */}
+        <div className='mb-8'>
+          <BlogPWAFeatures blogPosts={blogPostsForOffline} />
         </div>
 
 

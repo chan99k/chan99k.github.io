@@ -12,6 +12,7 @@ const STATIC_ASSETS = [
   '/blog',
   '/reviews',
   '/search',
+  '/offline',
   '/manifest.json',
   '/icons/icon-192x192.svg',
   '/icons/icon-512x512.svg',
