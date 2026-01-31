@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Layout title="Projects - chan99k">
+	<section class="py-12">
+        <h1 class="text-4xl font-bold mb-12">Projects</h1>
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+			{
+				projects.map((project) => (
+                    <ProjectCard project={project} />
+				))
+			}
+		</div>
+	</section>
+</Layout>

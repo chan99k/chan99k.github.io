@@ -1,0 +1,60 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects');
+	return projects.map((project) => ({
+		params: { slug: project.slug },
+		props: project,
+	}));
+}
+type Props = CollectionEntry<'projects'>;
+
+const project = Astro.props;
+const { Content } = await project.render();
+---
+
+<Layout title={project.data.title}>
+	<article class="py-12 max-w-4xl mx-auto">
+        <header class="mb-12">
+             <div class="aspect-video w-full overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-900 mb-8 border border-gray-100 dark:border-gray-800">
+                {project.data.heroImage && (
+                    <img 
+                        src={project.data.heroImage} 
+                        alt={project.data.title}
+                        class="w-full h-full object-cover"
+                    />
+                )}
+            </div>
+            
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-8">
+                <div>
+                     <h1 class="text-4xl sm:text-5xl font-bold mb-4">{project.data.title}</h1>
+                     <p class="text-xl text-gray-500 dark:text-gray-400">{project.data.description}</p>
+                </div>
+                <div class="flex flex-col gap-2 min-w-[200px]">
+                    {project.data.demoUrl && (
+                        <a href={project.data.demoUrl} target="_blank" class="btn w-full">View Demo</a>
+                    )}
+                     {project.data.githubUrl && (
+                        <a href={project.data.githubUrl} target="_blank" class="btn w-full bg-gray-900 text-white hover:bg-black dark:bg-white dark:text-black dark:hover:bg-gray-200">GitHub</a>
+                    )}
+                </div>
+            </div>
+
+             <div class="flex flex-wrap gap-2 mb-12">
+                {project.data.techStack.map(tech => (
+                    <span class="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-gray-800 rounded-full">
+                        {tech}
+                    </span>
+                ))}
+            </div>
+        </header>
+
+        <div class="prose prose-lg dark:prose-invert max-w-none">
+            <Content />
+        </div>
+	</article>
+</Layout>

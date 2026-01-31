@@ -1,0 +1,39 @@
+---
+import { type CollectionEntry } from 'astro:content';
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+---
+
+<a href={`/projects/${project.slug}/`} class="group block mb-12 last:mb-0">
+    <div class="space-y-4">
+        <div class="aspect-video w-full overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
+            {project.data.heroImage && (
+                <img 
+                    src={project.data.heroImage} 
+                    alt={project.data.title}
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+            )}
+        </div>
+        <div>
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-2xl font-bold group-hover:underline decoration-accent underline-offset-4">{project.data.title}</h3>
+                <span class="text-sm font-mono text-gray-500">{project.data.pubDate.getFullYear()}</span>
+            </div>
+            <p class="text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
+                {project.data.description}
+            </p>
+            <div class="flex flex-wrap gap-2">
+                {project.data.techStack.map(tech => (
+                    <span class="px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 rounded">
+                        {tech}
+                    </span>
+                ))}
+            </div>
+        </div>
+    </div>
+</a>

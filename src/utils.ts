@@ -5,6 +5,14 @@ export function randomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+export function formatDate(date: Date): string {
+    return date.toLocaleDateString('en-us', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+}
+
 export function uniqueName() {
     const config = {
         dictionaries: [adjectives, animals],
