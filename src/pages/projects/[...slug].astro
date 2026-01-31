@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
+import Giscus from '../../components/Giscus';
 
 export async function getStaticPaths() {
 	const projects = await getCollection('projects');
@@ -55,6 +56,10 @@ const { Content } = await project.render();
 
         <div class="prose prose-lg dark:prose-invert max-w-none">
             <Content />
+        </div>
+
+        <div class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800">
+            <Giscus client:visible />
         </div>
 	</article>
 </Layout>

@@ -25,6 +25,15 @@ import ThemeToggle from './ThemeToggle';
                         </li>
                     ))}
                     <li>
+                         <button 
+                            id="search-trigger"
+                            aria-label="Search"
+                            class="flex items-center justify-center p-1 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search w-5 h-5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        </button>
+                    </li>
+                    <li>
                         <ThemeToggle client:load />
                     </li>
                 </ul>
@@ -32,3 +41,9 @@ import ThemeToggle from './ThemeToggle';
         }
     </nav>
 </header>
+
+<script>
+    document.getElementById('search-trigger')?.addEventListener('click', () => {
+        document.dispatchEvent(new Event('open-search'));
+    });
+</script>
