@@ -4,6 +4,8 @@ const navItems = [
     { linkText: 'Projects', href: '/projects' },
     { linkText: 'About', href: '/about' }
 ];
+
+import ThemeToggle from './ThemeToggle';
 ---
 
 <header class="sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md transition-colors duration-300">
@@ -14,7 +16,7 @@ const navItems = [
         
         {
             !!navItems?.length && (
-                <ul class="flex gap-x-6">
+                <ul class="flex items-center gap-x-6">
                     {navItems.map((item) => (
                         <li>
                             <a href={item.href} class="text-sm font-medium hover:text-accent transition-colors">
@@ -22,6 +24,9 @@ const navItems = [
                             </a>
                         </li>
                     ))}
+                    <li>
+                        <ThemeToggle client:load />
+                    </li>
                 </ul>
             )
         }
