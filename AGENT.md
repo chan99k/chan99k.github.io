@@ -8,7 +8,7 @@
 | Framework | **Astro** (Static first) + **React** (Interactive islands) |
 | Styling | **Tailwind CSS v4** (Vanilla CSS for custom needs) |
 | Content | **MDX / Content Collections** (`src/content/`) |
-| State | **Astro Props** (Server) / **React State** (Client/Island) |
+| State | **Astro Props** (Server) / **React State & TanStack Query** (Client/Island) |
 | Import | Standard ESM. `import type` for types. |
 
 ---
@@ -33,6 +33,10 @@ src/content/config.ts          # Content Collections schema
 4.  **Test-Driven Merges**:
     - **No Tests = No PR**: Every feature PR must include passing unit tests.
     - **Green Build**: `npm run build` and `npm test` must pass before merging.
+5.  **Data Fetching Strategy**:
+    - Use **Astro's `getCollection`** for static content (Blog posts, Projects).
+    - Use **TanStack Query** for client-side interactive data fetching (Search, real-time APIs).
+    - Wrap islands using React Query with `QueryProvider` from `src/providers/QueryProvider.tsx`.
 
 ---
 
@@ -105,23 +109,27 @@ const { Content } = await post.render();
 ### React Component Pattern (`.tsx`)
 *Use mainly for "islands" like Search or Interactive Widgets.*
 
+#### Use TanStack Query for Data Fetching
 ```tsx
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import QueryProvider from '../providers/QueryProvider';
 
-export function SearchBar() {
-  const [query, setQuery] = useState('');
+function MyInteractiveComponent() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['my-key'],
+    queryFn: () => fetch('/api/data').then(res => res.json())
+  });
 
+  if (isLoading) return <div>Loading...</div>;
+  return <div>{data.name}</div>;
+}
+
+// Ensure the component or its parent is wrapped with QueryProvider
+export default function InteractiveIsland() {
   return (
-    <div class="relative group">
-       <input 
-         type="text" 
-         placeholder="Search posts..." 
-         value={query}
-         onChange={(e) => setQuery(e.target.value)}
-         className="bg-transparent border-b border-gray-300 focus:border-primary outline-none transition-colors w-full"
-       />
-       {/* Search logic would go here */}
-    </div>
+    <QueryProvider>
+      <MyInteractiveComponent />
+    </QueryProvider>
   );
 }
 ```

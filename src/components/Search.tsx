@@ -3,6 +3,8 @@ import { Command } from 'cmdk';
 import { Search as SearchIcon, FileText, Folder, X } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { useQuery } from '@tanstack/react-query';
+import QueryProvider from '../providers/QueryProvider';
 
 // Helper for tailwind classes
 function cn(...inputs: ClassValue[]) {
@@ -16,10 +18,18 @@ interface SearchItem {
     type: 'Blog' | 'Project';
 }
 
-export default function Search() {
+function SearchContent() {
     const [open, setOpen] = useState(false);
-    const [items, setItems] = useState<SearchItem[]>([]);
-    const [loading, setLoading] = useState(false);
+
+    const { data: items = [], isLoading: loading } = useQuery<SearchItem[]>({
+        queryKey: ['search'],
+        queryFn: async () => {
+            const res = await fetch('/search.json');
+            if (!res.ok) throw new Error('Network response was not ok');
+            return res.json();
+        },
+        enabled: open, // Only fetch when open
+    });
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
@@ -32,16 +42,6 @@ export default function Search() {
 
         document.addEventListener('keydown', down);
         document.addEventListener('open-search', openEvent);
-
-        // Pre-fetch items
-        setLoading(true);
-        fetch('/search.json')
-            .then(res => res.json())
-            .then(data => {
-                setItems(data);
-                setLoading(false);
-            })
-            .catch(() => setLoading(false));
 
         return () => {
             document.removeEventListener('keydown', down);
@@ -115,5 +115,13 @@ export default function Search() {
                 </div>
             </div>
         </Command.Dialog>
+    );
+}
+
+export default function Search() {
+    return (
+        <QueryProvider>
+            <SearchContent />
+        </QueryProvider>
     );
 }
