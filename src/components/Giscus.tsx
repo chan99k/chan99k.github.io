@@ -18,7 +18,7 @@ export default function Giscus() {
         script.setAttribute('data-emit-metadata', '0');
         script.setAttribute('data-input-position', 'bottom');
         script.setAttribute('data-theme', localStorage.getItem('theme') === 'dark' ? 'dark' : 'light');
-        script.setAttribute('data-lang', 'en');
+        script.setAttribute('data-lang', 'ko');
         script.setAttribute('crossorigin', 'anonymous');
         script.async = true;
 

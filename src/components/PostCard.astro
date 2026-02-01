@@ -9,15 +9,18 @@ interface Props {
 const { post } = Astro.props;
 ---
 
-<a href={`/blog/${post.slug}/`} class="group block py-6 border-b border-gray-100 dark:border-gray-800 last:border-0 hover:opacity-70 transition-opacity">
-    <div class="flex flex-col gap-1">
-        <span class="text-sm text-gray-400 font-mono">
-            <FormattedDate date={post.data.pubDate} />
-        </span>
-        <h3 class="text-xl font-bold group-hover:underline decoration-accent underline-offset-4">
+<a href={`/blog/${post.slug}/`} class="group block py-8 border-b border-gray-100 dark:border-gray-800 last:border-0">
+    <div class="flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+            <span class="text-xs text-gray-400 font-mono uppercase tracking-widest">
+                <FormattedDate date={post.data.pubDate} />
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-300 dark:text-gray-700 transition-all duration-300 group-hover:text-accent group-hover:translate-x-1"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </div>
+        <h3 class="text-2xl font-bold tracking-tight transition-colors group-hover:text-accent">
             {post.data.title}
         </h3>
-        <p class="text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+        <p class="text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
             {post.data.description}
         </p>
     </div>

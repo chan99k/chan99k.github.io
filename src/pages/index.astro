@@ -14,23 +14,23 @@ const projects = (await getCollection('projects'))
 import ProjectCard from '../components/ProjectCard.astro';
 ---
 
-<Layout title="chan99k's blog" description="Developer & Builder. Writing about web development, design systems, and my journey.">
+<Layout title="chan99k's blog" description="개발자이자 빌더. 웹 개발, 디자인 시스템, 그리고 저의 여정에 대해 기록합니다.">
     <section class="py-24 sm:py-32">
         <h1 class="text-5xl sm:text-7xl font-bold tracking-tight mb-6">
-            Hello, I'm <span class="text-accent">Chan</span>.
+            안녕하세요, <span class="text-accent">Chan</span>입니다.
             <br />
-            Developer & Builder.
+            개발자 & 빌더
         </h1>
         <p class="text-xl text-gray-500 max-w-2xl leading-relaxed">
-            Writing about web development, design systems, and my journey as a creator.
-            Currently building minimalist and high-performance applications.
+            웹 개발, 디자인 시스템, 제작자로서의 기록을 남깁니다.
+            미니멀하고 성능 좋은 고품질의 애플리케이션을 지향합니다.
         </p>
     </section>
 
     <section class="py-12 border-t border-gray-100 dark:border-gray-800">
         <div class="flex items-center justify-between mb-8">
-            <h2 class="text-2xl font-bold">Featured Projects</h2>
-            <a href="/projects" class="text-sm font-medium hover:underline text-gray-500">View all</a>
+            <h2 class="text-2xl font-bold">주요 프로젝트</h2>
+            <a href="/projects" class="text-sm font-medium hover:underline text-gray-500">전체보기</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             {projects.map((project) => (
@@ -41,8 +41,8 @@ import ProjectCard from '../components/ProjectCard.astro';
 
     <section class="py-12 border-t border-gray-100 dark:border-gray-800">
         <div class="flex items-center justify-between mb-8">
-            <h2 class="text-2xl font-bold">Latest Posts</h2>
-            <a href="/blog" class="text-sm font-medium hover:underline text-gray-500">View all</a>
+            <h2 class="text-2xl font-bold">최신 글</h2>
+            <a href="/blog" class="text-sm font-medium hover:underline text-gray-500">전체보기</a>
         </div>
         <div class="flex flex-col">
             {posts.map((post) => (

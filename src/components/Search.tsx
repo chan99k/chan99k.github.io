@@ -55,7 +55,7 @@ export default function Search() {
         <Command.Dialog
             open={open}
             onOpenChange={setOpen}
-            label="Global Search"
+            label="전체 검색"
             className="fixed inset-0 z-[100] flex items-start justify-center pt-24 md:pt-40 px-4 bg-black/50 backdrop-blur-sm transition-all"
             onClick={(e) => {
                 if (e.target === e.currentTarget) setOpen(false);
@@ -65,7 +65,7 @@ export default function Search() {
                 <div className="flex items-center px-4 border-b border-gray-100 dark:border-gray-800">
                     <SearchIcon className="w-5 h-5 text-gray-400 mr-3" />
                     <Command.Input
-                        placeholder="Search posts and projects..."
+                        placeholder="글 또는 프로젝트 검색..."
                         className="flex-1 py-4 bg-transparent outline-none text-lg text-gray-900 dark:text-gray-100 placeholder:text-gray-400"
                     />
                     <button onClick={() => setOpen(false)} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
@@ -74,14 +74,14 @@ export default function Search() {
                 </div>
 
                 <Command.List className="max-h-[60vh] overflow-y-auto p-2 scroll-py-2 custom-scrollbar">
-                    <Command.Empty className="py-6 text-center text-gray-500">No results found.</Command.Empty>
+                    <Command.Empty className="py-6 text-center text-gray-500">검색 결과가 없습니다.</Command.Empty>
 
                     {loading && (
-                        <div className="py-6 text-center text-gray-500">Loading...</div>
+                        <div className="py-6 text-center text-gray-500">검색 중...</div>
                     )}
 
                     {!loading && items.length > 0 && (
-                        <Command.Group heading="Content">
+                        <Command.Group heading="콘텐츠">
                             {items.map((item) => (
                                 <Command.Item
                                     key={item.slug}
@@ -107,10 +107,10 @@ export default function Search() {
 
                 <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-400 flex items-center justify-between">
                     <span>
-                        <kbd className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">ok</kbd> to select
+                        <kbd className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">Enter</kbd> 선택
                     </span>
                     <span>
-                        <kbd className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">esc</kbd> to close
+                        <kbd className="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">ESC</kbd> 닫기
                     </span>
                 </div>
             </div>
