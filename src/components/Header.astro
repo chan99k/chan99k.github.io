@@ -8,38 +8,40 @@ const navItems = [
 import ThemeToggle from './ThemeToggle';
 ---
 
-<header class="sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md transition-colors duration-300">
-    <nav class="flex items-center justify-between py-5 border-b border-gray-100 dark:border-gray-800">
-        <a href="/" class="text-2xl font-bold tracking-tight hover:opacity-70 transition-opacity">
-            chan99k
-        </a>
-        
-        {
-            !!navItems?.length && (
-                <ul class="flex items-center gap-x-6">
-                    {navItems.map((item) => (
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md transition-colors duration-300 border-b border-gray-100 dark:border-gray-800">
+    <div class="max-w-[1280px] mx-auto px-10 sm:px-16 lg:px-24">
+        <nav class="flex items-center justify-between py-6">
+            <a href="/" class="text-2xl font-bold tracking-tight hover:opacity-70 transition-opacity">
+                chan99k
+            </a>
+            
+            {
+                !!navItems?.length && (
+                    <ul class="flex items-center gap-x-8">
+                        {navItems.map((item) => (
+                            <li>
+                                <a href={item.href} class="text-sm font-medium hover:text-accent transition-colors">
+                                    {item.linkText}
+                                </a>
+                            </li>
+                        ))}
                         <li>
-                            <a href={item.href} class="text-sm font-medium hover:text-accent transition-colors">
-                                {item.linkText}
-                            </a>
+                             <button 
+                                id="search-trigger"
+                                aria-label="Search"
+                                class="flex items-center justify-center p-1 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search w-5 h-5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </button>
                         </li>
-                    ))}
-                    <li>
-                         <button 
-                            id="search-trigger"
-                            aria-label="Search"
-                            class="flex items-center justify-center p-1 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search w-5 h-5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                        </button>
-                    </li>
-                    <li>
-                        <ThemeToggle client:load />
-                    </li>
-                </ul>
-            )
-        }
-    </nav>
+                        <li>
+                            <ThemeToggle client:load />
+                        </li>
+                    </ul>
+                )
+            }
+        </nav>
+    </div>
 </header>
 
 <script>
