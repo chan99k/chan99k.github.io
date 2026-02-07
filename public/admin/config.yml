@@ -2,7 +2,7 @@ backend:
   name: github
   branch: main
   repo: chan99k/chan99k.github.io
-  base_url: https://chan99k.github.io
+  base_url: https://blog.chan99k.dev
   auth_endpoint: /oauth
 
 publish_mode: editorial_workflow
