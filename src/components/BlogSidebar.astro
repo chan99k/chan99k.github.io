@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import { buildTagTree, tagToSlug } from '../utils/tags';
+import type { TagTreeNode } from '../utils/tags';
+
+interface Props {
+	currentTag?: string;
+}
+
+const { currentTag } = Astro.props;
+
+const posts = await getCollection('blog', ({ data }) => data.draft !== true);
+const tree = buildTagTree(posts);
+
+function renderTree(node: TagTreeNode, basePath: string = ''): { name: string; fullPath: string; count: number; children: ReturnType<typeof renderTree> }[] {
+	return Object.entries(node.children)
+		.sort(([a], [b]) => a.localeCompare(b))
+		.map(([name, child]) => ({
+			name,
+			fullPath: basePath ? `${basePath}/${name}` : name,
+			count: child.count,
+			children: renderTree(child, basePath ? `${basePath}/${name}` : name),
+		}));
+}
+
+const treeData = renderTree(tree);
+---
+
+<aside class="hidden lg:block w-56 shrink-0 py-12 pr-8">
+	<div class="sticky top-24">
+		<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">카테고리</h2>
+		<nav>
+			<a
+				href="/blog"
+				class:list={[
+					'no-underline block py-1.5 text-sm transition-colors',
+					!currentTag
+						? 'text-accent font-semibold'
+						: 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white',
+				]}
+			>
+				전체 글
+			</a>
+			{treeData.map((item) => (
+				<Fragment>
+					<a
+						href={`/tags/${tagToSlug(item.fullPath)}/`}
+						class:list={[
+							'no-underline block py-1.5 text-sm transition-colors',
+							currentTag === item.fullPath
+								? 'text-accent font-semibold'
+								: 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white',
+						]}
+					>
+						{item.name}
+						<span class="text-xs text-gray-300 dark:text-gray-600 ml-1">{item.count}</span>
+					</a>
+					{item.children.length > 0 && (
+						<div class="ml-3 border-l border-gray-100 dark:border-gray-800 pl-3">
+							{item.children.map((child) => (
+								<a
+									href={`/tags/${tagToSlug(child.fullPath)}/`}
+									class:list={[
+										'no-underline block py-1 text-sm transition-colors',
+										currentTag === child.fullPath
+											? 'text-accent font-semibold'
+											: 'text-gray-400 dark:text-gray-500 hover:text-black dark:hover:text-white',
+									]}
+								>
+									{child.name}
+									<span class="text-xs text-gray-300 dark:text-gray-600 ml-1">{child.count}</span>
+								</a>
+							))}
+						</div>
+					)}
+				</Fragment>
+			))}
+		</nav>
+	</div>
+</aside>

@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import PostCard from '../../components/PostCard.astro';
 import TagChips from '../../components/TagChips.astro';
+import BlogSidebar from '../../components/BlogSidebar.astro';
 import { getRootTags } from '../../utils/tags';
 
 const posts = (await getCollection('blog', ({ data }) => data.draft !== true)).sort(
@@ -13,19 +14,22 @@ const rootTags = getRootTags(posts);
 ---
 
 <Layout title="블로그 - chan99k" description="웹 개발, 디자인 시스템, 소프트웨어 엔지니어링에 관한 최신 글들을 확인하세요.">
-	<section class="py-12">
-        <h1 class="text-4xl font-bold mb-8">블로그</h1>
-		{rootTags.length > 0 && (
-			<div class="mb-10">
-				<TagChips tags={rootTags} size="md" />
+	<div class="flex gap-0">
+		<BlogSidebar />
+		<section class="py-12 min-w-0 grow">
+			<h1 class="text-4xl font-bold mb-8">블로그</h1>
+			{rootTags.length > 0 && (
+				<div class="mb-10 lg:hidden">
+					<TagChips tags={rootTags} size="md" />
+				</div>
+			)}
+			<div class="flex flex-col">
+				{
+					posts.map((post) => (
+						<PostCard post={post} />
+					))
+				}
 			</div>
-		)}
-		<div class="flex flex-col">
-			{
-				posts.map((post) => (
-                    <PostCard post={post} />
-				))
-			}
-		</div>
-	</section>
+		</section>
+	</div>
 </Layout>
