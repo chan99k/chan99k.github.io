@@ -29,6 +29,7 @@ const tree = buildTagTree(allPosts);
 const segments = tag.split('/');
 let node = tree;
 for (const seg of segments) {
+	if (!node?.children[seg]) break;
 	node = node.children[seg];
 }
 const childTags = Object.keys(node?.children ?? {}).map(
