@@ -1,0 +1,71 @@
+backend:
+  name: github
+  branch: main
+  repo: chan99k/chan99k.github.io
+  base_url: https://chan99k.github.io
+  auth_endpoint: /oauth
+
+publish_mode: editorial_workflow
+
+media_folder: "src/assets/images/blog"
+public_folder: "/src/assets/images/blog"
+
+search: false
+
+locale: "ko"
+
+collections:
+  - name: "blog"
+    label: "블로그"
+    label_singular: "포스트"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    preview_path: "blog/{{slug}}"
+    fields:
+      - label: "제목"
+        name: "title"
+        widget: "string"
+
+      - label: "설명"
+        name: "description"
+        widget: "text"
+        hint: "검색 결과 및 미리보기에 표시되는 요약문"
+
+      - label: "발행일"
+        name: "pubDate"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        picker_utc: false
+
+      - label: "수정일"
+        name: "updatedDate"
+        widget: "datetime"
+        required: false
+        date_format: "YYYY-MM-DD"
+        time_format: false
+
+      - label: "대표 이미지"
+        name: "heroImage"
+        widget: "image"
+        required: false
+
+      - label: "태그"
+        name: "tags"
+        widget: "list"
+        default: []
+        allow_add: true
+        min: 0
+        label_singular: "태그"
+        hint: "계층 태그는 /로 구분 (예: 개발/React)"
+
+      - label: "초안"
+        name: "draft"
+        widget: "boolean"
+        default: false
+        hint: "활성화하면 사이트에 게시되지 않습니다"
+
+      - label: "본문"
+        name: "body"
+        widget: "markdown"
