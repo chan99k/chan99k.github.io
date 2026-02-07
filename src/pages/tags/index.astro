@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import TagTree from '../../components/TagTree.astro';
+import { buildTagTree } from '../../utils/tags';
+
+const posts = (await getCollection('blog', ({ data }) => data.draft !== true)).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const tree = buildTagTree(posts);
+---
+
+<Layout title="태그 - chan99k" description="태그별로 블로그 글을 탐색하세요.">
+	<section class="py-12">
+		<h1 class="text-4xl font-bold mb-12">태그</h1>
+		<TagTree tree={tree} />
+	</section>
+</Layout>

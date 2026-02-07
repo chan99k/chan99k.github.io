@@ -1,0 +1,36 @@
+---
+import type { TagTreeNode } from '../utils/tags';
+import { tagToSlug } from '../utils/tags';
+
+interface Props {
+	tree: TagTreeNode;
+	basePath?: string;
+}
+
+const { tree, basePath = '' } = Astro.props;
+
+const entries = Object.entries(tree.children).sort(([a], [b]) => a.localeCompare(b));
+---
+
+<ul class:list={[basePath === '' ? '' : 'ml-6', 'list-none']}>
+	{entries.map(([name, node]) => {
+		const fullPath = basePath ? `${basePath}/${name}` : name;
+		const hasChildren = Object.keys(node.children).length > 0;
+		return (
+			<li class="py-1.5">
+				<div class="flex items-center gap-2">
+					<a
+						href={`/tags/${tagToSlug(fullPath)}/`}
+						class="no-underline text-black dark:text-white hover:text-accent transition-colors font-medium"
+					>
+						{name}
+					</a>
+					<span class="text-xs text-gray-400 font-mono">({node.count})</span>
+				</div>
+				{hasChildren && (
+					<Astro.self tree={node} basePath={fullPath} />
+				)}
+			</li>
+		);
+	})}
+</ul>

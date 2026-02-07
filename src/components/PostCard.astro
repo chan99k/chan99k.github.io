@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry } from 'astro:content';
 import FormattedDate from './FormattedDate.astro';
+import TagChips from './TagChips.astro';
 
 interface Props {
 	post: CollectionEntry<'blog'>;
@@ -23,5 +24,10 @@ const { post } = Astro.props;
         <p class="text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
             {post.data.description}
         </p>
+        {post.data.tags.length > 0 && (
+            <div class="mt-1" onclick="event.stopPropagation()">
+                <TagChips tags={post.data.tags} />
+            </div>
+        )}
     </div>
 </a>

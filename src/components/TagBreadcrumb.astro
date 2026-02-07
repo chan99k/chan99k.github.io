@@ -1,0 +1,33 @@
+---
+import { tagToSlug } from '../utils/tags';
+
+interface Props {
+	tag: string;
+}
+
+const { tag } = Astro.props;
+const segments = tag.split('/');
+---
+
+<nav class="flex items-center gap-1.5 text-sm text-gray-400 mb-8">
+	<a href="/tags/" class="no-underline hover:text-accent transition-colors">태그</a>
+	{segments.map((segment, i) => {
+		const path = segments.slice(0, i + 1).join('/');
+		const isLast = i === segments.length - 1;
+		return (
+			<>
+				<span class="select-none">/</span>
+				{isLast ? (
+					<span class="text-black dark:text-white font-medium">{segment}</span>
+				) : (
+					<a
+						href={`/tags/${tagToSlug(path)}/`}
+						class="no-underline hover:text-accent transition-colors"
+					>
+						{segment}
+					</a>
+				)}
+			</>
+		);
+	})}
+</nav>
