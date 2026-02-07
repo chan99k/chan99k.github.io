@@ -1,17 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getEntry } from 'astro:content';
+
+const about = await getEntry('pages', 'about');
+const { Content } = await about.render();
 ---
 
-<Layout title="소개 - chan99k" description="소프트웨어 엔지니어 Chan의 자기소개와 기술, 디자인에 대한 생각들을 공유합니다.">
+<Layout title={`${about.data.title} - chan99k`} description={about.data.description}>
 	<section class="py-12 max-w-3xl mx-auto">
-        <h1 class="text-4xl font-bold mb-8">소개</h1>
+        <h1 class="text-4xl font-bold mb-8">{about.data.title}</h1>
         <div class="prose prose-lg dark:prose-invert">
-            <p>
-                안녕하세요! 저는 깔끔하고 성능 좋으며 접근성 높은 웹 애플리케이션을 만드는 데 열정을 가진 소프트웨어 엔지니어 Chan입니다.
-            </p>
-            <p>
-                이 블로그는 기술, 디자인, 그리고 그 사이의 모든 것들에 대한 저의 생각을 담는 놀이터입니다.
-            </p>
+            <Content />
         </div>
 	</section>
 </Layout>

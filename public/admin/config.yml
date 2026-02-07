@@ -121,3 +121,23 @@ collections:
       - label: "본문"
         name: "body"
         widget: "markdown"
+
+  - name: "pages"
+    label: "페이지"
+    files:
+      - name: "about"
+        label: "소개"
+        file: "src/content/pages/about.md"
+        fields:
+          - label: "제목"
+            name: "title"
+            widget: "string"
+
+          - label: "설명"
+            name: "description"
+            widget: "text"
+            hint: "SEO 메타 설명"
+
+          - label: "본문"
+            name: "body"
+            widget: "markdown"
