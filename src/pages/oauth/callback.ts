@@ -52,15 +52,15 @@ function renderMessage(type: 'success' | 'error', content: string): string {
 <body>
 <script>
 (function() {
-  function recieveMessage(e) {
-    console.log("recieveMessage %o", e);
+  function receiveMessage(e) {
+    console.log("receiveMessage %o", e);
     window.opener.postMessage(
       'authorization:github:${type}:${content}',
       e.origin
     );
-    window.removeEventListener("message", recieveMessage, false);
+    window.removeEventListener("message", receiveMessage, false);
   }
-  window.addEventListener("message", recieveMessage, false);
+  window.addEventListener("message", receiveMessage, false);
   window.opener.postMessage("authorizing:github", "*");
 })();
 </script>
