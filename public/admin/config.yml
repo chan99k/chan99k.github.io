@@ -69,3 +69,55 @@ collections:
       - label: "본문"
         name: "body"
         widget: "markdown"
+
+  - name: "projects"
+    label: "프로젝트"
+    label_singular: "프로젝트"
+    folder: "src/content/projects"
+    create: true
+    slug: "{{slug}}"
+    preview_path: "projects/{{slug}}"
+    fields:
+      - label: "제목"
+        name: "title"
+        widget: "string"
+
+      - label: "설명"
+        name: "description"
+        widget: "text"
+        hint: "프로젝트 카드에 표시되는 요약문"
+
+      - label: "발행일"
+        name: "pubDate"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        picker_utc: false
+
+      - label: "대표 이미지"
+        name: "heroImage"
+        widget: "image"
+        required: false
+
+      - label: "기술 스택"
+        name: "techStack"
+        widget: "list"
+        allow_add: true
+        label_singular: "기술"
+        hint: "사용한 기술 (예: React, TypeScript)"
+
+      - label: "데모 URL"
+        name: "demoUrl"
+        widget: "string"
+        required: false
+        hint: "배포된 사이트 주소"
+
+      - label: "GitHub URL"
+        name: "githubUrl"
+        widget: "string"
+        required: false
+        hint: "GitHub 저장소 주소"
+
+      - label: "본문"
+        name: "body"
+        widget: "markdown"
