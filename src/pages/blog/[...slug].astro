@@ -23,13 +23,13 @@ const currentTag = post.data.tags?.[0];
 <Layout title={post.data.title} description={post.data.description} image={post.data.heroImage}>
 	<div class="flex gap-0">
 		<BlogSidebar currentTag={currentTag} />
-		<article class="py-12 max-w-3xl min-w-0 grow">
-			<header class="mb-10">
-				<div class="mb-4 text-gray-400 text-sm font-mono">
+		<article class="py-8 sm:py-12 max-w-3xl min-w-0 grow">
+			<header class="mb-8 sm:mb-10">
+				<div class="mb-3 sm:mb-4 text-gray-400 text-sm font-mono">
 					<FormattedDate date={post.data.pubDate} />
 				</div>
-				<h1 class="text-4xl sm:text-5xl font-bold mb-4 leading-tight">{post.data.title}</h1>
-				<p class="text-xl text-gray-500 dark:text-gray-400">{post.data.description}</p>
+				<h1 class="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 leading-tight">{post.data.title}</h1>
+				<p class="text-base sm:text-xl text-gray-500 dark:text-gray-400">{post.data.description}</p>
 			</header>
 
 			<div class="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-headings:text-black dark:prose-headings:text-white prose-a:text-accent prose-img:rounded-xl">

@@ -10,43 +10,92 @@ import ThemeToggle from './ThemeToggle';
 ---
 
 <header class="sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md transition-colors duration-300 border-b border-gray-100 dark:border-gray-800">
-    <div class="max-w-[1280px] mx-auto px-10 sm:px-16 lg:px-24">
-        <nav class="flex items-center justify-between py-6">
-            <a href="/" class="text-2xl font-bold tracking-tight hover:opacity-70 transition-opacity">
+    <div class="max-w-[1280px] mx-auto px-5 sm:px-10 lg:px-24">
+        <nav class="flex items-center justify-between py-4 sm:py-6">
+            <a href="/" class="text-xl sm:text-2xl font-bold tracking-tight hover:opacity-70 transition-opacity no-underline">
                 chan99k's
             </a>
-            
-            {
-                !!navItems?.length && (
-                    <ul class="flex items-center gap-x-8">
-                        {navItems.map((item) => (
-                            <li>
-                                <a href={item.href} class="text-sm font-medium hover:text-accent transition-colors">
-                                    {item.linkText}
-                                </a>
-                            </li>
-                        ))}
-                        <li>
-                             <button 
-                                id="search-trigger"
-                                aria-label="Search"
-                                class="flex items-center justify-center p-1 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search w-5 h-5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                            </button>
-                        </li>
-                        <li>
-                            <ThemeToggle client:load />
-                        </li>
-                    </ul>
-                )
-            }
+
+            <!-- Desktop Nav -->
+            <ul class="hidden md:flex items-center gap-x-8">
+                {navItems.map((item) => (
+                    <li>
+                        <a href={item.href} class="text-sm font-medium hover:text-accent transition-colors no-underline">
+                            {item.linkText}
+                        </a>
+                    </li>
+                ))}
+                <li>
+                    <button
+                        id="search-trigger"
+                        aria-label="검색"
+                        class="flex items-center justify-center p-1 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </button>
+                </li>
+                <li>
+                    <ThemeToggle client:load />
+                </li>
+            </ul>
+
+            <!-- Mobile Controls -->
+            <div class="flex items-center gap-3 md:hidden">
+                <button
+                    id="search-trigger-mobile"
+                    aria-label="검색"
+                    class="flex items-center justify-center p-1.5 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </button>
+                <ThemeToggle client:load />
+                <button
+                    id="mobile-menu-toggle"
+                    aria-label="메뉴"
+                    class="flex items-center justify-center p-1.5 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                >
+                    <!-- Hamburger icon -->
+                    <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                    <!-- Close icon (hidden by default) -->
+                    <svg id="menu-icon-close" class="hidden" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
         </nav>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-black/95 backdrop-blur-md">
+        <div class="max-w-[1280px] mx-auto px-5 sm:px-10 py-4">
+            <ul class="flex flex-col gap-1">
+                {navItems.map((item) => (
+                    <li>
+                        <a href={item.href} class="block py-3 text-base font-medium hover:text-accent transition-colors no-underline">
+                            {item.linkText}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </div>
     </div>
 </header>
 
 <script>
     document.getElementById('search-trigger')?.addEventListener('click', () => {
         document.dispatchEvent(new Event('open-search'));
+    });
+    document.getElementById('search-trigger-mobile')?.addEventListener('click', () => {
+        document.dispatchEvent(new Event('open-search'));
+    });
+
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('menu-icon-open');
+    const iconClose = document.getElementById('menu-icon-close');
+
+    toggle?.addEventListener('click', () => {
+        const isOpen = !menu?.classList.contains('hidden');
+        menu?.classList.toggle('hidden', isOpen);
+        iconOpen?.classList.toggle('hidden', !isOpen);
+        iconClose?.classList.toggle('hidden', isOpen);
     });
 </script>
