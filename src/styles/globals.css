@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -36,7 +37,7 @@
     }
 
     :not(pre)>code {
-        @apply px-1 py-0.5 font-mono rounded bg-gray-900 text-accent;
+        @apply px-1 py-0.5 font-mono rounded bg-gray-100 text-accent dark:bg-gray-800;
         font-size: 0.9em;
     }
 }

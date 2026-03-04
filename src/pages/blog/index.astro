@@ -24,11 +24,13 @@ const rootTags = getRootTags(posts);
 				</div>
 			)}
 			<div class="flex flex-col">
-				{
+				{posts.length > 0 ? (
 					posts.map((post) => (
 						<PostCard post={post} />
 					))
-				}
+				) : (
+					<p class="text-gray-400 py-12 text-center">아직 작성된 글이 없습니다.</p>
+				)}
 			</div>
 		</section>
 	</div>

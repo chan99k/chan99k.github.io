@@ -10,7 +10,7 @@ import ThemeToggle from './ThemeToggle';
 ---
 
 <header class="sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md transition-colors duration-300 border-b border-gray-100 dark:border-gray-800">
-    <div class="max-w-[1280px] mx-auto px-5 sm:px-10 lg:px-24">
+    <div class="max-w-7xl mx-auto px-5 sm:px-10 lg:px-24">
         <nav class="flex items-center justify-between py-4 sm:py-6">
             <a href="/" class="text-xl sm:text-2xl font-bold tracking-tight hover:opacity-70 transition-opacity no-underline">
                 chan99k's
@@ -52,6 +52,8 @@ import ThemeToggle from './ThemeToggle';
                 <button
                     id="mobile-menu-toggle"
                     aria-label="메뉴"
+                    aria-expanded="false"
+                    aria-controls="mobile-menu"
                     class="flex items-center justify-center p-1.5 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                     <!-- Hamburger icon -->
@@ -64,8 +66,8 @@ import ThemeToggle from './ThemeToggle';
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-black/95 backdrop-blur-md">
-        <div class="max-w-[1280px] mx-auto px-5 sm:px-10 py-4">
+    <div id="mobile-menu" role="menu" class="hidden md:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-black/95 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-5 sm:px-10 py-4">
             <ul class="flex flex-col gap-1">
                 {navItems.map((item) => (
                     <li>
@@ -97,5 +99,6 @@ import ThemeToggle from './ThemeToggle';
         menu?.classList.toggle('hidden', isOpen);
         iconOpen?.classList.toggle('hidden', !isOpen);
         iconClose?.classList.toggle('hidden', isOpen);
+        toggle?.setAttribute('aria-expanded', String(!isOpen));
     });
 </script>

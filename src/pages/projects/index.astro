@@ -12,11 +12,13 @@ const projects = (await getCollection('projects')).sort(
 	<section class="py-8 sm:py-12">
         <h1 class="text-2xl sm:text-4xl font-bold mb-8 sm:mb-12">프로젝트</h1>
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 sm:gap-y-16">
-			{
+			{projects.length > 0 ? (
 				projects.map((project) => (
                     <ProjectCard project={project} />
 				))
-			}
+			) : (
+				<p class="text-gray-400 py-12 text-center col-span-full">아직 등록된 프로젝트가 없습니다.</p>
+			)}
 		</div>
 	</section>
 </Layout>
