@@ -37,7 +37,7 @@ const blog = defineCollection({
         heroImage: z.string().optional(),
         tags: tagSchema,
         project: z.string().optional(),
-        contentSource: z.enum(['original', 'ai-translated', 'ai-assisted']).default('original'),
+        contentSource: z.enum(['original', 'ai-generated', 'ai-assisted']).default('original'),
         draft: z.boolean().default(false),
     }),
 });

@@ -16,26 +16,26 @@ export interface Tier1Category {
 export const TAG_TAXONOMY: Record<string, Tier1Category> = {
 	Projects: {
 		color: 'teal',
-		children: ['블로그', 'Giftify'],
+		children: ['blogs', 'giftify'],
 	},
 	Areas: {
 		color: 'blue',
-		children: ['개발', '아키텍처', '인프라'],
+		children: ['개발', 'architecture', 'infra'],
 	},
 	Resources: {
 		color: 'amber',
-		children: ['번역'],
+		children: ['translations'],
 	},
 	Archives: {
 		color: 'rose',
-		children: ['TIL', '생각'],
+		children: ['TIL', 'thoughts'],
 	},
 } as const;
 
 /** 2tier color overrides — when a 2tier tag needs a color different from its parent 1tier */
 export const TIER2_COLORS: Partial<Record<string, TierColor>> = {
-	'아키텍처': 'violet',
-	'인프라': 'emerald',
+	'architecture': 'violet',
+	'infra': 'emerald',
 };
 
 /** Resolve the display color for a tag (looks up 2tier override, falls back to 1tier) */
