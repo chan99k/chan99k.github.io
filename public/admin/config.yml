@@ -60,6 +60,16 @@ collections:
         label_singular: "태그"
         hint: "계층 태그는 /로 구분 (예: 개발/React)"
 
+      - label: "콘텐츠 소스"
+        name: "contentSource"
+        widget: "select"
+        options:
+          - "original"
+          - "ai-generated"
+          - "ai-assisted"
+        default: "ai-assisted"
+        hint: "AI 보조 작성은 ai-assisted, 직접 검증 완료 시 original로 승격"
+
       - label: "초안"
         name: "draft"
         widget: "boolean"

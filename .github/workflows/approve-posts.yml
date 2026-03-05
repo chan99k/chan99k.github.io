@@ -1,0 +1,44 @@
+name: Approve Posts (Promote to Original)
+
+on:
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: "승격할 포스트 slug 목록 (쉼표 구분)"
+        required: true
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Promote contentSource to original
+        run: |
+          IFS=',' read -ra SLUG_ARRAY <<< "${{ github.event.inputs.slugs }}"
+
+          for slug in "${SLUG_ARRAY[@]}"; do
+            slug=$(echo "$slug" | xargs)  # trim whitespace
+
+            # Find matching .md file in src/content/blog/
+            file=$(find src/content/blog/ -type f -name "*${slug}*.md" | head -n 1)
+
+            if [ -z "$file" ]; then
+              echo "Warning: No file found for slug: $slug"
+              continue
+            fi
+
+            echo "Processing: $file"
+
+            # Replace contentSource value in frontmatter
+            sed -i "s/^contentSource:.*$/contentSource: original/" "$file"
+          done
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/content/blog/
+          git diff --staged --quiet || git commit -m "chore(blog): contentSource를 original로 승격"
+          git push
