@@ -28,7 +28,7 @@ export const TAG_TAXONOMY = {
 	},
 	Archives: {
 		color: 'rose',
-		children: ['TIL', 'thoughts'],
+		children: ['til', 'thoughts'],
 	},
 } as const satisfies Record<string, Tier1Category>;
 

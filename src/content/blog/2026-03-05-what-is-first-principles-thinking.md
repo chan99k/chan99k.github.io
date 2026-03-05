@@ -2,7 +2,7 @@
 title: "제1원리 사고란 무엇인가? (What is First Principles Thinking?)"
 description: "제1원리 사고(First Principles Thinking)는 복잡한 문제를 가장 근본적인 진실로 분해하여 새로운 해결책을 발견하는 사고 방법이다. 유추에 의한 추론 대신 제1원리로부터의 추론을 사용함으로써, 우리가 절대적으로 참이라고 알고 있는 것과 가정을 분리해낸다."
 pubDate: "2026-03-05"
-tags: ["Resources/translations/기술 블로그", "Archives/thoughts/adr"]
+tags: ["Resources/translations/tech-blog"]
 contentSource: "ai-generated"
 draft: false
 ---
