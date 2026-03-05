@@ -1,5 +1,6 @@
 ---
 import { tagToSlug } from '../utils/tags';
+import { getTagColor, COLOR_CLASSES } from '../data/tag-taxonomy';
 
 interface Props {
 	tags: string[];
@@ -12,6 +13,10 @@ const sizeClasses = {
 	sm: 'text-xs px-2.5 py-0.5',
 	md: 'text-sm px-3 py-1',
 };
+
+function getColorClass(tag: string): string {
+	return COLOR_CLASSES[getTagColor(tag)];
+}
 ---
 
 <div class="flex flex-wrap gap-2">
@@ -21,9 +26,8 @@ const sizeClasses = {
 			<a
 				href={`/tags/${tagToSlug(tag)}/`}
 				class:list={[
-					'no-underline border border-gray-200 dark:border-gray-700 rounded-full',
-					'text-gray-500 dark:text-gray-400 hover:text-accent hover:border-accent',
-					'dark:hover:text-accent dark:hover:border-accent transition-colors',
+					'no-underline rounded-full font-medium transition-opacity hover:opacity-80',
+					getColorClass(tag),
 					sizeClasses[size],
 				]}
 			>

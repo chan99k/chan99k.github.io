@@ -12,7 +12,7 @@ export default defineConfig({
         remarkPlugins: [remarkCjkFriendly],
     },
     vite: {
-        plugins: [tailwindcss()]
+        plugins: [tailwindcss()],
     },
     integrations: [react()],
     adapter: isDev ? undefined : netlify()
