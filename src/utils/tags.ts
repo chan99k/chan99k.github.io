@@ -24,12 +24,12 @@ export function expandTag(tag: string): string[] {
 	return expanded;
 }
 
-export function buildTagTree(posts: { data: { tags: string[] } }[]): TagTreeNode {
+export function buildTagTree(posts: { data: { tags?: string[] } }[]): TagTreeNode {
 	const root: TagTreeNode = { count: 0, children: {} };
 
 	for (const post of posts) {
 		const seen = new Set<string>();
-		for (const tag of post.data.tags) {
+		for (const tag of post.data.tags ?? []) {
 			for (const expanded of expandTag(tag)) {
 				if (seen.has(expanded)) continue;
 				seen.add(expanded);
@@ -51,18 +51,18 @@ export function buildTagTree(posts: { data: { tags: string[] } }[]): TagTreeNode
 }
 
 export function getPostsByTag(
-	posts: { data: { tags: string[] } }[],
+	posts: { data: { tags?: string[] } }[],
 	tag: string,
 ): typeof posts {
 	return posts.filter((post) =>
-		post.data.tags.some((t) => t === tag || t.startsWith(tag + '/')),
+		(post.data.tags ?? []).some((t) => t === tag || t.startsWith(tag + '/')),
 	);
 }
 
-export function getAllTags(posts: { data: { tags: string[] } }[]): string[] {
+export function getAllTags(posts: { data: { tags?: string[] } }[]): string[] {
 	const tagSet = new Set<string>();
 	for (const post of posts) {
-		for (const tag of post.data.tags) {
+		for (const tag of post.data.tags ?? []) {
 			for (const expanded of expandTag(tag)) {
 				tagSet.add(expanded);
 			}
@@ -71,7 +71,7 @@ export function getAllTags(posts: { data: { tags: string[] } }[]): string[] {
 	return [...tagSet].sort();
 }
 
-export function getRootTags(posts: { data: { tags: string[] } }[]): string[] {
+export function getRootTags(posts: { data: { tags?: string[] } }[]): string[] {
 	const tree = buildTagTree(posts);
 	return Object.keys(tree.children).sort();
 }
@@ -110,14 +110,15 @@ export interface GraphData {
 	edges: GraphEdge[];
 }
 
-export function getGraphData(posts: { data: { tags: string[] } }[]): GraphData {
+export function getGraphData(posts: { data: { tags?: string[] } }[]): GraphData {
 	const tagCounts = new Map<string, number>();
 	const cooccurrences = new Map<string, Set<string>>();
 
 	// Count tags and track co-occurrences per post
 	for (const post of posts) {
+		const tags = post.data.tags ?? [];
 		const expandedTags = new Set<string>();
-		for (const tag of post.data.tags) {
+		for (const tag of tags) {
 			for (const expanded of expandTag(tag)) {
 				expandedTags.add(expanded);
 				tagCounts.set(expanded, (tagCounts.get(expanded) ?? 0) + 1);
@@ -125,7 +126,7 @@ export function getGraphData(posts: { data: { tags: string[] } }[]): GraphData {
 		}
 
 		// Co-occurrence: leaf-level tags that share a post but aren't in a parent-child relationship
-		const leafTags = post.data.tags.map((t) => expandTag(t));
+		const leafTags = tags.map((t) => expandTag(t));
 		for (let i = 0; i < leafTags.length; i++) {
 			for (let j = i + 1; j < leafTags.length; j++) {
 				const leafA = leafTags[i][leafTags[i].length - 1];
@@ -135,7 +136,7 @@ export function getGraphData(posts: { data: { tags: string[] } }[]): GraphData {
 					if (!cooccurrences.has(key)) {
 						cooccurrences.set(key, new Set());
 					}
-					cooccurrences.get(key)!.add(post.data.tags.join(','));
+					cooccurrences.get(key)!.add(tags.join(','));
 				}
 			}
 		}
