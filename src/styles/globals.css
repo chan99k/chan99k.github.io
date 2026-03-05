@@ -6,17 +6,29 @@
 @theme {
     --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
 
-    /* 29CM Colors */
+    /* === Deprecated: 29CM Colors (kept for reference) ===
+    --color-accent: #FF4800;        Vivid Orange-Red
+    --color-gray-800: #262626;      Warm Dark Gray
+    --color-gray-900: #171717;      Warm Near-Black
+    === */
+
+    /* Light (unchanged) */
     --color-black: #000000;
     --color-white: #FFFFFF;
-    --color-accent: #FF4800;
-    /* Vivid Orange-Red */
     --color-gray-50: #F4F4F4;
     --color-gray-100: #E4E4E4;
     --color-gray-200: #d4d4d4;
     --color-gray-300: #a3a3a3;
-    --color-gray-800: #262626;
-    --color-gray-900: #171717;
+
+    /* Dark (Programmers-inspired cool navy) */
+    --color-gray-800: #2B3040;
+    --color-gray-900: #1E2231;
+    --color-navy-800: #2B3040;
+    --color-navy-900: #1E2231;
+    --color-navy-950: #171C2A;
+
+    /* Accent (Programmers-inspired blue) */
+    --color-accent: #0078FF;
 }
 
 @layer base {
@@ -89,7 +101,7 @@
 }
 
 ::-webkit-scrollbar-track {
-    @apply bg-white dark:bg-black;
+    @apply bg-white dark:bg-navy-950;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -119,4 +131,33 @@ html {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Prose Table Styles (Programmers-inspired: blue header + clean borders) */
+.prose :where(table) {
+    @apply w-full text-sm border-collapse;
+}
+
+.prose :where(thead th) {
+    @apply bg-accent/10 text-accent font-semibold text-left px-4 py-3 border-b-2 border-accent/20;
+}
+
+.dark .prose :where(thead th) {
+    @apply bg-accent/15 text-blue-300 border-accent/30;
+}
+
+.prose :where(tbody td) {
+    @apply px-4 py-3 border-b border-gray-100;
+}
+
+.dark .prose :where(tbody td) {
+    @apply border-navy-800;
+}
+
+.prose :where(tbody tr:hover) {
+    @apply bg-gray-50;
+}
+
+.dark .prose :where(tbody tr:hover) {
+    @apply bg-navy-800/50;
 }

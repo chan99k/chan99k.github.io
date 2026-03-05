@@ -15,6 +15,10 @@ type Props = CollectionEntry<'projects'>;
 
 const project = Astro.props;
 const { Content } = await project.render();
+
+const relatedPosts = (await getCollection('blog', ({ data }) =>
+	data.draft !== true && data.project === project.slug
+)).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <Layout title={project.data.title} description={project.data.description} image={project.data.heroImage}>
@@ -57,6 +61,26 @@ const { Content } = await project.render();
         <div class="prose prose-lg dark:prose-invert max-w-none">
             <Content />
         </div>
+
+        {relatedPosts.length > 0 && (
+            <section class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800">
+                <h2 class="text-xl font-bold mb-6">관련 포스트</h2>
+                <ul class="flex flex-col gap-4">
+                    {relatedPosts.map((post) => (
+                        <li>
+                            <a href={`/blog/${post.slug}/`} class="group flex items-baseline gap-4 no-underline">
+                                <time class="text-sm text-gray-400 font-mono shrink-0">
+                                    {post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                </time>
+                                <span class="text-base font-medium group-hover:text-accent transition-colors">
+                                    {post.data.title}
+                                </span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        )}
 
         <div class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800">
             <Giscus client:visible />

@@ -36,3 +36,6 @@ docs/plans/
 
 # Screenshots (root level)
 /*.png
+
+# BackLogs CLI
+backlog/
