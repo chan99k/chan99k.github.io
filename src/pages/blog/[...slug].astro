@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import BlogSidebar from '../../components/BlogSidebar.astro';
 import Giscus from '../../components/Giscus';
+import AdUnit from '../../components/AdUnit.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -41,7 +42,10 @@ const currentTag = post.data.tags?.[0];
 				<Content />
 			</div>
 
-			<div class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-800">
+			<!-- Advertisement -->
+			<AdUnit format="auto" className="border-t border-gray-100 dark:border-gray-800 pt-8" />
+
+			<div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
 				<div id="comments">
 					<Giscus client:visible />
 				</div>

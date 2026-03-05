@@ -1,0 +1,65 @@
+---
+interface Props {
+  clientId?: string;
+  slot?: string;
+  format?: 'auto' | 'rectangle' | 'vertical' | 'horizontal';
+  className?: string;
+}
+
+const {
+  clientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID,
+  slot = '',
+  format = 'auto',
+  className = '',
+} = Astro.props;
+
+// Don't render if no client ID is provided
+if (!clientId) {
+  return null;
+}
+---
+
+<div class={`ad-container my-8 ${className}`}>
+  <ins
+    class="adsbygoogle"
+    style="display:block"
+    data-ad-client={clientId}
+    data-ad-slot={slot}
+    data-ad-format={format}
+    data-full-width-responsive="true"
+  ></ins>
+</div>
+
+<script>
+  // Initialize AdSense ad units
+  if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
+    ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+  }
+</script>
+
+<style>
+  .ad-container {
+    min-height: 90px;
+    overflow: hidden;
+  }
+
+  /* Ensure ads work well in dark mode */
+  :global(.dark) .ad-container {
+    /* AdSense handles its own colors, but we ensure the container doesn't interfere */
+    background: transparent;
+  }
+
+  /* Responsive container */
+  .adsbygoogle {
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .ad-container {
+      margin-left: -1rem;
+      margin-right: -1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+</style>

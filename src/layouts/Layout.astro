@@ -21,7 +21,10 @@ const { title, description = "chan99k의 개인 블로그 및 포트폴리오입
         <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
-        
+
+        <!-- Canonical URL -->
+        <link rel="canonical" href={Astro.url} />
+
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
         <meta property="og:url" content={Astro.url} />
@@ -38,6 +41,12 @@ const { title, description = "chan99k의 개인 블로그 및 포트폴리오입
 
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+
+        <!-- Google AdSense -->
+        {import.meta.env.PUBLIC_ADSENSE_CLIENT_ID && (
+            <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${import.meta.env.PUBLIC_ADSENSE_CLIENT_ID}`} crossorigin="anonymous"></script>
+        )}
+
         <script is:inline>
             (function() {
                 const stored = localStorage.getItem('theme');
