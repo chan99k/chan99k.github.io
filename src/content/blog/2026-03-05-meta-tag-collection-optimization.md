@@ -1,8 +1,13 @@
 ---
-title: "메타 태그 컬렉션 최적화: List에서 HashSet으로"
-description: "제품 메타태그의 존재 여부를 확인하는 단순한 코드에서 출발해, Enum Strategy Pattern, HashSet, Skip-List, TreeSet까지 — 문제에 가장 적합한 자료구조를 선택하는 것이 왜 중요한지를 다룬다."
-pubDate: "2026-03-05"
-tags: ["Areas/개발/lang/Java", "Areas/개발/design-pattern"]
+title: "메타 태그 컬렉션 최적화 문제: List에서 HashSet으로"
+description: 제품 메타태그의 존재 여부를 확인하는 단순한 코드에서 출발해, Enum Strategy Pattern, HashSet,
+  Skip-List, TreeSet까지 — 문제에 가장 적합한 자료구조를 선택하는 것이 왜 중요한지 깨달은 경험을 다룬다.
+pubDate: 2025-08-21
+updatedDate: 2026-03-05
+tags:
+  - Areas/개발/lang/Java
+  - Areas/개발/design-pattern
+draft: true
 ---
 
 c-lab 은 C-Level 고객들이 필요한 모든 제품들을 정확하고 신속하게 제공해 주는 서비스이다. C-Level 고객들은 하나같이 본인만의 특별한 취향을 갖고 있기 때문에, c-lab 은 고객 맞춤형 서비스를 제공하기 위하여 최대한 상세하게 제품 태그를 관리하여야 할 필요성이 있다.
