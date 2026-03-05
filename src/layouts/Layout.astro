@@ -44,7 +44,10 @@ const { title, description = "chan99k의 개인 블로그 및 포트폴리오입
 
         <!-- Google AdSense -->
         {import.meta.env.PUBLIC_ADSENSE_CLIENT_ID && (
-            <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${import.meta.env.PUBLIC_ADSENSE_CLIENT_ID}`} crossorigin="anonymous"></script>
+            <>
+                <meta name="google-adsense-account" content={import.meta.env.PUBLIC_ADSENSE_CLIENT_ID} />
+                <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${import.meta.env.PUBLIC_ADSENSE_CLIENT_ID}`} crossorigin="anonymous"></script>
+            </>
         )}
 
         <script is:inline>
