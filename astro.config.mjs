@@ -9,7 +9,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://chan99k.github.io',
+    site: 'https://blog.chan99k.dev',
     markdown: {
         remarkPlugins: [remarkCjkFriendly],
     },
