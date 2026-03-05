@@ -13,7 +13,7 @@ export interface Tier1Category {
 	children: string[];
 }
 
-export const TAG_TAXONOMY: Record<string, Tier1Category> = {
+export const TAG_TAXONOMY = {
 	Projects: {
 		color: 'teal',
 		children: ['blogs', 'giftify'],
@@ -30,7 +30,10 @@ export const TAG_TAXONOMY: Record<string, Tier1Category> = {
 		color: 'rose',
 		children: ['TIL', 'thoughts'],
 	},
-} as const;
+} as const satisfies Record<string, Tier1Category>;
+
+export type Tier1Name = keyof typeof TAG_TAXONOMY;
+export type Tier2Name = typeof TAG_TAXONOMY[Tier1Name]['children'][number];
 
 /** 2tier color overrides — when a 2tier tag needs a color different from its parent 1tier */
 export const TIER2_COLORS: Partial<Record<string, TierColor>> = {
