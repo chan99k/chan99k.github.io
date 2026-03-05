@@ -5,6 +5,7 @@ pubDate: "2026-02-07"
 updatedDate: "2026-03-05"
 tags: ["Areas/개발/frontend/Astro", "Areas/개발/lang/TypeScript", "Areas/infra"]
 project: "chan99k-blog"
+contentSource: "ai-generated"
 ---
 
 이 블로그는 Netlify의 Astro 공식 템플릿에서 시작했습니다. 약 이틀에 걸쳐 개인 기술 블로그로 재구축한 과정을 기록합니다.
