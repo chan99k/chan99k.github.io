@@ -23,9 +23,16 @@ pnpm-debug.log*
 # Local Netlify folder
 .netlify
 
+# IDE
+.idea/
+
 # AI tools
 .claude/
 .playwright-mcp/
+.omc/
+
+# Local docs
+docs/plans/
 
 # Screenshots (root level)
 /*.png
