@@ -5,6 +5,7 @@ import PostCard from '../../components/PostCard.astro';
 import TagBreadcrumb from '../../components/TagBreadcrumb.astro';
 import TagChips from '../../components/TagChips.astro';
 import { getAllTags, getPostsByTag, slugToTag, buildTagTree } from '../../utils/tags';
+import { SITE } from '../../config/site';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog', ({ data }) => data.draft !== true);
@@ -37,7 +38,7 @@ const childTags = Object.keys(node?.children ?? {}).map(
 );
 ---
 
-<Layout title={`${tag} - chan99k`} description={`"${tag}" 태그가 붙은 글 목록입니다.`}>
+<Layout title={`${tag} - ${SITE.name}`} description={`"${tag}" 태그가 붙은 글 목록입니다.`}>
 	<section class="py-12">
 		<TagBreadcrumb tag={tag} />
 		<h1 class="text-4xl font-bold mb-4">{segments[segments.length - 1]}</h1>

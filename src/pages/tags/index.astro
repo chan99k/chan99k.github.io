@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import TagTree from '../../components/TagTree.astro';
 import TagGraph from '../../components/TagGraph';
 import { buildTagTree, getGraphData } from '../../utils/tags';
+import { SITE } from '../../config/site';
 
 const posts = (await getCollection('blog', ({ data }) => data.draft !== true)).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -13,7 +14,7 @@ const tree = buildTagTree(posts);
 const graphData = getGraphData(posts);
 ---
 
-<Layout title="태그 - chan99k" description="태그별로 블로그 글을 탐색하세요.">
+<Layout title={`태그 - ${SITE.name}`} description="태그별로 블로그 글을 탐색하세요.">
 	<section class="py-8 sm:py-12">
 		<h1 class="text-2xl sm:text-4xl font-bold mb-8 sm:mb-12">태그</h1>
 

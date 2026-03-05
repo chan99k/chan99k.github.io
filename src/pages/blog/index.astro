@@ -5,6 +5,7 @@ import PostCard from '../../components/PostCard.astro';
 import TagChips from '../../components/TagChips.astro';
 import BlogSidebar from '../../components/BlogSidebar.astro';
 import { getRootTags } from '../../utils/tags';
+import { SITE } from '../../config/site';
 
 const posts = (await getCollection('blog', ({ data }) => data.draft !== true)).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -13,7 +14,7 @@ const posts = (await getCollection('blog', ({ data }) => data.draft !== true)).s
 const rootTags = getRootTags(posts);
 ---
 
-<Layout title="블로그 - chan99k" description="웹 개발, 디자인 시스템, 소프트웨어 엔지니어링에 관한 최신 글들을 확인하세요.">
+<Layout title={`블로그 - ${SITE.name}`} description="웹 개발, 디자인 시스템, 소프트웨어 엔지니어링에 관한 최신 글들을 확인하세요.">
 	<div class="flex gap-0">
 		<BlogSidebar />
 		<section class="py-8 sm:py-12 pl-8 min-w-0 grow">

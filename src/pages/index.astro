@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { SITE } from '../config/site';
 ---
 
-<Layout title="chan99k's blog" description="개발자이자 빌더. 웹 개발, 디자인 시스템, 그리고 저의 여정에 대해 기록합니다.">
+<Layout title={SITE.title} description={SITE.description}>
 </Layout>

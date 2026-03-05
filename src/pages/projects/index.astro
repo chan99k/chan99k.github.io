@@ -2,13 +2,14 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import { SITE } from '../../config/site';
 
 const projects = (await getCollection('projects')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
-<Layout title="프로젝트 - chan99k" description="저의 개인 프로젝트, 오픈소스 활동, 그리고 개발 과정을 살펴보세요.">
+<Layout title={`프로젝트 - ${SITE.name}`} description="저의 개인 프로젝트, 오픈소스 활동, 그리고 개발 과정을 살펴보세요.">
 	<section class="py-8 sm:py-12">
         <h1 class="text-2xl sm:text-4xl font-bold mb-8 sm:mb-12">프로젝트</h1>
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 sm:gap-y-16">
