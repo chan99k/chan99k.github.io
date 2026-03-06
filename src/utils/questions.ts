@@ -41,9 +41,30 @@ export function getRandomQuestion<T extends QuestionEntry>(
 export function matchRelatedPosts(
 	question: QuestionEntry,
 	posts: PostEntry[],
+	maxResults = 5,
 ): PostEntry[] {
 	const explicit = new Set(question.data.relatedPosts);
-	return posts.filter((p) => explicit.has(p.slug));
+	const explicitPosts = posts.filter((p) => explicit.has(p.slug));
+
+	const qTags = new Set(question.data.tags.map((t) => t.toLowerCase()));
+	if (qTags.size === 0) return explicitPosts.slice(0, maxResults);
+
+	const explicitSlugs = new Set(explicitPosts.map((p) => p.slug));
+	const tagMatched = posts
+		.filter((p) => !explicitSlugs.has(p.slug))
+		.map((p) => {
+			// Extract tier2/tier3 from PARA tags (skip tier1)
+			const segments = p.data.tags.flatMap((t) =>
+				t.split('/').slice(1).map((s) => s.toLowerCase()),
+			);
+			const overlap = segments.filter((s) => qTags.has(s)).length;
+			return { post: p, overlap };
+		})
+		.filter(({ overlap }) => overlap > 0)
+		.sort((a, b) => b.overlap - a.overlap)
+		.map(({ post }) => post);
+
+	return [...explicitPosts, ...tagMatched].slice(0, maxResults);
 }
 
 export function getCategories(questions: QuestionEntry[]): string[] {
