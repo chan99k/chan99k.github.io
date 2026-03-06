@@ -7,6 +7,7 @@ import { ApiKeySettings } from './interview/ApiKeySettings';
 import { RelatedPosts } from './interview/RelatedPosts';
 import { filterByCategory, getRandomQuestion, matchRelatedPosts, getCategories } from '../utils/questions';
 import { buildEvaluationPrompt, streamEvaluation } from '../utils/claude';
+import type { Provider } from '../utils/claude';
 import type { EmbeddingsData } from '../utils/embeddings';
 import type { QuestionEntry, PostEntry } from '../utils/questions';
 
@@ -25,6 +26,7 @@ interface Props {
 
 export default function InterviewWidget({ questions, posts }: Props) {
     const [apiKey, setApiKey] = useState('');
+    const [provider, setProvider] = useState<Provider>('claude');
     const [category, setCategory] = useState('all');
     const [current, setCurrent] = useState<QuestionData>(() => getRandomQuestion(questions));
     const [answer, setAnswer] = useState('');
@@ -102,7 +104,7 @@ export default function InterviewWidget({ questions, posts }: Props) {
 
         try {
             let fullText = '';
-            for await (const chunk of streamEvaluation(apiKey, prompt)) {
+            for await (const chunk of streamEvaluation(apiKey, prompt, provider)) {
                 fullText += chunk;
                 setStreamText(fullText);
             }
@@ -117,7 +119,7 @@ export default function InterviewWidget({ questions, posts }: Props) {
         } finally {
             setIsLoading(false);
         }
-    }, [apiKey, answer, current, posts, embeddings]);
+    }, [apiKey, answer, current, posts, embeddings, provider]);
 
     const relatedPosts = matchRelatedPosts(current, posts);
 
@@ -186,7 +188,10 @@ export default function InterviewWidget({ questions, posts }: Props) {
 
             {!apiKey && (
                 <div className="mt-6">
-                    <ApiKeySettings onKeyChange={setApiKey} />
+                    <ApiKeySettings onSettingsChange={(key, prov) => {
+                        setApiKey(key);
+                        setProvider(prov);
+                    }} />
                 </div>
             )}
         </div>

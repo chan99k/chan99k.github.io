@@ -1,5 +1,7 @@
 import { EVALUATION_CRITERIA, TOTAL_SCORE } from '../config/evaluation';
 
+export type Provider = 'claude' | 'openai';
+
 interface EvaluationInput {
     question: string;
     modelAnswer: string;
@@ -69,18 +71,45 @@ ${rubricRows}
 피드백은 한국어로 작성해주세요.`;
 }
 
+const PROVIDER_CONFIG = {
+    claude: {
+        proxy: '/.netlify/functions/claude-proxy',
+        headerKey: 'x-claude-api-key',
+        model: 'claude-sonnet-4-20250514',
+        extractText: (parsed: Record<string, unknown>): string | null => {
+            if (parsed.type === 'content_block_delta') {
+                const delta = parsed.delta as Record<string, unknown> | undefined;
+                return (delta?.text as string) ?? null;
+            }
+            return null;
+        },
+    },
+    openai: {
+        proxy: '/.netlify/functions/openai-proxy',
+        headerKey: 'x-openai-api-key',
+        model: 'gpt-4o',
+        extractText: (parsed: Record<string, unknown>): string | null => {
+            const choices = parsed.choices as { delta?: { content?: string } }[] | undefined;
+            return choices?.[0]?.delta?.content ?? null;
+        },
+    },
+} as const;
+
 export async function* streamEvaluation(
     apiKey: string,
     prompt: string,
+    provider: Provider = 'claude',
 ): AsyncGenerator<string> {
-    const response = await fetch('/.netlify/functions/claude-proxy', {
+    const config = PROVIDER_CONFIG[provider];
+
+    const response = await fetch(config.proxy, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'x-claude-api-key': apiKey,
+            [config.headerKey]: apiKey,
         },
         body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
+            model: config.model,
             max_tokens: 1024,
             stream: true,
             messages: [{ role: 'user', content: prompt }],
@@ -89,7 +118,7 @@ export async function* streamEvaluation(
 
     if (!response.ok) {
         const err = await response.text();
-        throw new Error(`Claude API error: ${response.status} ${err}`);
+        throw new Error(`${provider} API error: ${response.status} ${err}`);
     }
 
     const reader = response.body!.getReader();
@@ -111,9 +140,8 @@ export async function* streamEvaluation(
 
             try {
                 const parsed = JSON.parse(data);
-                if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
-                    yield parsed.delta.text;
-                }
+                const text = config.extractText(parsed);
+                if (text) yield text;
             } catch {
                 // skip non-JSON lines
             }

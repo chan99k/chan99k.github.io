@@ -4,7 +4,7 @@ import { describe, it, expect, afterEach, vi, beforeEach } from 'vitest';
 import InterviewWidget from './InterviewWidget';
 
 beforeEach(() => {
-    localStorage.clear();
+    sessionStorage.clear();
     global.fetch = vi.fn().mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ chunks: [] }),
