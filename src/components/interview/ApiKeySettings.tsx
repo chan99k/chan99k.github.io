@@ -10,7 +10,7 @@ export function ApiKeySettings({ onKeyChange }: Props) {
     const [key, setKey] = useState('');
 
     useEffect(() => {
-        const stored = localStorage.getItem(STORAGE_KEY);
+        const stored = sessionStorage.getItem(STORAGE_KEY);
         if (stored) {
             setKey(stored);
             onKeyChange(stored);
@@ -18,7 +18,7 @@ export function ApiKeySettings({ onKeyChange }: Props) {
     }, []);
 
     const handleSave = () => {
-        localStorage.setItem(STORAGE_KEY, key);
+        sessionStorage.setItem(STORAGE_KEY, key);
         onKeyChange(key);
     };
 
@@ -41,7 +41,7 @@ export function ApiKeySettings({ onKeyChange }: Props) {
                 </button>
             </div>
             <p className="mt-2 text-xs text-neutral-500">
-                * 키는 브라우저에만 저장되며, 블로그 서버를 거치지 않고 Claude API에 직접 전송됩니다
+                * 키는 현재 세션에만 저장되며, 탭을 닫으면 자동 삭제됩니다
             </p>
         </div>
     );

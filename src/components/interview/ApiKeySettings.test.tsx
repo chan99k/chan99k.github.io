@@ -4,7 +4,7 @@ import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest';
 import { ApiKeySettings } from './ApiKeySettings';
 
 describe('ApiKeySettings', () => {
-    beforeEach(() => localStorage.clear());
+    beforeEach(() => sessionStorage.clear());
     afterEach(() => cleanup());
 
     it('renders input and save button', () => {
@@ -13,7 +13,7 @@ describe('ApiKeySettings', () => {
         expect(screen.getByRole('button', { name: /저장/i })).toBeDefined();
     });
 
-    it('saves key to localStorage on submit', () => {
+    it('saves key to sessionStorage on submit', () => {
         const onKeyChange = vi.fn();
         render(<ApiKeySettings onKeyChange={onKeyChange} />);
 
@@ -21,12 +21,12 @@ describe('ApiKeySettings', () => {
         fireEvent.change(input, { target: { value: 'sk-ant-test-key-123' } });
         fireEvent.click(screen.getByRole('button', { name: /저장/i }));
 
-        expect(localStorage.getItem('claude-api-key')).toBe('sk-ant-test-key-123');
+        expect(sessionStorage.getItem('claude-api-key')).toBe('sk-ant-test-key-123');
         expect(onKeyChange).toHaveBeenCalledWith('sk-ant-test-key-123');
     });
 
-    it('loads existing key from localStorage', () => {
-        localStorage.setItem('claude-api-key', 'sk-ant-existing');
+    it('loads existing key from sessionStorage', () => {
+        sessionStorage.setItem('claude-api-key', 'sk-ant-existing');
         render(<ApiKeySettings onKeyChange={() => {}} />);
 
         const input = screen.getByPlaceholderText(/sk-ant-/i) as HTMLInputElement;
