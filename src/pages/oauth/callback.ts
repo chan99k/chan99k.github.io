@@ -47,21 +47,23 @@ export const GET: APIRoute = async ({ url }) => {
 };
 
 function renderMessage(type: 'success' | 'error', content: string): string {
+	const allowedOrigin = import.meta.env.SITE || 'https://blog.chan99k.dev';
 	return `<!doctype html>
 <html>
 <body>
 <script>
 (function() {
+  var ALLOWED = '${allowedOrigin}';
   function receiveMessage(e) {
-    console.log("receiveMessage %o", e);
+    if (e.origin !== ALLOWED) return;
     window.opener.postMessage(
       'authorization:github:${type}:${content}',
-      e.origin
+      ALLOWED
     );
     window.removeEventListener("message", receiveMessage, false);
   }
   window.addEventListener("message", receiveMessage, false);
-  window.opener.postMessage("authorizing:github", "*");
+  window.opener.postMessage("authorizing:github", ALLOWED);
 })();
 </script>
 </body>

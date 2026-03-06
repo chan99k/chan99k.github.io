@@ -59,7 +59,7 @@ export default async () => {
 		);
 	} catch (err) {
 		console.error('Review email error:', err);
-		return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
+		return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
 	}
 };
 
