@@ -33,7 +33,6 @@ export default function InterviewWidget({ questions, posts }: Props) {
     const [feedback, setFeedback] = useState<FeedbackData | null>(null);
     const [streamText, setStreamText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [showAnswer, setShowAnswer] = useState(false);
     const [embeddings, setEmbeddings] = useState<EmbeddingsData | null>(null);
 
     const categories = getCategories(questions);
@@ -51,7 +50,6 @@ export default function InterviewWidget({ questions, posts }: Props) {
         setAnswer('');
         setFeedback(null);
         setStreamText('');
-        setShowAnswer(false);
     }, [questions, category, current.slug]);
 
     const handleCategoryChange = useCallback((cat: string) => {
@@ -61,7 +59,6 @@ export default function InterviewWidget({ questions, posts }: Props) {
         setAnswer('');
         setFeedback(null);
         setStreamText('');
-        setShowAnswer(false);
     }, [questions]);
 
     const handleEvaluate = useCallback(async () => {
@@ -156,24 +153,12 @@ export default function InterviewWidget({ questions, posts }: Props) {
 
             <div className="mt-2 flex gap-2">
                 <button
-                    onClick={() => setShowAnswer(!showAnswer)}
-                    className="text-sm text-neutral-600 hover:underline dark:text-neutral-400"
-                >
-                    {showAnswer ? '모범답안 숨기기' : '모범답안 보기'}
-                </button>
-                <button
                     onClick={handleNext}
                     className="text-sm text-neutral-600 hover:underline dark:text-neutral-400"
                 >
                     다음 질문
                 </button>
             </div>
-
-            {showAnswer && (
-                <div className="mt-3 rounded bg-neutral-50 p-3 text-sm dark:bg-neutral-800">
-                    {current.data.answer}
-                </div>
-            )}
 
             <AiFeedback
                 feedback={feedback}

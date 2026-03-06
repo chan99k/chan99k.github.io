@@ -51,11 +51,6 @@ describe('InterviewWidget', () => {
         expect(options.some(o => o.textContent === 'java')).toBe(true);
     });
 
-    it('shows model answer toggle button', () => {
-        render(<InterviewWidget questions={mockQuestions} posts={mockPosts} />);
-        expect(screen.getByText('모범답안 보기')).toBeDefined();
-    });
-
     it('shows next question button', () => {
         render(<InterviewWidget questions={mockQuestions} posts={mockPosts} />);
         expect(screen.getByText('다음 질문')).toBeDefined();
