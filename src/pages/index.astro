@@ -1,7 +1,28 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { SITE } from '../config/site';
+import { getCollection } from 'astro:content';
+import InterviewWidget from '../components/InterviewWidget';
+
+const questions = await getCollection('questions');
+const allPosts = await getCollection('blog');
+const posts = allPosts
+    .filter((p) => !p.data.draft)
+    .map((p) => ({ slug: p.slug, data: { title: p.data.title, tags: p.data.tags } }));
+
+const questionsData = questions.map((q) => ({
+    slug: q.slug,
+    data: q.data,
+    body: q.body ?? '',
+}));
 ---
 
 <Layout title={SITE.title} description={SITE.description}>
+    <main class="mx-auto max-w-4xl px-4 py-8">
+        <InterviewWidget
+            client:visible
+            questions={questionsData}
+            posts={posts}
+        />
+    </main>
 </Layout>

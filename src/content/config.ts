@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { TAG_TAXONOMY } from '../data/tag-taxonomy';
+import { questionSchema } from '../schemas/question';
 
 const tagSchema = z.array(z.string()).default([]).superRefine((tags, ctx) => {
     const tier1Names = Object.keys(TAG_TAXONOMY);
@@ -63,4 +64,9 @@ const pages = defineCollection({
     }),
 });
 
-export const collections = { blog, projects, pages };
+const questions = defineCollection({
+    type: 'content',
+    schema: questionSchema,
+});
+
+export const collections = { blog, projects, pages, questions };
