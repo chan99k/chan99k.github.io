@@ -39,3 +39,6 @@ docs/plans/
 
 # BackLogs CLI
 backlog/
+
+# Generated embeddings
+public/blog-embeddings.json
