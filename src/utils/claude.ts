@@ -117,8 +117,11 @@ export async function* streamEvaluation(
     });
 
     if (!response.ok) {
-        const err = await response.text();
-        throw new Error(`${provider} API error: ${response.status} ${err}`);
+        const msg = response.status === 401 ? 'API 키가 유효하지 않습니다'
+            : response.status === 429 ? '요청 한도를 초과했습니다'
+            : response.status === 403 ? '접근이 거부되었습니다'
+            : 'API 요청에 실패했습니다';
+        throw new Error(msg);
     }
 
     const reader = response.body!.getReader();

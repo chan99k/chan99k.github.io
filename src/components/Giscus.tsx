@@ -24,8 +24,7 @@ export default function Giscus() {
         script.setAttribute('crossorigin', 'anonymous');
         script.async = true;
 
-        ref.current.innerHTML = '';
-        ref.current.appendChild(script);
+        ref.current.replaceChildren(script);
     }, []);
 
     return <div ref={ref} className="giscus mt-10" />;
