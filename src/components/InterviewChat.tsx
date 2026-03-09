@@ -24,7 +24,7 @@ async function* streamFromProxy(
         },
         body: JSON.stringify({
             model: 'claude-sonnet-4-20250514',
-            max_tokens: 2048,
+            max_tokens: 4096,
             stream: true,
             system,
             messages,
@@ -167,7 +167,9 @@ export default function InterviewChat({ initialQuestion }: Props) {
                 depth: newDepth,
             });
 
-            const llmMessages = updatedMessages.map((m) => ({ role: m.role, content: m.content }));
+            // Keep only recent messages to avoid exceeding input token limit
+            const recentMessages = updatedMessages.slice(-8);
+            const llmMessages = recentMessages.map((m) => ({ role: m.role, content: m.content }));
 
             let fullText = '';
             for await (const chunk of streamFromProxy(apiKey, systemPrompt, llmMessages)) {

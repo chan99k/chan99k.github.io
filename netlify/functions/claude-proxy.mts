@@ -1,7 +1,7 @@
 import type { Context } from '@netlify/functions';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-const MAX_TOKENS_LIMIT = 2048;
+const MAX_TOKENS_LIMIT = 4096;
 const MAX_BODY_SIZE = 50 * 1024; // 50KB
 const MAX_MESSAGES = 10;
 const MAX_MESSAGE_CONTENT_LENGTH = 10000;
