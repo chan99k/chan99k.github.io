@@ -10,7 +10,8 @@
         "preview": "astro preview",
         "astro": "astro",
         "test": "vitest run",
-        "cms": "npx decap-server"
+        "cms": "npx decap-server",
+        "sync:embeddings": "npx tsx scripts/sync-embeddings.ts"
     },
     "dependencies": {
         "@ai-sdk/anthropic": "^3.0.58",
