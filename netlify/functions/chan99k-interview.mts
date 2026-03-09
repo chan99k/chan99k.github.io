@@ -3,18 +3,6 @@ import { createClient } from '@supabase/supabase-js';
 
 const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
 const SERVER_KEY_HEADER = 'x-server-key';
-const MODEL = 'Xenova/all-MiniLM-L6-v2';
-
-// Dynamic import to avoid bundling issues with ONNX native bindings
-let extractor: unknown = null;
-
-async function getExtractor() {
-    if (!extractor) {
-        const { pipeline } = await import('@huggingface/transformers');
-        extractor = await pipeline('feature-extraction', MODEL);
-    }
-    return extractor as { (text: string, opts: Record<string, unknown>): Promise<{ data: Float32Array }> };
-}
 
 function getAllowedOrigins(): string[] {
     const origins = [...ALLOWED_ORIGINS];
@@ -58,7 +46,12 @@ export default async (req: Request, _context: Context) => {
         return new Response('Forbidden', { status: 403 });
     }
 
-    let body: { query: string; messages?: { role: string; content: string }[]; session_id?: string };
+    let body: {
+        query: string;
+        embedding?: number[];
+        messages?: { role: string; content: string }[];
+        session_id?: string;
+    };
     try {
         body = await req.json();
     } catch {
@@ -69,20 +62,20 @@ export default async (req: Request, _context: Context) => {
         return new Response('Missing query', { status: 400 });
     }
 
-    // 1. RAG search (server-side embedding — personal use, cold start acceptable)
-    const ext = await getExtractor();
-    const output = await ext(body.query, { pooling: 'mean', normalize: true });
-    const queryEmbedding = Array.from(output.data as Float32Array);
-
     const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
     const supabase = createClient(supabaseUrl, serviceRoleKey);
 
-    const { data: chunks } = await supabase.rpc('search_similar_chunks', {
-        query_embedding: JSON.stringify(queryEmbedding),
-        match_count: 5,
-        match_threshold: 0.5,
-    });
+    // 1. RAG search (client sends pre-computed embedding vector)
+    let chunks: unknown[] = [];
+    if (body.embedding && Array.isArray(body.embedding) && body.embedding.length === 384) {
+        const { data } = await supabase.rpc('search_similar_chunks', {
+            query_embedding: JSON.stringify(body.embedding),
+            match_count: 5,
+            match_threshold: 0.5,
+        });
+        chunks = data ?? [];
+    }
 
     // 2. LLM call with server key (stream passthrough)
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -96,7 +89,7 @@ export default async (req: Request, _context: Context) => {
             model: 'claude-sonnet-4-20250514',
             max_tokens: 2048,
             stream: true,
-            system: `RAG 컨텍스트:\n${JSON.stringify(chunks ?? [])}`,
+            system: `RAG 컨텍스트:\n${JSON.stringify(chunks)}`,
             messages: body.messages ?? [{ role: 'user', content: body.query }],
         }),
     });
@@ -104,7 +97,7 @@ export default async (req: Request, _context: Context) => {
     console.log(JSON.stringify({
         ts: new Date().toISOString(),
         fn: 'chan99k-interview',
-        rag_chunks: (chunks ?? []).length,
+        rag_chunks: chunks.length,
         llm_status: response.status,
     }));
 

@@ -6,7 +6,6 @@
   NODE_VERSION = "20"
 
 [functions]
-  external_node_modules = ["@huggingface/transformers", "onnxruntime-node", "onnxruntime-common"]
   node_bundler = "esbuild"
 
 # Redirect SPA fallback for admin page
