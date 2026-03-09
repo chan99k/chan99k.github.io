@@ -176,19 +176,31 @@ export default function InterviewChat({ initialQuestion }: Props) {
             }
 
             // 4. Parse AI response
-            const jsonMatch = fullText.match(/```json\n?([\s\S]*?)\n?```/) ?? fullText.match(/\{[\s\S]*\}/);
+            // Parse JSON from LLM response — prefer ```json block, fallback to last { in text
+            const codeBlockMatch = fullText.match(/```json\n?([\s\S]*?)\n?```/);
+            let jsonText: string | undefined = codeBlockMatch?.[1];
+
+            if (!jsonText) {
+                const lastBrace = fullText.lastIndexOf('{');
+                if (lastBrace !== -1) {
+                    jsonText = fullText.slice(lastBrace);
+                }
+            }
+
             let aiResponse: {
                 evaluations: unknown[];
-                followUp: { interviewer: string; question: string };
+                followUp?: { interviewer: string; reaction?: string; question: string };
                 shouldContinue: boolean;
                 overallScore: number;
                 summary: string;
             } | null = null;
 
-            if (jsonMatch) {
+            if (jsonText) {
                 try {
-                    aiResponse = JSON.parse(jsonMatch[1] ?? jsonMatch[0]);
-                } catch { /* fallback to raw text */ }
+                    aiResponse = JSON.parse(jsonText);
+                } catch (e) {
+                    console.warn('[Interview] JSON parse failed:', e, 'raw:', jsonText.slice(0, 200));
+                }
             }
 
             const assistantMsg: ChatMessage = {
