@@ -16,8 +16,19 @@ const RATE_LIMIT_MAX_REQUESTS = 10;
 
 const requestCounts = new Map<string, { count: number; resetAt: number }>();
 
+function cleanupExpiredEntries(): void {
+    const now = Date.now();
+    for (const [key, entry] of requestCounts) {
+        if (now > entry.resetAt) requestCounts.delete(key);
+    }
+}
+
 function checkRateLimit(identifier: string): boolean {
     const now = Date.now();
+
+    // Periodic cleanup to prevent unbounded Map growth
+    if (requestCounts.size > 100) cleanupExpiredEntries();
+
     const entry = requestCounts.get(identifier);
 
     if (!entry || now > entry.resetAt) {
