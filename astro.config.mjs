@@ -15,6 +15,14 @@ export default defineConfig({
     },
     vite: {
         plugins: [tailwindcss()],
+        optimizeDeps: {
+            exclude: ['onnxruntime-node'],
+        },
+        build: {
+            rollupOptions: {
+                external: ['onnxruntime-node'],
+            },
+        },
     },
     integrations: [react(), sitemap()],
     adapter: isDev ? undefined : netlify()
