@@ -1,19 +1,19 @@
 import type { Context } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
-import { pipeline, type FeatureExtractionPipeline } from '@huggingface/transformers';
 
 const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
 const SERVER_KEY_HEADER = 'x-server-key';
 const MODEL = 'Xenova/all-MiniLM-L6-v2';
 
-let extractor: FeatureExtractionPipeline | null = null;
+// Dynamic import to avoid bundling issues with ONNX native bindings
+let extractor: unknown = null;
 
-async function getExtractor(): Promise<FeatureExtractionPipeline> {
+async function getExtractor() {
     if (!extractor) {
-        // @ts-expect-error — pipeline() union type too complex for tsc
+        const { pipeline } = await import('@huggingface/transformers');
         extractor = await pipeline('feature-extraction', MODEL);
     }
-    return extractor;
+    return extractor as { (text: string, opts: Record<string, unknown>): Promise<{ data: Float32Array }> };
 }
 
 function getAllowedOrigins(): string[] {
