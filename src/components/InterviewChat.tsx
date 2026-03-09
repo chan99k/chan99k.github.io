@@ -132,16 +132,25 @@ export default function InterviewChat({ initialQuestion }: Props) {
                 setSession((s) => ({ ...s, sessionId: sessionId! }));
             }
 
-            // 2. Client-side embedding + RAG search
-            const embedding = await getQueryEmbedding(answer, setEmbeddingStatus);
-            const token = (await supabase.auth.getSession()).data.session?.access_token;
+            // 2. Client-side embedding + RAG search (graceful degradation if model fails)
+            let chunks: unknown[] = [];
+            try {
+                const embedding = await getQueryEmbedding(answer, setEmbeddingStatus);
+                const token = (await supabase.auth.getSession()).data.session?.access_token;
 
-            const searchRes = await fetch('/.netlify/functions/rag-search', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                body: JSON.stringify({ embedding, top_k: SESSION_CONFIG.searchTopK }),
-            });
-            const { chunks } = searchRes.ok ? await searchRes.json() : { chunks: [] };
+                const searchRes = await fetch('/.netlify/functions/rag-search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                    body: JSON.stringify({ embedding, top_k: SESSION_CONFIG.searchTopK }),
+                });
+                if (searchRes.ok) {
+                    const data = await searchRes.json();
+                    chunks = data.chunks ?? [];
+                }
+            } catch {
+                // Embedding model download failed (CORS etc.) — skip RAG, continue with LLM only
+                console.warn('Embedding failed, skipping RAG search');
+            }
 
             setSession((s) => ({ ...s, status: 'evaluating' }));
 
