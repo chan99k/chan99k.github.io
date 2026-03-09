@@ -118,10 +118,11 @@ export default function InterviewChat({ initialQuestion }: Props) {
         setSession((s) => ({ ...s, messages: updatedMessages, status: 'searching' }));
 
         try {
+            const token = (await supabase.auth.getSession()).data.session?.access_token;
+
             // 1. Create session if first answer
             let sessionId = session.sessionId;
             if (!sessionId) {
-                const token = (await supabase.auth.getSession()).data.session?.access_token;
                 const res = await fetch('/.netlify/functions/session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -133,7 +134,6 @@ export default function InterviewChat({ initialQuestion }: Props) {
             }
 
             // 2. Client-side embedding + RAG search (graceful degradation if model fails)
-            const token = (await supabase.auth.getSession()).data.session?.access_token;
             let chunks: unknown[] = [];
             try {
                 const embedding = await getQueryEmbedding(answer, setEmbeddingStatus);
