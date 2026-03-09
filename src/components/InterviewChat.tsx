@@ -24,7 +24,7 @@ async function* streamFromProxy(
         },
         body: JSON.stringify({
             model: 'claude-sonnet-4-20250514',
-            max_tokens: 2048,
+            max_tokens: 4096,
             stream: true,
             system,
             messages,
@@ -79,6 +79,9 @@ export default function InterviewChat({ initialQuestion }: Props) {
     const [embeddingStatus, setEmbeddingStatus] = useState<EmbeddingStatus>('idle');
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    const sessionRef = useRef(session);
+    useEffect(() => { sessionRef.current = session; }, [session]);
+
     // Auth state
     useEffect(() => {
         supabase.auth.getUser().then(({ data }) => setUser(data.user));
@@ -114,14 +117,14 @@ export default function InterviewChat({ initialQuestion }: Props) {
             timestamp: Date.now(),
         };
 
-        const updatedMessages = [...session.messages, userMsg];
+        const updatedMessages = [...sessionRef.current.messages, userMsg];
         setSession((s) => ({ ...s, messages: updatedMessages, status: 'searching' }));
 
         try {
             const token = (await supabase.auth.getSession()).data.session?.access_token;
 
             // 1. Create session if first answer
-            let sessionId = session.sessionId;
+            let sessionId = sessionRef.current.sessionId;
             if (!sessionId) {
                 const res = await fetch('/.netlify/functions/session', {
                     method: 'POST',
@@ -155,16 +158,18 @@ export default function InterviewChat({ initialQuestion }: Props) {
             setSession((s) => ({ ...s, status: 'evaluating' }));
 
             // 3. Build prompt and stream LLM
-            const newDepth = session.depth + 1;
+            const newDepth = sessionRef.current.depth + 1;
             const systemPrompt = buildInterviewSystemPrompt({
-                question: session.currentQuestion,
+                question: sessionRef.current.currentQuestion,
                 userAnswer: answer,
                 chunks,
                 history: updatedMessages,
                 depth: newDepth,
             });
 
-            const llmMessages = updatedMessages.map((m) => ({ role: m.role, content: m.content }));
+            // Keep only recent messages to avoid exceeding input token limit
+            const recentMessages = updatedMessages.slice(-8);
+            const llmMessages = recentMessages.map((m) => ({ role: m.role, content: m.content }));
 
             let fullText = '';
             for await (const chunk of streamFromProxy(apiKey, systemPrompt, llmMessages)) {
@@ -173,19 +178,31 @@ export default function InterviewChat({ initialQuestion }: Props) {
             }
 
             // 4. Parse AI response
-            const jsonMatch = fullText.match(/```json\n?([\s\S]*?)\n?```/) ?? fullText.match(/\{[\s\S]*\}/);
+            // Parse JSON from LLM response — prefer ```json block, fallback to last { in text
+            const codeBlockMatch = fullText.match(/```json\n?([\s\S]*?)\n?```/);
+            let jsonText: string | undefined = codeBlockMatch?.[1];
+
+            if (!jsonText) {
+                const lastBrace = fullText.lastIndexOf('{');
+                if (lastBrace !== -1) {
+                    jsonText = fullText.slice(lastBrace);
+                }
+            }
+
             let aiResponse: {
                 evaluations: unknown[];
-                followUp: { interviewer: string; reaction?: string; question: string };
+                followUp?: { interviewer: string; reaction?: string; question: string };
                 shouldContinue: boolean;
                 overallScore: number;
                 summary: string;
             } | null = null;
 
-            if (jsonMatch) {
+            if (jsonText) {
                 try {
-                    aiResponse = JSON.parse(jsonMatch[1] ?? jsonMatch[0]);
-                } catch { /* fallback to raw text */ }
+                    aiResponse = JSON.parse(jsonText);
+                } catch (e) {
+                    console.warn('[Interview] JSON parse failed:', e, 'raw:', jsonText.slice(0, 200));
+                }
             }
 
             // Build visible message: reaction + follow-up question (hide evaluation during interview)
@@ -239,16 +256,19 @@ export default function InterviewChat({ initialQuestion }: Props) {
             });
 
             // 6. Update state
-            if (aiResponse?.shouldContinue && newDepth < SESSION_CONFIG.maxDepth) {
+            if (aiResponse?.shouldContinue && aiResponse.followUp?.question && newDepth < SESSION_CONFIG.maxDepth) {
                 setSession((s) => ({
                     ...s,
                     messages: newMessages,
                     depth: newDepth,
                     status: 'question_displayed',
-                    currentQuestion: aiResponse!.followUp.question,
+                    currentQuestion: aiResponse!.followUp!.question,
                     scores: newScores,
                 }));
             } else {
+                if (aiResponse?.shouldContinue && !aiResponse.followUp?.question) {
+                    console.warn('[Interview] shouldContinue=true but followUp missing, ending session');
+                }
                 await fetch('/.netlify/functions/session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -267,7 +287,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
         } finally {
             setIsLoading(false);
         }
-    }, [input, isLoading, user, apiKey, session]);
+    }, [input, isLoading, user, apiKey]);
 
     // --- Render ---
 

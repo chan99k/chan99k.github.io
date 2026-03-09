@@ -1,7 +1,7 @@
 import type { Context } from '@netlify/functions';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-const MAX_TOKENS_LIMIT = 2048;
+const MAX_TOKENS_LIMIT = 4096;
 const MAX_BODY_SIZE = 50 * 1024; // 50KB
 const MAX_MESSAGES = 10;
 const MAX_MESSAGE_CONTENT_LENGTH = 10000;
@@ -10,6 +10,39 @@ const ALLOWED_ORIGINS = [
 ];
 const API_KEY_PATTERN = /^sk-ant-api\d{2}-[A-Za-z0-9_-]{40,}$/;
 const API_KEY_MAX_LENGTH = 200;
+
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 10;
+
+const requestCounts = new Map<string, { count: number; resetAt: number }>();
+
+function cleanupExpiredEntries(): void {
+    const now = Date.now();
+    for (const [key, entry] of requestCounts) {
+        if (now > entry.resetAt) requestCounts.delete(key);
+    }
+}
+
+function checkRateLimit(identifier: string): boolean {
+    const now = Date.now();
+
+    // Periodic cleanup to prevent unbounded Map growth
+    if (requestCounts.size > 100) cleanupExpiredEntries();
+
+    const entry = requestCounts.get(identifier);
+
+    if (!entry || now > entry.resetAt) {
+        requestCounts.set(identifier, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+        return true;
+    }
+
+    if (entry.count >= RATE_LIMIT_MAX_REQUESTS) {
+        return false;
+    }
+
+    entry.count++;
+    return true;
+}
 
 function getAllowedOrigins(): string[] {
     const origins = [...ALLOWED_ORIGINS];
@@ -93,6 +126,12 @@ export default async (req: Request, _context: Context) => {
     const apiKey = req.headers.get('x-claude-api-key');
     if (!validateApiKey(apiKey)) {
         return new Response('Missing or invalid API key', { status: 401 });
+    }
+
+    // Rate limiting (per API key suffix)
+    const rateLimitKey = apiKey!.slice(-8);
+    if (!checkRateLimit(rateLimitKey)) {
+        return new Response('Rate limit exceeded - max 10 requests per minute', { status: 429 });
     }
 
     // Read and validate body size
