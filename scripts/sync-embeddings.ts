@@ -171,7 +171,7 @@ async function syncQuestionEmbeddings(extractor: FeatureExtractionPipeline) {
 
 async function main() {
     console.log(`Loading model: ${MODEL}...`);
-    // @ts-expect-error — pipeline() union type too complex for tsc, works at runtime
+    // @ts-ignore — pipeline() union type too complex for tsc, works at runtime
     const extractor: FeatureExtractionPipeline = await pipeline('feature-extraction', MODEL);
 
     await syncBlogEmbeddings(extractor);

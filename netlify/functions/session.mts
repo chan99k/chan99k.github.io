@@ -1,0 +1,168 @@
+import type { Context } from '@netlify/functions';
+import { createClient } from '@supabase/supabase-js';
+
+const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
+const MAX_BODY_SIZE = 50 * 1024;
+const MAX_CONTENT_LENGTH = 10000;
+
+function getAllowedOrigins(): string[] {
+    const origins = [...ALLOWED_ORIGINS];
+    const deployUrl = process.env.DEPLOY_PRIME_URL;
+    if (deployUrl) origins.push(deployUrl);
+    return origins;
+}
+
+function validateOrigin(origin: string | null): boolean {
+    if (!origin) return false;
+    return getAllowedOrigins().includes(origin);
+}
+
+function addCorsHeaders(headers: Headers, origin: string): void {
+    headers.set('Access-Control-Allow-Origin', origin);
+    headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+}
+
+async function authenticateUser(authHeader: string | null, supabaseUrl: string, serviceRoleKey: string) {
+    if (!authHeader?.startsWith('Bearer ')) return null;
+    const supabase = createClient(supabaseUrl, serviceRoleKey);
+    const { data: { user } } = await supabase.auth.getUser(authHeader.slice(7));
+    return user;
+}
+
+export default async (req: Request, _context: Context) => {
+    const origin = req.headers.get('origin');
+
+    if (!validateOrigin(origin)) {
+        return new Response('Forbidden', { status: 403 });
+    }
+
+    if (req.method === 'OPTIONS') {
+        const h = new Headers();
+        addCorsHeaders(h, origin!);
+        return new Response(null, { status: 204, headers: h });
+    }
+
+    if (req.method !== 'POST') {
+        return new Response('Method not allowed', { status: 405 });
+    }
+
+    const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
+
+    const user = await authenticateUser(req.headers.get('Authorization'), supabaseUrl, serviceRoleKey);
+    if (!user) {
+        return new Response('Unauthorized', { status: 401 });
+    }
+
+    // Read and validate body
+    let bodyText: string;
+    try {
+        bodyText = await req.text();
+    } catch {
+        return new Response('Failed to read request body', { status: 400 });
+    }
+
+    if (bodyText.length > MAX_BODY_SIZE) {
+        return new Response('Request body too large', { status: 413 });
+    }
+
+    let body: { action: string; session_id?: string; data?: Record<string, unknown> };
+    try {
+        body = JSON.parse(bodyText);
+    } catch {
+        return new Response('Invalid JSON', { status: 400 });
+    }
+
+    const supabase = createClient(supabaseUrl, serviceRoleKey);
+    const responseHeaders = new Headers({ 'Content-Type': 'application/json' });
+    addCorsHeaders(responseHeaders, origin!);
+
+    // --- Actions ---
+
+    if (body.action === 'create') {
+        const initialQuestion = String(body.data?.initial_question ?? '').slice(0, MAX_CONTENT_LENGTH);
+
+        const { data: session, error } = await supabase.from('sessions').insert({
+            user_id: user.id,
+            status: 'active',
+            initial_question: initialQuestion,
+        }).select().single();
+
+        if (error) {
+            console.error(JSON.stringify({ ts: new Date().toISOString(), fn: 'session', action: 'create', error: error.message }));
+            return new Response(JSON.stringify({ error: 'Failed to create session' }), { status: 500, headers: responseHeaders });
+        }
+
+        // Upsert user profile
+        await supabase.from('user_profiles').upsert({
+            user_id: user.id,
+            display_name: user.user_metadata?.name ?? user.email ?? '',
+        }, { onConflict: 'user_id' });
+
+        console.log(JSON.stringify({ ts: new Date().toISOString(), fn: 'session', action: 'create', user: user.id, session: session.id }));
+        return new Response(JSON.stringify({ session_id: session.id, status: 'active' }), { headers: responseHeaders });
+    }
+
+    if (body.action === 'message') {
+        if (!body.session_id || !body.data?.content) {
+            return new Response('Missing session_id or content', { status: 400, headers: responseHeaders });
+        }
+
+        const content = String(body.data.content).slice(0, MAX_CONTENT_LENGTH);
+
+        const { error } = await supabase.from('session_messages').insert({
+            session_id: body.session_id,
+            depth: Number(body.data.depth ?? 0),
+            role: String(body.data.role ?? 'user'),
+            content,
+            message_type: String(body.data.message_type ?? 'answer'),
+            interviewer: body.data.interviewer ? String(body.data.interviewer) : null,
+            related_chunks: body.data.related_chunks ?? null,
+            score: body.data.score ?? null,
+            ordering: Number(body.data.ordering ?? 0),
+        });
+
+        if (error) {
+            console.error(JSON.stringify({ ts: new Date().toISOString(), fn: 'session', action: 'message', error: error.message }));
+            return new Response(JSON.stringify({ error: 'Failed to save message' }), { status: 500, headers: responseHeaders });
+        }
+
+        return new Response(JSON.stringify({ ok: true }), { headers: responseHeaders });
+    }
+
+    if (body.action === 'complete') {
+        if (!body.session_id) {
+            return new Response('Missing session_id', { status: 400, headers: responseHeaders });
+        }
+
+        await supabase.from('sessions').update({
+            status: 'completed',
+            total_score: body.data?.total_score != null ? Number(body.data.total_score) : null,
+            feedback: body.data?.feedback ?? null,
+            completed_at: new Date().toISOString(),
+        }).eq('id', body.session_id);
+
+        // Update user profile stats
+        const { data: sessions } = await supabase
+            .from('sessions')
+            .select('total_score')
+            .eq('user_id', user.id)
+            .eq('status', 'completed');
+
+        if (sessions && sessions.length > 0) {
+            const totalSessions = sessions.length;
+            const avgScore = sessions.reduce((s, r) => s + (r.total_score ?? 0), 0) / totalSessions;
+            await supabase.from('user_profiles').update({
+                total_sessions: totalSessions,
+                avg_score: avgScore,
+                updated_at: new Date().toISOString(),
+            }).eq('user_id', user.id);
+        }
+
+        console.log(JSON.stringify({ ts: new Date().toISOString(), fn: 'session', action: 'complete', session: body.session_id }));
+        return new Response(JSON.stringify({ ok: true, status: 'completed' }), { headers: responseHeaders });
+    }
+
+    return new Response(JSON.stringify({ error: 'Unknown action' }), { status: 400, headers: responseHeaders });
+};
