@@ -121,10 +121,11 @@ export default function InterviewChat({ initialQuestion }: Props) {
         setSession((s) => ({ ...s, messages: updatedMessages, status: 'searching' }));
 
         try {
+            const token = (await supabase.auth.getSession()).data.session?.access_token;
+
             // 1. Create session if first answer
             let sessionId = sessionRef.current.sessionId;
             if (!sessionId) {
-                const token = (await supabase.auth.getSession()).data.session?.access_token;
                 const res = await fetch('/.netlify/functions/session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -136,7 +137,6 @@ export default function InterviewChat({ initialQuestion }: Props) {
             }
 
             // 2. Client-side embedding + RAG search (graceful degradation if model fails)
-            const token = (await supabase.auth.getSession()).data.session?.access_token;
             let chunks: unknown[] = [];
             try {
                 const embedding = await getQueryEmbedding(answer, setEmbeddingStatus);
@@ -205,9 +205,20 @@ export default function InterviewChat({ initialQuestion }: Props) {
                 }
             }
 
+            // Build visible message: reaction + follow-up question (hide evaluation during interview)
+            let visibleContent = fullText;
+            if (aiResponse) {
+                if (aiResponse.shouldContinue && aiResponse.followUp) {
+                    const reaction = aiResponse.followUp.reaction ? `${aiResponse.followUp.reaction}\n\n` : '';
+                    visibleContent = `${reaction}${aiResponse.followUp.question}`;
+                } else {
+                    visibleContent = aiResponse.summary;
+                }
+            }
+
             const assistantMsg: ChatMessage = {
                 role: 'assistant',
-                content: aiResponse ? aiResponse.summary : fullText,
+                content: visibleContent,
                 interviewer: aiResponse?.followUp?.interviewer,
                 messageType: aiResponse?.shouldContinue ? 'evaluation' : 'feedback',
                 timestamp: Date.now(),
@@ -336,7 +347,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
                 {streamText && (
                     <div className="rounded bg-green-50 p-3 text-sm dark:bg-green-900/20">
                         <span className="text-xs font-medium text-neutral-500">AI (응답 중...)</span>
-                        <p className="mt-1 whitespace-pre-wrap">{streamText}</p>
+                        <p className="mt-1 whitespace-pre-wrap text-neutral-500">면접관이 답변을 검토하고 있습니다...</p>
                     </div>
                 )}
                 <div ref={messagesEndRef} />
