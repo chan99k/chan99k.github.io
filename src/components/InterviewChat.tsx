@@ -176,7 +176,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
             const jsonMatch = fullText.match(/```json\n?([\s\S]*?)\n?```/) ?? fullText.match(/\{[\s\S]*\}/);
             let aiResponse: {
                 evaluations: unknown[];
-                followUp: { interviewer: string; question: string };
+                followUp: { interviewer: string; reaction?: string; question: string };
                 shouldContinue: boolean;
                 overallScore: number;
                 summary: string;
@@ -188,9 +188,20 @@ export default function InterviewChat({ initialQuestion }: Props) {
                 } catch { /* fallback to raw text */ }
             }
 
+            // Build visible message: reaction + follow-up question (hide evaluation during interview)
+            let visibleContent = fullText;
+            if (aiResponse) {
+                if (aiResponse.shouldContinue && aiResponse.followUp) {
+                    const reaction = aiResponse.followUp.reaction ? `${aiResponse.followUp.reaction}\n\n` : '';
+                    visibleContent = `${reaction}${aiResponse.followUp.question}`;
+                } else {
+                    visibleContent = aiResponse.summary;
+                }
+            }
+
             const assistantMsg: ChatMessage = {
                 role: 'assistant',
-                content: aiResponse ? aiResponse.summary : fullText,
+                content: visibleContent,
                 interviewer: aiResponse?.followUp?.interviewer,
                 messageType: aiResponse?.shouldContinue ? 'evaluation' : 'feedback',
                 timestamp: Date.now(),
@@ -316,7 +327,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
                 {streamText && (
                     <div className="rounded bg-green-50 p-3 text-sm dark:bg-green-900/20">
                         <span className="text-xs font-medium text-neutral-500">AI (응답 중...)</span>
-                        <p className="mt-1 whitespace-pre-wrap">{streamText}</p>
+                        <p className="mt-1 whitespace-pre-wrap text-neutral-500">면접관이 답변을 검토하고 있습니다...</p>
                     </div>
                 )}
                 <div ref={messagesEndRef} />
