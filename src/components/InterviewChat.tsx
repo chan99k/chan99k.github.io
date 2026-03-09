@@ -79,6 +79,9 @@ export default function InterviewChat({ initialQuestion }: Props) {
     const [embeddingStatus, setEmbeddingStatus] = useState<EmbeddingStatus>('idle');
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    const sessionRef = useRef(session);
+    useEffect(() => { sessionRef.current = session; }, [session]);
+
     // Auth state
     useEffect(() => {
         supabase.auth.getUser().then(({ data }) => setUser(data.user));
@@ -114,12 +117,12 @@ export default function InterviewChat({ initialQuestion }: Props) {
             timestamp: Date.now(),
         };
 
-        const updatedMessages = [...session.messages, userMsg];
+        const updatedMessages = [...sessionRef.current.messages, userMsg];
         setSession((s) => ({ ...s, messages: updatedMessages, status: 'searching' }));
 
         try {
             // 1. Create session if first answer
-            let sessionId = session.sessionId;
+            let sessionId = sessionRef.current.sessionId;
             if (!sessionId) {
                 const token = (await supabase.auth.getSession()).data.session?.access_token;
                 const res = await fetch('/.netlify/functions/session', {
@@ -155,9 +158,9 @@ export default function InterviewChat({ initialQuestion }: Props) {
             setSession((s) => ({ ...s, status: 'evaluating' }));
 
             // 3. Build prompt and stream LLM
-            const newDepth = session.depth + 1;
+            const newDepth = sessionRef.current.depth + 1;
             const systemPrompt = buildInterviewSystemPrompt({
-                question: session.currentQuestion,
+                question: sessionRef.current.currentQuestion,
                 userAnswer: answer,
                 chunks,
                 history: updatedMessages,
@@ -256,7 +259,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
         } finally {
             setIsLoading(false);
         }
-    }, [input, isLoading, user, apiKey, session]);
+    }, [input, isLoading, user, apiKey]);
 
     // --- Render ---
 
