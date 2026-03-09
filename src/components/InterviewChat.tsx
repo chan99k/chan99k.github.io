@@ -133,10 +133,10 @@ export default function InterviewChat({ initialQuestion }: Props) {
             }
 
             // 2. Client-side embedding + RAG search (graceful degradation if model fails)
+            const token = (await supabase.auth.getSession()).data.session?.access_token;
             let chunks: unknown[] = [];
             try {
                 const embedding = await getQueryEmbedding(answer, setEmbeddingStatus);
-                const token = (await supabase.auth.getSession()).data.session?.access_token;
 
                 const searchRes = await fetch('/.netlify/functions/rag-search', {
                     method: 'POST',
