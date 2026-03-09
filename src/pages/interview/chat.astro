@@ -1,0 +1,25 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import InterviewChat from '../../components/InterviewChat';
+import { getCollection } from 'astro:content';
+
+const questions = await getCollection('questions');
+const randomIdx = Math.floor(Math.random() * questions.length);
+const initialQuestion = questions[randomIdx]?.data.title ?? '면접 질문을 준비 중입니다...';
+---
+
+<Layout title="AI 모의면접">
+    <main class="py-8">
+        <InterviewChat client:load initialQuestion={initialQuestion} />
+    </main>
+</Layout>
+
+<script is:inline>
+    // noindex for this page
+    if (!document.querySelector('meta[name="robots"]')) {
+        const meta = document.createElement('meta');
+        meta.name = 'robots';
+        meta.content = 'noindex';
+        document.head.appendChild(meta);
+    }
+</script>
