@@ -243,16 +243,19 @@ export default function InterviewChat({ initialQuestion }: Props) {
             });
 
             // 6. Update state
-            if (aiResponse?.shouldContinue && newDepth < SESSION_CONFIG.maxDepth) {
+            if (aiResponse?.shouldContinue && aiResponse.followUp?.question && newDepth < SESSION_CONFIG.maxDepth) {
                 setSession((s) => ({
                     ...s,
                     messages: newMessages,
                     depth: newDepth,
                     status: 'question_displayed',
-                    currentQuestion: aiResponse!.followUp.question,
+                    currentQuestion: aiResponse!.followUp!.question,
                     scores: newScores,
                 }));
             } else {
+                if (aiResponse?.shouldContinue && !aiResponse.followUp?.question) {
+                    console.warn('[Interview] shouldContinue=true but followUp missing, ending session');
+                }
                 await fetch('/.netlify/functions/session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
