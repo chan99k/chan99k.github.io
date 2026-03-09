@@ -5,8 +5,8 @@ description: "@TransactionalEventListener(at-most-once)에서
   중 2개가 멱등하지 않았고, Redis AOP(1차) + 서비스 레벨 가드(2차)의 2계층 방어로 해결했다."
 pubDate: 2026-02-24
 tags:
-  - 아키텍처
-  - 개발/Spring
+  - Areas/architecture
+  - Areas/개발/Spring
 draft: false
 ---
 
