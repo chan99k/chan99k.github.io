@@ -362,14 +362,14 @@ export default function InterviewChat({ initialQuestion }: Props) {
                         placeholder="답변을 입력하세요..."
                         rows={3}
                         className="flex-1 rounded border px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
-                        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmitAnswer(); } }}
+                        onKeyDown={(e) => { if (e.key === 'Enter' && e.shiftKey) { e.preventDefault(); handleSubmitAnswer(); } }}
                     />
                     <button
                         onClick={handleSubmitAnswer}
                         disabled={isLoading || !apiKey}
                         className="rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
                     >
-                        {isLoading ? '...' : '제출'}
+                        {isLoading ? '...' : '제출 (⇧Enter)'}
                     </button>
                 </div>
             )}
