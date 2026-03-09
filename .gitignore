@@ -30,6 +30,7 @@ pnpm-debug.log*
 .claude/
 .playwright-mcp/
 .omc/
+.worktrees/
 
 # Local docs
 docs/plans/
