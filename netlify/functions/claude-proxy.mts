@@ -11,6 +11,28 @@ const ALLOWED_ORIGINS = [
 const API_KEY_PATTERN = /^sk-ant-api\d{2}-[A-Za-z0-9_-]{40,}$/;
 const API_KEY_MAX_LENGTH = 200;
 
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 10;
+
+const requestCounts = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(identifier: string): boolean {
+    const now = Date.now();
+    const entry = requestCounts.get(identifier);
+
+    if (!entry || now > entry.resetAt) {
+        requestCounts.set(identifier, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+        return true;
+    }
+
+    if (entry.count >= RATE_LIMIT_MAX_REQUESTS) {
+        return false;
+    }
+
+    entry.count++;
+    return true;
+}
+
 function getAllowedOrigins(): string[] {
     const origins = [...ALLOWED_ORIGINS];
     const deployUrl = process.env.DEPLOY_PRIME_URL;
@@ -93,6 +115,12 @@ export default async (req: Request, _context: Context) => {
     const apiKey = req.headers.get('x-claude-api-key');
     if (!validateApiKey(apiKey)) {
         return new Response('Missing or invalid API key', { status: 401 });
+    }
+
+    // Rate limiting (per API key suffix)
+    const rateLimitKey = apiKey!.slice(-8);
+    if (!checkRateLimit(rateLimitKey)) {
+        return new Response('Rate limit exceeded - max 10 requests per minute', { status: 429 });
     }
 
     // Read and validate body size
