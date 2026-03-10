@@ -1,0 +1,19 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import InterviewHistory from '../../components/InterviewHistory';
+---
+
+<Layout title="면접 히스토리">
+    <main class="py-8">
+        <InterviewHistory client:load />
+    </main>
+</Layout>
+
+<script is:inline>
+    if (!document.querySelector('meta[name="robots"]')) {
+        const meta = document.createElement('meta');
+        meta.name = 'robots';
+        meta.content = 'noindex';
+        document.head.appendChild(meta);
+    }
+</script>

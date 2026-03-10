@@ -43,7 +43,7 @@ export default async (req: Request, _context: Context) => {
         return new Response(null, { status: 204, headers: h });
     }
 
-    if (req.method !== 'POST') {
+    if (req.method !== 'POST' && req.method !== 'GET') {
         return new Response('Method not allowed', { status: 405 });
     }
 
@@ -162,6 +162,58 @@ export default async (req: Request, _context: Context) => {
 
         console.log(JSON.stringify({ ts: new Date().toISOString(), fn: 'session', action: 'complete', session: body.session_id }));
         return new Response(JSON.stringify({ ok: true, status: 'completed' }), { headers: responseHeaders });
+    }
+
+    // --- GET actions: get single session / list sessions ---
+
+    if (body.action === 'get') {
+        if (!body.session_id) {
+            return new Response('Missing session_id', { status: 400, headers: responseHeaders });
+        }
+
+        const { data: session, error: sessionError } = await supabase
+            .from('sessions')
+            .select('*')
+            .eq('id', body.session_id)
+            .eq('user_id', user.id)
+            .single();
+
+        if (sessionError || !session) {
+            return new Response(JSON.stringify({ error: 'Session not found' }), { status: 404, headers: responseHeaders });
+        }
+
+        const { data: messages } = await supabase
+            .from('session_messages')
+            .select('*')
+            .eq('session_id', body.session_id)
+            .order('ordering', { ascending: true });
+
+        return new Response(JSON.stringify({ session, messages: messages ?? [] }), { headers: responseHeaders });
+    }
+
+    if (body.action === 'list') {
+        const limit = Math.min(Number(body.data?.limit ?? 20), 50);
+        const offset = Number(body.data?.offset ?? 0);
+
+        let query = supabase
+            .from('sessions')
+            .select('id, status, initial_question, total_score, feedback, created_at, completed_at', { count: 'exact' })
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .range(offset, offset + limit - 1);
+
+        if (body.data?.status) {
+            query = query.eq('status', String(body.data.status));
+        }
+
+        const { data: sessions, count, error: listError } = await query;
+
+        if (listError) {
+            console.error(JSON.stringify({ ts: new Date().toISOString(), fn: 'session', action: 'list', error: listError.message }));
+            return new Response(JSON.stringify({ error: 'Failed to list sessions' }), { status: 500, headers: responseHeaders });
+        }
+
+        return new Response(JSON.stringify({ sessions: sessions ?? [], total: count ?? 0 }), { headers: responseHeaders });
     }
 
     return new Response(JSON.stringify({ error: 'Unknown action' }), { status: 400, headers: responseHeaders });

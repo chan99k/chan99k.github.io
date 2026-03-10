@@ -506,12 +506,22 @@ export default function InterviewChat({ initialQuestion, interviewers }: Props) 
             )}
 
             {session.status === 'completed' && (
-                <button
-                    onClick={() => setSession({ ...INITIAL_SESSION_STATE, currentQuestion: initialQuestion })}
-                    className="w-full rounded bg-neutral-200 py-2 text-sm dark:bg-neutral-700"
-                >
-                    새 면접 시작
-                </button>
+                <div className="flex gap-2">
+                    {session.sessionId && (
+                        <a
+                            href={`/interview/result/${session.sessionId}`}
+                            className="flex-1 rounded bg-blue-600 py-2 text-center text-sm text-white hover:bg-blue-700"
+                        >
+                            결과 보기
+                        </a>
+                    )}
+                    <button
+                        onClick={() => setSession({ ...INITIAL_SESSION_STATE, currentQuestion: initialQuestion })}
+                        className="flex-1 rounded bg-neutral-200 py-2 text-sm dark:bg-neutral-700"
+                    >
+                        새 면접 시작
+                    </button>
+                </div>
             )}
         </div>
     );
