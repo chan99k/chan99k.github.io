@@ -68,9 +68,57 @@ async function* streamFromProxy(
     }
 }
 
+async function* streamFromServer(
+    token: string,
+    system: string,
+    messages: { role: string; content: string }[],
+): AsyncGenerator<string> {
+    const response = await fetch('/.netlify/functions/interview-server', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ system, messages }),
+    });
+
+    if (!response.ok) {
+        if (response.status === 429) {
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.error || '일일 사용 한도를 초과했습니다');
+        }
+        throw new Error('서버 API 요청에 실패했습니다');
+    }
+
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() ?? '';
+        for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            const data = line.slice(6);
+            if (data === '[DONE]') return;
+            try {
+                const parsed = JSON.parse(data);
+                if (parsed.type === 'content_block_delta') {
+                    const text = parsed.delta?.text;
+                    if (text) yield text;
+                }
+            } catch { /* skip */ }
+        }
+    }
+}
+
 export default function InterviewChat({ initialQuestion }: Props) {
     const [user, setUser] = useState<User | null>(null);
     const [apiKey, setApiKey] = useState('');
+    const [showApiKeyInput, setShowApiKeyInput] = useState(false);
     const [session, setSession] = useState<SessionState>({ ...INITIAL_SESSION_STATE, currentQuestion: initialQuestion });
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -190,9 +238,16 @@ export default function InterviewChat({ initialQuestion }: Props) {
             const llmMessages = recentMessages.map((m) => ({ role: m.role, content: m.content }));
 
             let fullText = '';
-            for await (const chunk of streamFromProxy(apiKey, systemPrompt, llmMessages)) {
-                fullText += chunk;
-                setStreamText(fullText);
+            if (apiKey) {
+                for await (const chunk of streamFromProxy(apiKey, systemPrompt, llmMessages)) {
+                    fullText += chunk;
+                    setStreamText(fullText);
+                }
+            } else {
+                for await (const chunk of streamFromServer(token!, systemPrompt, llmMessages)) {
+                    fullText += chunk;
+                    setStreamText(fullText);
+                }
             }
 
             // 4. Parse AI response
@@ -332,7 +387,18 @@ export default function InterviewChat({ initialQuestion }: Props) {
             </div>
 
             {/* API Key input */}
-            {!apiKey && (
+            {!apiKey && !showApiKeyInput && (
+                <div className="mb-4 rounded bg-blue-50 p-3 dark:bg-blue-900/20">
+                    <p className="text-sm text-blue-800 dark:text-blue-200">서버 키 모드 (일일 20회 제한)</p>
+                    <button
+                        onClick={() => setShowApiKeyInput(true)}
+                        className="mt-2 text-sm text-blue-600 underline hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-100"
+                    >
+                        자체 API 키 사용하기
+                    </button>
+                </div>
+            )}
+            {!apiKey && showApiKeyInput && (
                 <div className="mb-4 rounded bg-yellow-50 p-3 dark:bg-yellow-900/20">
                     <label className="block text-sm font-medium">Claude API Key (BYOK)</label>
                     <input
@@ -341,6 +407,12 @@ export default function InterviewChat({ initialQuestion }: Props) {
                         className="mt-1 w-full rounded border px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
                         onBlur={(e) => setApiKey(e.target.value)}
                     />
+                    <button
+                        onClick={() => setShowApiKeyInput(false)}
+                        className="mt-2 text-sm text-neutral-600 underline hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+                    >
+                        서버 키 모드로 돌아가기
+                    </button>
                 </div>
             )}
 
@@ -383,7 +455,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
                     />
                     <button
                         onClick={handleSubmitAnswer}
-                        disabled={isLoading || !apiKey}
+                        disabled={isLoading}
                         className="rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
                     >
                         {isLoading ? '...' : '제출 (⇧Enter)'}
