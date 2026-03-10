@@ -1,15 +1,11 @@
 import type { Context } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
-import { pipeline, type FeatureExtractionPipeline } from '@huggingface/transformers';
 
 const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
 const MAX_BODY_SIZE = 50 * 1024; // 50KB
 const MAX_EMBEDDING_DIM = 384;
 const MAX_TEXT_LENGTH = 2000;
-const MODEL = 'Xenova/all-MiniLM-L6-v2';
-
-// Cache pipeline in module scope for warm Netlify instances
-let cachedPipeline: FeatureExtractionPipeline | null = null;
+const HF_MODEL = 'sentence-transformers/all-MiniLM-L6-v2';
 
 function getAllowedOrigins(): string[] {
     const origins = [...ALLOWED_ORIGINS];
@@ -30,12 +26,37 @@ function addCorsHeaders(headers: Headers, origin: string): void {
 }
 
 async function getEmbedding(text: string): Promise<number[]> {
-    if (!cachedPipeline) {
-        // @ts-ignore — pipeline() union type too complex for tsc, works at runtime
-        cachedPipeline = await pipeline('feature-extraction', MODEL);
+    const hfToken = process.env.HF_API_TOKEN ?? '';
+    const res = await fetch(`https://api-inference.huggingface.co/pipeline/feature-extraction/${HF_MODEL}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(hfToken ? { Authorization: `Bearer ${hfToken}` } : {}),
+        },
+        body: JSON.stringify({ inputs: text, options: { wait_for_model: true } }),
+    });
+
+    if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`HF Inference API error ${res.status}: ${errText}`);
     }
-    const output = await cachedPipeline(text, { pooling: 'mean', normalize: true });
-    return Array.from(output.data as Float32Array);
+
+    // HF returns [[number[]]] for sentence-transformers — mean pooling already applied
+    const data = await res.json();
+    const embedding: number[] = Array.isArray(data[0]) && Array.isArray(data[0][0])
+        ? meanPool(data[0]) // token-level embeddings, need pooling
+        : data[0];          // already sentence-level
+    return embedding;
+}
+
+function meanPool(tokenEmbeddings: number[][]): number[] {
+    const dim = tokenEmbeddings[0].length;
+    const sum = new Array(dim).fill(0);
+    for (const token of tokenEmbeddings) {
+        for (let i = 0; i < dim; i++) sum[i] += token[i];
+    }
+    const len = tokenEmbeddings.length;
+    return sum.map(v => v / len);
 }
 
 export default async (req: Request, _context: Context) => {
