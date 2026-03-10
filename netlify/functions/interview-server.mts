@@ -2,7 +2,7 @@ import type { Context } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
 
 const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
-const SERVER_KEY_HEADER = 'x-server-key';
+const DAILY_QUOTA_LIMIT = 3;
 
 function getAllowedOrigins(): string[] {
     const origins = [...ALLOWED_ORIGINS];
@@ -19,7 +19,7 @@ function validateOrigin(origin: string | null): boolean {
 function addCorsHeaders(headers: Headers, origin: string): void {
     headers.set('Access-Control-Allow-Origin', origin);
     headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-server-key');
+    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 }
 
 export default async (req: Request, _context: Context) => {
@@ -39,45 +39,59 @@ export default async (req: Request, _context: Context) => {
         return new Response('Method not allowed', { status: 405 });
     }
 
-    // Verify server key (personal use only)
-    const serverKey = process.env.SERVER_ANTHROPIC_API_KEY;
-    const providedKey = req.headers.get(SERVER_KEY_HEADER);
-    if (!serverKey || providedKey !== serverKey) {
-        return new Response('Forbidden', { status: 403 });
+    // 1. Authenticate with Supabase JWT
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return new Response('Unauthorized', { status: 401 });
     }
 
-    let body: {
-        query: string;
-        embedding?: number[];
-        messages?: { role: string; content: string }[];
-        session_id?: string;
-    };
+    const token = authHeader.slice(7);
+    const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
+    const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? process.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+        return new Response('Unauthorized', { status: 401 });
+    }
+
+    // 2. Check and increment daily quota
+    const { data: quotaOk, error: quotaError } = await supabase.rpc('check_and_increment_quota', {
+        p_user_id: user.id,
+        p_daily_limit: DAILY_QUOTA_LIMIT,
+    });
+
+    if (quotaError) {
+        console.error('[interview-server] Quota check error:', quotaError);
+        return new Response('Internal server error', { status: 500 });
+    }
+
+    if (!quotaOk) {
+        return new Response(JSON.stringify({ error: '일일 사용 한도(3회)를 초과했습니다' }), {
+            status: 429,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+
+    // 3. Parse request body
+    let body: { system: string; messages: { role: string; content: string }[] };
     try {
         body = await req.json();
     } catch {
         return new Response('Invalid JSON', { status: 400 });
     }
 
-    if (!body.query || typeof body.query !== 'string') {
-        return new Response('Missing query', { status: 400 });
+    if (!body.system || !Array.isArray(body.messages)) {
+        return new Response('Missing system or messages', { status: 400 });
     }
 
-    const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? '';
-    const supabase = createClient(supabaseUrl, serviceRoleKey);
-
-    // 1. RAG search (client sends pre-computed embedding vector)
-    let chunks: unknown[] = [];
-    if (body.embedding && Array.isArray(body.embedding) && body.embedding.length === 384) {
-        const { data } = await supabase.rpc('search_similar_chunks', {
-            query_embedding: JSON.stringify(body.embedding),
-            match_count: 5,
-            match_threshold: 0.5,
-        });
-        chunks = data ?? [];
+    // 4. Call Anthropic API with server key
+    const serverKey = process.env.SERVER_ANTHROPIC_API_KEY;
+    if (!serverKey) {
+        console.error('[interview-server] SERVER_ANTHROPIC_API_KEY not configured');
+        return new Response('Server misconfigured', { status: 500 });
     }
 
-    // 2. LLM call with server key (stream passthrough)
     const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -87,17 +101,17 @@ export default async (req: Request, _context: Context) => {
         },
         body: JSON.stringify({
             model: 'claude-sonnet-4-20250514',
-            max_tokens: 2048,
+            max_tokens: 4096,
             stream: true,
-            system: `RAG 컨텍스트:\n${JSON.stringify(chunks)}`,
-            messages: body.messages ?? [{ role: 'user', content: body.query }],
+            system: body.system,
+            messages: body.messages,
         }),
     });
 
     console.log(JSON.stringify({
         ts: new Date().toISOString(),
-        fn: 'chan99k-interview',
-        rag_chunks: chunks.length,
+        fn: 'interview-server',
+        user_id: user.id,
         llm_status: response.status,
     }));
 
