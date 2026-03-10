@@ -62,7 +62,11 @@ export default async (req: Request, _context: Context) => {
         if (body.category) query = query.eq('category', body.category);
         if (body.difficulty) query = query.eq('difficulty', body.difficulty);
         if (body.search && typeof body.search === 'string') {
-            query = query.or(`title.ilike.%${body.search}%,question.ilike.%${body.search}%`);
+            // Sanitize PostgREST filter special chars to prevent filter injection
+            const sanitized = body.search.replace(/[%_\\(),."']/g, '');
+            if (sanitized.length > 0) {
+                query = query.or(`title.ilike.%${sanitized}%,question.ilike.%${sanitized}%`);
+            }
         }
 
         const page = Math.max(1, Number(body.page) || 1);
