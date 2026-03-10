@@ -389,7 +389,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
             {/* API Key input */}
             {!apiKey && !showApiKeyInput && (
                 <div className="mb-4 rounded bg-blue-50 p-3 dark:bg-blue-900/20">
-                    <p className="text-sm text-blue-800 dark:text-blue-200">서버 키 모드 (일일 20회 제한)</p>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">서버 키 모드 (일일 3회 제한)</p>
                     <button
                         onClick={() => setShowApiKeyInput(true)}
                         className="mt-2 text-sm text-blue-600 underline hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-100"

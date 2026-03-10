@@ -2,7 +2,7 @@ import type { Context } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
 
 const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
-const DAILY_QUOTA_LIMIT = 20;
+const DAILY_QUOTA_LIMIT = 3;
 
 function getAllowedOrigins(): string[] {
     const origins = [...ALLOWED_ORIGINS];
@@ -67,7 +67,7 @@ export default async (req: Request, _context: Context) => {
     }
 
     if (!quotaOk) {
-        return new Response(JSON.stringify({ error: '일일 사용 한도(20회)를 초과했습니다' }), {
+        return new Response(JSON.stringify({ error: '일일 사용 한도(3회)를 초과했습니다' }), {
             status: 429,
             headers: { 'Content-Type': 'application/json' },
         });
