@@ -4,6 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
 const MAX_BODY_SIZE = 50 * 1024; // 50KB
 const MAX_EMBEDDING_DIM = 384;
+const MAX_TEXT_LENGTH = 2000;
+const HF_MODEL = 'sentence-transformers/all-MiniLM-L6-v2';
 
 function getAllowedOrigins(): string[] {
     const origins = [...ALLOWED_ORIGINS];
@@ -21,6 +23,40 @@ function addCorsHeaders(headers: Headers, origin: string): void {
     headers.set('Access-Control-Allow-Origin', origin);
     headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
     headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+}
+
+async function getEmbedding(text: string): Promise<number[]> {
+    const hfToken = process.env.HF_API_TOKEN ?? '';
+    const res = await fetch(`https://api-inference.huggingface.co/pipeline/feature-extraction/${HF_MODEL}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(hfToken ? { Authorization: `Bearer ${hfToken}` } : {}),
+        },
+        body: JSON.stringify({ inputs: text, options: { wait_for_model: true } }),
+    });
+
+    if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`HF Inference API error ${res.status}: ${errText}`);
+    }
+
+    // HF returns [[number[]]] for sentence-transformers — mean pooling already applied
+    const data = await res.json();
+    const embedding: number[] = Array.isArray(data[0]) && Array.isArray(data[0][0])
+        ? meanPool(data[0]) // token-level embeddings, need pooling
+        : data[0];          // already sentence-level
+    return embedding;
+}
+
+function meanPool(tokenEmbeddings: number[][]): number[] {
+    const dim = tokenEmbeddings[0].length;
+    const sum = new Array(dim).fill(0);
+    for (const token of tokenEmbeddings) {
+        for (let i = 0; i < dim; i++) sum[i] += token[i];
+    }
+    const len = tokenEmbeddings.length;
+    return sum.map(v => v / len);
 }
 
 export default async (req: Request, _context: Context) => {
@@ -58,20 +94,49 @@ export default async (req: Request, _context: Context) => {
         return new Response('Request body too large', { status: 413 });
     }
 
-    let body: { embedding: number[]; top_k?: number };
+    let body: { text?: string; embedding?: number[]; top_k?: number };
     try {
         body = JSON.parse(bodyText);
     } catch {
         return new Response('Invalid JSON', { status: 400 });
     }
 
-    // Validate embedding vector
-    if (!Array.isArray(body.embedding) || body.embedding.length !== MAX_EMBEDDING_DIM) {
-        return new Response(`embedding must be a ${MAX_EMBEDDING_DIM}-dim array`, { status: 400 });
-    }
+    // Accept either text (server computes embedding) or embedding (backward compat)
+    let embedding: number[];
 
-    if (!body.embedding.every((v) => typeof v === 'number' && isFinite(v))) {
-        return new Response('embedding contains invalid values', { status: 400 });
+    if (body.text) {
+        // Server-side embedding (new path)
+        if (typeof body.text !== 'string' || body.text.trim().length === 0) {
+            return new Response('text must be a non-empty string', { status: 400 });
+        }
+        if (body.text.length > MAX_TEXT_LENGTH) {
+            return new Response(`text exceeds max length of ${MAX_TEXT_LENGTH} characters`, { status: 400 });
+        }
+
+        try {
+            embedding = await getEmbedding(body.text);
+        } catch (err) {
+            console.error(JSON.stringify({
+                ts: new Date().toISOString(),
+                fn: 'rag-search',
+                error: 'embedding generation failed',
+                message: err instanceof Error ? err.message : String(err),
+            }));
+            return new Response('Failed to generate embedding', { status: 500 });
+        }
+    } else if (body.embedding) {
+        // Client-provided embedding (backward compat)
+        if (!Array.isArray(body.embedding) || body.embedding.length !== MAX_EMBEDDING_DIM) {
+            return new Response(`embedding must be a ${MAX_EMBEDDING_DIM}-dim array`, { status: 400 });
+        }
+
+        if (!body.embedding.every((v) => typeof v === 'number' && isFinite(v))) {
+            return new Response('embedding contains invalid values', { status: 400 });
+        }
+
+        embedding = body.embedding;
+    } else {
+        return new Response('Either text or embedding must be provided', { status: 400 });
     }
 
     const topK = Math.min(Math.max(body.top_k ?? 5, 1), 20);
@@ -89,7 +154,7 @@ export default async (req: Request, _context: Context) => {
 
     // Search via pgvector RPC
     const { data: chunks, error: searchError } = await supabase.rpc('search_similar_chunks', {
-        query_embedding: JSON.stringify(body.embedding),
+        query_embedding: JSON.stringify(embedding),
         match_count: topK,
         match_threshold: 0.5,
     });

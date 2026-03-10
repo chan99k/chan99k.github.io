@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { supabase } from '../utils/supabase';
-import { getQueryEmbedding, type EmbeddingStatus } from '../utils/client-embeddings';
 import { INITIAL_SESSION_STATE, SESSION_CONFIG } from '../config/interview-session';
 import type { SessionState, ChatMessage } from '../config/interview-session';
 import { buildInterviewSystemPrompt } from '../utils/interview-prompt';
@@ -76,7 +75,6 @@ export default function InterviewChat({ initialQuestion }: Props) {
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [streamText, setStreamText] = useState('');
-    const [embeddingStatus, setEmbeddingStatus] = useState<EmbeddingStatus>('idle');
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const isNearBottomRef = useRef(true); // Start true to auto-scroll initially
@@ -156,23 +154,23 @@ export default function InterviewChat({ initialQuestion }: Props) {
                 setSession((s) => ({ ...s, sessionId: sessionId! }));
             }
 
-            // 2. Client-side embedding + RAG search (graceful degradation if model fails)
-            let chunks: unknown[] = [];
+            // 2. Server-side embedding + RAG search (graceful degradation if server fails)
+            let chunks: { slug: string; title: string; chunk_text: string; source: string }[] = [];
             try {
-                const embedding = await getQueryEmbedding(answer, setEmbeddingStatus);
-
                 const searchRes = await fetch('/.netlify/functions/rag-search', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                    body: JSON.stringify({ embedding, top_k: SESSION_CONFIG.searchTopK }),
+                    body: JSON.stringify({ text: answer, top_k: SESSION_CONFIG.searchTopK }),
                 });
                 if (searchRes.ok) {
                     const data = await searchRes.json();
                     chunks = data.chunks ?? [];
+                } else {
+                    console.warn('RAG search failed:', searchRes.status, searchRes.statusText);
                 }
-            } catch {
-                // Embedding model download failed (CORS etc.) — skip RAG, continue with LLM only
-                console.warn('Embedding failed, skipping RAG search');
+            } catch (err) {
+                // Network or server error — skip RAG, continue with LLM only
+                console.warn('RAG search error:', err);
             }
 
             setSession((s) => ({ ...s, status: 'evaluating' }));
@@ -329,7 +327,6 @@ export default function InterviewChat({ initialQuestion }: Props) {
             <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-xl font-bold">AI 모의면접</h2>
                 <div className="flex items-center gap-2 text-sm text-neutral-500">
-                    {embeddingStatus === 'loading' && <span>모델 로딩...</span>}
                     <span>Depth: {session.depth}/{SESSION_CONFIG.maxDepth}</span>
                 </div>
             </div>
