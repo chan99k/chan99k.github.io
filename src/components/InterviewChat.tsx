@@ -155,7 +155,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
             }
 
             // 2. Server-side embedding + RAG search (graceful degradation if server fails)
-            let chunks: unknown[] = [];
+            let chunks: { slug: string; title: string; chunk_text: string; source: string }[] = [];
             try {
                 const searchRes = await fetch('/.netlify/functions/rag-search', {
                     method: 'POST',
