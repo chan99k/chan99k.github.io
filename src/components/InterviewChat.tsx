@@ -78,6 +78,8 @@ export default function InterviewChat({ initialQuestion }: Props) {
     const [streamText, setStreamText] = useState('');
     const [embeddingStatus, setEmbeddingStatus] = useState<EmbeddingStatus>('idle');
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const isNearBottomRef = useRef(true); // Start true to auto-scroll initially
 
     const sessionRef = useRef(session);
     useEffect(() => { sessionRef.current = session; }, [session]);
@@ -91,9 +93,21 @@ export default function InterviewChat({ initialQuestion }: Props) {
         return () => subscription.unsubscribe();
     }, []);
 
-    // Auto-scroll
+    // Check if user is near bottom of chat
+    const handleScroll = useCallback(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = container;
+        const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+        isNearBottomRef.current = distanceFromBottom < 100;
+    }, []);
+
+    // Smart auto-scroll: only scroll if user is near bottom
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (isNearBottomRef.current) {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
     }, [session.messages, streamText]);
 
     const handleLogin = async (provider: 'google' | 'github') => {
@@ -109,6 +123,12 @@ export default function InterviewChat({ initialQuestion }: Props) {
         setIsLoading(true);
         const answer = input.trim();
         setInput('');
+
+        // Force scroll to bottom when user sends a message
+        isNearBottomRef.current = true;
+        setTimeout(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 0);
 
         const userMsg: ChatMessage = {
             role: 'user',
@@ -335,7 +355,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
             </div>
 
             {/* Chat messages */}
-            <div className="mb-4 max-h-96 space-y-3 overflow-y-auto">
+            <div ref={scrollContainerRef} onScroll={handleScroll} className="mb-4 max-h-96 space-y-3 overflow-y-auto">
                 {session.messages.map((msg, i) => (
                     <div key={i} className={`rounded p-3 text-sm ${msg.role === 'user' ? 'bg-neutral-100 dark:bg-neutral-800' : 'bg-green-50 dark:bg-green-900/20'}`}>
                         <span className="text-xs font-medium text-neutral-500">
