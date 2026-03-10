@@ -112,7 +112,11 @@ ${input.depth >= SESSION_CONFIG.minDepthForFinish
 export function buildFinalFeedbackPrompt(
     history: ChatMessage[],
     scores: number[],
+    interviewers?: InterviewerId[],
 ): string {
+    const activeInterviewers = (interviewers ?? ['frontend', 'backend', 'dba'])
+        .map((id) => INTERVIEWER_ROLES[id])
+        .filter(Boolean);
     return `지금까지의 면접 대화를 종합하여 최종 피드백을 생성하세요.
 
 ## 대화 히스토리
@@ -125,9 +129,12 @@ ${scores.map((s, i) => `Turn ${i + 1}: ${s}점`).join(', ')}
 **"잘한 건 당연한 거라서 의미가 없어요. 미흡한 부분을 조금이라도 고쳐야죠."**
 
 - 칭찬은 최소화하고 비판과 개선점에 집중하세요
-- 각 면접관(frontend/backend/dba)은 자신의 전문 영역에서 구체적인 부족한 점을 지적하세요
+- 각 면접관은 자신의 전문 영역에서 구체적인 부족한 점을 지적하세요
 - 각 면접관이 학습이 필요한 구체적 키워드/주제를 제시하세요
 - "강점"보다 "약점"과 "학습 가이드"를 더 상세하게 작성하세요
+
+## 참여 면접관
+${activeInterviewers.map((r) => `- ${r.id}: ${r.name} (${r.perspective})`).join('\n')}
 
 JSON으로 응답하세요:
 
@@ -141,18 +148,10 @@ JSON으로 응답하세요:
   ],
   "overallFeedback": "종합 피드백 (비판적 관점, 3-5문장)",
   "interviewerComments": {
-    "frontend": {
-      "critique": "프론트엔드 관점에서 부족한 점 (비판적)",
+${activeInterviewers.map((r) => `    "${r.id}": {
+      "critique": "${r.name} 관점에서 부족한 점 (비판적)",
       "studyKeywords": ["학습 필요 키워드1", "학습 필요 키워드2", "학습 필요 키워드3"]
-    },
-    "backend": {
-      "critique": "백엔드 관점에서 부족한 점 (비판적)",
-      "studyKeywords": ["학습 필요 키워드1", "학습 필요 키워드2", "학습 필요 키워드3"]
-    },
-    "dba": {
-      "critique": "DBA 관점에서 부족한 점 (비판적)",
-      "studyKeywords": ["학습 필요 키워드1", "학습 필요 키워드2", "학습 필요 키워드3"]
-    }
+    }`).join(',\n')}
   }
 }
 \`\`\`

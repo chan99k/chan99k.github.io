@@ -4,9 +4,11 @@ import { INITIAL_SESSION_STATE, SESSION_CONFIG } from '../config/interview-sessi
 import type { SessionState, ChatMessage } from '../config/interview-session';
 import { buildInterviewSystemPrompt } from '../utils/interview-prompt';
 import type { User } from '@supabase/supabase-js';
+import type { InterviewerId } from '../config/interviewers';
 
 interface Props {
     initialQuestion: string;
+    interviewers?: InterviewerId[];
 }
 
 // Reuse claude-proxy streaming pattern from src/utils/claude.ts
@@ -115,7 +117,7 @@ async function* streamFromServer(
     }
 }
 
-export default function InterviewChat({ initialQuestion }: Props) {
+export default function InterviewChat({ initialQuestion, interviewers }: Props) {
     const [user, setUser] = useState<User | null>(null);
     const [apiKey, setApiKey] = useState('');
     const [showApiKeyInput, setShowApiKeyInput] = useState(false);
@@ -239,6 +241,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
                 chunks,
                 history: updatedMessages,
                 depth: newDepth,
+                interviewers,
                 jdContext,
             });
 
@@ -369,7 +372,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
         } finally {
             setIsLoading(false);
         }
-    }, [input, isLoading, user, apiKey, companyName, jdText, session.currentQuestion, session.scores]);
+    }, [input, isLoading, user, apiKey, interviewers, companyName, jdText, session.currentQuestion, session.scores]);
 
     // --- Render ---
 

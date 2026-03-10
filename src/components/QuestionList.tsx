@@ -75,15 +75,22 @@ export default function QuestionList() {
             {isLoading ? <p className="text-neutral-500">로딩 중...</p> : (
                 <div className="space-y-3">
                     {questions.map(q => (
-                        <a key={q.id} href={`/interview/questions/${q.id}`}
-                            className="block rounded-lg border p-4 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800/50">
-                            <h3 className="font-medium">{q.title}</h3>
-                            <div className="mt-1 flex gap-2 text-xs text-neutral-500">
-                                <span className="rounded bg-blue-100 px-1.5 py-0.5 dark:bg-blue-900/30">{q.category}</span>
-                                <span className="rounded bg-green-100 px-1.5 py-0.5 dark:bg-green-900/30">{q.difficulty}</span>
-                                {q.tags.slice(0, 3).map(t => <span key={t} className="rounded bg-neutral-100 px-1.5 py-0.5 dark:bg-neutral-700">{t}</span>)}
-                            </div>
-                        </a>
+                        <div key={q.id} className="flex items-center gap-2">
+                            <a href={`/interview/questions/${q.id}`}
+                                className="block flex-1 rounded-lg border p-4 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800/50">
+                                <h3 className="font-medium">{q.title}</h3>
+                                <div className="mt-1 flex gap-2 text-xs text-neutral-500">
+                                    <span className="rounded bg-blue-100 px-1.5 py-0.5 dark:bg-blue-900/30">{q.category}</span>
+                                    <span className="rounded bg-green-100 px-1.5 py-0.5 dark:bg-green-900/30">{q.difficulty}</span>
+                                    {q.tags.slice(0, 3).map(t => <span key={t} className="rounded bg-neutral-100 px-1.5 py-0.5 dark:bg-neutral-700">{t}</span>)}
+                                </div>
+                            </a>
+                            <a href={`/interview/chat?q=${encodeURIComponent(q.title)}`}
+                                className="shrink-0 rounded-lg border border-blue-600 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                title="이 질문으로 면접 시작">
+                                면접
+                            </a>
+                        </div>
                     ))}
                     {questions.length === 0 && <p className="text-neutral-500">질문이 없습니다.</p>}
                 </div>
