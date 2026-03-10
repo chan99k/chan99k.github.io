@@ -1,0 +1,23 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import InterviewResult from '../../../components/InterviewResult';
+
+export const prerender = false;
+
+const { id } = Astro.params;
+---
+
+<Layout title="면접 결과">
+    <main class="py-8">
+        <InterviewResult client:load sessionId={id!} />
+    </main>
+</Layout>
+
+<script is:inline>
+    if (!document.querySelector('meta[name="robots"]')) {
+        const meta = document.createElement('meta');
+        meta.name = 'robots';
+        meta.content = 'noindex';
+        document.head.appendChild(meta);
+    }
+</script>
