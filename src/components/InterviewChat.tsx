@@ -330,7 +330,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
             {/* Current question */}
             <div className="mb-4 rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
                 <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
-                    {session.status === 'completed' ? '면접이 종료되었습니다.' : session.currentQuestion}
+                    {session.status === 'completed' ? '면접이 종료되었습니다.' : initialQuestion}
                 </p>
             </div>
 
