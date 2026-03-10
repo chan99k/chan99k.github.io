@@ -9,6 +9,7 @@ interface PromptInput {
     history: ChatMessage[];
     depth: number;
     interviewers?: InterviewerId[];
+    jdContext?: { company: string; jd: string };
 }
 
 export function buildInterviewSystemPrompt(input: PromptInput): string {
@@ -26,6 +27,10 @@ export function buildInterviewSystemPrompt(input: PromptInput): string {
         ).join('\n')}`
         : '';
 
+    const jdSection = input.jdContext
+        ? `\n\n## 기업 맥락\n- 기업: ${input.jdContext.company}\n- 채용공고:\n${input.jdContext.jd}\n\n이 기업의 기술 스택과 채용 요구사항을 고려하여 질문하세요.`
+        : '';
+
     const criteria = SESSION_CONFIG.evaluationCriteria;
 
     return `당신은 AI 모의면접 시스템의 면접관 패널입니다.
@@ -40,7 +45,7 @@ ${interviewerSection}
 
 ## 초기 질문
 ${input.question}
-${ragSection}
+${ragSection}${jdSection}
 
 ## 평가 기준 (${Object.values(criteria).reduce((a, b) => a + b, 0)}점 만점)
 - 정확성: ${criteria.accuracy}점
