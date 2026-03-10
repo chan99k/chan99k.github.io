@@ -373,7 +373,6 @@ export default function InterviewChat({ initialQuestion, interviewers }: Props) 
             setIsLoading(false);
         }
     }, [input, isLoading, user, apiKey, interviewers, companyName, jdText, session.currentQuestion, session.scores]);
-    }, [input, isLoading, user, apiKey, companyName, jdText, session.currentQuestion, session.scores]);
 
     // --- Render ---
 
