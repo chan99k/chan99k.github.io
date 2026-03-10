@@ -127,6 +127,11 @@ export default function InterviewChat({ initialQuestion }: Props) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const isNearBottomRef = useRef(true); // Start true to auto-scroll initially
 
+    // JD context state
+    const [showJdInput, setShowJdInput] = useState(false);
+    const [companyName, setCompanyName] = useState('');
+    const [jdText, setJdText] = useState('');
+
     const sessionRef = useRef(session);
     useEffect(() => { sessionRef.current = session; }, [session]);
 
@@ -225,12 +230,16 @@ export default function InterviewChat({ initialQuestion }: Props) {
 
             // 3. Build prompt and stream LLM
             const newDepth = sessionRef.current.depth + 1;
+            const jdContext = companyName.trim() || jdText.trim()
+                ? { company: companyName.trim(), jd: jdText.trim() }
+                : undefined;
             const systemPrompt = buildInterviewSystemPrompt({
                 question: sessionRef.current.currentQuestion,
                 userAnswer: answer,
                 chunks,
                 history: updatedMessages,
                 depth: newDepth,
+                jdContext,
             });
 
             // Keep only recent messages to avoid exceeding input token limit
@@ -360,7 +369,7 @@ export default function InterviewChat({ initialQuestion }: Props) {
         } finally {
             setIsLoading(false);
         }
-    }, [input, isLoading, user, apiKey]);
+    }, [input, isLoading, user, apiKey, companyName, jdText, session.currentQuestion, session.scores]);
 
     // --- Render ---
 
@@ -413,6 +422,36 @@ export default function InterviewChat({ initialQuestion }: Props) {
                     >
                         서버 키 모드로 돌아가기
                     </button>
+                </div>
+            )}
+
+            {/* JD 입력 (선택사항) - 면접 시작 전에만 표시 */}
+            {session.messages.length === 0 && (
+                <div className="mb-4 rounded-lg border border-dashed border-neutral-300 p-4 dark:border-neutral-600">
+                    <button
+                        onClick={() => setShowJdInput(!showJdInput)}
+                        className="text-sm font-medium text-neutral-600 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+                    >
+                        {showJdInput ? '▼ 기업 맥락 접기' : '▶ 기업/채용공고 설정 (선택사항)'}
+                    </button>
+                    {showJdInput && (
+                        <div className="mt-3 space-y-2">
+                            <input
+                                type="text"
+                                placeholder="기업명 (예: 네이버, 카카오)"
+                                value={companyName}
+                                onChange={(e) => setCompanyName(e.target.value)}
+                                className="w-full rounded border px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
+                            />
+                            <textarea
+                                placeholder="채용공고 또는 JD 텍스트 (붙여넣기)"
+                                value={jdText}
+                                onChange={(e) => setJdText(e.target.value)}
+                                rows={4}
+                                className="w-full rounded border px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
+                            />
+                        </div>
+                    )}
                 </div>
             )}
 
