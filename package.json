@@ -10,6 +10,10 @@
         "preview": "astro preview",
         "astro": "astro",
         "test": "vitest run",
+        "test:e2e": "playwright test",
+        "test:e2e:ui": "playwright test --ui",
+        "test:e2e:debug": "playwright test --debug",
+        "test:e2e:headed": "playwright test --headed",
         "cms": "npx decap-server",
         "sync:embeddings": "npx tsx scripts/sync-embeddings.ts"
     },
@@ -49,6 +53,7 @@
         "unique-names-generator": "^4.7.1"
     },
     "devDependencies": {
+        "@playwright/test": "^1.58.2",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/react": "^16.3.2",
         "@testing-library/user-event": "^14.6.1",
