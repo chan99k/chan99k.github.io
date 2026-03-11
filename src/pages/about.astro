@@ -14,8 +14,7 @@ const posts = (await getCollection('blog'))
     .slice(0, 3);
 
 const projects = (await getCollection('projects'))
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-    .slice(0, 2);
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <Layout title={`${about.data.title} - ${SITE.name}`} description={about.data.description}>
@@ -26,7 +25,7 @@ const projects = (await getCollection('projects'))
             상상을 다시 <span class="bg-gradient-to-r from-gray-500 to-gray-300 dark:from-gray-400 dark:to-gray-600 bg-clip-text text-transparent">현상</span>으로
         </h1>
         <p class="text-base sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
-            웹 개발자로써의 학습 기록을 남깁니다.
+            학습 기록을 남기고, 그를 바탕으로 피드백 루프를 만들어갑니다.
         </p>
     </section>
 
@@ -42,9 +41,11 @@ const projects = (await getCollection('projects'))
             <h2 class="text-2xl font-bold">주요 프로젝트</h2>
             <a href="/projects" class="text-sm font-medium hover:underline text-gray-500">전체보기</a>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="project-scroll flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory">
             {projects.map((project) => (
-                <ProjectCard project={project} />
+                <div class="min-w-[300px] sm:min-w-[360px] max-w-[400px] flex-shrink-0 snap-start">
+                    <ProjectCard project={project} />
+                </div>
             ))}
         </div>
     </section>
@@ -61,3 +62,26 @@ const projects = (await getCollection('projects'))
         </div>
     </section>
 </Layout>
+
+<style>
+    .project-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: #d1d5db transparent;
+    }
+    .project-scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+    .project-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .project-scroll::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 3px;
+    }
+    :global(.dark) .project-scroll {
+        scrollbar-color: #374151 transparent;
+    }
+    :global(.dark) .project-scroll::-webkit-scrollbar-thumb {
+        background: #374151;
+    }
+</style>
