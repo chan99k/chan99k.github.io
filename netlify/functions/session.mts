@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
 const MAX_BODY_SIZE = 50 * 1024;
+const ALLOWED_EMAILS = ['kjkj5868@gmail.com'];
 const MAX_CONTENT_LENGTH = 10000;
 
 function getAllowedOrigins(): string[] {
@@ -53,6 +54,11 @@ export default async (req: Request, _context: Context) => {
     const user = await authenticateUser(req.headers.get('Authorization'), supabaseUrl, serviceRoleKey);
     if (!user) {
         return new Response('Unauthorized', { status: 401 });
+    }
+
+    // Restrict access to allowed emails only
+    if (!user.email || !ALLOWED_EMAILS.includes(user.email)) {
+        return new Response('Forbidden', { status: 403 });
     }
 
     // Read and validate body
