@@ -5,13 +5,14 @@
     "scripts": {
         "dev": "astro dev",
         "start": "astro dev",
-        "build": "npm run build:embeddings && astro build",
+        "build": "npm run sync:embeddings:incremental && npm run build:embeddings && astro build",
         "build:embeddings": "npx tsx scripts/build-embeddings.ts",
         "preview": "astro preview",
         "astro": "astro",
         "test": "vitest run",
         "cms": "npx decap-server",
-        "sync:embeddings": "npx tsx scripts/sync-embeddings.ts"
+        "sync:embeddings": "npx tsx scripts/sync-embeddings.ts",
+        "sync:embeddings:incremental": "npx tsx scripts/sync-embeddings-incremental.ts"
     },
     "dependencies": {
         "@ai-sdk/anthropic": "^3.0.58",
