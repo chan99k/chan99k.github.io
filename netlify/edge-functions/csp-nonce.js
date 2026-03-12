@@ -17,7 +17,9 @@ const CSP_DIRECTIVES = {
     'https://api.anthropic.com',
     'https://cdn.jsdelivr.net',
     'https://*.google.com',
+    'https://*.google',
     'https://*.googlesyndication.com',
+    'https://*.gstatic.com',
   ],
   'frame-src': [
     'https://googleads.g.doubleclick.net',
