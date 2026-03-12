@@ -380,11 +380,7 @@ export default function InterviewChat({ initialQuestion, interviewers }: Props) 
         return (
             <div className="mx-auto max-w-2xl rounded-xl border p-6 dark:border-neutral-700">
                 <h2 className="mb-4 text-xl font-bold">AI 모의면접</h2>
-                <p className="mb-4 text-neutral-600 dark:text-neutral-400">로그인하여 개인화된 모의면접을 시작하세요.</p>
-                <div className="flex gap-2">
-                    <button onClick={() => handleLogin('google')} className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">Google 로그인</button>
-                    <button onClick={() => handleLogin('github')} className="rounded bg-neutral-800 px-4 py-2 text-white hover:bg-neutral-900">GitHub 로그인</button>
-                </div>
+                <p className="text-neutral-600 dark:text-neutral-400">현재 비공개로 운영 중입니다.</p>
             </div>
         );
     }

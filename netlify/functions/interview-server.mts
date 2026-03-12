@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
 const DAILY_QUOTA_LIMIT = 3;
+const ALLOWED_EMAILS = ['kjkj5868@gmail.com'];
 
 function getAllowedOrigins(): string[] {
     const origins = [...ALLOWED_ORIGINS];
@@ -53,6 +54,11 @@ export default async (req: Request, _context: Context) => {
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
     if (authError || !user) {
         return new Response('Unauthorized', { status: 401 });
+    }
+
+    // Restrict access to allowed emails only
+    if (!user.email || !ALLOWED_EMAILS.includes(user.email)) {
+        return new Response('Forbidden', { status: 403 });
     }
 
     // 2. Check and increment daily quota
