@@ -23,6 +23,8 @@ const CSP_DIRECTIVES = {
   ],
   'frame-src': [
     'https://googleads.g.doubleclick.net',
+    'https://*.google.com',
+    'https://*.google',
     'https://giscus.app',
     'https://app.netlify.com',
   ],
