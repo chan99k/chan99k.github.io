@@ -105,23 +105,7 @@ export default function InterviewResult({ sessionId }: Props) {
     if (!user) {
         return (
             <div className="mx-auto max-w-2xl rounded-xl border p-4 sm:p-6 dark:border-neutral-700">
-                <p className="text-sm text-neutral-600 dark:text-neutral-400">로그인이 필요합니다.</p>
-                <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                    <button
-                        onClick={() => supabase.auth.signInWithOAuth({ provider: 'google' })}
-                        className="rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
-                        aria-label="Google 계정으로 로그인"
-                    >
-                        Google 로그인
-                    </button>
-                    <button
-                        onClick={() => supabase.auth.signInWithOAuth({ provider: 'github' })}
-                        className="rounded bg-neutral-800 px-4 py-2 text-sm text-white hover:bg-neutral-900"
-                        aria-label="GitHub 계정으로 로그인"
-                    >
-                        GitHub 로그인
-                    </button>
-                </div>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">현재 비공개로 운영 중입니다.</p>
             </div>
         );
     }
