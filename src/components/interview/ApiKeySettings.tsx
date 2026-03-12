@@ -38,7 +38,7 @@ export function ApiKeySettings({ onSettingsChange }: Props) {
     return (
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950">
             <p className="mb-2 text-sm font-medium">API Key 설정</p>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row">
                 <select
                     value={provider}
                     onChange={(e) => setProvider(e.target.value as Provider)}
