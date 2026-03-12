@@ -1,6 +1,3 @@
-import type { MiddlewareHandler } from 'astro';
-import { randomUUID } from 'node:crypto';
-
 const CSP_DIRECTIVES = {
   'default-src': ["'self'"],
   'script-src': [
@@ -32,7 +29,7 @@ const CSP_DIRECTIVES = {
   'upgrade-insecure-requests': [],
 };
 
-function buildCspHeader(nonce: string): string {
+function buildCspHeader(nonce) {
   return Object.entries(CSP_DIRECTIVES)
     .map(([directive, values]) => {
       const resolved = values.map((v) =>
@@ -45,15 +42,15 @@ function buildCspHeader(nonce: string): string {
     .join('; ');
 }
 
-export const onRequest: MiddlewareHandler = async (_context, next) => {
-  const response = await next();
-
+export default async (request, context) => {
+  const response = await context.next();
   const contentType = response.headers.get('content-type');
+
   if (!contentType || !contentType.includes('text/html')) {
     return response;
   }
 
-  const nonce = randomUUID();
+  const nonce = crypto.randomUUID();
   let html = await response.text();
 
   // Inject nonce into inline <script> tags (without src attribute, skip if nonce already present)
@@ -77,3 +74,5 @@ export const onRequest: MiddlewareHandler = async (_context, next) => {
     headers,
   });
 };
+
+export const config = { path: '/*' };
