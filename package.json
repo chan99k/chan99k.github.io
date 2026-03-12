@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "astro dev",
         "start": "astro dev",
-        "build": "npm run sync:embeddings:incremental && npm run build:embeddings && astro build",
+        "build": "npm run sync:embeddings:incremental && npm run build:embeddings && astro build && node scripts/generate-csp-hashes.mjs",
         "build:embeddings": "npx tsx scripts/build-embeddings.ts",
         "preview": "astro preview",
         "astro": "astro",
