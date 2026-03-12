@@ -5,6 +5,8 @@ const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
 const MAX_BODY_SIZE = 50 * 1024;
 const ALLOWED_EMAILS = ['kjkj5868@gmail.com'];
 const MAX_CONTENT_LENGTH = 10000;
+const ALLOWED_ACTIONS = ['create', 'message', 'complete', 'get', 'list'] as const;
+const ALLOWED_ROLES = ['user', 'assistant'] as const;
 
 function getAllowedOrigins(): string[] {
     const origins = [...ALLOWED_ORIGINS];
@@ -80,6 +82,10 @@ export default async (req: Request, _context: Context) => {
         return new Response('Invalid JSON', { status: 400 });
     }
 
+    if (!ALLOWED_ACTIONS.includes(body.action as typeof ALLOWED_ACTIONS[number])) {
+        return new Response(JSON.stringify({ error: 'Unknown action' }), { status: 400 });
+    }
+
     const supabase = createClient(supabaseUrl, serviceRoleKey);
     const responseHeaders = new Headers({ 'Content-Type': 'application/json' });
     addCorsHeaders(responseHeaders, origin!);
@@ -116,11 +122,14 @@ export default async (req: Request, _context: Context) => {
         }
 
         const content = String(body.data.content).slice(0, MAX_CONTENT_LENGTH);
+        const role = ALLOWED_ROLES.includes(body.data.role as typeof ALLOWED_ROLES[number])
+            ? body.data.role as string
+            : 'user';
 
         const { error } = await supabase.from('session_messages').insert({
             session_id: body.session_id,
             depth: Number(body.data.depth ?? 0),
-            role: String(body.data.role ?? 'user'),
+            role,
             content,
             message_type: String(body.data.message_type ?? 'answer'),
             interviewer: body.data.interviewer ? String(body.data.interviewer) : null,
