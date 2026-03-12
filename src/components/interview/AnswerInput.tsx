@@ -50,12 +50,12 @@ export function AnswerInput({
 					placeholder={placeholder}
 					rows={1}
 					disabled={isLoading}
-					className="flex-1 resize-none overflow-hidden border-none bg-transparent py-1 text-sm outline-none dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
+					className="flex-1 resize-none overflow-hidden border-none bg-transparent text-sm leading-8 outline-none dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
 				/>
 				<button
 					onClick={onSubmit}
 					disabled={isDisabled}
-					className="mb-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0078FF] text-white transition-colors hover:bg-[#0066DD] disabled:bg-gray-300 dark:disabled:bg-gray-600"
+					className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0078FF] text-white transition-colors hover:bg-[#0066DD] disabled:bg-gray-300 dark:disabled:bg-gray-600"
 					title={!hasApiKey ? 'API 키를 먼저 설정하세요' : '제출 (Enter)'}
 				>
 					{isLoading ? (
