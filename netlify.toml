@@ -8,6 +8,12 @@
 [functions]
   node_bundler = "esbuild"
 
+# CSP and security headers — 'unsafe-inline' is replaced with hashes by post-build script
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; connect-src 'self' https://*.netlify.app https://*.netlify.com https://*.supabase.co https://api.anthropic.com; frame-src https://googleads.g.doubleclick.net https://giscus.app https://app.netlify.com; font-src 'self' data:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+
 # Redirect SPA fallback for admin page
 [[redirects]]
   from = "/admin/*"
