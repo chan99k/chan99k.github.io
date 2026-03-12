@@ -168,13 +168,13 @@ export default function InterviewWidget({ questions, posts }: Props) {
             {/* Chat area - expands when messages exist */}
             <div
                 className={`w-full overflow-hidden transition-all duration-500 ease-out ${
-                    phase === 'chat' ? 'max-h-[60vh] opacity-100' : 'max-h-0 opacity-0'
+                    phase === 'chat' ? 'max-h-[60dvh] opacity-100' : 'max-h-0 opacity-0'
                 }`}
             >
                 <div className="mb-1 border-t border-neutral-200 dark:border-neutral-700" />
                 <div
                     ref={chatContainerRef}
-                    className="max-h-[55vh] space-y-1 overflow-y-auto py-4"
+                    className="max-h-[55dvh] space-y-1 overflow-y-auto py-4"
                     role="log"
                     aria-label="면접 대화"
                 >

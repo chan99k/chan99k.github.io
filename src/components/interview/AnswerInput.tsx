@@ -41,7 +41,7 @@ export function AnswerInput({
 
 	return (
 		<div className="w-full max-w-2xl mx-auto">
-			<div className="flex items-end gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-2 shadow-lg dark:border-gray-700 dark:bg-[#2B3040] dark:shadow-none">
+			<div className="flex items-end gap-2 rounded-2xl border border-gray-200 bg-white px-3 py-2 sm:px-4 shadow-lg dark:border-gray-700 dark:bg-[#2B3040] dark:shadow-none">
 				<textarea
 					ref={textareaRef}
 					value={value}
