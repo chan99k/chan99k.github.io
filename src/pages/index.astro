@@ -21,7 +21,7 @@ const questionsData = questions.map((q) => ({
     <div class="relative flex flex-1 flex-col items-center px-4">
         {/* Full-width gradient background */}
         <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-accent/[0.03] via-transparent to-transparent dark:from-accent/[0.06]" aria-hidden="true"></div>
-        <div class="relative z-10 w-full max-w-2xl">
+        <div class="relative z-10 flex w-full max-w-2xl flex-1 flex-col">
             <InterviewWidget
                 client:visible
                 questions={questionsData}
