@@ -43,3 +43,8 @@ backlog/
 
 # Generated embeddings
 public/blog-embeddings.json
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
