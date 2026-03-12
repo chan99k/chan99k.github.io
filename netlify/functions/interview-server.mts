@@ -91,6 +91,21 @@ export default async (req: Request, _context: Context) => {
         return new Response('Missing system or messages', { status: 400 });
     }
 
+    if (body.system.length > 20000) {
+        return new Response('System prompt too long', { status: 400 });
+    }
+    if (body.messages.length > 50) {
+        return new Response('Too many messages', { status: 400 });
+    }
+    for (const msg of body.messages) {
+        if (!msg.role || !msg.content || typeof msg.content !== 'string') {
+            return new Response('Invalid message format', { status: 400 });
+        }
+        if (msg.content.length > 10000) {
+            return new Response('Message content too long', { status: 400 });
+        }
+    }
+
     // 4. Call Anthropic API with server key
     const serverKey = process.env.SERVER_ANTHROPIC_API_KEY;
     if (!serverKey) {
