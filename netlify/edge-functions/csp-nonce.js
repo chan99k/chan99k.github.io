@@ -7,7 +7,7 @@ const CSP_DIRECTIVES = {
     'https://unpkg.com',
     'https://giscus.app',
   ],
-  'style-src': ["'self'", '__NONCE__', 'https://cdn.jsdelivr.net'],
+  'style-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
   'img-src': ["'self'", 'data:', 'https:'],
   'connect-src': [
     "'self'",
@@ -16,6 +16,8 @@ const CSP_DIRECTIVES = {
     'https://*.supabase.co',
     'https://api.anthropic.com',
     'https://cdn.jsdelivr.net',
+    'https://*.google.com',
+    'https://*.googlesyndication.com',
   ],
   'frame-src': [
     'https://googleads.g.doubleclick.net',
@@ -57,12 +59,6 @@ export default async (request, context) => {
   html = html.replace(
     /<script(?![^>]*\ssrc=)(?![^>]*\snonce=)([^>]*)>/gi,
     `<script nonce="${nonce}"$1>`,
-  );
-
-  // Inject nonce into <style> tags (skip if nonce already present)
-  html = html.replace(
-    /<style(?![^>]*\snonce=)([^>]*)>/gi,
-    `<style nonce="${nonce}"$1>`,
   );
 
   const headers = new Headers(response.headers);
