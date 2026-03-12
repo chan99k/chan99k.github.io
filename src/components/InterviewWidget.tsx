@@ -147,13 +147,14 @@ export default function InterviewWidget({ questions, posts }: Props) {
     const relatedPosts = messages.some((m) => m.feedback) ? matchRelatedPosts(current, posts) : [];
 
     return (
-        <div className="flex w-full flex-col items-center">
-            {/* Question header - centered in initial, top-aligned in chat */}
+        <div className="flex w-full flex-1 flex-col items-center">
+            {/* Top spacer - pushes content so input bar sits at vertical center */}
+            {phase === 'initial' && <div className="flex-1" />}
+
+            {/* Question header */}
             <div
                 className={`w-full transition-all duration-500 ease-out ${
-                    phase === 'initial'
-                        ? 'flex flex-1 flex-col items-center justify-center py-12'
-                        : 'pb-4'
+                    phase === 'initial' ? 'mb-8' : 'pb-4'
                 }`}
             >
                 <QuestionCard
@@ -222,6 +223,9 @@ export default function InterviewWidget({ questions, posts }: Props) {
                     placeholder={phase === 'initial' ? '답변을 입력하세요...' : '추가 답변을 입력하세요...'}
                 />
             </div>
+
+            {/* Bottom spacer - balances top spacer so input bar sits at ~center */}
+            {phase === 'initial' && <div className="flex-[1.3]" />}
 
             {/* API Key modal */}
             {showApiKeyModal && (

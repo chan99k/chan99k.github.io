@@ -26,7 +26,7 @@ export function AnswerInput({
 		if (!textarea) return;
 
 		textarea.style.height = 'auto';
-		const newHeight = Math.min(textarea.scrollHeight, 144); // max ~6 rows (24px line height)
+		const newHeight = Math.min(textarea.scrollHeight, 144);
 		textarea.style.height = `${newHeight}px`;
 	}, [value]);
 
@@ -41,7 +41,7 @@ export function AnswerInput({
 
 	return (
 		<div className="w-full max-w-2xl mx-auto">
-			<div className="relative flex items-end rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#2B3040] shadow-lg dark:shadow-none">
+			<div className="flex items-end gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-2 shadow-lg dark:border-gray-700 dark:bg-[#2B3040] dark:shadow-none">
 				<textarea
 					ref={textareaRef}
 					value={value}
@@ -50,16 +50,16 @@ export function AnswerInput({
 					placeholder={placeholder}
 					rows={1}
 					disabled={isLoading}
-					className="resize-none overflow-hidden bg-transparent border-none outline-none px-4 py-3 text-sm w-full dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
+					className="flex-1 resize-none overflow-hidden border-none bg-transparent py-1 text-sm outline-none dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
 				/>
 				<button
 					onClick={onSubmit}
 					disabled={isDisabled}
-					className="absolute right-2 bottom-2 w-8 h-8 rounded-full bg-[#0078FF] text-white flex items-center justify-center disabled:bg-gray-300 dark:disabled:bg-gray-600 hover:bg-[#0066DD] transition-colors"
-					title={!hasApiKey ? 'API 키를 먼저 설정하세요' : 'AI 평가 받기'}
+					className="mb-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0078FF] text-white transition-colors hover:bg-[#0066DD] disabled:bg-gray-300 dark:disabled:bg-gray-600"
+					title={!hasApiKey ? 'API 키를 먼저 설정하세요' : '제출 (Enter)'}
 				>
 					{isLoading ? (
-						<svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+						<svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
 							<circle
 								className="opacity-25"
 								cx="12"
