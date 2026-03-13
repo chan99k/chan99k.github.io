@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.stubEnv('SUPABASE_URL', 'https://test.supabase.co');
 vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'test-service-key');
+vi.stubEnv('ADMIN_EMAILS', 'kjkj5868@gmail.com');
 
 const mockRpc = vi.fn();
 const mockGetUser = vi.fn();
@@ -168,7 +169,7 @@ describe('submit-question.mts', () => {
             action: 'approve',
             data: {
               submission_id: 'sq-1',
-              category: 'network',
+              category: 'backend',
               title: 'REST vs GraphQL',
             },
           },

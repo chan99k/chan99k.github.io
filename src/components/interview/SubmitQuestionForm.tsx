@@ -13,6 +13,7 @@ export default function SubmitQuestionForm() {
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const [question, setQuestion] = useState('');
     const [difficulty, setDifficulty] = useState('junior');
@@ -35,6 +36,7 @@ export default function SubmitQuestionForm() {
         if (!question.trim()) return;
 
         setSubmitting(true);
+        setError(null);
         try {
             const { data: { session } } = await supabase.auth.getSession();
             const token = session?.access_token;
@@ -56,9 +58,12 @@ export default function SubmitQuestionForm() {
 
             if (res.ok) {
                 setSubmitted(true);
+            } else {
+                const data = await res.json().catch(() => null);
+                setError(data?.error ?? '제출에 실패했습니다. 다시 시도해주세요.');
             }
         } catch {
-            // ignore
+            setError('네트워크 오류가 발생했습니다.');
         } finally {
             setSubmitting(false);
         }
@@ -166,6 +171,12 @@ export default function SubmitQuestionForm() {
                         익명으로 제출 (체크 해제 시 닉네임 공개)
                     </label>
                 </div>
+
+                {error && (
+                    <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/20 dark:text-red-400" data-testid="submit-error">
+                        {error}
+                    </div>
+                )}
 
                 <button
                     type="submit"

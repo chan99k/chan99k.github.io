@@ -11,7 +11,8 @@ export type PointTransactionType =
   | 'welcome'
   | 'question_submit'
   | 'feedback'
-  | 'interview';
+  | 'interview'
+  | 'refund';
 
 export interface PointBalance {
   balance: number;
@@ -34,4 +35,5 @@ export const POINT_TYPE_LABELS: Record<PointTransactionType, string> = {
   question_submit: '기출 기부 보상',
   feedback: '피드백 작성 보상',
   interview: '면접 이용',
+  refund: '환불',
 };

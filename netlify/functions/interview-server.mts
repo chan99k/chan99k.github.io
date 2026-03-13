@@ -137,6 +137,20 @@ export default async (req: Request, _context: Context) => {
         llm_status: response.status,
     }));
 
+    // Refund points if Anthropic API call failed
+    if (!response.ok && !isByok) {
+        const { error: refundError } = await supabase.rpc('earn_points', {
+            p_user_id: user.id,
+            p_amount: INTERVIEW_POINT_COST,
+            p_type: 'refund',
+            p_reference_id: null,
+            p_description: 'API 호출 실패 환불',
+        });
+        if (refundError) {
+            console.error('[interview-server] Point refund error:', refundError);
+        }
+    }
+
     const responseHeaders = new Headers({
         'Content-Type': response.headers.get('Content-Type') ?? 'text/event-stream',
     });

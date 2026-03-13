@@ -24,6 +24,7 @@ export default function MyPage() {
     const [transactions, setTransactions] = useState<PointTransaction[]>([]);
     const [sessions, setSessions] = useState<SessionSummary[]>([]);
     const [sessionsTotal, setSessionsTotal] = useState(0);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user: u } }) => {
@@ -51,8 +52,14 @@ export default function MyPage() {
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                 body: JSON.stringify({ action: 'balance' }),
             });
-            if (res.ok) setBalance(await res.json());
-        } catch { /* ignore */ }
+            if (res.ok) {
+                setBalance(await res.json());
+            } else {
+                setError('포인트 정보를 불러오지 못했습니다.');
+            }
+        } catch {
+            setError('네트워크 오류가 발생했습니다.');
+        }
     }
 
     async function fetchTransactions() {
@@ -67,8 +74,12 @@ export default function MyPage() {
             if (res.ok) {
                 const data = await res.json();
                 setTransactions(data.transactions);
+            } else {
+                setError('포인트 이력을 불러오지 못했습니다.');
             }
-        } catch { /* ignore */ }
+        } catch {
+            setError('네트워크 오류가 발생했습니다.');
+        }
     }
 
     async function fetchSessions(u: User) {
@@ -84,8 +95,12 @@ export default function MyPage() {
                 const data = await res.json();
                 setSessions(data.sessions);
                 setSessionsTotal(data.total);
+            } else {
+                setError('면접 히스토리를 불러오지 못했습니다.');
             }
-        } catch { /* ignore */ }
+        } catch {
+            setError('네트워크 오류가 발생했습니다.');
+        }
     }
 
     function handleLogin(provider: 'google' | 'github') {
@@ -121,6 +136,12 @@ export default function MyPage() {
                 <h2 className="text-xl font-bold">마이페이지</h2>
                 <span className="text-sm text-neutral-500">{user.email}</span>
             </div>
+
+            {error && (
+                <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/20 dark:text-red-400" data-testid="error-banner">
+                    {error}
+                </div>
+            )}
 
             {/* Point summary card */}
             <div className="mb-6 rounded-xl border bg-gradient-to-r from-blue-50 to-indigo-50 p-6 dark:border-neutral-700 dark:from-neutral-800 dark:to-neutral-800" data-testid="points-card">
