@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import MyPage from '../../components/interview/MyPage';
+
+export const prerender = false;
+---
+
+<Layout title="마이페이지">
+    <main class="py-8">
+        <MyPage client:load />
+    </main>
+</Layout>
+
+<script is:inline>
+    if (!document.querySelector('meta[name="robots"]')) {
+        const meta = document.createElement('meta');
+        meta.name = 'robots';
+        meta.content = 'noindex';
+        document.head.appendChild(meta);
+    }
+</script>

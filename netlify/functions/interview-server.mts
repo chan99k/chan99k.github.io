@@ -1,27 +1,8 @@
 import type { Context } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
+import { validateOrigin, addCorsHeaders } from './utils/cors.js';
 
-const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
-const DAILY_QUOTA_LIMIT = 3;
-const ALLOWED_EMAILS = ['kjkj5868@gmail.com'];
-
-function getAllowedOrigins(): string[] {
-    const origins = [...ALLOWED_ORIGINS];
-    const deployUrl = process.env.DEPLOY_PRIME_URL;
-    if (deployUrl) origins.push(deployUrl);
-    return origins;
-}
-
-function validateOrigin(origin: string | null): boolean {
-    if (!origin) return false;
-    return getAllowedOrigins().includes(origin);
-}
-
-function addCorsHeaders(headers: Headers, origin: string): void {
-    headers.set('Access-Control-Allow-Origin', origin);
-    headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-}
+const INTERVIEW_POINT_COST = 50;
 
 export default async (req: Request, _context: Context) => {
     const origin = req.headers.get('origin');
@@ -56,27 +37,29 @@ export default async (req: Request, _context: Context) => {
         return new Response('Unauthorized', { status: 401 });
     }
 
-    // Restrict access to allowed emails only
-    if (!user.email || !ALLOWED_EMAILS.includes(user.email)) {
-        return new Response('Forbidden', { status: 403 });
-    }
+    // 2. Check points (skip for BYOK users)
+    const isByok = req.headers.get('X-Use-Own-Key') === 'true';
 
-    // 2. Check and increment daily quota
-    const { data: quotaOk, error: quotaError } = await supabase.rpc('check_and_increment_quota', {
-        p_user_id: user.id,
-        p_daily_limit: DAILY_QUOTA_LIMIT,
-    });
-
-    if (quotaError) {
-        console.error('[interview-server] Quota check error:', quotaError);
-        return new Response('Internal server error', { status: 500 });
-    }
-
-    if (!quotaOk) {
-        return new Response(JSON.stringify({ error: '일일 사용 한도(3회)를 초과했습니다' }), {
-            status: 429,
-            headers: { 'Content-Type': 'application/json' },
+    if (!isByok) {
+        const { data: newBalance, error: pointError } = await supabase.rpc('spend_points', {
+            p_user_id: user.id,
+            p_amount: INTERVIEW_POINT_COST,
+            p_type: 'interview',
         });
+
+        if (pointError) {
+            console.error('[interview-server] Point deduction error:', pointError);
+            return new Response('Internal server error', { status: 500 });
+        }
+
+        if (newBalance === -1) {
+            return new Response(JSON.stringify({
+                error: '포인트가 부족합니다. 기출 문제를 제출하거나 피드백을 작성하여 포인트를 적립하세요.',
+            }), {
+                status: 402,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
     }
 
     // 3. Parse request body
@@ -135,6 +118,20 @@ export default async (req: Request, _context: Context) => {
         user_id: user.id,
         llm_status: response.status,
     }));
+
+    // Refund points if Anthropic API call failed
+    if (!response.ok && !isByok) {
+        const { error: refundError } = await supabase.rpc('earn_points', {
+            p_user_id: user.id,
+            p_amount: INTERVIEW_POINT_COST,
+            p_type: 'refund',
+            p_reference_id: null,
+            p_description: 'API 호출 실패 환불',
+        });
+        if (refundError) {
+            console.error('[interview-server] Point refund error:', refundError);
+        }
+    }
 
     const responseHeaders = new Headers({
         'Content-Type': response.headers.get('Content-Type') ?? 'text/event-stream',
