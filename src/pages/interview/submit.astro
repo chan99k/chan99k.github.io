@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SubmitQuestionForm from '../../components/interview/SubmitQuestionForm';
+
+export const prerender = false;
+---
+
+<Layout title="기출 문제 제출">
+    <main class="py-8">
+        <SubmitQuestionForm client:load />
+    </main>
+</Layout>
+
+<script is:inline>
+    if (!document.querySelector('meta[name="robots"]')) {
+        const meta = document.createElement('meta');
+        meta.name = 'robots';
+        meta.content = 'noindex';
+        document.head.appendChild(meta);
+    }
+</script>
