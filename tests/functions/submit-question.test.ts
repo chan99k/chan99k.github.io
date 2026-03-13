@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { mockContext } from './utils/test-helpers';
+import { mockContext } from '../../netlify/functions/utils/test-helpers';
 
 vi.stubEnv('SUPABASE_URL', 'https://test.supabase.co');
 vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'test-service-key');
@@ -65,7 +65,7 @@ vi.mock('@supabase/supabase-js', () => ({
 }));
 
 const importHandler = async () => {
-  const mod = await import('./submit-question.mts');
+  const mod = await import('../../netlify/functions/submit-question.mts');
   return mod.default;
 };
 

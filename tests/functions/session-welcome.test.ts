@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { mockContext } from './utils/test-helpers';
+import { mockContext } from '../../netlify/functions/utils/test-helpers';
 
 // Mock environment
 vi.stubEnv('SUPABASE_URL', 'https://test.supabase.co');
@@ -44,7 +44,7 @@ vi.mock('@supabase/supabase-js', () => ({
 }));
 
 const importHandler = async () => {
-  const mod = await import('./session.mts');
+  const mod = await import('../../netlify/functions/session.mts');
   return mod.default;
 };
 

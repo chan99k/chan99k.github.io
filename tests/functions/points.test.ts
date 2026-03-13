@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { mockContext } from './utils/test-helpers';
+import { mockContext } from '../../netlify/functions/utils/test-helpers';
 
 // Mock Supabase client
 const mockRpc = vi.fn();
@@ -27,7 +27,7 @@ vi.mock('@supabase/supabase-js', () => ({
 
 // Dynamic import after mock
 const importHandler = async () => {
-  const mod = await import('./points.mts');
+  const mod = await import('../../netlify/functions/points.mts');
   return mod.default;
 };
 

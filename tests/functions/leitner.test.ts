@@ -6,7 +6,7 @@ import {
 	getNextReviewDays,
 	type PostReviewState,
 	type BlogPost,
-} from './leitner';
+} from '../../netlify/functions/utils/leitner';
 
 const makePost = (slug: string): BlogPost => ({
 	slug,
