@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { mockContext } from './utils/test-helpers';
 
 // Mock environment
 vi.stubEnv('PUBLIC_SUPABASE_URL', 'https://test.supabase.co');
@@ -61,7 +62,7 @@ describe('interview-server.mts - Point system integration', () => {
           system: 'You are an interviewer',
           messages: [{ role: 'user', content: 'Hello' }],
         }),
-        {} as any,
+        mockContext,
       );
 
       expect(mockRpc).toHaveBeenCalledWith('spend_points', expect.objectContaining({
@@ -82,7 +83,7 @@ describe('interview-server.mts - Point system integration', () => {
           system: 'You are an interviewer',
           messages: [{ role: 'user', content: 'Hello' }],
         }),
-        {} as any,
+        mockContext,
       );
 
       expect(res.status).toBe(402);
@@ -102,7 +103,7 @@ describe('interview-server.mts - Point system integration', () => {
           },
           { 'X-Use-Own-Key': 'true' },
         ),
-        {} as any,
+        mockContext,
       );
 
       // spend_points should NOT be called for BYOK users
@@ -127,7 +128,7 @@ describe('interview-server.mts - Point system integration', () => {
           system: 'You are an interviewer',
           messages: [{ role: 'user', content: 'Hello' }],
         }),
-        {} as any,
+        mockContext,
       );
 
       // Should NOT return 403 - any authenticated user with points can use

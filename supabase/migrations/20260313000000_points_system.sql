@@ -15,7 +15,7 @@ create table point_transactions (
   id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users not null,
   amount integer not null,
-  type text not null,
+  type text not null check (type in ('welcome', 'question_submit', 'feedback', 'interview', 'refund')),
   reference_id uuid,
   description text,
   created_at timestamptz default now()

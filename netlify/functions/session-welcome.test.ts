@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { mockContext } from './utils/test-helpers';
 
 // Mock environment
 vi.stubEnv('SUPABASE_URL', 'https://test.supabase.co');
@@ -75,7 +76,7 @@ describe('session.mts - Welcome points', () => {
     const handler = await importHandler();
     await handler(
       makeRequest({ action: 'create', data: { initial_question: 'What is React?' } }),
-      {} as any,
+      mockContext,
     );
 
     // earn_points RPC should be called with welcome type
@@ -96,7 +97,7 @@ describe('session.mts - Welcome points', () => {
     // The function should check user_points first, and only grant if not exists
     await handler(
       makeRequest({ action: 'create', data: { initial_question: 'Test' } }),
-      {} as any,
+      mockContext,
     );
 
     // If user already exists in user_points, welcome should be called with

@@ -118,6 +118,7 @@ export default async (req: Request, _context: Context) => {
                 p_user_id: user.id,
                 p_amount: 100,
                 p_type: 'welcome',
+                p_reference_id: null,
                 p_description: '웰컴 포인트',
             });
         }

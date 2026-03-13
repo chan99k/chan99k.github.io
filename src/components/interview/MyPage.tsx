@@ -55,10 +55,10 @@ export default function MyPage() {
             if (res.ok) {
                 setBalance(await res.json());
             } else {
-                setError('포인트 정보를 불러오지 못했습니다.');
+                setError(prev => prev ?? '포인트 정보를 불러오지 못했습니다.');
             }
         } catch {
-            setError('네트워크 오류가 발생했습니다.');
+            setError(prev => prev ?? '네트워크 오류가 발생했습니다.');
         }
     }
 
@@ -75,10 +75,10 @@ export default function MyPage() {
                 const data = await res.json();
                 setTransactions(data.transactions);
             } else {
-                setError('포인트 이력을 불러오지 못했습니다.');
+                setError(prev => prev ?? '포인트 이력을 불러오지 못했습니다.');
             }
         } catch {
-            setError('네트워크 오류가 발생했습니다.');
+            setError(prev => prev ?? '네트워크 오류가 발생했습니다.');
         }
     }
 
@@ -96,10 +96,10 @@ export default function MyPage() {
                 setSessions(data.sessions);
                 setSessionsTotal(data.total);
             } else {
-                setError('면접 히스토리를 불러오지 못했습니다.');
+                setError(prev => prev ?? '면접 히스토리를 불러오지 못했습니다.');
             }
         } catch {
-            setError('네트워크 오류가 발생했습니다.');
+            setError(prev => prev ?? '네트워크 오류가 발생했습니다.');
         }
     }
 

@@ -1,8 +1,8 @@
 import type { Context } from '@netlify/functions';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { User } from '@supabase/supabase-js';
+import { validateOrigin, addCorsHeaders } from './utils/cors.js';
 
-const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
 const ALLOWED_ACTIONS = ['submit', 'my-submissions', 'review-list', 'approve', 'reject'] as const;
 const ALLOWED_DIFFICULTIES = ['junior', 'mid', 'senior'] as const;
 const ALLOWED_CATEGORIES = ['frontend', 'backend', 'dba', 'devops', 'general'] as const;
@@ -10,24 +10,6 @@ const MAX_QUESTION_LENGTH = 5000;
 
 function getAdminEmails(): string[] {
     return (process.env.ADMIN_EMAILS ?? '').split(',').map(e => e.trim()).filter(Boolean);
-}
-
-function getAllowedOrigins(): string[] {
-    const origins = [...ALLOWED_ORIGINS];
-    const deployUrl = process.env.DEPLOY_PRIME_URL;
-    if (deployUrl) origins.push(deployUrl);
-    return origins;
-}
-
-function validateOrigin(origin: string | null): boolean {
-    if (!origin) return false;
-    return getAllowedOrigins().includes(origin);
-}
-
-function addCorsHeaders(headers: Headers, origin: string): void {
-    headers.set('Access-Control-Allow-Origin', origin);
-    headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 }
 
 function jsonResponse(body: unknown, status: number, headers: Headers): Response {

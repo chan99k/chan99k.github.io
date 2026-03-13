@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { mockContext } from './utils/test-helpers';
 
 // Mock Supabase client
 const mockRpc = vi.fn();
-const mockFrom = vi.fn();
 const mockGetUser = vi.fn();
 
 vi.mock('@supabase/supabase-js', () => ({
@@ -59,7 +59,7 @@ describe('points.mts Netlify Function', () => {
       });
 
       const handler = await importHandler();
-      const res = await handler(makeRequest({ action: 'balance' }), {} as any);
+      const res = await handler(makeRequest({ action: 'balance' }), mockContext);
       const data = await res.json();
 
       expect(res.status).toBe(200);
@@ -72,7 +72,7 @@ describe('points.mts Netlify Function', () => {
       mockRpc.mockResolvedValue({ data: [], error: null });
 
       const handler = await importHandler();
-      const res = await handler(makeRequest({ action: 'balance' }), {} as any);
+      const res = await handler(makeRequest({ action: 'balance' }), mockContext);
       const data = await res.json();
 
       expect(res.status).toBe(200);
@@ -85,7 +85,7 @@ describe('points.mts Netlify Function', () => {
       const handler = await importHandler();
       const res = await handler(
         makeRequest({ action: 'history', limit: 10, offset: 0 }),
-        {} as any,
+        mockContext,
       );
       const data = await res.json();
 
@@ -107,7 +107,7 @@ describe('points.mts Netlify Function', () => {
       });
 
       const handler = await importHandler();
-      const res = await handler(req, {} as any);
+      const res = await handler(req, mockContext);
       expect(res.status).toBe(401);
     });
 
@@ -115,7 +115,7 @@ describe('points.mts Netlify Function', () => {
       mockGetUser.mockResolvedValue({ data: { user: null }, error: { message: 'invalid' } });
 
       const handler = await importHandler();
-      const res = await handler(makeRequest({ action: 'balance' }), {} as any);
+      const res = await handler(makeRequest({ action: 'balance' }), mockContext);
       expect(res.status).toBe(401);
     });
   });
@@ -123,7 +123,7 @@ describe('points.mts Netlify Function', () => {
   describe('unknown action', () => {
     it('returns 400 for unknown action', async () => {
       const handler = await importHandler();
-      const res = await handler(makeRequest({ action: 'invalid' }), {} as any);
+      const res = await handler(makeRequest({ action: 'invalid' }), mockContext);
       expect(res.status).toBe(400);
     });
   });

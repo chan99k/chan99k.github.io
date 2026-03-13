@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { mockContext } from './utils/test-helpers';
 
 vi.stubEnv('SUPABASE_URL', 'https://test.supabase.co');
 vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'test-service-key');
@@ -104,7 +105,7 @@ describe('submit-question.mts', () => {
             is_anonymous: true,
           },
         }),
-        {} as any,
+        mockContext,
       );
 
       expect(res.status).toBe(200);
@@ -120,7 +121,7 @@ describe('submit-question.mts', () => {
           action: 'submit',
           data: { difficulty: 'junior' },
         }),
-        {} as any,
+        mockContext,
       );
 
       expect(res.status).toBe(400);
@@ -149,7 +150,7 @@ describe('submit-question.mts', () => {
       const handler = await importHandler();
       const res = await handler(
         makeRequest({ action: 'my-submissions' }),
-        {} as any,
+        mockContext,
       );
 
       expect(res.status).toBe(200);
@@ -175,7 +176,7 @@ describe('submit-question.mts', () => {
           },
           ADMIN_EMAIL,
         ),
-        {} as any,
+        mockContext,
       );
 
       expect(res.status).toBe(200);
@@ -194,7 +195,7 @@ describe('submit-question.mts', () => {
           { action: 'approve', data: { submission_id: 'sq-1' } },
           'nonadmin@example.com',
         ),
-        {} as any,
+        mockContext,
       );
 
       expect(res.status).toBe(403);
@@ -212,7 +213,7 @@ describe('submit-question.mts', () => {
           },
           ADMIN_EMAIL,
         ),
-        {} as any,
+        mockContext,
       );
 
       expect(res.status).toBe(200);
