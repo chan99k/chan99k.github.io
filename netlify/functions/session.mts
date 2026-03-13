@@ -3,7 +3,6 @@ import { createClient } from '@supabase/supabase-js';
 
 const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
 const MAX_BODY_SIZE = 50 * 1024;
-const ALLOWED_EMAILS = ['kjkj5868@gmail.com'];
 const MAX_CONTENT_LENGTH = 10000;
 const ALLOWED_ACTIONS = ['create', 'message', 'complete', 'get', 'list'] as const;
 const ALLOWED_ROLES = ['user', 'assistant'] as const;
@@ -58,11 +57,6 @@ export default async (req: Request, _context: Context) => {
         return new Response('Unauthorized', { status: 401 });
     }
 
-    // Restrict access to allowed emails only
-    if (!user.email || !ALLOWED_EMAILS.includes(user.email)) {
-        return new Response('Forbidden', { status: 403 });
-    }
-
     // Read and validate body
     let bodyText: string;
     try {
@@ -111,6 +105,22 @@ export default async (req: Request, _context: Context) => {
             user_id: user.id,
             display_name: user.user_metadata?.name ?? user.email ?? '',
         }, { onConflict: 'user_id' });
+
+        // Grant welcome points if first time (user_points row doesn't exist)
+        const { data: existingPoints } = await supabase
+            .from('user_points')
+            .select('user_id')
+            .eq('user_id', user.id)
+            .single();
+
+        if (!existingPoints) {
+            await supabase.rpc('earn_points', {
+                p_user_id: user.id,
+                p_amount: 100,
+                p_type: 'welcome',
+                p_description: '웰컴 포인트',
+            });
+        }
 
         console.log(JSON.stringify({ ts: new Date().toISOString(), fn: 'session', action: 'create', user: user.id, session: session.id }));
         return new Response(JSON.stringify({ session_id: session.id, status: 'active' }), { headers: responseHeaders });
