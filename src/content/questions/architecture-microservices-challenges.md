@@ -2,7 +2,7 @@
 title: "마이크로서비스 아키텍처의 주요 과제와 해결 방안을 설명하세요"
 answer: "마이크로서비스는 분산 트랜잭션, 서비스 간 통신 복잡도, 데이터 일관성, 배포/모니터링 복잡성 등의 과제가 있습니다. 분산 트랜잭션은 Saga 패턴(Choreography/Orchestration)으로 해결하고, 통신은 Service Mesh(Istio, Linkerd)로 관리하며, 데이터 일관성은 Event Sourcing과 CQRS로 보완합니다. API Gateway로 진입점을 단일화하고, Circuit Breaker로 장애를 격리하며, Distributed Tracing(Zipkin, Jaeger)으로 요청 흐름을 추적합니다. 초기에는 Monolith로 시작하여 도메인이 안정화된 후 분리하는 것이 권장됩니다."
 category: "architecture"
-difficulty: "senior"
+difficulty: 4
 tags: ["MSA", "분산 시스템", "트랜잭션"]
 source: "curated"
 hints: ["Saga", "Service Mesh", "분산 트랜잭션"]

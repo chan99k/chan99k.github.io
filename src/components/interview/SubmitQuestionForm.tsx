@@ -2,11 +2,6 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase';
 import type { User } from '@supabase/supabase-js';
 
-const DIFFICULTIES = [
-    { value: 'junior', label: '주니어' },
-    { value: 'mid', label: '미드' },
-    { value: 'senior', label: '시니어' },
-];
 
 export default function SubmitQuestionForm() {
     const [user, setUser] = useState<User | null>(null);
@@ -16,7 +11,7 @@ export default function SubmitQuestionForm() {
     const [error, setError] = useState<string | null>(null);
 
     const [question, setQuestion] = useState('');
-    const [difficulty, setDifficulty] = useState('junior');
+    const [difficulty, setDifficulty] = useState(3);
     const [companyName, setCompanyName] = useState('');
     const [isAnonymous, setIsAnonymous] = useState(true);
 
@@ -135,16 +130,19 @@ export default function SubmitQuestionForm() {
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label htmlFor="difficulty" className="mb-1 block text-sm font-medium">난이도</label>
-                        <select
-                            id="difficulty"
-                            value={difficulty}
-                            onChange={(e) => setDifficulty(e.target.value)}
-                            className="w-full rounded-lg border px-4 py-2.5 text-sm dark:border-neutral-700 dark:bg-neutral-800"
-                        >
-                            {DIFFICULTIES.map((d) => (
-                                <option key={d.value} value={d.value}>{d.label}</option>
+                        <div className="flex gap-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                    key={star}
+                                    type="button"
+                                    onClick={() => setDifficulty(star)}
+                                    className={`text-xl transition-colors ${star <= difficulty ? 'text-amber-400' : 'text-gray-300 dark:text-gray-600'} hover:text-amber-300`}
+                                    aria-label={`난이도 ${star}점`}
+                                >
+                                    ★
+                                </button>
                             ))}
-                        </select>
+                        </div>
                     </div>
                     <div>
                         <label htmlFor="company" className="mb-1 block text-sm font-medium">기업명 (선택)</label>

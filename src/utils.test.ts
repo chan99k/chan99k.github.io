@@ -15,7 +15,7 @@ describe('utils', () => {
     describe('formatDate', () => {
         it('formats date correctly', () => {
             const date = new Date('2025-07-08');
-            expect(formatDate(date)).toBe('Jul 8, 2025');
+            expect(formatDate(date)).toBe('2025년 7월 8일');
         });
     });
 });

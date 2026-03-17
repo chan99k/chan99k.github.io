@@ -7,7 +7,7 @@ describe('questionSchema', () => {
 			title: 'HashMap vs Hashtable 차이점',
 			answer: 'HashMap은 비동기, Hashtable은 동기화',
 			category: 'java',
-			difficulty: 'junior',
+			difficulty: 2,
 			tags: ['Collections'],
 			source: 'curated',
 			relatedPosts: ['meta-tag-collection-optimization'],
@@ -17,13 +17,29 @@ describe('questionSchema', () => {
 	});
 
 	it('rejects invalid difficulty', () => {
-		const result = questionSchema.safeParse({
+		const resultString = questionSchema.safeParse({
 			title: 'Test',
 			answer: 'Answer',
 			category: 'java',
 			difficulty: 'expert',
 		});
-		expect(result.success).toBe(false);
+		expect(resultString.success).toBe(false);
+
+		const resultTooLow = questionSchema.safeParse({
+			title: 'Test',
+			answer: 'Answer',
+			category: 'java',
+			difficulty: 0,
+		});
+		expect(resultTooLow.success).toBe(false);
+
+		const resultTooHigh = questionSchema.safeParse({
+			title: 'Test',
+			answer: 'Answer',
+			category: 'java',
+			difficulty: 6,
+		});
+		expect(resultTooHigh.success).toBe(false);
 	});
 
 	it('enforces hints max 5', () => {
@@ -31,7 +47,7 @@ describe('questionSchema', () => {
 			title: 'Test',
 			answer: 'Answer',
 			category: 'java',
-			difficulty: 'junior',
+			difficulty: 2,
 			hints: ['a', 'b', 'c', 'd', 'e', 'f'],
 		});
 		expect(result.success).toBe(false);
@@ -42,11 +58,23 @@ describe('questionSchema', () => {
 			title: 'Test',
 			answer: 'Answer',
 			category: 'java',
-			difficulty: 'junior',
+			difficulty: 3,
 		});
 		expect(result.tags).toEqual([]);
 		expect(result.source).toBe('curated');
 		expect(result.relatedPosts).toEqual([]);
 		expect(result.hints).toEqual([]);
+	});
+
+	it('validates all difficulty levels 1-5', () => {
+		for (let level = 1; level <= 5; level++) {
+			const result = questionSchema.safeParse({
+				title: 'Test',
+				answer: 'Answer',
+				category: 'java',
+				difficulty: level,
+			});
+			expect(result.success).toBe(true);
+		}
 	});
 });

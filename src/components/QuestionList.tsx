@@ -12,7 +12,6 @@ interface Question {
 }
 
 const CATEGORIES = ['general', 'java', 'spring', 'database', 'network', 'os', 'design-pattern', 'architecture'];
-const DIFFICULTIES = ['junior', 'mid', 'senior'];
 
 export default function QuestionList() {
     const [questions, setQuestions] = useState<Question[]>([]);
@@ -67,7 +66,7 @@ export default function QuestionList() {
                 <select value={difficulty} onChange={(e) => { setDifficulty(e.target.value); setPage(1); }}
                     className="rounded border px-3 py-1.5 text-sm dark:border-neutral-700 dark:bg-neutral-800">
                     <option value="">전체 난이도</option>
-                    {DIFFICULTIES.map(d => <option key={d} value={d}>{d}</option>)}
+                    {[1, 2, 3, 4, 5].map(d => <option key={d} value={String(d)}>{'★'.repeat(d)}{'☆'.repeat(5-d)}</option>)}
                 </select>
             </div>
 
@@ -81,7 +80,7 @@ export default function QuestionList() {
                                 <h3 className="font-medium">{q.title}</h3>
                                 <div className="mt-1 flex gap-2 text-xs text-neutral-500">
                                     <span className="rounded bg-blue-100 px-1.5 py-0.5 dark:bg-blue-900/30">{q.category}</span>
-                                    <span className="rounded bg-green-100 px-1.5 py-0.5 dark:bg-green-900/30">{q.difficulty}</span>
+                                    <span className="text-amber-400" aria-label={`난이도 ${q.difficulty}점`}>{'★'.repeat(Number(q.difficulty))}{'☆'.repeat(5 - Number(q.difficulty))}</span>
                                     {q.tags.slice(0, 3).map(t => <span key={t} className="rounded bg-neutral-100 px-1.5 py-0.5 dark:bg-neutral-700">{t}</span>)}
                                 </div>
                             </a>

@@ -2,7 +2,7 @@
 title: "Java Optional의 올바른 사용법과 안티패턴을 설명하세요"
 answer: "Optional은 메서드 반환 타입으로 사용하여 null 가능성을 명시적으로 표현합니다. of(), ofNullable(), empty()로 생성하고, isPresent() 체크보다 map(), flatMap(), orElse(), orElseThrow() 등 함수형 메서드를 선호해야 합니다. 필드나 메서드 파라미터로 사용하거나, Optional.get()을 직접 호출하거나, Optional을 컬렉션에 담는 것은 안티패턴입니다."
 category: "java"
-difficulty: "mid"
+difficulty: 3
 tags: ["Optional", "함수형", "Best Practice"]
 source: "curated"
 hints: ["반환 타입", "isPresent() 지양", "필드 사용 금지"]

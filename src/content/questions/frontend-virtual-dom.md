@@ -2,7 +2,7 @@
 title: "Virtual DOM의 동작 원리와 성능 이점을 설명하세요"
 answer: "Virtual DOM은 실제 DOM을 JavaScript 객체로 표현한 가상의 DOM입니다. 상태 변경 시 새로운 Virtual DOM을 생성하고, 이전 Virtual DOM과 비교(Diffing)하여 변경된 부분만 실제 DOM에 반영(Reconciliation)합니다. 직접 DOM 조작보다 효율적인 이유는 DOM 접근 비용이 비싸기 때문에 여러 변경을 모아서 한 번에 반영(Batching)하기 때문입니다. React, Vue 등에서 사용하며, Svelte는 Virtual DOM 없이 컴파일 타임에 최적화합니다."
 category: "frontend"
-difficulty: "mid"
+difficulty: 3
 tags: ["React", "Virtual DOM", "성능"]
 source: "curated"
 hints: ["Diffing", "Reconciliation", "Batching"]

@@ -2,7 +2,7 @@
 title: "Spring @Transactional의 전파 속성(Propagation) 중 REQUIRED, REQUIRES_NEW, NESTED를 비교하세요"
 answer: "REQUIRED는 기존 트랜잭션이 있으면 참여하고 없으면 새로 생성하는 기본값입니다. REQUIRES_NEW는 항상 새 트랜잭션을 생성하고 기존 트랜잭션을 일시 중단합니다. NESTED는 기존 트랜잭션 내에 중첩 트랜잭션(savepoint)을 생성하여 부분 롤백이 가능하지만 JDBC 3.0 savepoint를 지원하는 DataSource가 필요합니다."
 category: "spring"
-difficulty: "senior"
+difficulty: 4
 tags: ["트랜잭션", "전파", "롤백"]
 source: "curated"
 hints: ["기본값", "일시 중단", "savepoint"]

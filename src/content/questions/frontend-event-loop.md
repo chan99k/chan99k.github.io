@@ -2,7 +2,7 @@
 title: "JavaScript의 Event Loop와 Call Stack, Task Queue의 동작을 설명하세요"
 answer: "JavaScript는 단일 스레드로 동작하며, Call Stack에서 함수를 실행합니다. 비동기 작업(setTimeout, Promise)은 Web API로 넘어가고, 완료되면 Task Queue(Macro) 또는 Microtask Queue에 콜백을 추가합니다. Event Loop는 Call Stack이 비면 Microtask Queue를 먼저 모두 처리하고, 그 다음 Task Queue에서 하나씩 가져와 실행합니다. Promise는 Microtask, setTimeout은 Task로 Promise가 먼저 실행됩니다."
 category: "frontend"
-difficulty: "mid"
+difficulty: 3
 tags: ["JavaScript", "비동기", "Event Loop"]
 source: "curated"
 hints: ["단일 스레드", "Microtask vs Task", "Queue 우선순위"]

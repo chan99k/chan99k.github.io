@@ -2,7 +2,7 @@
 title: "Spring Boot의 Auto Configuration 동작 원리를 설명하세요"
 answer: "@SpringBootApplication은 @EnableAutoConfiguration을 포함하며, 이는 spring.factories(Boot 2.x) 또는 AutoConfiguration.imports(Boot 3.x)에 정의된 설정 클래스들을 조건부로 활성화합니다. @ConditionalOnClass, @ConditionalOnMissingBean 등의 조건 어노테이션으로 classpath와 Bean 존재 여부를 검사하여 자동 구성 여부를 결정합니다. 사용자 정의 Bean이 있으면 자동 구성을 건너뛰어 커스터마이징을 허용합니다."
 category: "spring"
-difficulty: "mid"
+difficulty: 3
 tags: ["Spring Boot", "Auto Configuration", "조건부 Bean"]
 source: "curated"
 hints: ["spring.factories", "@Conditional", "사용자 Bean 우선"]

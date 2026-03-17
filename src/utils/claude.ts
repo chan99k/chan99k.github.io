@@ -1,4 +1,4 @@
-import { EVALUATION_CRITERIA, TOTAL_SCORE } from '../config/evaluation';
+import { EVALUATION_CRITERIA, TOTAL_SCORE, getDifficultyWeight } from '../config/evaluation';
 
 export type Provider = 'claude' | 'openai';
 
@@ -6,7 +6,7 @@ interface EvaluationInput {
     question: string;
     modelAnswer: string;
     userAnswer: string;
-    difficulty: 'junior' | 'mid' | 'senior';
+    difficulty: number;
     blogContext: { title: string; chunk: string }[];
 }
 
@@ -17,8 +17,8 @@ export function buildEvaluationPrompt(input: EvaluationInput): string {
 
     // Build rubric table with difficulty-weighted scores
     const rubricRows = EVALUATION_CRITERIA.map((criterion) => {
-        const weight = criterion.weight[input.difficulty];
-        return `| ${criterion.name} | ${criterion.maxScore} | x${weight} | ${criterion.description} |`;
+        const weight = getDifficultyWeight(criterion, input.difficulty);
+        return `| ${criterion.name} | ${criterion.maxScore} | x${weight.toFixed(2)} | ${criterion.description} |`;
     }).join('\n');
 
     return `당신은 기술 면접 평가관입니다. 다음 면접 질문에 대한 답변을 평가해주세요.
@@ -27,7 +27,7 @@ export function buildEvaluationPrompt(input: EvaluationInput): string {
 ${input.question}
 
 ## 난이도
-${input.difficulty} 레벨
+${'★'.repeat(input.difficulty)}${'☆'.repeat(5 - input.difficulty)} (${input.difficulty}/5)
 
 ## 모범 답안
 ${input.modelAnswer}
@@ -38,7 +38,7 @@ ${blogSection}
 
 ## 평가 루브릭 (${TOTAL_SCORE}점 만점)
 
-| 관점 | 배점 | 가중치(${input.difficulty}) | 설명 |
+| 관점 | 배점 | 가중치(${input.difficulty}점) | 설명 |
 |------|------|----------------------------|------|
 ${rubricRows}
 

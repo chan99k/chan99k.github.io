@@ -2,7 +2,7 @@
 title: "String Pool의 동작 방식과 new String()의 차이를 설명하세요"
 answer: "String literal은 String Pool(Java 7부터 Heap 영역)에 저장되며, 동일한 문자열은 재사용됩니다. new String()은 매번 새로운 객체를 Heap에 생성합니다. String Pool은 intern() 메서드로 명시적으로 추가할 수 있으며, 메모리 효율성을 높이지만 너무 많은 문자열을 intern하면 오히려 메모리 부담이 됩니다."
 category: "java"
-difficulty: "junior"
+difficulty: 2
 tags: ["String", "메모리", "최적화"]
 source: "curated"
 hints: ["literal vs new", "intern()", "메모리 재사용"]

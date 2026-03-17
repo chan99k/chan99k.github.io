@@ -2,7 +2,7 @@
 title: "브라우저 렌더링 과정(Critical Rendering Path)을 설명하세요"
 answer: "브라우저는 HTML을 파싱하여 DOM Tree를 생성하고, CSS를 파싱하여 CSSOM Tree를 생성합니다. 이 둘을 결합하여 Render Tree를 만들고, Layout(Reflow) 단계에서 각 요소의 크기와 위치를 계산합니다. Paint 단계에서 픽셀로 그리고, Composite 단계에서 레이어를 합성하여 화면에 표시합니다. JavaScript는 DOM/CSSOM 접근 시 파싱을 중단(blocking)하므로 script 태그 위치가 중요합니다. async/defer 속성으로 비차단 로딩이 가능합니다."
 category: "frontend"
-difficulty: "mid"
+difficulty: 3
 tags: ["브라우저", "렌더링", "성능"]
 source: "curated"
 hints: ["DOM/CSSOM", "Reflow/Repaint", "async/defer"]
