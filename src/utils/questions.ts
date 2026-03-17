@@ -3,7 +3,7 @@ export interface QuestionEntry {
 	data: {
 		title: string;
 		category: string;
-		difficulty: 'junior' | 'mid' | 'senior';
+		difficulty: number;
 		tags: string[];
 		relatedPosts: string[];
 		[key: string]: unknown;

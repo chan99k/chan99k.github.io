@@ -88,14 +88,10 @@ describe('InterviewChat - Accessibility', () => {
         }
     });
 
-    it('renders login buttons with accessible labels', () => {
+    it('renders login prompt when not authenticated', () => {
         render(<InterviewChat initialQuestion="Test Question" />);
-        // Login buttons should be visible initially (before auth check completes)
-        const googleBtn = screen.queryByLabelText('Google 계정으로 로그인');
-        const githubBtn = screen.queryByLabelText('GitHub 계정으로 로그인');
-
-        // At least one should be present during render
-        expect(googleBtn || githubBtn).toBeTruthy();
+        // Component shows private message when not authenticated
+        expect(screen.getByText('현재 비공개로 운영 중입니다.')).toBeDefined();
     });
 
     it('provides keyboard shortcut hint for submit when logged in', async () => {

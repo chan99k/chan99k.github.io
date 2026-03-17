@@ -42,7 +42,7 @@ export default function QuestionDetail({ questionId }: { questionId: string }) {
                 <h1 className="text-2xl font-bold">{question.title}</h1>
                 <div className="mt-2 flex gap-2 text-sm">
                     <span className="rounded bg-blue-100 px-2 py-0.5 dark:bg-blue-900/30">{question.category}</span>
-                    <span className="rounded bg-green-100 px-2 py-0.5 dark:bg-green-900/30">{question.difficulty}</span>
+                    <span className="text-amber-400" aria-label={`난이도 ${question.difficulty}점`}>{'★'.repeat(Number(question.difficulty))}{'☆'.repeat(5 - Number(question.difficulty))}</span>
                 </div>
             </div>
 

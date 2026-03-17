@@ -2,7 +2,7 @@
 title: "Deadlock(교착상태)의 발생 조건과 예방/회피/탐지/복구 방법을 설명하세요"
 answer: "Deadlock은 두 개 이상의 프로세스/스레드가 서로 상대방의 자원을 기다리며 무한 대기하는 상태입니다. 발생 조건은 Mutual Exclusion(상호 배제), Hold and Wait(점유와 대기), No Preemption(비선점), Circular Wait(순환 대기) 4가지가 모두 만족되어야 합니다. 예방은 4가지 조건 중 하나를 제거하고, 회피는 은행원 알고리즘으로 안전 상태만 허용하며, 탐지는 자원 할당 그래프로 사이클을 찾고, 복구는 프로세스 종료 또는 자원 선점으로 해결합니다."
 category: "os"
-difficulty: "mid"
+difficulty: 3
 tags: ["운영체제", "동시성", "교착상태"]
 source: "curated"
 hints: ["4가지 조건", "은행원 알고리즘", "순환 대기"]

@@ -7,7 +7,7 @@ describe('buildEvaluationPrompt', () => {
             question: 'HashMap vs Hashtable?',
             modelAnswer: 'HashMap은 비동기...',
             userAnswer: '동기화 차이입니다',
-            difficulty: 'junior',
+            difficulty: 2,
             blogContext: [
                 { title: 'Meta Tag', chunk: 'HashSet은...' },
             ],
@@ -17,7 +17,7 @@ describe('buildEvaluationPrompt', () => {
         expect(prompt).toContain('동기화 차이입니다');
         expect(prompt).toContain('HashSet은...');
         expect(prompt).toContain('Meta Tag');
-        expect(prompt).toContain('junior');
+        expect(prompt).toContain('★★☆☆☆ (2/5)');
     });
 
     it('includes rubric table with criteria', () => {
@@ -25,7 +25,7 @@ describe('buildEvaluationPrompt', () => {
             question: 'Q',
             modelAnswer: 'A',
             userAnswer: 'U',
-            difficulty: 'mid',
+            difficulty: 3,
             blogContext: [],
         });
 
@@ -38,24 +38,25 @@ describe('buildEvaluationPrompt', () => {
     });
 
     it('adjusts weights by difficulty', () => {
-        const juniorPrompt = buildEvaluationPrompt({
+        const easyPrompt = buildEvaluationPrompt({
             question: 'Q',
             modelAnswer: 'A',
             userAnswer: 'U',
-            difficulty: 'junior',
+            difficulty: 1,
             blogContext: [],
         });
-        const seniorPrompt = buildEvaluationPrompt({
+        const hardPrompt = buildEvaluationPrompt({
             question: 'Q',
             modelAnswer: 'A',
             userAnswer: 'U',
-            difficulty: 'senior',
+            difficulty: 5,
             blogContext: [],
         });
 
-        // Junior should emphasize accuracy (1.5), Senior should emphasize depth (1.5)
-        expect(juniorPrompt).toContain('1.5');
-        expect(seniorPrompt).toContain('1.5');
+        // Difficulty 1: accuracy weight=1.50, depth weight=0.80
+        expect(easyPrompt).toContain('x1.50');
+        // Difficulty 5: accuracy weight=0.80, depth weight=1.50
+        expect(hardPrompt).toContain('x0.80');
     });
 
     it('omits blog section when no context', () => {
@@ -63,7 +64,7 @@ describe('buildEvaluationPrompt', () => {
             question: 'Q',
             modelAnswer: 'A',
             userAnswer: 'U',
-            difficulty: 'mid',
+            difficulty: 3,
             blogContext: [],
         });
 

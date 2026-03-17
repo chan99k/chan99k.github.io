@@ -2,7 +2,7 @@
 title: "Event-Driven Architecture의 특징과 Event Sourcing의 차이를 설명하세요"
 answer: "Event-Driven Architecture(EDA)는 이벤트 발행과 구독으로 컴포넌트 간 통신하며, 비동기적이고 느슨한 결합을 제공합니다. Publisher는 Subscriber를 알 필요 없이 이벤트만 발행하고, Message Broker(Kafka, RabbitMQ)가 중간에서 전달합니다. Event Sourcing은 상태 변경을 이벤트로 저장하여 모든 변경 이력을 보존하고, 현재 상태는 이벤트를 재생(replay)하여 복원합니다. EDA는 통신 방식, Event Sourcing은 저장 방식으로 목적이 다르며 함께 사용할 수 있습니다."
 category: "architecture"
-difficulty: "senior"
+difficulty: 4
 tags: ["이벤트", "비동기", "MSA"]
 source: "curated"
 hints: ["Pub-Sub", "느슨한 결합", "이벤트 재생"]

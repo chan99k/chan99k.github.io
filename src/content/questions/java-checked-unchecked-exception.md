@@ -2,7 +2,7 @@
 title: "Java의 Checked Exception과 Unchecked Exception의 차이와 사용 기준을 설명하세요"
 answer: "Checked Exception(IOException, SQLException 등)은 컴파일 타임에 체크되며 명시적 처리(try-catch 또는 throws)가 강제됩니다. Unchecked Exception(RuntimeException 하위)은 실행 중 발생하며 처리가 선택적입니다. Checked는 복구 가능한 예외 상황에, Unchecked는 프로그래밍 오류(NullPointerException, IllegalArgumentException)에 사용합니다. 최근 트렌드는 과도한 Checked Exception을 Unchecked로 래핑하여 코드 간결성을 높이는 방향입니다."
 category: "java"
-difficulty: "junior"
+difficulty: 2
 tags: ["예외처리", "RuntimeException", "Best Practice"]
 source: "curated"
 hints: ["컴파일 타임 체크", "복구 가능성", "최근 트렌드"]

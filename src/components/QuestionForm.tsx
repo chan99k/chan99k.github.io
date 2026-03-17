@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { supabase } from '../utils/supabase';
 
 const CATEGORIES = ['general', 'java', 'spring', 'database', 'network', 'os', 'design-pattern', 'architecture'];
-const DIFFICULTIES = ['junior', 'mid', 'senior'];
 
 interface Props {
     editId?: string;
@@ -14,7 +13,7 @@ export default function QuestionForm({ editId, initialData }: Props) {
     const [answer, setAnswer] = useState((initialData?.answer as string) ?? '');
     const [explanation, setExplanation] = useState((initialData?.explanation as string) ?? '');
     const [category, setCategory] = useState((initialData?.category as string) ?? 'general');
-    const [difficulty, setDifficulty] = useState((initialData?.difficulty as string) ?? 'junior');
+    const [difficulty, setDifficulty] = useState((initialData?.difficulty as number) ?? 3);
     const [tags, setTags] = useState((initialData?.tags as string[])?.join(', ') ?? '');
     const [hints, setHints] = useState((initialData?.hints as string[])?.join(', ') ?? '');
     const [isSaving, setIsSaving] = useState(false);
@@ -66,10 +65,19 @@ export default function QuestionForm({ editId, initialData }: Props) {
                 </div>
                 <div>
                     <label className="block text-sm font-medium">난이도</label>
-                    <select value={difficulty} onChange={e => setDifficulty(e.target.value)}
-                        className="mt-1 w-full rounded border px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-800">
-                        {DIFFICULTIES.map(d => <option key={d} value={d}>{d}</option>)}
-                    </select>
+                    <div className="mt-1 flex gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <button
+                                key={star}
+                                type="button"
+                                onClick={() => setDifficulty(star)}
+                                className={`text-xl transition-colors ${star <= difficulty ? 'text-amber-400' : 'text-gray-300 dark:text-gray-600'} hover:text-amber-300`}
+                                aria-label={`난이도 ${star}점`}
+                            >
+                                ★
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
             <div>

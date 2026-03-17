@@ -5,6 +5,7 @@ import InterviewWidget from './InterviewWidget';
 
 beforeEach(() => {
     sessionStorage.clear();
+    Element.prototype.scrollIntoView = vi.fn();
     global.fetch = vi.fn().mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ chunks: [] }),
@@ -19,7 +20,7 @@ const mockQuestions = [
             title: 'Test Question',
             answer: 'Test Answer',
             category: 'java',
-            difficulty: 'junior' as const,
+            difficulty: 2,
             tags: [],
             source: 'curated' as const,
             relatedPosts: [],
@@ -39,20 +40,19 @@ describe('InterviewWidget', () => {
         expect(screen.getByText(/Test Question/)).toBeDefined();
     });
 
-    it('shows API key banner when no key stored', () => {
+    it('shows answer input field', () => {
         render(<InterviewWidget questions={mockQuestions} posts={mockPosts} />);
-        expect(screen.getByPlaceholderText(/sk-ant-/i)).toBeDefined();
+        expect(screen.getByPlaceholderText('답변을 입력하세요...')).toBeDefined();
     });
 
-    it('shows category filter', () => {
+    it('disables submit button when no API key', () => {
         render(<InterviewWidget questions={mockQuestions} posts={mockPosts} />);
-        // The select should have the 'java' option
-        const options = screen.getAllByRole('option');
-        expect(options.some(o => o.textContent === 'java')).toBe(true);
+        const submitBtn = screen.getByTitle('API 키를 먼저 설정하세요');
+        expect(submitBtn.hasAttribute('disabled')).toBe(true);
     });
 
-    it('shows next question button', () => {
+    it('shows refresh question button', () => {
         render(<InterviewWidget questions={mockQuestions} posts={mockPosts} />);
-        expect(screen.getByText('다음 질문')).toBeDefined();
+        expect(screen.getByLabelText('Refresh question')).toBeDefined();
     });
 });

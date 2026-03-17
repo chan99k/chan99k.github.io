@@ -40,7 +40,7 @@ describe('SubmitQuestionForm', () => {
     });
     render(<SubmitQuestionForm />);
     expect(await screen.findByLabelText(/면접 질문/)).toBeDefined();
-    expect(screen.getByLabelText(/난이도/)).toBeDefined();
+    expect(screen.getByText('난이도')).toBeDefined();
     expect(screen.getByLabelText(/기업명/)).toBeDefined();
     expect(screen.getByLabelText(/익명/)).toBeDefined();
   });

@@ -12,7 +12,7 @@ const mockQuestions = [
 		data: {
 			title: 'Q1',
 			category: 'java',
-			difficulty: 'junior' as const,
+			difficulty: 2,
 			tags: ['Collections'],
 			relatedPosts: ['post-a'],
 		},
@@ -22,7 +22,7 @@ const mockQuestions = [
 		data: {
 			title: 'Q2',
 			category: 'architecture',
-			difficulty: 'senior' as const,
+			difficulty: 4,
 			tags: ['DDD'],
 			relatedPosts: [],
 		},
@@ -32,7 +32,7 @@ const mockQuestions = [
 		data: {
 			title: 'Q3',
 			category: 'java',
-			difficulty: 'mid' as const,
+			difficulty: 3,
 			tags: ['Concurrency'],
 			relatedPosts: ['post-b'],
 		},

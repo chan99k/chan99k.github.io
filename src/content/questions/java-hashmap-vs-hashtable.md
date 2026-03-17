@@ -2,7 +2,7 @@
 title: "HashMap과 Hashtable의 차이점을 설명하세요"
 answer: "HashMap은 비동기(non-synchronized)로 동작하며 null 키와 null 값을 허용합니다. Hashtable은 synchronized로 스레드 안전하지만 성능이 낮고, null을 허용하지 않습니다. Java 5 이후에는 ConcurrentHashMap이 Hashtable의 대안으로 권장됩니다."
 category: "java"
-difficulty: "junior"
+difficulty: 2
 tags: ["Collections", "동기화", "Thread-safe"]
 source: "curated"
 relatedPosts: ["meta-tag-collection-optimization"]
