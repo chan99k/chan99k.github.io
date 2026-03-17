@@ -4,7 +4,7 @@ description: "CQRS(Command Query Responsibility Segregation)는 데이터 저장
 pubDate: "2026-03-05"
 tags: ["Areas/architecture", "Areas/개발/design-pattern", "Resources/translations/tech-blog"]
 contentSource: "ai-generated"
-draft: false
+draft: true
 ---
 
 # CQRS Pattern

@@ -3,6 +3,7 @@ title: "나의 구원자, act 도입기"
 description: "GitHub Actions 워크플로우를 로컬에서 실행하는 act 도입 과정에서 OrbStack 소켓 문제, Apple Silicon 호환성, 프로젝트 준비 상태까지 — Push & Pray 사이클을 끊기 위한 여정."
 pubDate: "2026-03-05"
 tags: ["Areas/infra", "Areas/개발/도구"]
+draft: true
 ---
 
 GitHub Actions를 사용하여 워크플로우를 개발해 본 사람이라면 누구나 'Push & Pray'라는 고통스러운 사이클을 경험해 봤을 것이다. 로컬에서 코드를 수정하고, 확신이 없는 상태로 커밋과 푸시를 날린 뒤, 실행 결과를 초조하게 기다리는 과정 말이다. 이 느리고 비효율적인 피드백 루프는 개발 생산성을 저해하는 주된 요인이다.

@@ -4,7 +4,7 @@ description: "서킷 브레이커 패턴은 원격 서비스나 리소스에 연
 pubDate: "2026-03-05"
 tags: ["Areas/architecture", "Areas/개발/design-pattern", "Resources/translations/tech-blog"]
 contentSource: "ai-generated"
-draft: false
+draft: true
 ---
 
 # Circuit Breaker Pattern

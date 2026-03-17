@@ -4,7 +4,7 @@ description: "이벤트 소싱 패턴은 객체의 현재 상태만 저장하는
 pubDate: "2026-03-05"
 tags: ["Areas/architecture", "Areas/개발/design-pattern", "Resources/translations/tech-blog"]
 contentSource: "ai-generated"
-draft: false
+draft: true
 ---
 
 # Event Sourcing Pattern
