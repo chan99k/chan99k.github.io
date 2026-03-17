@@ -15,8 +15,8 @@ export function QuestionCard({ title, hints, onRefresh, compact = false }: Props
 			<h3
 				className={
 					compact
-						? 'text-base font-semibold'
-						: 'text-center text-xl font-semibold sm:text-2xl'
+						? 'text-base font-semibold break-keep'
+						: 'text-center text-xl font-semibold sm:text-2xl break-keep'
 				}
 			>
 				<span className="text-neutral-400">Q. </span>
