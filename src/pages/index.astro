@@ -28,11 +28,10 @@ const questionsData = questions.map((q) => ({
                 questions={questionsData}
                 posts={posts}
             />
-            {/* CTA: 기출 제출 유도 — compact inline */}
-            <a href="/interview/submit" class="mt-4 flex items-center justify-center gap-2 rounded-lg border border-gray-200 dark:border-gray-700 px-4 py-2.5 text-sm text-gray-500 dark:text-gray-400 hover:border-accent/40 hover:text-accent transition-colors">
-                <span>실제 면접 기출이 있나요?</span>
-                <span class="font-medium text-accent">제출하고 100P 받기 →</span>
-            </a>
+            {/* CTA: 기출 제출 유도 */}
+            <p class="mt-4 text-center text-xs text-gray-400 dark:text-gray-500">
+                실제 면접 기출이 있나요? <a href="/interview/submit" class="text-accent hover:underline">제출하고 100P 받기 →</a>
+            </p>
         </div>
     </div>
 </Layout>
