@@ -6,9 +6,9 @@ export function randomInt(min: number, max: number) {
 }
 
 export function formatDate(date: Date): string {
-    return date.toLocaleDateString('en-us', {
+    return date.toLocaleDateString('ko-KR', {
         year: 'numeric',
-        month: 'short',
+        month: 'long',
         day: 'numeric',
     });
 }

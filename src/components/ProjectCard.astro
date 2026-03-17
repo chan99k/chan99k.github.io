@@ -11,12 +11,16 @@ const { project } = Astro.props;
 <a href={`/projects/${project.slug}/`} class="group block no-underline">
     <div class="space-y-3 sm:space-y-4">
         <div class="aspect-video w-full overflow-hidden rounded-lg sm:rounded-xl bg-gray-100 dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
-            {project.data.heroImage && (
+            {project.data.heroImage ? (
                 <img
                     src={project.data.heroImage}
                     alt={project.data.title}
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
+            ) : (
+                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent/10 via-accent/5 to-transparent dark:from-accent/20 dark:via-accent/10 dark:to-transparent transition-transform duration-500 group-hover:scale-105">
+                    <span class="text-2xl sm:text-3xl font-bold text-accent/30 dark:text-accent/40 select-none">{project.data.title.charAt(0)}</span>
+                </div>
             )}
         </div>
         <div>

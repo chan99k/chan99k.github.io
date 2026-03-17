@@ -10,7 +10,7 @@ interface Props {
 const { post } = Astro.props;
 ---
 
-<div class="group py-6 sm:py-8 border-b border-gray-100 dark:border-gray-800 last:border-0">
+<div class="group py-6 sm:py-8 border-b border-gray-100 dark:border-gray-800 last:border-0 transition-colors duration-200 hover:bg-gray-50/50 dark:hover:bg-white/[0.02] -mx-4 px-4 rounded-lg">
     <a href={`/blog/${post.slug}/`} class="block no-underline">
         <div class="flex items-center justify-between">
             <span class="flex items-center gap-2 text-xs text-gray-400 font-mono uppercase tracking-widest">

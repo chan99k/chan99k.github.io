@@ -19,8 +19,9 @@ const questionsData = questions.map((q) => ({
 
 <Layout title={SITE.title} description={SITE.description} fullWidth>
     <div class="relative flex flex-1 flex-col items-center px-4">
+        <h1 class="sr-only">{SITE.title} - 기술 면접 연습</h1>
         {/* Full-width gradient background */}
-        <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-accent/[0.03] via-transparent to-transparent dark:from-accent/[0.06]" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-accent/[0.08] via-transparent to-transparent dark:from-accent/[0.12]" aria-hidden="true"></div>
         <div class="relative z-10 flex w-full max-w-2xl flex-1 flex-col">
             <InterviewWidget
                 client:visible
