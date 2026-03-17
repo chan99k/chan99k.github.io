@@ -4,6 +4,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import remarkCjkFriendly from 'remark-cjk-friendly';
+import expressiveCode from 'astro-expressive-code';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -24,6 +25,16 @@ export default defineConfig({
             },
         },
     },
-    integrations: [react(), sitemap()],
+    integrations: [
+        expressiveCode({
+            themes: ['github-light', 'github-dark'],
+            styleOverrides: {
+                codeFontFamily: 'var(--font-mono, ui-monospace, monospace)',
+                uiFontFamily: 'var(--font-sans, system-ui, sans-serif)',
+            },
+        }),
+        react(),
+        sitemap(),
+    ],
     adapter: isDev ? undefined : netlify()
 });

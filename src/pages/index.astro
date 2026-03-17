@@ -19,8 +19,9 @@ const questionsData = questions.map((q) => ({
 
 <Layout title={SITE.title} description={SITE.description} fullWidth>
     <div class="relative flex flex-1 flex-col items-center px-4">
+        <h1 class="sr-only">{SITE.title} - 기술 면접 연습</h1>
         {/* Full-width gradient background */}
-        <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-accent/[0.03] via-transparent to-transparent dark:from-accent/[0.06]" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-accent/[0.08] via-transparent to-transparent dark:from-accent/[0.12]" aria-hidden="true"></div>
         <div class="relative z-10 flex w-full max-w-2xl flex-1 flex-col">
             <InterviewWidget
                 client:visible
@@ -28,17 +29,9 @@ const questionsData = questions.map((q) => ({
                 posts={posts}
             />
             {/* CTA: 기출 제출 유도 */}
-            <div class="mt-8 rounded-xl border border-dashed border-blue-300 bg-blue-50/50 p-5 text-center dark:border-blue-800 dark:bg-blue-950/20">
-                <p class="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                    실제 면접에서 받은 질문이 있나요?
-                </p>
-                <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                    기출 문제를 공유하고 <span class="font-bold text-blue-600">100P</span>를 받으세요!
-                </p>
-                <a href="/interview/submit" class="mt-3 inline-block rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors">
-                    기출 제출하기
-                </a>
-            </div>
+            <p class="mt-4 mb-16 text-center text-xs text-gray-400 dark:text-gray-500">
+                실제 면접 기출이 있나요? <a href="/interview/submit" class="text-accent hover:underline">제출하고 100P 받기 →</a>
+            </p>
         </div>
     </div>
 </Layout>

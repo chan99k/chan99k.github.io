@@ -355,10 +355,43 @@ function GraphInteractions() {
 	return null;
 }
 
+/* ── Legend ── */
+
+const PARA_LABELS: Record<string, string> = {
+	Areas: '영역',
+	Resources: '리소스',
+	Archives: '아카이브',
+	Projects: '프로젝트',
+};
+
+function Legend({ dark }: { dark: boolean }) {
+	return (
+		<div className="absolute top-3 right-3 z-20 flex flex-col gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-3 text-xs">
+			{Object.entries(PARA_CENTERS).map(([para]) => (
+				<div key={para} className="flex items-center gap-2">
+					<span
+						className="inline-block w-3 h-3 rounded-full"
+						style={{ backgroundColor: hexForColor(
+							para === 'Areas' ? 'blue' : para === 'Resources' ? 'amber' : para === 'Archives' ? 'rose' : 'teal',
+							dark,
+						)}}
+					/>
+					<span className="text-gray-600 dark:text-gray-400">{para} <span className="text-gray-400 dark:text-gray-500">({PARA_LABELS[para]})</span></span>
+				</div>
+			))}
+			<div className="mt-1 pt-1.5 border-t border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 leading-relaxed">
+				노드 크기 = 포스트 수<br />
+				클릭하여 태그 탐색
+			</div>
+		</div>
+	);
+}
+
 /* ── Main ── */
 
 export default function TagGraph({ data }: { data: GraphData }) {
 	const [dark, setDark] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const hullCanvasRef = useRef<HTMLCanvasElement>(null);
 
 	useEffect(() => {
@@ -373,11 +406,28 @@ export default function TagGraph({ data }: { data: GraphData }) {
 		return () => observer.disconnect();
 	}, []);
 
+	useEffect(() => {
+		const timer = setTimeout(() => setLoading(false), 2000);
+		return () => clearTimeout(timer);
+	}, []);
+
 	return (
 		<div
 			className="w-full rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden relative"
-			style={{ height: '500px' }}
+			style={{ height: 'min(500px, 80vh)' }}
 		>
+			{/* Loading overlay */}
+			{loading && (
+				<div className="absolute inset-0 z-30 flex items-center justify-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+					<div className="flex flex-col items-center gap-3">
+						<div className="w-8 h-8 border-2 border-gray-300 dark:border-gray-600 border-t-accent rounded-full animate-spin" />
+						<span className="text-sm text-gray-500 dark:text-gray-400">그래프를 그리는 중...</span>
+					</div>
+				</div>
+			)}
+
+			<Legend dark={dark} />
+
 			<canvas
 				ref={hullCanvasRef}
 				className="absolute inset-0 pointer-events-none"
