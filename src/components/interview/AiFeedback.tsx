@@ -17,9 +17,10 @@ export interface FeedbackData {
 interface Props {
     feedback: FeedbackData | null;
     isLoading: boolean;
+    showScores?: boolean;
 }
 
-export function AiFeedback({ feedback, isLoading }: Props) {
+export function AiFeedback({ feedback, isLoading, showScores = true }: Props) {
     if (isLoading && !feedback) {
         return (
             <div className="flex items-center gap-2 py-1">
@@ -34,15 +35,18 @@ export function AiFeedback({ feedback, isLoading }: Props) {
     return (
         <div className="space-y-3">
             {/* Total Score */}
-            <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">{feedback.totalScore}</span>
-                <span className="text-sm text-neutral-400">/100</span>
-            </div>
+            {showScores && (
+                <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">{feedback.totalScore}</span>
+                    <span className="text-sm text-neutral-400">/100</span>
+                </div>
+            )}
 
             {/* Criteria Scores */}
-            <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">평가 항목</h3>
-                {feedback.criteria.map((criterion) => {
+            {showScores && (
+                <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">평가 항목</h3>
+                    {feedback.criteria.map((criterion) => {
                     const percentage = (criterion.score / criterion.maxScore) * 100;
                     return (
                         <div key={criterion.id} className="space-y-1">
@@ -66,7 +70,8 @@ export function AiFeedback({ feedback, isLoading }: Props) {
                         </div>
                     );
                 })}
-            </div>
+                </div>
+            )}
 
             {/* Strengths */}
             {feedback.strengths.length > 0 && (
