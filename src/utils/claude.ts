@@ -151,3 +151,54 @@ export async function* streamEvaluation(
         }
     }
 }
+
+export async function* streamFromServer(
+    token: string,
+    system: string,
+    messages: { role: string; content: string }[],
+): AsyncGenerator<string> {
+    const response = await fetch('/.netlify/functions/interview-server', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ system, messages }),
+    });
+
+    if (!response.ok) {
+        if (response.status === 402) {
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.error || '포인트가 부족합니다');
+        }
+        if (response.status === 429) {
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.error || '일일 사용 한도를 초과했습니다');
+        }
+        throw new Error('서버 API 요청에 실패했습니다');
+    }
+
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() ?? '';
+        for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            const data = line.slice(6);
+            if (data === '[DONE]') return;
+            try {
+                const parsed = JSON.parse(data);
+                if (parsed.type === 'content_block_delta') {
+                    const text = parsed.delta?.text;
+                    if (text) yield text;
+                }
+            } catch { /* skip */ }
+        }
+    }
+}
