@@ -20,8 +20,8 @@ export function QuestionCard({ title, hints, onRefresh, compact = false, isFollo
 			<h3
 				className={
 					compact
-						? 'text-base font-semibold'
-						: 'text-center text-xl font-semibold sm:text-2xl'
+						? 'text-base font-semibold break-keep'
+						: 'text-center text-xl font-semibold break-keep sm:text-2xl'
 				}
 			>
 				<span className="text-neutral-400">Q. </span>
