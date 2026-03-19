@@ -17,15 +17,18 @@ export default function InterviewerPicker({ selected, onChange, compact }: Props
         return (
             <button
                 onClick={() => setExpanded(true)}
-                className="text-xs text-neutral-500 underline hover:text-neutral-700 dark:text-neutral-400"
+                className="flex items-center gap-1.5 text-xs text-neutral-400 hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300"
             >
-                면접관 설정 ({selected.length}명)
+                <span>면접관</span>
+                <span className="rounded-full bg-neutral-100 px-1.5 py-0.5 text-[10px] dark:bg-neutral-800">
+                    {selected.length}
+                </span>
             </button>
         );
     }
 
     return (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
             {ALL_IDS.map((id) => {
                 const role = INTERVIEWER_ROLES[id];
                 const isSelected = selected.includes(id);
@@ -39,10 +42,10 @@ export default function InterviewerPicker({ selected, onChange, compact }: Props
                                 onChange([...selected, id]);
                             }
                         }}
-                        className={`rounded-full px-3 py-1 text-xs transition-colors ${
+                        className={`rounded-full px-2.5 py-1 text-xs transition-colors ${
                             isSelected
-                                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
-                                : 'bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400'
+                                ? 'bg-neutral-200 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200'
+                                : 'bg-neutral-100 text-neutral-400 dark:bg-neutral-800 dark:text-neutral-500'
                         }`}
                     >
                         {role.name.replace(' 면접관', '')}
@@ -52,7 +55,7 @@ export default function InterviewerPicker({ selected, onChange, compact }: Props
             {compact && (
                 <button
                     onClick={() => setExpanded(false)}
-                    className="text-xs text-neutral-400"
+                    className="text-xs text-neutral-300 hover:text-neutral-500 dark:text-neutral-600"
                 >
                     접기
                 </button>

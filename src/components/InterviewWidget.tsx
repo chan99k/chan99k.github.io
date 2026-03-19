@@ -398,11 +398,6 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                         />
                     )}
                 </div>
-                {phase === 'initial' && (
-                    <div className="mt-4">
-                        <InterviewerPicker selected={interviewers} onChange={setInterviewers} compact />
-                    </div>
-                )}
             </div>
 
             {/* Chat area - expands when messages exist */}
@@ -452,19 +447,6 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                 </div>
             )}
 
-            {/* ServerKeyBanner */}
-            <div className="w-full pb-2">
-                <ServerKeyBanner
-                    apiKey={apiKey}
-                    onApiKeyChange={setApiKey}
-                    isLoggedIn={!!user}
-                    onLoginClick={() => {
-                        setError('로그인이 필요합니다. 우측 상단에서 로그인해주세요.');
-                    }}
-                    pointBalance={pointBalance}
-                />
-            </div>
-
             {/* Error banner */}
             {error && (
                 <div className="w-full pb-2">
@@ -478,7 +460,7 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
             )}
 
             {/* Input bar - always visible */}
-            <div className="w-full pt-2">
+            <div className="w-full">
                 <AnswerInput
                     value={inputValue}
                     onChange={setInputValue}
@@ -487,6 +469,26 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                     hasApiKey={!!apiKey}
                     placeholder={phase === 'initial' ? '답변을 입력하세요...' : '추가 답변을 입력하세요...'}
                 />
+            </div>
+
+            {/* Status bar - below input */}
+            <div className="w-full pt-2">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        {phase === 'initial' && (
+                            <InterviewerPicker selected={interviewers} onChange={setInterviewers} compact />
+                        )}
+                    </div>
+                    <ServerKeyBanner
+                        apiKey={apiKey}
+                        onApiKeyChange={setApiKey}
+                        isLoggedIn={!!user}
+                        onLoginClick={() => {
+                            setError('로그인이 필요합니다. 우측 상단에서 로그인해주세요.');
+                        }}
+                        pointBalance={pointBalance}
+                    />
+                </div>
             </div>
 
             {/* Bottom spacer - balances top spacer so input bar sits at ~center */}
