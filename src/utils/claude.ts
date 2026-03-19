@@ -153,16 +153,16 @@ export async function* streamEvaluation(
 }
 
 export async function* streamFromServer(
-    token: string,
+    token: string | null,
     system: string,
     messages: { role: string; content: string }[],
 ): AsyncGenerator<string> {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const response = await fetch('/.netlify/functions/interview-server', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        },
+        headers,
         body: JSON.stringify({ system, messages }),
     });
 

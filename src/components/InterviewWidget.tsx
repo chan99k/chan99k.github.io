@@ -114,11 +114,8 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
     const handleSubmit = useCallback(async () => {
         if (!inputValue.trim() || isLoading) return;
 
-        // Check if user has API key or is logged in
-        if (!apiKey && !user) {
-            setError('로그인이 필요합니다.');
-            return;
-        }
+        // Both logged-in and anonymous users can submit
+        // Anonymous: server handles IP-based rate limiting
 
         const answer = inputValue.trim();
         setInputValue('');
@@ -171,84 +168,35 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                 }
             }
 
-            // Step 3: Build prompt
+            // Step 3: Build prompt and stream
             let fullText = '';
-            if (depth === 0 && !user) {
-                // Single-turn BYOK mode (backwards compatible)
-                const related = matchRelatedPosts(current, posts);
-                let blogContext: { title: string; chunk: string }[] = [];
+            const historyMessages = messages.map((m) => ({
+                role: m.role === 'user' ? 'user' : 'assistant',
+                content: m.content,
+            }));
 
-                if (embeddings) {
-                    for (const post of related) {
-                        const postChunks = embeddings.chunks.filter((c) => c.slug === post.slug);
-                        for (const chunk of postChunks) {
-                            blogContext.push({ title: chunk.title, chunk: chunk.chunk });
-                        }
-                    }
-                } else {
-                    blogContext = related.map((p) => ({
-                        title: p.data.title,
-                        chunk: `블로그 포스트: ${p.data.title}`,
-                    }));
-                }
+            const systemPrompt = buildInterviewSystemPrompt({
+                question: current.data.title,
+                userAnswer: answer,
+                chunks: ragChunks,
+                history: historyMessages.map((m) => ({ role: m.role as 'user' | 'assistant' | 'system', content: m.content, timestamp: Date.now() })),
+                depth,
+                interviewers,
+            });
 
-                const prompt = buildEvaluationPrompt({
-                    question: current.data.title,
-                    modelAnswer: current.data.answer,
-                    userAnswer: answer,
-                    difficulty: current.data.difficulty,
-                    blogContext,
-                });
-
-                for await (const chunk of streamEvaluation(apiKey, prompt, provider)) {
+            if (apiKey) {
+                // BYOK mode
+                for await (const chunk of streamEvaluation(apiKey, systemPrompt, provider)) {
                     fullText += chunk;
                     setStreamText(fullText);
                 }
-
-                // Parse single-turn feedback
-                const jsonMatch = fullText.match(/```json\n?([\s\S]*?)\n?```/) ?? fullText.match(/\{[\s\S]*\}/);
-                if (jsonMatch) {
-                    const parsed: FeedbackData = JSON.parse(jsonMatch[1] ?? jsonMatch[0]);
-                    const interviewerMsg: Message = {
-                        role: 'interviewer',
-                        content: parsed.summary || '평가가 완료되었습니다.',
-                        feedback: parsed,
-                    };
-                    setMessages((prev) => [...prev, interviewerMsg]);
-                } else {
-                    const interviewerMsg: Message = {
-                        role: 'interviewer',
-                        content: fullText,
-                    };
-                    setMessages((prev) => [...prev, interviewerMsg]);
-                }
             } else {
-                // Multi-turn mode
-                const historyMessages = messages.map((m) => ({
-                    role: m.role === 'user' ? 'user' : 'assistant',
-                    content: m.content,
-                }));
-
-                const systemPrompt = buildInterviewSystemPrompt({
-                    question: current.data.title,
-                    userAnswer: answer,
-                    chunks: ragChunks,
-                    history: historyMessages.map((m) => ({ role: m.role as 'user' | 'assistant' | 'system', content: m.content, timestamp: Date.now() })),
-                    depth,
-                    interviewers,
-                });
-
-                if (apiKey) {
-                    for await (const chunk of streamEvaluation(apiKey, systemPrompt, provider)) {
-                        fullText += chunk;
-                        setStreamText(fullText);
-                    }
-                } else if (token) {
-                    for await (const chunk of streamFromServer(token, systemPrompt, [...historyMessages, { role: 'user', content: answer }])) {
-                        fullText += chunk;
-                        setStreamText(fullText);
-                    }
+                // Server key mode (works for both logged-in and anonymous)
+                for await (const chunk of streamFromServer(token, systemPrompt, [...historyMessages, { role: 'user', content: answer }])) {
+                    fullText += chunk;
+                    setStreamText(fullText);
                 }
+            }
 
                 // Parse multi-turn response
                 const jsonMatch = fullText.match(/```json\n?([\s\S]*?)\n?```/) ?? fullText.match(/\{[\s\S]*\}/);
