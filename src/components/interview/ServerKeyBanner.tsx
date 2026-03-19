@@ -7,12 +7,14 @@ interface Props {
     isLoggedIn: boolean;
     onLoginClick: () => void;
     pointBalance?: number | null;
+    forceShowInput?: boolean;
 }
 
 export default function ServerKeyBanner({
-    apiKey, onApiKeyChange, isLoggedIn, onLoginClick, pointBalance
+    apiKey, onApiKeyChange, isLoggedIn, onLoginClick, pointBalance, forceShowInput
 }: Props) {
     const [showInput, setShowInput] = useState(false);
+    const isInputVisible = showInput || forceShowInput;
 
     if (apiKey) {
         return (
@@ -28,10 +30,16 @@ export default function ServerKeyBanner({
         );
     }
 
-    if (!isLoggedIn) {
+    if (!isLoggedIn && !isInputVisible) {
         return (
-            <div className="flex items-center justify-between text-xs text-neutral-400 dark:text-neutral-500">
-                <span>로그인하면 무료로 이용할 수 있어요</span>
+            <div className="flex items-center gap-1.5 text-xs text-neutral-400 dark:text-neutral-500">
+                <button
+                    onClick={() => setShowInput(true)}
+                    className="underline hover:text-neutral-600 dark:hover:text-neutral-300"
+                >
+                    API 키 입력
+                </button>
+                <span>·</span>
                 <button
                     onClick={onLoginClick}
                     className="underline hover:text-neutral-600 dark:hover:text-neutral-300"
@@ -42,7 +50,7 @@ export default function ServerKeyBanner({
         );
     }
 
-    if (showInput) {
+    if (isInputVisible) {
         return (
             <div className="space-y-2 rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-700 dark:bg-neutral-800/50">
                 <label className="block text-xs font-medium text-neutral-600 dark:text-neutral-400">

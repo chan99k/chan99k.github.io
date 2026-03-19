@@ -81,6 +81,7 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
 
     // Points
     const [pointBalance, setPointBalance] = useState<number | null>(null);
+    const [promptApiKey, setPromptApiKey] = useState(false);
 
     const chatEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -116,9 +117,10 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
 
         // Check if user has API key or is logged in
         if (!apiKey && !user) {
-            setError('로그인이 필요합니다. 우측 상단에서 로그인해주세요.');
+            setPromptApiKey(true);
             return;
         }
+        setPromptApiKey(false);
 
         const answer = inputValue.trim();
         setInputValue('');
@@ -471,8 +473,8 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                 />
             </div>
 
-            {/* Status bar - below input */}
-            <div className="w-full pt-2">
+            {/* Status bar - below input, aligned with input padding */}
+            <div className="w-full px-4 pt-1.5">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         {phase === 'initial' && (
@@ -481,12 +483,13 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                     </div>
                     <ServerKeyBanner
                         apiKey={apiKey}
-                        onApiKeyChange={setApiKey}
+                        onApiKeyChange={(key) => { setApiKey(key); setPromptApiKey(false); }}
                         isLoggedIn={!!user}
                         onLoginClick={() => {
                             setError('로그인이 필요합니다. 우측 상단에서 로그인해주세요.');
                         }}
                         pointBalance={pointBalance}
+                        forceShowInput={promptApiKey}
                     />
                 </div>
             </div>
