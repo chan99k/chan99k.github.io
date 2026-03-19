@@ -164,7 +164,7 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                     });
                     if (ragRes.ok) {
                         const ragData = await ragRes.json();
-                        ragChunks = ragData.results ?? [];
+                        ragChunks = ragData.chunks ?? [];
                     }
                 } catch {
                     // Graceful degradation: continue without RAG
