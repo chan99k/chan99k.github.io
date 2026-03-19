@@ -198,65 +198,49 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                 }
             }
 
-                // Parse multi-turn response
-                const jsonMatch = fullText.match(/```json\n?([\s\S]*?)\n?```/) ?? fullText.match(/\{[\s\S]*\}/);
-                if (jsonMatch) {
-                    const parsed = JSON.parse(jsonMatch[1] ?? jsonMatch[0]);
-                    const { evaluations, followUp, shouldContinue, overallScore } = parsed;
+            // Parse response
+            const jsonMatch = fullText.match(/```json\n?([\s\S]*?)\n?```/) ?? fullText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                const parsed = JSON.parse(jsonMatch[1] ?? jsonMatch[0]);
+                const { followUp, shouldContinue, overallScore } = parsed;
 
-                    if (shouldContinue && followUp) {
-                        // Continue interview with follow-up question
-                        const interviewerMsg: Message = {
-                            role: 'interviewer',
-                            content: `${followUp.reaction ? followUp.reaction + '\n\n' : ''}${followUp.question}`,
-                            isFollowUp: true,
-                            reaction: followUp.reaction,
-                        };
-                        setMessages((prev) => [...prev, interviewerMsg]);
-                        setCurrent((prev) => ({
-                            ...prev,
-                            data: {
-                                ...prev.data,
-                                title: followUp.question,
-                            },
-                        }));
-                        setDepth((d) => d + 1);
-                        setScores((prev) => [...prev, overallScore ?? 0]);
-                    } else {
-                        // End interview
-                        const interviewerMsg: Message = {
-                            role: 'interviewer',
-                            content: parsed.summary || '면접이 종료되었습니다.',
-                        };
-                        setMessages((prev) => [...prev, interviewerMsg]);
-                        setIsComplete(true);
-                        setScores((prev) => [...prev, overallScore ?? 0]);
-
-                        // Save completion
-                        if (sessionId && token) {
-                            await fetch('/.netlify/functions/session', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${token}`,
-                                },
-                                body: JSON.stringify({
-                                    action: 'complete',
-                                    session_id: sessionId,
-                                    data: {
-                                        total_score: scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : overallScore ?? 0,
-                                    },
-                                }),
-                            });
-                        }
-                    }
+                if (shouldContinue && followUp) {
+                    const interviewerMsg: Message = {
+                        role: 'interviewer',
+                        content: `${followUp.reaction ? followUp.reaction + '\n\n' : ''}${followUp.question}`,
+                        isFollowUp: true,
+                        reaction: followUp.reaction,
+                    };
+                    setMessages((prev) => [...prev, interviewerMsg]);
+                    setCurrent((prev) => ({
+                        ...prev,
+                        data: { ...prev.data, title: followUp.question },
+                    }));
+                    setDepth((d) => d + 1);
+                    setScores((prev) => [...prev, overallScore ?? 0]);
                 } else {
                     const interviewerMsg: Message = {
                         role: 'interviewer',
-                        content: fullText,
+                        content: parsed.summary || '면접이 종료되었습니다.',
                     };
                     setMessages((prev) => [...prev, interviewerMsg]);
+                    setIsComplete(true);
+                    setScores((prev) => [...prev, overallScore ?? 0]);
+
+                    if (sessionId && token) {
+                        await fetch('/.netlify/functions/session', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                            body: JSON.stringify({
+                                action: 'complete',
+                                session_id: sessionId,
+                                data: { total_score: scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : overallScore ?? 0 },
+                            }),
+                        });
+                    }
                 }
+            } else {
+                setMessages((prev) => [...prev, { role: 'interviewer', content: fullText }]);
             }
 
             // Step 4: Save messages to session (if session exists)
