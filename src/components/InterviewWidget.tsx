@@ -447,18 +447,6 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                 </div>
             )}
 
-            {/* Error banner */}
-            {error && (
-                <div className="w-full pb-2">
-                    <div className="flex items-center justify-between rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700 dark:bg-red-900/20 dark:text-red-300">
-                        <span>{error}</span>
-                        <button onClick={() => setError(null)} className="ml-2 underline">
-                            닫기
-                        </button>
-                    </div>
-                </div>
-            )}
-
             {/* Input bar - always visible */}
             <div className="w-full">
                 <AnswerInput
@@ -473,6 +461,9 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
 
             {/* Status bar - below input, aligned with input padding */}
             <div className="w-full px-4 pt-1.5">
+                {error && (
+                    <p className="mb-1 text-xs text-red-500 dark:text-red-400">{error}</p>
+                )}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         {phase === 'initial' && (
