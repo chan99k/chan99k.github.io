@@ -3,6 +3,34 @@ import { createClient } from '@supabase/supabase-js';
 import { validateOrigin, addCorsHeaders } from './utils/cors.js';
 
 const INTERVIEW_POINT_COST = 50;
+const ANON_DAILY_LIMIT = 2;
+
+// In-memory rate limit store for anonymous users (resets on cold start)
+const anonRateLimit = new Map<string, { count: number; resetAt: number }>();
+
+function getClientIp(req: Request, context: Context): string {
+    return req.headers.get('x-nf-client-connection-ip')
+        ?? req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+        ?? 'unknown';
+}
+
+function checkAnonRateLimit(ip: string): { allowed: boolean; remaining: number } {
+    const now = Date.now();
+    const entry = anonRateLimit.get(ip);
+
+    if (!entry || now > entry.resetAt) {
+        // Reset: new day window (24h from first request)
+        anonRateLimit.set(ip, { count: 1, resetAt: now + 24 * 60 * 60 * 1000 });
+        return { allowed: true, remaining: ANON_DAILY_LIMIT - 1 };
+    }
+
+    if (entry.count >= ANON_DAILY_LIMIT) {
+        return { allowed: false, remaining: 0 };
+    }
+
+    entry.count++;
+    return { allowed: true, remaining: ANON_DAILY_LIMIT - entry.count };
+}
 
 export default async (req: Request, _context: Context) => {
     const origin = req.headers.get('origin');
@@ -21,26 +49,47 @@ export default async (req: Request, _context: Context) => {
         return new Response('Method not allowed', { status: 405 });
     }
 
-    // 1. Authenticate with Supabase JWT
+    // 1. Authenticate — allow anonymous with rate limiting
     const authHeader = req.headers.get('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return new Response('Unauthorized', { status: 401 });
+    let user: { id: string } | null = null;
+    let isAnonymous = false;
+
+    if (authHeader?.startsWith('Bearer ')) {
+        const token = authHeader.slice(7);
+        const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
+        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? process.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+        const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(token);
+        if (!authError && authUser) {
+            user = authUser;
+        }
     }
 
-    const token = authHeader.slice(7);
-    const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
-    const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? process.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    if (!user) {
+        // Anonymous mode: IP-based rate limiting
+        isAnonymous = true;
+        const ip = getClientIp(req, _context);
+        const { allowed, remaining } = checkAnonRateLimit(ip);
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    if (authError || !user) {
-        return new Response('Unauthorized', { status: 401 });
+        if (!allowed) {
+            const responseHeaders = new Headers({ 'Content-Type': 'application/json' });
+            addCorsHeaders(responseHeaders, origin!);
+            return new Response(JSON.stringify({
+                error: '일일 체험 한도를 초과했습니다. 회원가입하면 더 많이 이용할 수 있어요!',
+                signup: true,
+            }), { status: 429, headers: responseHeaders });
+        }
     }
 
-    // 2. Check points (skip for BYOK users)
+    // 2. Check points (skip for anonymous and BYOK users)
     const isByok = req.headers.get('X-Use-Own-Key') === 'true';
 
-    if (!isByok) {
+    if (!isAnonymous && !isByok && user) {
+        const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
+        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? process.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
         const { data: newBalance, error: pointError } = await supabase.rpc('spend_points', {
             p_user_id: user.id,
             p_amount: INTERVIEW_POINT_COST,
@@ -53,12 +102,11 @@ export default async (req: Request, _context: Context) => {
         }
 
         if (newBalance === -1) {
+            const responseHeaders = new Headers({ 'Content-Type': 'application/json' });
+            addCorsHeaders(responseHeaders, origin!);
             return new Response(JSON.stringify({
                 error: '포인트가 부족합니다. 기출 문제를 제출하거나 피드백을 작성하여 포인트를 적립하세요.',
-            }), {
-                status: 402,
-                headers: { 'Content-Type': 'application/json' },
-            });
+            }), { status: 402, headers: responseHeaders });
         }
     }
 
@@ -115,12 +163,16 @@ export default async (req: Request, _context: Context) => {
     console.log(JSON.stringify({
         ts: new Date().toISOString(),
         fn: 'interview-server',
-        user_id: user.id,
+        user_id: user?.id ?? 'anonymous',
+        anonymous: isAnonymous,
         llm_status: response.status,
     }));
 
-    // Refund points if Anthropic API call failed
-    if (!response.ok && !isByok) {
+    // Refund points if Anthropic API call failed (authenticated users only)
+    if (!response.ok && !isByok && !isAnonymous && user) {
+        const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
+        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? process.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
         const { error: refundError } = await supabase.rpc('earn_points', {
             p_user_id: user.id,
             p_amount: INTERVIEW_POINT_COST,

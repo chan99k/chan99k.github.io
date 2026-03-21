@@ -5,25 +5,30 @@ interface Props {
 	hints: string[];
 	onRefresh?: () => void;
 	compact?: boolean;
+	isFollowUp?: boolean;
+	reaction?: string;
 }
 
-export function QuestionCard({ title, hints, onRefresh, compact = false }: Props) {
+export function QuestionCard({ title, hints, onRefresh, compact = false, isFollowUp = false, reaction }: Props) {
 	const [showHints, setShowHints] = useState(false);
 
 	return (
 		<div>
+			{reaction && (
+				<p className="mb-2 text-xs italic text-neutral-500 dark:text-neutral-400">{reaction}</p>
+			)}
 			<h3
 				className={
 					compact
-						? 'text-base font-semibold'
-						: 'text-center text-xl font-semibold sm:text-2xl'
+						? 'text-base font-semibold break-keep text-balance'
+						: 'text-center text-xl font-semibold break-keep text-balance sm:text-2xl'
 				}
 			>
 				<span className="text-neutral-400">Q. </span>
 				{title}
 			</h3>
 			<div className={`mt-3 flex items-center gap-2 ${compact ? '' : 'justify-end'}`}>
-				{hints.length > 0 && (
+				{!isFollowUp && hints.length > 0 && (
 					<>
 						<button
 							onClick={() => setShowHints(!showHints)}
@@ -33,7 +38,7 @@ export function QuestionCard({ title, hints, onRefresh, compact = false }: Props
 						</button>
 					</>
 				)}
-				{onRefresh && (
+				{!isFollowUp && onRefresh && (
 					<button
 						onClick={onRefresh}
 						className="text-neutral-300 transition-colors hover:text-neutral-500 dark:text-neutral-600 dark:hover:text-neutral-400"
@@ -53,7 +58,7 @@ export function QuestionCard({ title, hints, onRefresh, compact = false }: Props
 					</button>
 				)}
 			</div>
-			{showHints && hints.length > 0 && (
+			{!isFollowUp && showHints && hints.length > 0 && (
 				<div className={`mt-2 flex flex-wrap gap-1 ${compact ? '' : 'justify-center'}`}>
 					{hints.map((hint) => (
 						<span

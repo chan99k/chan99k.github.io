@@ -4,12 +4,17 @@ export function getAllowedOrigins(): string[] {
     const origins = [...ALLOWED_ORIGINS];
     const deployUrl = process.env.DEPLOY_PRIME_URL;
     if (deployUrl) origins.push(deployUrl);
+    const url = process.env.URL;
+    if (url) origins.push(url);
     return origins;
 }
 
 export function validateOrigin(origin: string | null): boolean {
     if (!origin) return false;
-    return getAllowedOrigins().includes(origin);
+    if (getAllowedOrigins().includes(origin)) return true;
+    // Allow Netlify deploy preview URLs
+    if (origin.endsWith('.netlify.app') && origin.startsWith('https://')) return true;
+    return false;
 }
 
 export function addCorsHeaders(headers: Headers, origin: string): void {

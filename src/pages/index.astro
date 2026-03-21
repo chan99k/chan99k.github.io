@@ -27,6 +27,8 @@ const questionsData = questions.map((q) => ({
                 client:visible
                 questions={questionsData}
                 posts={posts}
+                supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL}
+                supabaseAnonKey={import.meta.env.PUBLIC_SUPABASE_ANON_KEY}
             />
             {/* CTA: 기출 제출 유도 */}
             <p class="mt-4 mb-16 text-center text-xs text-gray-400 dark:text-gray-500">
