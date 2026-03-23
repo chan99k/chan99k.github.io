@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { supabase } from '../utils/supabase';
 
-const CATEGORIES = ['general', 'java', 'spring', 'database', 'network', 'os', 'design-pattern', 'architecture'];
+const CATEGORIES = [
+    'general', 'java', 'spring', 'database', 'network', 'os', 'design-pattern', 'architecture',
+    'loss-adjuster-law', 'loss-adjuster-claim', 'loss-adjuster-medical',
+];
 
 interface Props {
     editId?: string;

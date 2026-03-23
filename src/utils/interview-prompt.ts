@@ -1,5 +1,5 @@
-import { INTERVIEWER_ROLES, type InterviewerId } from '../config/interviewers';
-import { SESSION_CONFIG } from '../config/interview-session';
+import { INTERVIEWER_ROLES, detectCategory, type InterviewerId } from '../config/interviewers';
+import { SESSION_CONFIG, getEvaluationCriteria, EVALUATION_CRITERIA_LABELS } from '../config/interview-session';
 import type { ChatMessage } from '../config/interview-session';
 
 interface PromptInput {
@@ -13,16 +13,21 @@ interface PromptInput {
 }
 
 export function buildInterviewSystemPrompt(input: PromptInput): string {
-    const activeInterviewers = (input.interviewers ?? ['frontend', 'backend', 'dba'])
+    const ids = input.interviewers ?? ['frontend', 'backend', 'dba'];
+    const activeInterviewers = ids
         .map((id) => INTERVIEWER_ROLES[id])
         .filter(Boolean);
+
+    const category = detectCategory(ids);
+    const criteria = getEvaluationCriteria(category);
+    const isLossAdjuster = category === 'lossAdjuster';
 
     const interviewerSection = activeInterviewers
         .map((r) => `### ${r.name}\n${r.promptFragment}`)
         .join('\n\n');
 
     const ragSection = input.chunks.length > 0
-        ? `\n\n## 지원자 관련 자료 (블로그/프로젝트)\n${input.chunks.map((c) =>
+        ? `\n\n## ${isLossAdjuster ? '관련 참고 자료 (질문 은행/해설)' : '지원자 관련 자료 (블로그/프로젝트)'}\n${input.chunks.map((c) =>
             `- [${c.source}] ${c.title}: ${c.chunk_text.slice(0, 300)}`
         ).join('\n')}`
         : '';
@@ -31,10 +36,38 @@ export function buildInterviewSystemPrompt(input: PromptInput): string {
         ? `\n\n## 기업 맥락\n- 기업: ${input.jdContext.company}\n- 채용공고:\n${input.jdContext.jd}\n\n이 기업의 기술 스택과 채용 요구사항을 고려하여 질문하세요.`
         : '';
 
-    const criteria = SESSION_CONFIG.evaluationCriteria;
+    const criteriaTotal = Object.values(criteria).reduce((a, b) => a + b, 0);
+    const criteriaSection = Object.entries(criteria)
+        .map(([key, val]) => `- ${EVALUATION_CRITERIA_LABELS[key] ?? key}: ${val}점`)
+        .join('\n');
 
-    return `당신은 AI 모의면접 시스템의 면접관 패널입니다.
-다수의 면접관이 각자의 전문 관점에서 지원자를 평가합니다.
+    const interviewerIds = activeInterviewers.map((r) => r.id).join('|');
+
+    const roleDescription = isLossAdjuster
+        ? '손해사정사 시험 면접관 패널'
+        : 'AI 모의면접 시스템의 면접관 패널';
+
+    const questionFlow = isLossAdjuster
+        ? `### 질문 흐름 (순서대로 진행)
+1. **기초 개념 확인**: 법조문, 의학 용어, 핵심 정의 검증
+2. **심화 적용**: 판례 적용, 사례 분석, 산정 방법론 심화
+3. **실무 연결**: 실제 손해사정 사례에 적용, 복합 상황 판단
+
+질문 은행의 모범답안/해설이 있으면 2-3단계에서 적극 활용하세요.`
+        : `### 질문 흐름 (순서대로 진행)
+1. **CS 기초 확인**: 개념의 정의, 기본 원리 검증
+2. **관련 키워드 심화**: 기술적 깊이, 내부 동작 원리, 트레이드오프
+3. **실무 경험 연결**: 지원자의 블로그/프로젝트 자료(RAG)를 활용하여 실제 경험 탐색
+
+지원자의 블로그/프로젝트 자료가 있으면 2-3단계에서 적극 활용하세요.`;
+
+    const scoreKeys = Object.keys(criteria).reduce((acc, key) => {
+        acc[key] = 0;
+        return acc;
+    }, {} as Record<string, number>);
+
+    return `당신은 ${roleDescription}입니다.
+다수의 면접관이 각자의 전문 관점에서 ${isLossAdjuster ? '수험생' : '지원자'}를 평가합니다.
 
 ## 면접관 패널
 ${interviewerSection}
@@ -47,17 +80,13 @@ ${interviewerSection}
 ${input.question}
 ${ragSection}${jdSection}
 
-## 평가 기준 (${Object.values(criteria).reduce((a, b) => a + b, 0)}점 만점)
-- 정확성: ${criteria.accuracy}점
-- 깊이/원리: ${criteria.depth}점
-- 구조화: ${criteria.structure}점
-- 실무 연결: ${criteria.practical}점
-- 커뮤니케이션: ${criteria.communication}점
+## 평가 기준 (${criteriaTotal}점 만점)
+${criteriaSection}
 
 ## 응답 규칙
 
 면접관이 돌아가며 꼬리질문을 합니다.
-**중요: 면접 진행 중에는 평가나 피드백을 지원자에게 직접 말하지 마세요.**
+**중요: 면접 진행 중에는 평가나 피드백을 ${isLossAdjuster ? '수험생' : '지원자'}에게 직접 말하지 마세요.**
 실제 면접처럼, 답변을 듣고 바로 다음 질문으로 넘어가세요.
 
 ### 리액션 규칙
@@ -65,12 +94,7 @@ ${ragSection}${jdSection}
 - 중립적 확인만 허용: "네.", "알겠습니다.", "그렇군요.", "음."
 - 가능한 리액션 생략하고 바로 질문으로 넘어가세요
 
-### 질문 흐름 (순서대로 진행)
-1. **CS 기초 확인**: 개념의 정의, 기본 원리 검증
-2. **관련 키워드 심화**: 기술적 깊이, 내부 동작 원리, 트레이드오프
-3. **실무 경험 연결**: 지원자의 블로그/프로젝트 자료(RAG)를 활용하여 실제 경험 탐색
-
-지원자의 블로그/프로젝트 자료가 있으면 2-3단계에서 적극 활용하세요.
+${questionFlow}
 
 JSON으로 응답하세요:
 
@@ -78,20 +102,20 @@ JSON으로 응답하세요:
 {
   "evaluations": [
     {
-      "interviewer": "frontend|backend|dba",
-      "comment": "내부 평가 메모 (지원자에게 보이지 않음)",
-      "score": { "accuracy": 0, "depth": 0, "structure": 0, "practical": 0, "communication": 0 }
+      "interviewer": "${interviewerIds}",
+      "comment": "내부 평가 메모 (${isLossAdjuster ? '수험생' : '지원자'}에게 보이지 않음)",
+      "score": ${JSON.stringify(scoreKeys)}
     }
   ],
   "followUp": {
     "interviewer": "다음 질문을 하는 면접관 ID",
     "reaction": "중립적 확인만 (예: '네.' / '알겠습니다.' / '그렇군요.') 또는 생략",
     "question": "꼬리질문 내용",
-    "reason": "이 질문을 하는 이유 (내부 메모, 지원자에게 보이지 않음)"
+    "reason": "이 질문을 하는 이유 (내부 메모, ${isLossAdjuster ? '수험생' : '지원자'}에게 보이지 않음)"
   },
   "shouldContinue": true,
   "overallScore": 72,
-  "summary": "내부 종합 평가 메모 (지원자에게 보이지 않음)"
+  "summary": "내부 종합 평가 메모 (${isLossAdjuster ? '수험생' : '지원자'}에게 보이지 않음)"
 }
 \`\`\`
 
@@ -114,9 +138,14 @@ export function buildFinalFeedbackPrompt(
     scores: number[],
     interviewers?: InterviewerId[],
 ): string {
-    const activeInterviewers = (interviewers ?? ['frontend', 'backend', 'dba'])
+    const ids = interviewers ?? ['frontend', 'backend', 'dba'];
+    const activeInterviewers = ids
         .map((id) => INTERVIEWER_ROLES[id])
         .filter(Boolean);
+
+    const category = detectCategory(ids);
+    const isLossAdjuster = category === 'lossAdjuster';
+
     return `지금까지의 면접 대화를 종합하여 최종 피드백을 생성하세요.
 
 ## 대화 히스토리
@@ -144,7 +173,7 @@ JSON으로 응답하세요:
   "strengths": ["강점1", "강점2"],
   "weaknesses": ["약점1", "약점2", "약점3", "약점4"],
   "studyGuide": [
-    { "topic": "학습 주제", "reason": "부족한 이유", "resources": ["추천 키워드1", "추천 키워드2"] }
+    { "topic": "학습 주제", "reason": "부족한 이유", "resources": ["추천 ${isLossAdjuster ? '교재/조문' : '키워드'}1", "추천 ${isLossAdjuster ? '교재/조문' : '키워드'}2"] }
   ],
   "overallFeedback": "종합 피드백 (비판적 관점, 3-5문장)",
   "interviewerComments": {
