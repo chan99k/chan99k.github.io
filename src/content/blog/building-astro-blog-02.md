@@ -5,7 +5,7 @@ pubDate: "2026-03-05"
 tags: ["Areas/개발/frontend/Astro", "Areas/개발/lang/TypeScript", "Areas/infra"]
 project: "chan99k-blog"
 contentSource: "ai-assisted"
-draft: false
+draft: true
 ---
 
 시리즈 01에서 Astro 블로그의 기본 골격을 구축했습니다. 이번 글에서는 본격적인 기술 블로그로 확장하기 위해 추가한 기능들을 다룹니다. PARA 방법론 기반의 체계적인 태그 시스템, Obsidian 스타일의 네트워크 그래프 뷰, 검색엔진 최적화, 그리고 Google AdSense 설정까지 실제 코드와 의사결정 과정을 공유합니다.

@@ -4,7 +4,7 @@ description: "메서드 인젝션(Method Injection)은 Spring IoC 컨테이너�
 pubDate: "2026-03-10"
 tags: ["Resources/translations/Spring/IoC Container"]
 contentSource: "ai-assisted"
-draft: false
+draft: true
 ---
 
 # Method Injection

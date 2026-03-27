@@ -4,7 +4,7 @@ description: "Spring의 Java 기반 설정에서 가장 핵심적인 두 가지 
 pubDate: "2026-03-10"
 tags: ["Resources/translations/Spring/IoC Container"]
 contentSource: "ai-assisted"
-draft: false
+draft: true
 ---
 
 # Basic Concepts: @Bean and @Configuration

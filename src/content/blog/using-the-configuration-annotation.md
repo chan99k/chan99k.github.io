@@ -4,7 +4,7 @@ description: "이 문서는 Spring Framework의 `@Configuration` 어노테이션
 pubDate: "2026-03-10"
 tags: ["Resources/translations/Spring/IoC Container"]
 contentSource: "ai-assisted"
-draft: false
+draft: true
 ---
 
 # Using the @Configuration annotation

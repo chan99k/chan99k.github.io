@@ -4,7 +4,7 @@ description: "Spring의 ApplicationContext는 기본적으로 모든 싱글톤 �
 pubDate: "2026-03-10"
 tags: ["Resources/translations/Spring/IoC Container"]
 contentSource: "ai-assisted"
-draft: false
+draft: true
 ---
 
 # Lazy-initialized Beans

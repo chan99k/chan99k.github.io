@@ -4,7 +4,7 @@ description: "Spring IoC 컨테이너에서 빈(Bean) 간의 초기화 순서를
 pubDate: "2026-03-10"
 tags: ["Resources/translations/Spring/IoC Container"]
 contentSource: "ai-assisted"
-draft: false
+draft: true
 ---
 
 # Using depends-on
