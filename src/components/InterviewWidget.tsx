@@ -16,7 +16,7 @@ import ServerKeyBanner from './interview/ServerKeyBanner';
 import InterviewerPicker from './interview/InterviewerPicker';
 import SessionControls from './interview/SessionControls';
 import { INITIAL_SESSION_STATE, SESSION_CONFIG } from '../config/interview-session';
-import type { InterviewerId } from '../config/interviewers';
+import { getInterviewersByCategory, type InterviewerId } from '../config/interviewers';
 
 interface QuestionData extends QuestionEntry {
     data: QuestionEntry['data'] & {
@@ -77,7 +77,7 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
     const [error, setError] = useState<string | null>(null);
 
     // Interviewers
-    const [interviewers, setInterviewers] = useState<InterviewerId[]>(['frontend', 'backend', 'dba']);
+    const [interviewers, setInterviewers] = useState<InterviewerId[]>(() => getInterviewersByCategory('developer'));
 
     // Points
     const [pointBalance, setPointBalance] = useState<number | null>(null);

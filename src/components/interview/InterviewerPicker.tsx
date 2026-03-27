@@ -1,6 +1,6 @@
 // src/components/interview/InterviewerPicker.tsx
 import { useState } from 'react';
-import { INTERVIEWER_ROLES, type InterviewerId } from '../../config/interviewers';
+import { INTERVIEWER_ROLES, getInterviewersByCategory, type InterviewerId, type InterviewCategory } from '../../config/interviewers';
 
 interface Props {
     selected: InterviewerId[];
@@ -8,10 +8,25 @@ interface Props {
     compact?: boolean;
 }
 
-const ALL_IDS: InterviewerId[] = ['frontend', 'backend', 'dba'];
+const CATEGORY_LABELS: Record<InterviewCategory, string> = {
+    developer: '개발자',
+    lossAdjuster: '손해사정사',
+};
+
+const CATEGORIES: InterviewCategory[] = ['developer', 'lossAdjuster'];
 
 export default function InterviewerPicker({ selected, onChange, compact }: Props) {
     const [expanded, setExpanded] = useState(false);
+    const currentCategory = selected.length > 0
+        ? INTERVIEWER_ROLES[selected[0]]?.category ?? 'developer'
+        : 'developer';
+    const [activeCategory, setActiveCategory] = useState<InterviewCategory>(currentCategory);
+
+    const handleCategoryChange = (cat: InterviewCategory) => {
+        setActiveCategory(cat);
+        const ids = getInterviewersByCategory(cat);
+        onChange([...ids]);
+    };
 
     if (compact && !expanded) {
         return (
@@ -23,7 +38,7 @@ export default function InterviewerPicker({ selected, onChange, compact }: Props
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3">
                     <path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
                 </svg>
-                <span>면접관 {selected.length}명</span>
+                <span>{CATEGORY_LABELS[activeCategory]} {selected.length}명</span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-3 w-3">
                     <path fillRule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
                 </svg>
@@ -31,9 +46,29 @@ export default function InterviewerPicker({ selected, onChange, compact }: Props
         );
     }
 
+    const categoryIds = getInterviewersByCategory(activeCategory);
+
     return (
         <div className="flex flex-wrap items-center gap-2">
-            {ALL_IDS.map((id) => {
+            {/* Category tabs */}
+            <div className="flex rounded-full border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                {CATEGORIES.map((cat) => (
+                    <button
+                        key={cat}
+                        onClick={() => handleCategoryChange(cat)}
+                        className={`px-2.5 py-1 text-xs transition-colors ${
+                            activeCategory === cat
+                                ? 'bg-neutral-800 text-white dark:bg-neutral-200 dark:text-neutral-900'
+                                : 'text-neutral-400 hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300'
+                        }`}
+                    >
+                        {CATEGORY_LABELS[cat]}
+                    </button>
+                ))}
+            </div>
+
+            {/* Interviewer pills */}
+            {categoryIds.map((id) => {
                 const role = INTERVIEWER_ROLES[id];
                 const isSelected = selected.includes(id);
                 return (
