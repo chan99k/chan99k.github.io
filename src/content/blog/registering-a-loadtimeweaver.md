@@ -4,7 +4,7 @@ description: "Spring의 `LoadTimeWeaver`는 클래스가 JVM(Java Virtual Machin
 pubDate: "2026-03-10"
 tags: ["Resources/translations/Spring/IoC Container"]
 contentSource: "ai-assisted"
-draft: false
+draft: true
 ---
 
 # Registering a LoadTimeWeaver

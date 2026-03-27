@@ -9,7 +9,7 @@ tags:
   - Areas/개발/디버깅
   - Areas/infra
   - Areas/개발/Docker
-draft: false
+draft: true
 ---
 
 # 디버깅: ArgoCD + EC2 배포 후 전체 인프라 복구까지의 여정

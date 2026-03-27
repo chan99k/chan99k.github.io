@@ -4,7 +4,7 @@ description: "이 문서는 Spring Framework의 클래스패스 스캐닝 기능
 pubDate: "2026-03-10"
 tags: ["Resources/translations/Spring/IoC Container"]
 contentSource: "ai-assisted"
-draft: false
+draft: true
 ---
 
 # Classpath Scanning and Managed Components

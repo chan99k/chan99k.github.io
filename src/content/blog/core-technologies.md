@@ -4,7 +4,7 @@ description: "이 문서는 Spring Framework에 절대적으로 필수적인 모
 pubDate: "2026-03-10"
 tags: ["Resources/translations/Spring/IoC Container"]
 contentSource: "ai-assisted"
-draft: false
+draft: true
 ---
 
 # Core Technologies

@@ -7,7 +7,7 @@ pubDate: 2026-02-24
 tags:
   - Areas/개발/디버깅
   - Areas/개발/Spring
-draft: false
+draft: true
 ---
 
 # 디버깅: Spring AOP Self-Invocation으로 인한 @Transactional 미적용

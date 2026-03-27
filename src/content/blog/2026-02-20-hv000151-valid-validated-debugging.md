@@ -7,7 +7,7 @@ pubDate: 2026-02-20
 tags:
   - Areas/개발/Spring
   - Areas/개발/디버깅
-draft: false
+draft: true
 ---
 
 # 디버깅 HV000151: @Valid와 @Validated가 만나면 생기는 일
