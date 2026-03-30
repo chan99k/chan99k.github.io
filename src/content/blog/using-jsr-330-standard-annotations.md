@@ -2,7 +2,7 @@
 title: "Using JSR-330 Standard Annotations"
 description: "이 문서는 Spring Framework에서 JSR-330 표준 의존성 주입 애노테이션을 사용하는 방법을 설명합니다. Spring은 `jakarta.inject` 패키지의 표준 애노테이션을 지원하며, 이를 Spring의 기본 애노테이션 대안으로 사용할 수 있습니다. 주요 내용으로 `@Inject`와 `@Named` 애노테이션의 사용법, `@Component`의 표준 대안으로서 `@Named`의 활용, 그리고 JSR-330 표준 애노테이션의 제한사항을 다룹니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/core/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
 draft: false
 ---

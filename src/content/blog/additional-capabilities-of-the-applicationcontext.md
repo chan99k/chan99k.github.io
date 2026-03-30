@@ -2,7 +2,7 @@
 title: "Additional Capabilities of the ApplicationContext"
 description: "Spring의 `ApplicationContext`는 기본적인 `BeanFactory`의 기능을 넘어서 엔터프라이즈 애플리케이션 프레임워크에 적합한 다양한 추가 기능을 제공합니다. 주요 기능으로는 국제화를 위한 `MessageSource`, URL 및 파일 접근을 위한 `ResourceLoader`, 이벤트 발행을 위한 `ApplicationEventPublisher`, 그리고 계층적 컨텍스트를 지원하는 `HierarchicalBeanFactory` 인터페이스가 있습니다. 특히 이벤트 처리 메커니즘은 Spring 4.2부터 어노테이션 기반 모델(`@EventListener`)을 지원하며, 비동기 이벤트 처리, 이벤트 순서 제어, 제네릭 이벤트 등 다양한 고급 기능을 제공합니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/core/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
 draft: false
 ---

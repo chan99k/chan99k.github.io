@@ -2,7 +2,7 @@
 title: "Using the @Bean Annotation"
 description: "이 문서는 Spring Framework의 `@Bean` 애노테이션에 대한 공식 레퍼런스로, Java 기반 설정을 사용하여 빈(bean)을 정의하고 관리하는 방법을 다룹니다. `@Bean`은 메서드 레벨 애노테이션으로 XML의 `<bean/>` 요소와 동등한 기능을 제공하며, `@Configuration` 또는 `@Component` 클래스에서 사용할 수 있습니다. 주요 내용으로는 빈 선언 방법, 의존성 주입, 라이프사이클 콜백 처리, 빈 스코프 지정, 이름 커스터마이징 등을 포함합니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/core/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
 draft: false
 ---

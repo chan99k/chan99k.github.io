@@ -2,7 +2,7 @@
 title: "Dependencies and Configuration in Detail"
 description: "이 문서는 Spring Framework의 IoC 컨테이너에서 빈(bean)의 속성과 생성자 인자를 구성하는 다양한 XML 설정 방법을 다룹니다. 기본 값(primitive, String 등)부터 복잡한 객체 참조, 컬렉션, 중첩된 빈까지 상세히 설명합니다. XML 기반 설정의 각 요소(`<property/>`, `<constructor-arg/>`, `<ref/>`, `<idref/>` 등)의 역할과 활용법을 예제와 함께 제시하며, p-namespace와 c-namespace를 활용한 간결한 설정 방법도 소개합니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/core/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
 draft: false
 ---

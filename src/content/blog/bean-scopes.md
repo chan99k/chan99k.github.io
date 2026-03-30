@@ -2,7 +2,7 @@
 title: "Bean Scopes"
 description: "Spring Framework는 빈(Bean)의 생명주기와 인스턴스 생성 방식을 제어하는 6가지 스코프(Scope)를 제공합니다. singleton(기본값)과 prototype은 모든 컨테이너에서 사용 가능하며, request, session, application, websocket은 웹 기반 ApplicationContext에서만 사용할 수 있습니다. singleton은 컨테이너당 하나의 인스턴스를 유지하고, prototype은 요청할 때마다 새 인스턴스를 생성합니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/core/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
 draft: false
 ---

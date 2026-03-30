@@ -8,7 +8,7 @@ pubDate: 2026-02-24
 tags:
   - Areas/software/디버깅
   - Areas/infra
-  - Areas/software/Docker
+  - Areas/software/docker
 draft: true
 ---
 

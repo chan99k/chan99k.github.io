@@ -2,7 +2,7 @@
 title: "Annotation-based Container Configuration"
 description: "Spring Framework는 애너테이션 기반 구성(annotation-based configuration)에 대한 포괄적인 지원을 제공하며, 이를 통해 XML 구성 대신 클래스, 메서드, 필드에 직접 애너테이션을 사용하여 메타데이터를 정의할 수 있습니다. `BeanPostProcessor`와 애너테이션을 결합하여 Spring IoC 컨테이너가 특정 애너테이션을 인식하도록 합니다. 이 문서는 `@Autowired`, `@PostConstruct`, `@PreDestroy`와 같은 JSR-250 애너테이션, 그리고 `@Inject`, `@Named`와 같은 JSR-330 애너테이션에 대한 개요를 제공합니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/core/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
 draft: false
 ---

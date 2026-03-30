@@ -2,7 +2,7 @@
 title: "Basic Concepts: @Bean and @Configuration"
 description: "Spring의 Java 기반 설정에서 가장 핵심적인 두 가지 애너테이션은 `@Bean`과 `@Configuration`이다. `@Bean` 애너테이션은 메서드가 Spring IoC 컨테이너가 관리할 새로운 객체를 인스턴스화하고, 구성하며, 초기화한다는 것을 나타낸다. 이는 XML 설정의 `<bean/>` 요소와 동일한 역할을 수행한다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/core/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
 draft: false
 ---

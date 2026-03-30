@@ -2,7 +2,7 @@
 title: "Method Injection"
 description: "메서드 인젝션(Method Injection)은 Spring IoC 컨테이너의 고급 기능으로, 서로 다른 라이프사이클을 가진 빈들 간의 의존성 문제를 해결합니다. 특히 싱글톤 빈이 프로토타입 빈을 사용해야 할 때, 매번 새로운 인스턴스를 받을 수 있도록 해줍니다. Spring은 CGLIB 라이브러리를 사용하여 바이트코드를 동적으로 생성하고 서브클래스를 만들어 메서드를 오버라이드하는 방식으로 이를 구현합니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/core/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
 draft: false
 ---

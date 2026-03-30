@@ -2,7 +2,7 @@
 title: "Using depends-on"
 description: "Spring IoC 컨테이너에서 빈(Bean) 간의 초기화 순서를 명시적으로 제어하는 `depends-on` 속성에 대한 문서입니다. 일반적으로 빈 간의 의존성은 `<ref/>` 요소나 autowiring을 통해 관리되지만, 데이터베이스 드라이버 등록과 같이 정적 초기화가 필요한 경우에는 간접적인 의존성 관계가 존재할 수 있습니다. `depends-on` 속성 또는 `@DependsOn` 어노테이션을 사용하면 특정 빈이 초기화되기 전에 다른 빈들이 먼저 초기화되도록 강제할 수 있으며, 싱글톤 빈의 경우 소멸 순서도 제어할 수 있습니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/core/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
 draft: false
 ---
