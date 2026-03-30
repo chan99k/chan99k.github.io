@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import { buildTagTree, tagToSlug } from '../utils/tags';
 import type { TagTreeNode } from '../utils/tags';
+import SidebarTagNode from './SidebarTagNode.astro';
 
 interface Props {
 	currentTag?: string;
@@ -12,14 +13,23 @@ const { currentTag } = Astro.props;
 const posts = await getCollection('blog', ({ data }) => data.draft !== true);
 const tree = buildTagTree(posts);
 
-function renderTree(node: TagTreeNode, basePath: string = ''): { name: string; fullPath: string; count: number; children: ReturnType<typeof renderTree> }[] {
+const MAX_SIDEBAR_DEPTH = 4;
+const MIN_POSTS_FOR_TIER4 = 3;
+
+function renderTree(node: TagTreeNode, basePath: string = '', depth: number = 0): { name: string; fullPath: string; count: number; children: ReturnType<typeof renderTree> }[] {
+	if (depth >= MAX_SIDEBAR_DEPTH) return [];
+
 	return Object.entries(node.children)
 		.sort(([a], [b]) => a.localeCompare(b))
+		.filter(([_, child]) => {
+			if (depth === 3 && child.count < MIN_POSTS_FOR_TIER4) return false;
+			return true;
+		})
 		.map(([name, child]) => ({
 			name,
 			fullPath: basePath ? `${basePath}/${name}` : name,
 			count: child.count,
-			children: renderTree(child, basePath ? `${basePath}/${name}` : name),
+			children: renderTree(child, basePath ? `${basePath}/${name}` : name, depth + 1),
 		}));
 }
 
@@ -41,40 +51,7 @@ const treeData = renderTree(tree);
 			>
 				전체 글
 			</a>
-			{treeData.map((item) => (
-				<Fragment>
-					<a
-						href={`/tags/${tagToSlug(item.fullPath)}/`}
-						class:list={[
-							'no-underline block py-1.5 text-sm transition-colors',
-							currentTag === item.fullPath
-								? 'text-accent font-semibold'
-								: 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white',
-						]}
-					>
-						{item.name}
-						<span class="text-xs text-gray-300 dark:text-gray-600 ml-1">{item.count}</span>
-					</a>
-					{item.children.length > 0 && (
-						<div class="ml-3 border-l border-gray-100 dark:border-gray-800 pl-3">
-							{item.children.map((child) => (
-								<a
-									href={`/tags/${tagToSlug(child.fullPath)}/`}
-									class:list={[
-										'no-underline block py-1 text-sm transition-colors',
-										currentTag === child.fullPath
-											? 'text-accent font-semibold'
-											: 'text-gray-400 dark:text-gray-500 hover:text-black dark:hover:text-white',
-									]}
-								>
-									{child.name}
-									<span class="text-xs text-gray-300 dark:text-gray-600 ml-1">{child.count}</span>
-								</a>
-							))}
-						</div>
-					)}
-				</Fragment>
-			))}
+			<SidebarTagNode items={treeData} currentTag={currentTag} />
 		</nav>
 	</div>
 </aside>

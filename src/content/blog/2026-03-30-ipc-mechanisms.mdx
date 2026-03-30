@@ -1,0 +1,430 @@
+---
+title: "RPC는 아는데 IPC는 뭐지?"
+description: "파이프, 소켓, 공유 메모리, 메시지 큐, 시그널 -- 다섯 가지 IPC 메커니즘을 데이터 전달 방식, 메모리 복사 비용, 동기화 모델 관점에서 비교합니다."
+pubDate: 2026-03-30
+tags: ["Areas/software/os"]
+contentSource: "ai-assisted"
+draft: false
+---
+
+import ProcessIsolation from '../../components/diagrams/ProcessIsolation.astro';
+import SocketFlow from '../../components/diagrams/SocketFlow.astro';
+import IpcComparison from '../../components/diagrams/IpcComparison.astro';
+
+`RPC`를 공부하다 보면, 결국 "데이터를 전달하는 방식에 따라 어떤 비용과 제약이 발생하는가"라는 문제로 귀결됩니다. 이 문제는 네트워크를 통한 원격 호출뿐 아니라, 동일한 머신 내 프로세스 간 통신에서도 동일하게 적용됩니다.
+
+이 지점에서 "RPC가 원격 함수 호출을 추상화한 것이라면, 그 아래에서 실제로 데이터를 전달하는 메커니즘은 무엇일까?"라는 질문으로 이어졌고, 그 과정에서 `IPC(Inter-Process Communication)`라는 개념을 명확히 인지하게 되었습니다. 익숙하게 사용해왔던 개념이었지만, 이름을 붙이고 구조적으로 이해한 것은 이번이 처음이었습니다.
+
+이번 포스트에서는 `파이프`, `소켓`, `공유 메모리`, `메시지 큐`, `시그널` 이라는 다섯 가지 IPC 메커니즘 각각을 데이터 전달 방식, 메모리 복사 비용, 그리고 동기화 모델이라는 관점에서 비교합니다. 나아가 `cat | grep`과 같은 `Unix 파이프라인`부터 `Kafka`와 같은 `분산 메시징 시스템`까지, 서로 다른 레벨의 기술들이 동일한 문제 —`데이터를 어떻게 전달하고 소비할 것인가`— 를 각기 다른 제약 하에서 어떻게 해결하는지 하나의 흐름으로 연결해보려 합니다.
+
+```
+┌─────────────────────────────────────────────┐
+│ RPC (Remote Procedure Call)                │
+│ = IPC 위에 "원격 함수 호출" 추상화를 얹은  │
+│   상위 계층                                │
+│ = 예: gRPC → 내부적으로 TCP 소켓(IPC) 사용 │
+└──────────────────┬──────────────────────────┘
+                   │ 내부적으로 사용
+                   ▼
+┌─────────────────────────────────────────────┐
+│ IPC (Inter-Process Communication)          │
+│ = 프로세스 간 데이터를 주고받는 전송 메커니즘│
+│ = 파이프, 소켓, 공유 메모리, 메시지 큐, ... │
+└─────────────────────────────────────────────┘
+```
+
+
+`RPC`는 `IPC`의 대안이 아니라 **고레벨 추상화 계층**입니다. gRPC가 내부적으로 TCP 소켓(IPC)을 사용하는 것처럼, 모든 RPC는 어떤 형태의 IPC 위에서 동작합니다. RPC가 추가하는 것은 직렬화, 메서드 디스패치, 스텁 생성 같은 "함수 호출 시맨틱"입니다.
+
+---
+
+## 1. RPC는 아는데 IPC는 뭐지?
+
+gRPC, REST API와 같은 서비스 간 통신을 다루다 보면, 결국 "데이터를 다른 프로세스로 전달하는 비용은 어디에서 발생하는가?"라는 질문으로 이어지게 됩니다. 이 과정에서 `RPC(Remote Procedure Call)`라는 개념을 접하게 됩니다. 이는 원격에 있는 프로세스의 기능을 로컬 함수처럼 호출할 수 있도록 만든 추상화입니다. 그런데 여기서 한 가지 의문이 생깁니다.
+
+"RPC가 함수 호출을 추상화한 계층이라면, 그 아래에서 실제로 데이터를 실어 나르는 건 무엇이지?"
+
+그게 바로 `IPC(Inter-Process Communication)`입니다. 프로세스 간 데이터를 주고받는 전송 메커니즘으로, 같은 머신 안의 파이프부터 네트워크를 넘는 소켓까지 범위가 다양합니다.
+
+### 그런데 왜 프로세스끼리 "직접" 대화를 못 할까?
+
+각 프로세스는 독립된 가상 메모리 공간을 가집니다. 프로세스 A가 사용하는 메모리 주소 0x1000과 프로세스 B의 0x1000은 물리적으로 전혀 다른 곳을 가리킵니다.
+
+<ProcessIsolation />
+
+이 격리 덕분에 프로세스 하나가 죽어도 다른 프로세스에 영향을 주지 않으며, 보안과 안정성이 보장됩니다. 하지만 동시에, 서로 다른 주소 공간을 사용하는 프로세스 간에는 메모리를 직접 공유할 수 없기 때문에 대부분의 IPC는 OS(커널)를 경유합니다. 이 과정에서 시스템 콜과 데이터 복사 비용이 발생하며, 블로킹 시 컨텍스트 스위치가 추가될 수 있습니다. 다만 공유 메모리처럼 초기 설정 후에는 커널 개입 없이 직접 접근하는 방식도 있습니다.
+
+이 비용과 제약이 각 IPC 메커니즘의 설계를 결정짓는 핵심 요소가 됩니다.
+
+> 예를 들어 `Java Agent`는 JVM 위에서 실행 중인 애플리케이션의 바이트코드를 동적으로 조작할 수 있는 도구인데, JVM 내부에서 동작하며 동일한 프로세스와 메모리 공간을 공유합니다[^1]. 만약 별도의 프로세스로 동작했다면 IPC를 통해 데이터를 주고받아야 했고, 이로 인해 추가적인 복잡성과 비용이 발생했을 것입니다. 즉, 동일한 프로세스 내에서 동작하도록 설계함으로써 IPC 비용 자체를 회피한 사례라고 볼 수 있습니다.
+
+[^1]: Oracle Java SE Docs: [Instrumentation](https://docs.oracle.com/en/java/javase/21/docs/api/java.instrument/java/lang/instrument/Instrumentation.html) — *"Provides services that allow Java programming language agents to instrument programs running on the JVM."*
+
+---
+
+## 2. IPC 메커니즘 학습 노트
+
+### 2.1 파이프 (Pipe)
+
+가장 익숙한 IPC입니다. 우리는 터미널에서 `|` 기호를 쓸 때마다 파이프를 사용하고 있습니다.
+
+```bash
+# 세 개의 프로세스가 파이프로 연결됩니다
+cat access.log | grep "500" | wc -l
+#  cat ──pipe──> grep ──pipe──> wc
+```
+
+이 명령을 실행하면 쉘은 세 개의 프로세스를 생성하고, 각 프로세스의 stdout과 stdin을 파이프로 연결합니다. 이 과정에서 파일 디스크립터 리다이렉션을 통해 앞선 프로세스의 출력이 다음 프로세스의 입력으로 전달됩니다. 매일 쓰고 있었지만, 이게 IPC였다는 걸 의식하지 못했을 뿐입니다.
+
+**Anonymous Pipe vs Named Pipe (FIFO)**
+
+| 구분  | Anonymous Pipe                              | Named Pipe (FIFO)        |
+| --- | ------------------------------------------- | ------------------------ |
+| 생성  | `pipe()` 시스템 콜                              | `mkfifo` 명령 / `mkfifo()` |
+| 관계  | 파일 디스크립터를 전달받은 프로세스 간 <br />(주로 fork로 생성된 관계) | 관계 없는 프로세스 간             |
+| 수명  | 모든 관련 파일 디스크립터가 닫히면 소멸                      | 파일시스템에 존재                |
+| 방향  | 기본적으로 단방향                                   | 단방향                      |
+
+```bash
+# Named Pipe 예시
+mkfifo /tmp/my_pipe
+echo "hello" > /tmp/my_pipe &    # 프로세스 A: 쓰기
+cat /tmp/my_pipe                 # 프로세스 B: 읽기 → "hello"
+
+# FIFO는 읽는 쪽과 쓰는 쪽이 모두 준비되지 않으면 블로킹됩니다.
+```
+
+파이프의 핵심은 **스트림 기반으로 데이터를 순차적으로 전달한다는 점**입니다. 데이터는 커널 버퍼를 통해 흘러가며, 읽는 쪽은 이를 순서대로 소비합니다. 이 과정에서 **별도의 메시지 경계는 존재하지 않습니다**. [리눅스 공식 매뉴얼](https://man7.org/linux/man-pages/man7/pipe.7.html) 의 표현을 빌리면:
+
+> _"The communication channel provided by a pipe is a byte stream: there is no concept of message boundaries."_
+
+이러한 특성 때문에 파이프는 `cat | grep | wc`와 같이 **여러 프로세스를 하나의 데이터 처리 파이프라인으로 연결하는 데에 매우 적합**합니다. 각 프로세스는 이전 단계의 출력만 신경 쓰면 되고, 전체 흐름은 쉘이 설정한 파이프와 OS의 파일 디스크립터 메커니즘을 통해 자동으로 연결됩니다.
+
+다만, 일반적인 경우 데이터는 커널 버퍼를 거치며 복사가 발생하기 때문에 공유 메모리에 비해 오버헤드가 존재하며, 복잡한 양방향 통신이나 구조화된 메시지를 다루기에는 한계가 있습니다.
+
+파이프는 쉘 파이프라인(`cat | grep | wc`), 프로그래밍 언어의 서브프로세스 통신(Java의 `ProcessBuilder`, Kotlin의 `Process`), CI/CD 파이프라인에서 빌드 단계 간 출력 전달 등에서 사용됩니다.
+
+---
+
+### 2.2 소켓 (Socket)
+
+소켓은 네트워크 프로그래밍과 IPC 모두에서 가장 널리 사용되는 통신 방식입니다. 같은 머신 내 통신(`Unix Domain Socket`)과 네트워크 통신(`TCP Socket`) 모두 소켓입니다. 파이프와 달리 양방향 통신이 가능하고, 네트워크까지 확장할 수 있어서 실질적으로 가장 많이 쓰이는 IPC입니다.
+
+#### 소켓이란 무엇인가
+
+소켓은 "통신의 끝점(`endpoint`)"입니다. [리눅스 공식 매뉴얼](https://man7.org/linux/man-pages/man2/socket.2.html) 에서도 *"creates an endpoint for communication and returns a file descriptor"* 이라고 기술하고 있습니다.
+
+전화기에 비유하면 이해가 쉽습니다. *(이 비유는 TCP 소켓 기준입니다)* 전화를 걸려면 양쪽 모두 전화기(소켓)가 필요하고, 한쪽은 번호를 등록하고 기다리고(서버), 한쪽은 번호를 눌러서 겁니다(클라이언트).
+
+OS 레벨에서 소켓도 결국 파일 디스크립터(`File Descriptor`)로 관리됩니다. Unix의 *"Everything is a file"* 철학 덕분에, 소켓을 `read()`/`write()`로 다룰 수 있고, 뒤에서 살펴볼 Unix Domain Socket이 파일 경로를 주소로 쓰는 것도 이 설계의 자연스러운 결과입니다.
+
+<SocketFlow />
+
+이 `socket() -> bind() -> listen() -> accept()` 흐름은 TCP 서버 소켓 프로그래밍의 기본 패턴입니다. 클라이언트는 이보다 단순하게 `socket() -> connect() -> read()/write()` 순서를 따릅니다.
+
+C, Java, Kotlin, Go -- 어떤 언어로 TCP 소켓 프로그래밍을 해도 이 순서를 따릅니다. HTTP 서버, 데이터베이스 드라이버, 메시지 브로커 -- 네트워크를 쓰는 대부분의 프로그램이 내부적으로 이 흐름을 구현하고 있습니다.
+
+참고로 이 흐름은 연결 지향(`Connection-oriented`) 소켓 기준입니다. UDP 같은 비연결형 소켓은 `listen()`/`accept()` 없이 바로 `sendto()`/`recvfrom()`을 사용합니다.
+
+#### Unix Domain Socket vs TCP Socket
+
+소켓에는 크게 두 종류가 있습니다.
+
+| 구분     | Unix Domain Socket                                                                           | TCP Socket                 |
+| ------ | -------------------------------------------------------------------------------------------- | -------------------------- |
+| 주소     | 파일 경로 (`/var/run/docker.sock`)                                                               | IP:Port (`127.0.0.1:8080`) |
+| 범위     | 같은 머신만                                                                                       | 네트워크 가능                    |
+| 성능     | 빠름 <br />(소규모 메시지 기준, 레이턴시 30~50% 낮음. <br /> TCP/IP 스택을 거치지 않고, <br /> 체크섬·시퀀스 번호·ACK 등의 오버헤드가 없음) | 상대적으로 느림                   |
+| 접근 제어  | 파일 권한 (`chmod`)                                                                              | 방화벽, 인증                    |
+| 데이터 보장 | 커널 내 신뢰성 보장 (손실 없음)                                                                          | TCP 프로토콜에 의한 신뢰성 보장        |
+| 용도     | 로컬 서비스 간 통신                                                                                  | 원격 통신                      |
+
+핵심 차이는 `주소 체계`입니다. `TCP Socket`은 IP와 포트 번호로 상대를 찾지만, `Unix Domain Socket`은 파일 경로로 상대를 찾습니다. 같은 머신 안에서 통신할 때 TCP/IP 스택을 거칠 필요가 없으므로 더 빠릅니다.
+
+```
+TCP Socket (같은 머신이라도)
+  App A -> TCP/IP Stack -> Loopback -> TCP/IP Stack -> App B
+         (헤더 생성)    (127.0.0.1)  (헤더 파싱)
+
+Unix Domain Socket
+  App A -> Kernel (메모리 복사) -> App B
+         (TCP/IP 스택 생략)
+```
+
+
+#### Docker에서 소켓이 동작하는 방식
+
+Docker가 대표적인 `Unix Domain Socket` 활용 사례입니다. `docker ps` 명령을 치면 무슨 일이 벌어지는지 따라가 봅시다.
+
+```
++------------------+                    +-------------------+
+|  docker ps       |   Unix Domain      |  Docker Daemon    |
+|  (CLI 프로세스)   | -- Socket -->     |  (dockerd 프로세스) |
+|                  |   /var/run/        |                   |
+|                  |   docker.sock      |  컨테이너 목록 조회 |
++------------------+                    +-------------------+
+```
+
+1. Docker CLI(`docker`)는 독립된 프로세스입니다
+2. Docker 데몬(`dockerd`)도 별도의 프로세스입니다
+3. 두 프로세스는 `/var/run/docker.sock`이라는 `Unix Domain Socket`으로 통신합니다[^2]
+4. CLI가 소켓에 HTTP 요청을 보내면, 데몬이 응답을 돌려줍니다
+
+[^2]: Docker Desktop for Mac/Linux에서는 `$HOME/.docker/desktop/docker.sock` 등 다른 경로를 사용할 수도 있습니다.
+
+```bash
+# Docker 소켓을 직접 확인
+ls -la /var/run/docker.sock
+# srw-rw---- 1 root docker ... /var/run/docker.sock
+# 's'로 시작 = 소켓 파일
+# 'rw-rw----' = docker 그룹에 속하지 않은 사용자는 접근 불가
+```
+
+```bash
+# 소켓에 직접 HTTP 요청을 보내면 Docker API를 호출할 수 있습니다
+curl --unix-socket /var/run/docker.sock http://localhost/containers/json # -> docker ps와 동일한 결과가 JSON으로 나옵니다
+```
+
+`docker ps` = "`Unix Domain Socket`으로 Docker 데몬에 HTTP GET 요청을 보내서 컨테이너 목록을 받아온다." 이렇게 풀어쓸 수 있다는 것이 IPC를 이해한 뒤 달라지는 시각입니다. 같은 머신 내에서 통신하기 때문에 TCP를 사용할 필요가 없고, 더 낮은 오버헤드와 파일 권한 기반 접근 제어를 활용하기 위해 Unix Domain Socket을 사용합니다.
+
+#### 소켓 API의 추상화 — 주소만 바꾸면 네트워크가 됩니다
+
+같은 머신 안에서는 `Unix Domain Socket`, 네트워크를 넘으면 `TCP Socket`. **소켓 API는 동일하고, 주소 체계만 바뀝니다**. 이것이 소켓의 강력한 점입니다.
+
+>**참고: UDS는 Unix 전용이 아닙니다**
+>
+> `UDS(Unix Domain Socket)`는 이름에 "Unix"이 들어가지만, 별도의 프로토콜이 아니라 **소켓의 일종**입니다. 주소 체계로 `AF_UNIX`를 사용하는 소켓일 뿐, `socket()`, `bind()`, `connect()` 같은 표준 소켓 API를 그대로 사용합니다.
+>
+> 그래서 [Windows 10 Build 17063(2017년)부터도 Winsock에 `AF_UNIX`를 추가하는 것만으로 UDS를 네이티브 지원](https://devblogs.microsoft.com/commandline/af_unix-comes-to-windows/)할 수 있었습니다. `sockaddr_un` 구조체의 이름과 시맨틱을 Linux와 동일하게 유지하여 크로스 플랫폼 개발이 용이하도록 설계되었습니다. 다만 `socketpair`, ancillary data 등 [일부 기능은 아직 미지원](https://learn.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-socket) 한다고 합니다.
+>
+> 그렇다면 Windows는 왜 전통적으로 `UDS` 대신 `Named Pipe`(`\\.\pipe\`)를 로컬 IPC의 주력으로 사용해왔을까요? 이는 OS 설계 철학의 차이에서 비롯됩니다.
+> Unix가 *"Everything is a file"* — 모든 자원을 파일 디스크립터로 추상화하는 철학을 따르는 반면, [Windows NT는 *"Everything is an object"* — 모든 자원을 Object Manager가 관리하는 커널 객체로 추상화](https://blogsystem5.substack.com/p/windows-nt-vs-unix-design)합니다.
+>
+> Named Pipe는 이 객체 모델 위에 설계된 IPC입니다. 커널 객체이기 때문에 `Windows ACL`(접근 제어 목록)이 자연스럽게 적용되고, `\\ServerName\pipe\PipeName` 형태로 네트워크 너머의 파이프에도 접근할 수 있습니다. 파일 경로 기반인 UDS와는 출발점이 다른 셈입니다.
+
+```
+같은 머신                        네트워크 너머
+Unix Domain Socket               TCP Socket
+/var/run/docker.sock             192.168.1.10:5432
+       |                                |
+       +---- 동일한 소켓 API ----+
+              socket()
+              bind()
+              listen()
+              accept()
+              read() / write()
+              close()
+```
+
+우리가 매일 쓰는 HTTP도 결국 `TCP Socket` 위에서 동작합니다. Spring Boot의 `@RestController`, Express의 `app.get()` -- 이 코드들이 내부적으로 소켓을 열고, bind하고, listen하고, accept하고 있습니다. 프레임워크가 감춰줄 뿐입니다.
+
+```
+개발자가 작성하는 코드          프레임워크 내부            OS 레벨
+@GetMapping("/users")   ->   Tomcat NIO Connector   ->   socket()
+                                                          bind(:8080)
+                                                          listen()
+                                                          accept()
+```
+
+
+결국 개발자에게 소켓은 "데이터를 보내는 구멍"이라는 동일한 인터페이스를 제공합니다. 그 구멍 뒤에 커널 메모리가 있는지, 지구 반대편의 서버가 있는지는 OS가 감추어 줄 뿐입니다. 이것이 소켓 API가 수십 년간 표준으로 군림해 온 이유입니다.
+
+
+---
+
+### 2.3 공유 메모리 (Shared Memory)
+
+데이터 복사 오버헤드가 없는 유일한 IPC입니다. 다른 IPC 메커니즘은 커널을 경유하면서 데이터를 복사하지만, 공유 메모리는 두 프로세스가 동일한 물리 메모리 영역을 매핑하여 직접 읽고 씁니다.
+
+```
+Process A                    Process B
++------------------+         +------------------+
+| Virtual Memory   |         | Virtual Memory   |
+|                  |         |                  |
+| 0xA000 ----------+----+    | 0xB000 ----------+
++------------------+    |    +------------------+
+                        v
+                 +------+-------+
+                 | Shared Region |
+                 | (Physical)    |
+                 +--------------+
+```
+
+초기 설정(`shmget`, `mmap` 등)을 제외하면, 이후에는 시스템 콜 없이 사용자 공간에서 직접 메모리에 접근할 수 있기 때문에 매우 빠릅니다. 이 과정에서 데이터는 커널 버퍼를 거치지 않으며, 별도의 복사 없이 전달됩니다(`Zero-copy`).
+
+다른 IPC 메커니즘과 비교하면 차이가 명확합니다:
+
+```
+파이프 / 소켓
+  Process A -> write() -> [Kernel Buffer] -> read() -> Process B
+                 (복사 1)                    (복사 2)
+
+공유 메모리
+  Process A -> [Shared Region] <- Process B
+               (복사 0, 직접 접근)
+```
+
+단, 커널은 `mmap` 호출 시 물리 페이지를 즉시 할당하지 않습니다. 첫 접근 시 page fault를 통해 물리 페이지가 매핑되며(`demand paging`), 이후부터 시스템 콜 없이 접근 가능합니다.
+
+하지만 그만큼 책임도 커집니다. 두 프로세스가 동시에 같은 메모리 영역에 접근하면 경쟁 조건(`race condition`)이 발생하고 데이터가 깨질 수 있습니다. 따라서 Semaphore, Mutex, 또는 Atomic 연산과 같은 동기화 메커니즘을 반드시 함께 사용해야 합니다.
+
+공유 메모리는 데이터 복사 비용이 매우 큰 경우, 예를 들어 대용량 데이터를 자주 교환해야 하는 상황에서 특히 유리합니다. 반면, 동기화가 복잡하고 버그 발생 가능성이 높기 때문에 일반적인 애플리케이션보다는 데이터베이스나 고성능 시스템과 같이 성능이 절대적인 영역에서 주로 사용됩니다.
+
+공유 메모리는 데이터베이스 엔진 내부(PostgreSQL의 `shared_buffers`), 브라우저의 `SharedArrayBuffer`[^3], 고성능 메시징(LMAX Disruptor의 ring buffer), 브라우저 아키텍처(Chromium의 렌더러-브라우저 간 공유 메모리) 등에서 사용됩니다.
+
+[^3]: `SharedArrayBuffer`는 Spectre 공격 대응으로 cross-origin isolation(`COOP`/`COEP` 헤더)이 필수입니다. 동기화에는 Semaphore가 아닌 `Atomics` API를 사용합니다.
+
+---
+
+> **참고: Shared Memory도 OS 설계 철학의 영향을 받습니다**
+>
+> Unix 계열 시스템에서는 `shm_open()`(파일 디스크립터 반환) + `mmap()` 패턴으로 공유 메모리를 다룹니다. 파일 디스크립터 기반이므로 `read()`/`write()`와 같은 표준 I/O 인터페이스와 자연스럽게 어울리며, 이는 _"Everything is a file"_ 철학의 연장선입니다.
+>
+> 반면 Windows에서는 공유 메모리가 `File Mapping Object`라는 커널 객체로 표현되며, 핸들(`Handle`)을 통해 접근합니다. `CreateFileMapping`에 `INVALID_HANDLE_VALUE`를 넘기면 실제 파일 없이 시스템 페이징 파일을 백업 스토어로 사용하여 순수 공유 메모리를 만들 수 있습니다. 이름에 "File"이 들어가지만 반드시 파일이 필요한 것은 아닙니다. _"Everything is an object"_ 설계 철학을 반영한 것으로, Named Pipe와 마찬가지로 커널 객체 기반의 접근 제어(ACL)가 자연스럽게 적용됩니다.
+>
+> 결국 동일한 공유 메모리 개념이라도, Unix는 파일 디스크립터 기반 추상화로, Windows는 커널 객체 기반 추상화로 접근한다는 차이가 있습니다.
+
+
+
+
+---
+
+### 2.4 메시지 큐 (Message Queue)
+
+프로세스 간에 `구조화된 메시지`를 주고받는 방식입니다. 파이프가 바이트 스트림이라면, 메시지 큐는 경계가 있는 메시지 단위로 통신합니다. [pipe](https://man7.org/linux/man-pages/man7/pipe.7.html) 는 *"there is no concept of message boundaries"* 인데 반면에, [System V MQ](http://blog.man7.org/2009/10/chapter-46-system-v-message-queues.html)는 *"message boundaries are preserved"* 라고 리눅스 공식 매뉴얼에서도 명시하고 있습니다.
+
+```
+Process A                         Process B
+    |                                 |
+    |  -- msg{type:1, data:"hi"} -->  |
+    |                              [Queue]
+    |  -- msg{type:2, data:"bye"} --> |
+    |                                 |
+    |              Process C          |
+    |                 |               |
+    |      <-- read(type:1) --        |  <- 타입별 선택 수신 (System V MQ)
+```
+
+메시지 큐의 핵심은 **비동기 통신**과 **버퍼링**입니다. 보내는 쪽은 받는 쪽이 준비되어 있는지 신경 쓸 필요가 없습니다. 메시지는 큐에 쌓이고, 받는 쪽이 자기 속도로 꺼내갑니다. 파이프나 소켓이 "전화 통화"라면, 메시지 큐는 "음성 메시지함"에 가깝습니다.
+
+OS 레벨의 메시지 큐에는 두 종류가 있습니다:
+
+- **System V MQ**(`msgget`/`msgsnd`/`msgrcv`): 메시지에 정수 타입 필드가 있어 **타입별 선택 수신** 가능
+- **POSIX MQ**(`mq_open`/`mq_send`/`mq_receive`): 타입 필터링 대신 **우선순위 기반 수신** 지원. 더 현대적인 API
+
+#### OS 메시지 큐에서 분산 메시지 시스템으로
+
+OS 레벨 메시지 큐(`POSIX MQ`, `System V MQ`)에서 출발한 "보내는 쪽과 받는 쪽을 분리한다"는 아이디어는 분산 시스템에서도 동일하게 적용됩니다. 다만, 분산 메시지 시스템들은 OS MQ에서 직접 진화한 것이 아니라 각각 독립적인 설계 배경을 가지고 있습니다.
+
+```
+공통 원칙: Producer-Consumer 분리 (Decoupling)
+
+OS 레벨 (같은 머신)         분산 시스템 (네트워크)
+POSIX / System V MQ         RabbitMQ -- 전통적 메시지 브로커 (AMQP)
+                            Apache Kafka -- 분산 커밋 로그 (이벤트 스트리밍)
+                            Redis Streams -- 경량 메시지 스트림
+```
+
+
+OS 메시지 큐는 같은 머신 안에서만 작동하고, `Kafka`/`RabbitMQ`는 네트워크를 넘어 여러 머신의 프로세스를 연결합니다. 또한 분산 시스템 간에도 근본적인 차이가 있습니다.
+
+예를들어, Kafka 공식 문서는 스스로를 *"open-source distributed event streaming platform"* 이라고 [정의](https://kafka.apache.org/)합니다. 전통적인 메시지 큐와는 근본적으로 다른 아키텍처입니다.
+
+|구분|RabbitMQ|Kafka|Redis Streams|
+|---|---|---|---|
+|모델|메시지 브로커 (AMQP)|분산 커밋 로그|경량 스트림|
+|소비 후|메시지 삭제|메시지 보존 (offset 기반)|메시지 보존|
+|용도|작업 분배, 라우팅|이벤트 스트리밍, 로그 수집|경량 이벤트 처리|
+
+하지만 "보내는 쪽과 받는 쪽을 분리한다"는 근본 아이디어는 같습니다.
+
+메시지 큐는 주문 처리 시스템(주문 → 큐 → 결제/배송 서비스가 각자 소비), 로그 수집 파이프라인(애플리케이션 → Kafka → Elasticsearch), 비동기 작업 처리(웹 서버 → RabbitMQ → Worker), CI/CD 파이프라인의 빌드 이벤트 전달 등에서 사용됩니다.
+
+---
+
+### 2.5 시그널 (Signal)
+
+프로세스에 `비동기 알림`을 보내는 가장 단순한 형태의 IPC입니다. 데이터를 전달하는 게 아니라, "이런 일이 일어났다"는 이벤트를 전달합니다.
+
+```bash
+kill -15 <pid>    # SIGTERM: "종료해 주세요" (정상 종료 요청)
+kill -9  <pid>    # SIGKILL: "지금 당장 죽어" (강제 종료, 무시 불가)
+```
+
+`kill` 명령의 이름이 오해를 부르지만, 실제로는 "시그널을 보내는" 명령입니다. [kill(2) man page](https://man7.org/linux/man-pages/man2/kill.2.html)의 정의도 *"send signal to a process"* 입니다.
+
+프로세스가 시그널을 받으면 세 가지 중 하나가 일어납니다: **기본 동작**(종료, 정지 등), **무시**, 또는 **등록된 핸들러 실행**. 이 메커니즘이 SIGTERM과 SIGKILL의 차이를 만듭니다 -- SIGTERM은 핸들러로 잡아서 정리 작업을 할 수 있지만, SIGKILL은 핸들러 등록 자체가 불가능합니다. [리눅스 공식 매뉴얼](https://man7.org/linux/man-pages/man7/signal.7.html) 에서도 *"The signals SIGKILL and SIGSTOP cannot be caught, blocked, or ignored."* 라고 소개하고 있습니다.
+
+```
+SIGTERM (15)  ->  프로세스가 받고 정리 작업 후 종료 (graceful)
+SIGKILL (9)   ->  OS가 강제 종료 (핸들러 등록 불가, 무시 불가)
+SIGINT  (2)   ->  Ctrl+C를 누르면 포그라운드 프로세스 그룹에 전달
+SIGTSTP (20)  ->  Ctrl+Z를 누르면 전달 (핸들러로 잡을 수 있음)
+SIGSTOP       ->  프로그래밍적 강제 정지 (SIGKILL처럼 무시 불가)
+SIGCONT       ->  정지된 프로세스 재개
+```
+
+
+시그널의 한계: 기본적으로 전달할 수 있는 정보가 "시그널 번호" 하나뿐입니다. `sigqueue()`와 실시간 시그널(`SIGRTMIN` ~ `SIGRTMAX`)을 사용하면 정수 값이나 포인터를 함께 보낼 수 있지만, 실질적인 데이터 전송 수단으로는 부적합합니다. 데이터를 실어 보내야 하면 다른 IPC를 써야 합니다.
+
+시그널의 사용 예시를 들어볼까요? `docker stop`은 컨테이너에 SIGTERM을 보내고 10초(기본값) 후 SIGKILL로 강제 종료합니다. Kubernetes의 Pod 종료도 같은 패턴(SIGTERM → graceful shutdown 대기 → SIGKILL)을 따릅니다. Nginx는 `kill -HUP`으로 설정을 리로드하고, Node.js에서는 `process.on('SIGTERM', ...)`으로 종료 핸들러를 등록합니다.
+
+---
+
+## 3. 한눈에 비교
+
+<IpcComparison />
+
+---
+
+## 4. 면접에서 IPC를 만났을 때
+
+CS 면접에서 IPC는 직접 물어보기도 하지만, 다른 질문의 답을 깊게 만드는 재료이기도 합니다.
+
+### "프로세스와 스레드의 차이는?"
+
+거의 모든 면접에서 나오는 질문입니다. 보통 "프로세스는 독립된 메모리, 스레드는 메모리를 공유"라고 답합니다. 여기에 IPC를 연결하면 한 단계 깊어집니다.
+
+> 프로세스는 메모리가 격리되어 있으므로 데이터를 주고받으려면 IPC가 필요합니다. 반면 같은 프로세스의 스레드는 힙과 코드 영역을 공유하되 각자 독립된 스택을 가지므로, 별도의 IPC 없이 직접 데이터를 주고받을 수 있습니다. 대신 동기화(`Mutex`, `Semaphore`) 문제가 생깁니다. 공유 메모리 IPC도 같은 이유로 동기화가 필요합니다.
+
+### "Kafka는 메시지 큐인가?"
+
+엄밀히 말하면 `Kafka`는 "분산 이벤트 스트리밍 플랫폼"입니다. IPC 관점에서 보면 OS 레벨 메시지 큐와 "producer-consumer 분리(decoupling)"라는 핵심 아이디어를 공유하지만, 근본적으로 다른 아키텍처입니다.
+
+> OS의 메시지 큐는 같은 머신 안의 프로세스끼리 구조화된 메시지를 주고받는 IPC입니다. `Kafka`는 "producer-consumer 분리"라는 같은 아이디어 위에 있지만, 분산 커밋 로그(`distributed commit log`)라는 근본적으로 다른 아키텍처를 택했습니다. 전통적 메시지 큐가 소비된 메시지를 삭제하는 반면, `Kafka`는 메시지를 로그에 보존하고 여러 소비자가 각자의 offset으로 반복 읽기할 수 있습니다.
+
+### "Docker 컨테이너는 프로세스인가?"
+
+> Docker 컨테이너는 Linux `namespace`와 `cgroup`으로 격리된 프로세스입니다. 같은 Pod 안의 컨테이너들은 `network namespace`를 공유하므로 `localhost`를 통한 loopback TCP 소켓으로 통신합니다. 네트워크를 넘지 않는다는 점에서 같은 머신 내 IPC의 성격을 갖습니다. 반면 다른 Pod의 컨테이너와는 일반적으로 `Service`와 DNS를 통한 `TCP` 소켓 통신을 합니다.
+
+---
+
+## 정리하며
+
+프로세스 간 통신(`IPC`)은 운영체제의 핵심 메커니즘입니다. 같은 머신 안의 파이프부터 네트워크를 넘는 소켓까지, 프로세스끼리 데이터를 주고받는 다양한 방법을 통칭합니다.
+
+`RPC`(Remote Procedure Call)는 이 IPC 위에 "원격 함수 호출"이라는 추상화를 얹은 것으로, IPC의 대안이 아니라 상위 계층입니다. `gRPC`가 내부적으로 TCP 소켓(IPC)을 사용하는 것처럼, 모든 RPC는 어떤 형태의 IPC 위에서 동작합니다.
+
+파이프, 소켓, 공유 메모리, 메시지 큐, 시그널 -- 각각의 trade-off를 이해하면 `cat | grep`부터 마이크로서비스 아키텍처까지 하나의 맥락으로 연결됩니다.
+
+`IPC`를 공부하고 나면 일상(?)에서 쓰는 도구들이 다르게 보입니다.
+
+- 터미널에서 `|`를 칠 때 -> "파이프 IPC를 쓰고 있구나"
+- `docker ps`를 칠 때 -> "`Unix Domain Socket`으로 데몬과 통신하는구나"
+- `kill -9`를 칠 때 -> "`SIGKILL` 시그널을 보내는구나"
+- `Kafka` 메시지를 consume할 때 -> "producer-consumer 분리라는 메시지 큐의 아이디어가 분산 시스템으로 이어졌구나"
+
+IPC는 외워야 할 면접 지식이 아니라, **이미 매일 쓰고 있는 것에 이름을 붙이는 일**에 가깝습니다.
+
+다음 궁금증은 자연스럽게 이어집니다. 프로세스 간 통신을 알았으니, 그 통신이 블로킹되면 어떤 일이 벌어질까요? -- `Blocking I/O`와 `Non-blocking I/O` 으로 이어집니다.
+
+---
+
+## References
+
+- Silberschatz, *Operating System Concepts* (10th Edition), Chapter 3: Processes
+- Stevens & Rago, *Advanced Programming in the UNIX Environment* (3rd Edition), Chapter 14: Advanced I/O, Chapter 15: Interprocess Communication
+- Linux man pages: [pipe(7)](https://man7.org/linux/man-pages/man7/pipe.7.html), [socket(2)](https://man7.org/linux/man-pages/man2/socket.2.html), [shm_overview(7)](https://man7.org/linux/man-pages/man7/shm_overview.7.html), [mq_overview(7)](https://man7.org/linux/man-pages/man7/mq_overview.7.html), [signal(7)](https://man7.org/linux/man-pages/man7/signal.7.html)
+- [Docker Engine API Documentation](https://docs.docker.com/reference/api/engine/)
+- [Kubernetes Pods Documentation](https://kubernetes.io/docs/concepts/workloads/pods/)
+- [Apache Kafka Introduction](https://kafka.apache.org/intro/)

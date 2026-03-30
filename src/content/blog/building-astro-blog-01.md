@@ -3,7 +3,7 @@ title: "Astro로 기술 블로그 만들기: 실제 구축 과정"
 description: "Netlify Astro 템플릿에서 시작해 계층형 태그, Cmd+K 검색, 다크모드, Git 기반 CMS까지 갖춘 기술 블로그를 만드는 과정을 실제 코드와 함께 공유합니다."
 pubDate: "2026-02-07"
 updatedDate: "2026-03-05"
-tags: ["Areas/개발/frontend/Astro", "Areas/개발/lang/TypeScript", "Areas/infra"]
+tags: ["Areas/software/frontend/astro", "Areas/software/lang/typescript", "Areas/infra"]
 project: "chan99k-blog"
 contentSource: "ai-assisted"
 draft: true

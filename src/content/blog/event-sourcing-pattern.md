@@ -2,9 +2,9 @@
 title: "Event Sourcing Pattern"
 description: "이벤트 소싱 패턴은 객체의 현재 상태만 저장하는 대신, 객체에 수행된 전체 행위 시퀀스를 추가 전용 저장소에 기록하는 접근 방식이다. 복잡한 시스템에서 성능, 확장성, 감사 가능성을 향상시킬 수 있다."
 pubDate: "2026-03-05"
-tags: ["Areas/architecture", "Areas/개발/design-pattern", "Resources/translations/tech-blog"]
+tags: ["Areas/architecture", "Areas/software/design-pattern", "Resources/translations/tech-blog"]
 contentSource: "ai-generated"
-draft: true
+draft: false
 ---
 
 # Event Sourcing Pattern
