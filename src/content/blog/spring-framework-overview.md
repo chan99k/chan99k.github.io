@@ -2,9 +2,9 @@
 title: "Spring Framework Overview"
 description: "Spring Framework는 Java 엔터프라이즈 애플리케이션 개발을 쉽게 만드는 오픈소스 프레임워크입니다. 2003년 초기 J2EE의 복잡성에 대한 응답으로 탄생했으며, 현재는 Java 17+ 기반으로 Groovy와 Kotlin도 지원합니다. 핵심은 설정 모델과 의존성 주입(Dependency Injection) 메커니즘을 포함하는 코어 컨테이너이며, 메시징, 트랜잭션 데이터, 웹(Servlet 기반 Spring MVC 및 리액티브 Spring WebFlux) 등 다양한 애플리케이션 아키텍처에 대한 지원을 제공합니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/Spring/core/IoC Container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Spring Framework Overview

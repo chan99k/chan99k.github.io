@@ -2,7 +2,7 @@
 title: "빌더 패턴: 불변성과 일관성을 갖춘 객체 생성"
 description: "복잡한 객체를 안전하고 유연하게 생성하는 빌더 패턴을 정리한다. 이펙티브 자바 스타일과 GoF 스타일의 차이, 각각의 구조와 사용처를 비교한다."
 pubDate: "2026-03-05"
-tags: ["Areas/개발/design-pattern", "Areas/개발/lang/Java"]
+tags: ["Areas/software/design-pattern", "Areas/software/lang/Java"]
 draft: true
 ---
 

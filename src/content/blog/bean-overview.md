@@ -2,9 +2,9 @@
 title: "Bean Overview"
 description: "이 문서는 Spring Framework의 IoC 컨테이너에서 관리하는 빈(bean)의 정의, 명명, 인스턴스화에 대한 포괄적인 설명을 제공합니다. 빈 정의는 `BeanDefinition` 객체로 표현되며, 클래스 이름, 스코프, 생성자 인자, 프로퍼티, 초기화/소멸 메서드 등의 메타데이터를 포함합니다. 빈의 인스턴스화는 생성자, 정적 팩토리 메서드, 인스턴스 팩토리 메서드를 통해 이루어질 수 있으며, 빈 재정의(bean overriding) 기능은 향후 버전에서 deprecated될 예정입니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/Spring/core/IoC Container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Bean Overview

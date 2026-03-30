@@ -2,9 +2,9 @@
 title: "Core Technologies"
 description: "이 문서는 Spring Framework에 절대적으로 필수적인 모든 핵심 기술들을 다룹니다. 가장 중요한 것은 Spring Framework의 제어 역전(Inversion of Control, IoC) 컨테이너이며, 이어서 Spring의 관점 지향 프로그래밍(Aspect-Oriented Programming, AOP) 기술에 대한 포괄적인 설명이 제공됩니다. Spring Framework는 개념적으로 이해하기 쉬우면서도 Java 엔터프라이즈 프로그래밍의 AOP 요구사항 중 80%의 스위트 스팟을 성공적으로 처리하는 자체 AOP 프레임워크를 가지고 있습니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/Spring/core/IoC Container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Core Technologies

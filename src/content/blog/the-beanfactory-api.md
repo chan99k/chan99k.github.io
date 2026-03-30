@@ -2,9 +2,9 @@
 title: "The BeanFactory API"
 description: "`BeanFactory`는 Spring IoC 기능의 기반이 되는 핵심 API로, Spring의 다른 부분 및 서드파티 프레임워크와의 통합에 주로 사용됩니다. `DefaultListableBeanFactory` 구현체는 상위 레벨 `GenericApplicationContext` 컨테이너 내에서 핵심 델리게이트 역할을 합니다. `BeanFactory`와 관련 인터페이스들(`BeanFactoryAware`, `InitializingBean`, `DisposableBean`)은 어노테이션이나 리플렉션 없이도 매우 효율적인 상호작용을 가능하게 합니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/Spring/core/IoC Container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # The BeanFactory API

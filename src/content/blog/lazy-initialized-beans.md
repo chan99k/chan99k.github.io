@@ -2,9 +2,9 @@
 title: "Lazy-initialized Beans"
 description: "Spring의 ApplicationContext는 기본적으로 모든 싱글톤 빈을 초기화 과정에서 즉시 생성하고 구성한다. 이는 설정 오류를 즉시 발견할 수 있다는 장점이 있지만, 특정 상황에서는 빈의 지연 초기화(lazy initialization)가 필요할 수 있다. 지연 초기화 빈은 시작 시점이 아닌 처음 요청될 때 생성되며, `@Lazy` 애노테이션 또는 XML의 `lazy-init` 속성을 통해 설정할 수 있다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/Spring/core/IoC Container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Lazy-initialized Beans

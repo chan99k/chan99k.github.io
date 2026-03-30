@@ -2,9 +2,9 @@
 title: "Instantiating the Spring Container by Using AnnotationConfigApplicationContext"
 description: "이 문서는 Spring 3.0에서 도입된 `AnnotationConfigApplicationContext`를 사용하여 Spring 컨테이너를 인스턴스화하는 다양한 방법을 설명합니다. `AnnotationConfigApplicationContext`는 `@Configuration` 클래스뿐만 아니라 일반 `@Component` 클래스 및 JSR-330 메타데이터로 어노테이션된 클래스도 입력으로 받을 수 있는 유연한 `ApplicationContext` 구현체입니다. 문서는 네 가지 주요 사용 패턴을 다룹니다: (1) 생성자를 통한 단순 구성, (2) `register(Class<?>...)` 메서드를 사용한 프로그래밍 방식 빌드, (3) `scan(String...)` 메서드를 통한 컴포넌트 스캐닝 활성..."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/Spring/core/IoC Container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Instantiating the Spring Container by Using AnnotationConfigApplicationContext

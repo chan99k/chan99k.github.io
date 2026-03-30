@@ -2,9 +2,9 @@
 title: "Using the @Configuration annotation"
 description: "이 문서는 Spring Framework의 `@Configuration` 어노테이션을 사용하여 Java 기반 컨테이너 설정을 구성하는 방법을 설명합니다. `@Configuration`은 클래스가 Bean 정의의 소스임을 나타내는 클래스 레벨 어노테이션으로, `@Bean` 메서드를 통해 Bean을 선언하고 Bean 간 의존성을 정의할 수 있습니다. 문서는 세 가지 핵심 주제를 다룹니다: (1) `@Bean` 메서드 호출을 통한 Bean 간 의존성 주입, (2) 싱글톤과 프로토타입 스코프 Bean 간 의존성을 처리하는 Lookup Method Injection 패턴, (3) CGLIB 서브클래싱을 통해 `@Configuration` 클래스가 내부적으로 작동하는 방식. 특히 Spring은 `@Configur..."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/Spring/core/IoC Container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Using the @Configuration annotation

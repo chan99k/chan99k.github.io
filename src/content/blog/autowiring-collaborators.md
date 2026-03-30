@@ -2,9 +2,9 @@
 title: "Autowiring Collaborators"
 description: "Spring 컨테이너는 협력하는 빈(Bean) 간의 관계를 자동으로 와이어링(Autowiring)할 수 있다. 자동 와이어링은 ApplicationContext의 내용을 검사하여 협력자(다른 빈)를 자동으로 해결하므로, 프로퍼티나 생성자 인자를 명시할 필요를 크게 줄이고 객체가 진화함에 따라 설정을 자동으로 업데이트할 수 있다. 자동 와이어링에는 `no`, `byName`, `byType`, `constructor` 네 가지 모드가 있으며, 각각 다른 전략으로 의존성을 해결한다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/Spring/core/IoC Container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Autowiring Collaborators

@@ -2,9 +2,9 @@
 title: "Circuit Breaker Pattern"
 description: "서킷 브레이커 패턴은 원격 서비스나 리소스에 연결할 때 복구에 다양한 시간이 걸리는 장애를 처리하는 안정성 패턴이다. 장애를 감지한 후 결함이 있는 서비스에 대한 접근을 일시적으로 차단함으로써, 반복적인 실패 시도를 방지하고 시스템이 효과적으로 복구될 수 있도록 한다."
 pubDate: "2026-03-05"
-tags: ["Areas/architecture", "Areas/개발/design-pattern", "Resources/translations/tech-blog"]
+tags: ["Areas/architecture", "Areas/software/design-pattern", "Resources/translations/tech-blog"]
 contentSource: "ai-generated"
-draft: true
+draft: false
 ---
 
 # Circuit Breaker Pattern

@@ -2,9 +2,9 @@
 title: "Bean Definition Inheritance"
 description: "Spring의 빈 정의 상속(Bean Definition Inheritance)은 부모 빈 정의로부터 설정 정보를 상속받아 재사용할 수 있는 기능입니다. 자식 빈 정의는 부모로부터 생성자 인자(constructor arguments), 속성 값(property values), 초기화 메서드(initialization method) 등의 설정 데이터를 상속받으며, 필요에 따라 이를 재정의(override)하거나 새로운 값을 추가할 수 있습니다. 이 기능은 템플릿(templating)의 한 형태로, 반복적인 설정을 줄이고 유지보수를 용이하게 합니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/Spring/core/IoC Container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Bean Definition Inheritance

@@ -2,9 +2,9 @@
 title: "Environment Abstraction"
 description: "Spring Framework의 `Environment` 인터페이스는 애플리케이션 환경의 두 가지 핵심 측면인 **프로파일(profiles)** 과 **프로퍼티(properties)** 를 모델링하는 컨테이너 통합 추상화입니다. 프로파일은 특정 조건에서만 활성화되는 빈 정의의 논리적 그룹을 제공하여 개발/QA/운영 환경에 따라 다른 빈을 등록할 수 있게 하며, 프로퍼티는 다양한 소스(프로퍼티 파일, JVM 시스템 프로퍼티, 환경 변수, JNDI 등)에서 설정 값을 통합 관리할 수 있게 합니다. 이 문서는 `@Profile` 애노테이션을 사용한 환경별 빈 설정, 프로파일 표현식과 활성화 방법, `PropertySource` 계층 구조와 우선순위, `@PropertySource` 애노테이션을 통한 커스텀 ..."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/Spring/core/IoC Container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Environment Abstraction
