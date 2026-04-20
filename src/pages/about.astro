@@ -9,7 +9,7 @@ import { SITE } from '../config/site';
 const about = await getEntry('pages', 'about');
 const { Content } = await about.render();
 
-const posts = (await getCollection('blog'))
+const posts = (await getCollection('blog', ({ data }) => data.draft !== true))
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
     .slice(0, 3);
 
