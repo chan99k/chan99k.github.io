@@ -1,0 +1,368 @@
+---
+/**
+ * Socket communication flow diagram.
+ * Shows Server/Client socket lifecycle and UDS vs TCP comparison.
+ */
+---
+
+<div class="ipc-diagram socket-flow not-prose">
+  <div class="diagram-container">
+    <h2 class="diagram-title">소켓 통신 흐름</h2>
+    <p class="subtitle">socket() -> bind() -> listen() -> accept() -- 언어에 관계없이 동일한 패턴</p>
+    <div class="flow">
+      <div class="column server-col">
+        <div class="column-header">Server</div>
+        <div class="step"><span class="step-func">socket()</span><span class="step-desc">전화기 준비</span></div>
+        <div class="connector"></div>
+        <div class="step"><span class="step-func">bind()</span><span class="step-desc">번호 등록</span></div>
+        <div class="connector"></div>
+        <div class="step"><span class="step-func">listen()</span><span class="step-desc">수신 대기</span></div>
+        <div class="connector"></div>
+        <div class="step"><span class="step-func">accept()</span><span class="step-desc">전화 받기</span></div>
+        <div class="connector"></div>
+        <div class="step step-data"><span class="step-func">read/write</span><span class="step-desc">양방향 대화</span></div>
+        <div class="connector"></div>
+        <div class="step"><span class="step-func">close()</span><span class="step-desc">전화 끊기</span></div>
+      </div>
+      <div class="mid-col">
+        <div class="mid-block"></div><div class="mid-spacer"></div>
+        <div class="mid-block"></div><div class="mid-spacer"></div>
+        <div class="mid-block"></div><div class="mid-spacer"></div>
+        <div class="mid-block">
+          <div class="arrow-h">
+            <div class="line" style="background: linear-gradient(to left, var(--server-color), var(--client-color));"></div>
+            <div class="head-left" style="border-right-color: var(--server-color);"></div>
+            <div class="arrow-label" style="color: var(--text-muted);">connect()</div>
+          </div>
+        </div>
+        <div class="mid-spacer"></div>
+        <div class="mid-block">
+          <div class="arrow-h">
+            <div class="line" style="background: linear-gradient(to right, var(--server-color), var(--data-color), var(--client-color));"></div>
+            <div class="head-right" style="border-left-color: var(--client-color);"></div>
+            <div class="head-left" style="border-right-color: var(--server-color);"></div>
+            <div class="arrow-label" style="color: var(--data-color);">data</div>
+          </div>
+        </div>
+        <div class="mid-spacer"></div>
+        <div class="mid-block"></div>
+      </div>
+      <div class="column client-col">
+        <div class="column-header">Client</div>
+        <div style="height:42px;"></div><div style="height:10px;"></div>
+        <div style="height:42px;"></div><div style="height:10px;"></div>
+        <div class="step"><span class="step-func">socket()</span><span class="step-desc">전화기 준비</span></div>
+        <div class="connector"></div>
+        <div class="step"><span class="step-func">connect()</span><span class="step-desc">전화 걸기</span></div>
+        <div class="connector"></div>
+        <div class="step step-data"><span class="step-func">read/write</span><span class="step-desc">양방향 대화</span></div>
+        <div class="connector"></div>
+        <div class="step"><span class="step-func">close()</span><span class="step-desc">전화 끊기</span></div>
+      </div>
+    </div>
+    <div class="section-label">주소 체계 비교</div>
+    <div class="compare">
+      <div class="compare-card card-uds">
+        <div class="type">Unix Domain Socket</div>
+        <div class="addr">/var/run/docker.sock</div>
+        <div class="desc">같은 머신 전용 -- TCP/IP 스택 우회</div>
+      </div>
+      <div class="compare-card card-tcp">
+        <div class="type">TCP Socket</div>
+        <div class="addr">127.0.0.1:8080</div>
+        <div class="desc">네트워크 확장 가능 -- HTTP, gRPC</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .socket-flow {
+    --bg: #ffffff;
+    --surface: #f5f7fa;
+    --card: #ffffff;
+    --border: #e4e4e4;
+    --text: #1e2231;
+    --text-muted: #5a6478;
+    --code-bg: #f0f2f5;
+    --accent: #0078ff;
+    --server-color: #0078ff;
+    --client-color: #1a7f37;
+    --data-color: #bf5600;
+    --compare-uds-border: #d4a050;
+    --compare-uds-bg: #fff8ef;
+    --compare-tcp-border: #6cb4ff;
+    --compare-tcp-bg: #f0f7ff;
+  }
+
+  :global(.dark) .socket-flow {
+    --bg: #171c2a;
+    --surface: #1e2331;
+    --card: #171c2a;
+    --border: #2a3042;
+    --text: #ffffff;
+    --text-muted: #8892a4;
+    --code-bg: #1e2331;
+    --accent: #0078ff;
+    --server-color: #0078ff;
+    --client-color: #3fb950;
+    --data-color: #f0883e;
+    --compare-uds-border: #3d2a10;
+    --compare-uds-bg: #171c2a;
+    --compare-tcp-border: #0a3566;
+    --compare-tcp-bg: #171c2a;
+  }
+
+  .diagram-container {
+    max-width: 720px;
+    margin: 2rem auto;
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 48px;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .diagram-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .flow {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 220px;
+  }
+
+  .column-header {
+    font-size: 15px;
+    font-weight: 700;
+    padding: 10px 28px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  .server-col .column-header {
+    background: color-mix(in srgb, var(--server-color) 12%, transparent);
+    color: var(--server-color);
+  }
+
+  :global(.dark) .server-col .column-header {
+    background: color-mix(in srgb, var(--server-color) 20%, transparent);
+  }
+
+  .client-col .column-header {
+    background: color-mix(in srgb, var(--client-color) 12%, transparent);
+    color: var(--client-color);
+  }
+
+  :global(.dark) .client-col .column-header {
+    background: color-mix(in srgb, var(--client-color) 20%, transparent);
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .step:hover {
+    border-color: var(--accent);
+  }
+
+  .step-func {
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .step-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .connector {
+    width: 2px;
+    height: 10px;
+    background: var(--border);
+  }
+
+  .step-data {
+    border-color: var(--data-color) !important;
+  }
+
+  .step-data .step-func {
+    color: var(--data-color);
+  }
+
+  .mid-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90px;
+    padding-top: 52px;
+  }
+
+  .mid-spacer {
+    height: 10px;
+  }
+
+  .mid-block {
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .arrow-h {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .arrow-h .line {
+    width: 70px;
+    height: 2px;
+  }
+
+  .arrow-label {
+    font-size: 10px;
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .head-right {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 7px solid;
+    position: absolute;
+    right: -1px;
+  }
+
+  .head-left {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 7px solid;
+    position: absolute;
+    left: -1px;
+  }
+
+  .section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 36px;
+    margin-bottom: 14px;
+  }
+
+  .compare {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .compare-card {
+    flex: 1;
+    max-width: 240px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .compare-card .type {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .compare-card .addr {
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 12px;
+  }
+
+  .compare-card .desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  .card-uds {
+    background: var(--compare-uds-bg);
+    border: 1px solid var(--compare-uds-border);
+  }
+
+  .card-uds .type {
+    color: var(--data-color);
+  }
+
+  .card-tcp {
+    background: var(--compare-tcp-bg);
+    border: 1px solid var(--compare-tcp-border);
+  }
+
+  .card-tcp .type {
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .diagram-container {
+      padding: 24px 16px;
+    }
+
+    .flow {
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mid-col {
+      display: none;
+    }
+
+    .compare {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .compare-card {
+      max-width: 100%;
+    }
+  }
+</style>

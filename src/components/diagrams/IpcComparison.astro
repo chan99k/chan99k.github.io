@@ -1,0 +1,394 @@
+---
+/**
+ * IPC 5-type comparison diagram.
+ * Scatter plot (speed vs data volume) + comparison table.
+ * Note: Message Queue examples use OS-level APIs (POSIX/System V),
+ * NOT distributed systems like Kafka, per the blog's distinction.
+ */
+---
+
+<div class="ipc-diagram ipc-comparison not-prose">
+  <div class="diagram-container">
+    <h2 class="diagram-title">IPC 5종 비교</h2>
+    <p class="subtitle">속도와 전달 데이터량으로 본 각 메커니즘의 위치</p>
+    <div class="chart-area">
+      <div class="axis-y"></div><div class="axis-x"></div>
+      <div class="axis-end-y"></div><div class="axis-end-x"></div>
+      <div class="axis-label-y">전달 데이터량 →</div>
+      <div class="axis-label-x">속도 →</div>
+      <div class="dot c-shm" style="left:78%;bottom:220px;">
+        <div class="dot-circle">📦</div>
+        <div class="dot-label">공유 메모리</div>
+        <div class="dot-meta">최고 속도 / 동기화 필요</div>
+      </div>
+      <div class="dot c-socket" style="left:24%;bottom:230px;">
+        <div class="dot-circle">🔌</div>
+        <div class="dot-label">소켓</div>
+        <div class="dot-meta">양방향 / 네트워크 확장</div>
+      </div>
+      <div class="dot c-pipe" style="left:48%;bottom:140px;">
+        <div class="dot-circle">🔗</div>
+        <div class="dot-label">파이프</div>
+        <div class="dot-meta">단방향 / 스트림</div>
+      </div>
+      <div class="dot c-mq" style="left:24%;bottom:130px;">
+        <div class="dot-circle">📬</div>
+        <div class="dot-label">메시지 큐</div>
+        <div class="dot-meta">구조화 / 타입별 수신</div>
+      </div>
+      <div class="dot c-sig" style="left:62%;bottom:72px;">
+        <div class="dot-circle">⚡</div>
+        <div class="dot-label">시그널</div>
+        <div class="dot-meta">번호만 전달 / 비동기</div>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th></th><th>메커니즘</th><th>속도</th><th>방향</th><th>네트워크 지원</th><th>동기화</th><th>대표 사례</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="icon-cell">🔗</td>
+          <td class="name-cell" style="color:var(--pipe);">파이프</td>
+          <td><div class="speed-bar"><div class="speed-fill" style="width:50%;background:var(--pipe);"></div></div></td>
+          <td><span class="badge badge-uni">단방향</span></td>
+          <td><span class="badge badge-no">X</span></td>
+          <td><span class="badge badge-no">불필요</span></td>
+          <td class="example-cell">cat | grep</td>
+        </tr>
+        <tr>
+          <td class="icon-cell">🔌</td>
+          <td class="name-cell" style="color:var(--socket);">소켓</td>
+          <td><div class="speed-bar"><div class="speed-fill" style="width:50%;background:var(--socket);"></div></div></td>
+          <td><span class="badge badge-bi">양방향</span></td>
+          <td><span class="badge badge-yes">가능</span></td>
+          <td><span class="badge badge-no">불필요</span></td>
+          <td class="example-cell">Docker, REST API</td>
+        </tr>
+        <tr>
+          <td class="icon-cell">📦</td>
+          <td class="name-cell" style="color:var(--shm);">공유 메모리</td>
+          <td><div class="speed-bar"><div class="speed-fill" style="width:95%;background:var(--shm);"></div></div></td>
+          <td><span class="badge badge-bi">양방향</span></td>
+          <td><span class="badge badge-no">X</span></td>
+          <td><span class="badge badge-need">필요</span></td>
+          <td class="example-cell">DB, SharedArrayBuffer</td>
+        </tr>
+        <tr>
+          <td class="icon-cell">📬</td>
+          <td class="name-cell" style="color:var(--mq);">메시지 큐</td>
+          <td><div class="speed-bar"><div class="speed-fill" style="width:45%;background:var(--mq);"></div></div></td>
+          <td><span class="badge badge-bi">양방향</span></td>
+          <td><span class="badge badge-no">X</span></td>
+          <td><span class="badge badge-no">불필요</span></td>
+          <td class="example-cell">msgget, mq_open</td>
+        </tr>
+        <tr>
+          <td class="icon-cell">⚡</td>
+          <td class="name-cell" style="color:var(--sig);">시그널</td>
+          <td><div class="speed-bar"><div class="speed-fill" style="width:70%;background:var(--sig);"></div></div></td>
+          <td><span class="badge badge-uni">단방향</span></td>
+          <td><span class="badge badge-no">X</span></td>
+          <td><span class="badge badge-no">불필요</span></td>
+          <td class="example-cell">kill, Ctrl+C</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .ipc-comparison {
+    --bg: #ffffff;
+    --surface: #f5f7fa;
+    --card: #ffffff;
+    --border: #e4e4e4;
+    --border-subtle: #eef0f3;
+    --text: #1e2231;
+    --text-muted: #5a6478;
+    --code-bg: #f0f2f5;
+    --accent: #0078ff;
+    --pipe: #1a7f37;
+    --pipe-bg: #edf7ed;
+    --socket: #0078ff;
+    --socket-bg: #edf4ff;
+    --shm: #bf5600;
+    --shm-bg: #fff8ef;
+    --mq: #8957e5;
+    --mq-bg: #f5f0ff;
+    --sig: #e5534b;
+    --sig-bg: #fff1f0;
+    --row-hover: #f5f7fa;
+    --badge-uni-bg: #edf7ed; --badge-uni: #1a7f37;
+    --badge-bi-bg: #edf4ff; --badge-bi: #0078ff;
+    --badge-yes-bg: #edf4ff; --badge-yes: #0078ff;
+    --badge-no-bg: #f0f2f5; --badge-no: #8b95a5;
+    --badge-need-bg: #fff8ef; --badge-need: #bf5600;
+  }
+
+  :global(.dark) .ipc-comparison {
+    --bg: #171c2a;
+    --surface: #1e2331;
+    --card: #171c2a;
+    --border: #2a3042;
+    --border-subtle: #242b3d;
+    --text: #ffffff;
+    --text-muted: #8892a4;
+    --code-bg: #1e2331;
+    --accent: #0078ff;
+    --pipe: #3fb950;
+    --pipe-bg: #0f3524;
+    --socket: #0078ff;
+    --socket-bg: #0c2d5e;
+    --shm: #f0883e;
+    --shm-bg: #3d2a10;
+    --mq: #bc8cff;
+    --mq-bg: #2a1f3f;
+    --sig: #f85149;
+    --sig-bg: #3d1114;
+    --row-hover: #242b3d;
+    --badge-uni-bg: #0f3524; --badge-uni: #3fb950;
+    --badge-bi-bg: #0c2d5e; --badge-bi: #0078ff;
+    --badge-yes-bg: #0c2d5e; --badge-yes: #0078ff;
+    --badge-no-bg: #242b3d; --badge-no: #5a6478;
+    --badge-need-bg: #3d2a10; --badge-need: #f0883e;
+  }
+
+  .diagram-container {
+    max-width: 760px;
+    margin: 2rem auto;
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 48px;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .diagram-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .chart-area {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    margin-bottom: 40px;
+    padding-left: 20px;
+  }
+
+  .axis-y {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 40px;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .axis-x {
+    position: absolute;
+    left: 20px;
+    right: 0;
+    bottom: 40px;
+    height: 2px;
+    background: var(--border);
+  }
+
+  .axis-end-y {
+    position: absolute;
+    left: 16px;
+    top: -2px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 8px solid var(--border);
+  }
+
+  .axis-end-x {
+    position: absolute;
+    right: -2px;
+    bottom: 36px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid var(--border);
+  }
+
+  .axis-label-y {
+    position: absolute;
+    left: -2px;
+    top: 40%;
+    font-size: 11px;
+    color: var(--text-muted);
+    writing-mode: vertical-lr;
+  }
+
+  .axis-label-x {
+    position: absolute;
+    bottom: 18px;
+    right: 4px;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .dot {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: default;
+    transition: transform 0.2s;
+  }
+
+  .dot:hover {
+    transform: scale(1.08);
+  }
+
+  .dot-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    border: 2px solid;
+  }
+
+  .dot-label {
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .dot-meta {
+    font-size: 10px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .c-pipe .dot-circle { background: var(--pipe-bg); border-color: var(--pipe); }
+  .c-pipe .dot-label { color: var(--pipe); }
+  .c-socket .dot-circle { background: var(--socket-bg); border-color: var(--socket); }
+  .c-socket .dot-label { color: var(--socket); }
+  .c-shm .dot-circle { background: var(--shm-bg); border-color: var(--shm); }
+  .c-shm .dot-label { color: var(--shm); }
+  .c-mq .dot-circle { background: var(--mq-bg); border-color: var(--mq); }
+  .c-mq .dot-label { color: var(--mq); }
+  .c-sig .dot-circle { background: var(--sig-bg); border-color: var(--sig); }
+  .c-sig .dot-label { color: var(--sig); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    padding: 10px 12px;
+    text-align: left;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: middle;
+  }
+
+  tbody tr:hover {
+    background: var(--row-hover);
+  }
+
+  .icon-cell {
+    width: 32px;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .name-cell {
+    font-weight: 600;
+  }
+
+  .example-cell {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .speed-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border-subtle);
+    width: 80px;
+    overflow: hidden;
+  }
+
+  .speed-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .badge-uni { background: var(--badge-uni-bg); color: var(--badge-uni); }
+  .badge-bi { background: var(--badge-bi-bg); color: var(--badge-bi); }
+  .badge-yes { background: var(--badge-yes-bg); color: var(--badge-yes); }
+  .badge-no { background: var(--badge-no-bg); color: var(--badge-no); }
+  .badge-need { background: var(--badge-need-bg); color: var(--badge-need); }
+
+  @media (max-width: 640px) {
+    .diagram-container {
+      padding: 24px 16px;
+    }
+
+    .chart-area {
+      height: 280px;
+    }
+
+    .dot-circle {
+      width: 36px;
+      height: 36px;
+      font-size: 16px;
+    }
+
+    .dot-label { font-size: 11px; }
+    .dot-meta { font-size: 9px; }
+
+    table {
+      font-size: 11px;
+    }
+
+    thead th, tbody td {
+      padding: 8px 6px;
+    }
+
+    .speed-bar {
+      width: 50px;
+    }
+  }
+</style>

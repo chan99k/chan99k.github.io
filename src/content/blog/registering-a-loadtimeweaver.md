@@ -2,9 +2,9 @@
 title: "Registering a LoadTimeWeaver"
 description: "Spring의 `LoadTimeWeaver`는 클래스가 JVM(Java Virtual Machine)에 로드될 때 동적으로 변환(transformation)하는 기능을 제공한다. 이 문서는 `@EnableLoadTimeWeaving` 어노테이션을 사용한 Java 기반 설정과 `<context:load-time-weaver/>` 요소를 사용한 XML 기반 설정 두 가지 방법을 소개한다. 로드타임 위빙은 특히 Spring의 JPA 지원과 함께 사용될 때 유용하며, JPA 클래스 변환에 필요할 수 있다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Registering a LoadTimeWeaver

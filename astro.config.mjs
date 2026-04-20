@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
 import netlify from '@astrojs/netlify';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -33,6 +34,7 @@ export default defineConfig({
                 uiFontFamily: 'var(--font-sans, system-ui, sans-serif)',
             },
         }),
+        mdx(),
         react(),
         sitemap(),
     ],

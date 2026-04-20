@@ -2,9 +2,9 @@
 title: "Classpath Scanning and Managed Components"
 description: "이 문서는 Spring Framework의 클래스패스 스캐닝 기능을 통해 컴포넌트를 자동으로 탐지하고 빈으로 등록하는 방법을 설명합니다. XML 기반의 명시적 빈 정의 대신, `@Component` 및 스테레오타입 애너테이션(`@Repository`, `@Service`, `@Controller`)을 사용하여 빈을 선언할 수 있습니다. `@ComponentScan` 애너테이션을 통해 특정 패키지를 스캔하며, 필터를 사용하여 스캔 대상을 세밀하게 제어할 수 있습니다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Classpath Scanning and Managed Components

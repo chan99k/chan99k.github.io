@@ -1,0 +1,313 @@
+---
+/**
+ * Process Isolation & Virtual Memory diagram.
+ * Shows how two processes have isolated virtual memory spaces
+ * that map to different physical addresses.
+ */
+---
+
+<div class="ipc-diagram process-isolation not-prose">
+  <div class="diagram-container">
+    <h2 class="diagram-title">프로세스 격리와 가상 메모리</h2>
+    <p class="subtitle">같은 주소 0x1000이 물리적으로 전혀 다른 곳을 가리킵니다</p>
+    <div class="diagram">
+      <div class="process-box process-a">
+        <div class="process-header">Process A</div>
+        <div class="virtual-mem">
+          <div class="label">Virtual Memory</div>
+          <div class="addr-range">0x0000 ~ 0xFFFF</div>
+        </div>
+        <div class="arrow-section">
+          <div class="arrow-down"></div><div class="arrow-tip"></div>
+          <div class="page-table">Page Table A</div>
+          <div class="arrow-down"></div><div class="arrow-tip"></div>
+          <div class="physical-mem physical-a">0x7A00 ~ 0x7AFF</div>
+        </div>
+      </div>
+      <div class="wall"><div class="wall-line"></div><div class="wall-badge">격리됨</div></div>
+      <div class="process-box process-b">
+        <div class="process-header">Process B</div>
+        <div class="virtual-mem">
+          <div class="label">Virtual Memory</div>
+          <div class="addr-range">0x0000 ~ 0xFFFF</div>
+        </div>
+        <div class="arrow-section">
+          <div class="arrow-down"></div><div class="arrow-tip"></div>
+          <div class="page-table">Page Table B</div>
+          <div class="arrow-down"></div><div class="arrow-tip"></div>
+          <div class="physical-mem physical-b">0x3B00 ~ 0x3BFF</div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>왜 IPC가 필요한가:</strong> 이 격리 덕분에 프로세스 하나가 죽어도 다른 프로세스에 영향을 주지 않습니다. 하지만 바로 이 격리 때문에 프로세스끼리 데이터를 주고받으려면 OS의 도움이 필요합니다.
+    </div>
+  </div>
+</div>
+
+<style>
+  .process-isolation {
+    --bg: #ffffff;
+    --surface: #f5f7fa;
+    --card: #ffffff;
+    --border: #e4e4e4;
+    --border-dashed: #c8cdd5;
+    --text: #1e2231;
+    --text-muted: #5a6478;
+    --code-bg: #f0f2f5;
+    --accent: #0078ff;
+    --accent-bg: #e8f1ff;
+    --accent-border: #b3d4ff;
+    --process-a: #0078ff;
+    --process-a-bg: #e8f1ff;
+    --process-a-header: #edf4ff;
+    --process-b: #8957e5;
+    --process-b-bg: #f3edff;
+    --process-b-header: #f5f0ff;
+    --wall-color: #e5534b;
+    --wall-bg: #fff1f0;
+    --wall-border: #e5534b;
+  }
+
+  :global(.dark) .process-isolation {
+    --bg: #171c2a;
+    --surface: #1e2331;
+    --card: #171c2a;
+    --border: #2a3042;
+    --border-dashed: #3a4258;
+    --text: #ffffff;
+    --text-muted: #8892a4;
+    --code-bg: #1e2331;
+    --accent: #0078ff;
+    --accent-bg: #0c2d5e;
+    --accent-border: #0a4a99;
+    --process-a: #0078ff;
+    --process-a-bg: #0c2d5e;
+    --process-a-header: #0c2d5e;
+    --process-b: #bc8cff;
+    --process-b-bg: #231a33;
+    --process-b-header: #2a1f3f;
+    --wall-color: #f85149;
+    --wall-bg: #3d1114;
+    --wall-border: #6e2b2b;
+  }
+
+  .diagram-container {
+    max-width: 720px;
+    margin: 2rem auto;
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 48px;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .diagram-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .diagram {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: 32px;
+    position: relative;
+  }
+
+  .process-box {
+    width: 240px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+  }
+
+  .process-box:hover {
+    border-color: var(--accent);
+  }
+
+  .process-header {
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .process-a .process-header {
+    background: var(--process-a-header);
+    color: var(--process-a);
+  }
+
+  .process-b .process-header {
+    background: var(--process-b-header);
+    color: var(--process-b);
+  }
+
+  .virtual-mem {
+    padding: 16px;
+    background: var(--card);
+  }
+
+  .virtual-mem .label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .addr-range {
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 13px;
+    padding: 8px 12px;
+    background: var(--code-bg);
+    border-radius: 6px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .arrow-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 16px 16px;
+  }
+
+  .arrow-down {
+    width: 2px;
+    height: 24px;
+    background: var(--border-dashed);
+  }
+
+  .arrow-tip {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--border-dashed);
+    margin-bottom: 8px;
+  }
+
+  .page-table {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 6px 14px;
+    border: 1px dashed var(--border-dashed);
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+
+  .physical-mem {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 13px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .physical-a {
+    background: var(--process-a-bg);
+    color: var(--process-a);
+    border: 1px solid var(--accent-border);
+  }
+
+  .physical-b {
+    background: var(--process-b-bg);
+    color: var(--process-b);
+    border: 1px solid var(--process-b);
+  }
+
+  .wall {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wall-line {
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--wall-color) 0px,
+      var(--wall-color) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  }
+
+  .wall-badge {
+    background: var(--wall-bg);
+    color: var(--wall-color);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--wall-border);
+    z-index: 1;
+    white-space: nowrap;
+  }
+
+  .callout {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .callout strong {
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .diagram-container {
+      padding: 24px 16px;
+    }
+
+    .diagram {
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .wall {
+      position: static;
+      transform: none;
+      flex-direction: row;
+    }
+
+    .wall-line {
+      width: 100%;
+      height: 2px;
+      position: static;
+      background: repeating-linear-gradient(
+        to right,
+        var(--wall-color) 0px,
+        var(--wall-color) 6px,
+        transparent 6px,
+        transparent 12px
+      );
+    }
+  }
+</style>

@@ -2,9 +2,9 @@
 title: "Container Overview"
 description: "Spring IoC 컨테이너의 핵심은 `ApplicationContext` 인터페이스로, 빈(bean)의 인스턴스화, 구성, 조립을 담당한다. 컨테이너는 설정 메타데이터(configuration metadata)를 읽어 어떤 객체를 생성하고 어떻게 연결할지 결정한다. 설정 메타데이터는 애노테이션 기반 자바 클래스, `@Configuration`과 `@Bean`을 사용한 자바 설정, 또는 전통적인 XML 파일로 표현할 수 있다."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Container Overview

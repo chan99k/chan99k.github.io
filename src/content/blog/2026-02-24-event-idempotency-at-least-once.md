@@ -6,7 +6,7 @@ description: "@TransactionalEventListener(at-most-once)에서
 pubDate: 2026-02-24
 tags:
   - Areas/architecture
-  - Areas/개발/Spring
+  - Areas/software/Spring
 draft: true
 ---
 

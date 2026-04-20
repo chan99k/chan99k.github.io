@@ -20,7 +20,7 @@ export const TAG_TAXONOMY = {
 	},
 	Areas: {
 		color: 'blue',
-		children: ['개발', 'architecture', 'infra'],
+		children: ['software', 'architecture', 'infra'],
 	},
 	Resources: {
 		color: 'amber',

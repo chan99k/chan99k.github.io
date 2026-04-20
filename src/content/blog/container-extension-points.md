@@ -2,9 +2,9 @@
 title: "Container Extension Points"
 description: "Spring IoC 컨테이너는 특별한 통합 인터페이스를 구현하여 확장할 수 있습니다. 주요 확장 포인트는 세 가지입니다: (1) BeanPostProcessor는 빈 인스턴스를 커스터마이징하여 초기화 전후에 로직을 삽입할 수 있고, (2) BeanFactoryPostProcessor는 빈 정의 메타데이터를 수정하여 컨테이너가 빈을 인스턴스화하기 전에 설정을 변경할 수 있으며, (3) FactoryBean은 복잡한 초기화 로직을 Java 코드로 작성하여 빈 생성 로직 자체를 커스터마이징할 수 있습니다. BeanPostProcessor는 AOP 프록시 래핑과 같은 인프라 기능을 구현하는 데 사용되며, BeanFactoryPostProcessor는 PropertySourcesPlaceholderConfigu..."
 pubDate: "2026-03-10"
-tags: ["Resources/translations/Spring/IoC Container"]
+tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
-draft: true
+draft: false
 ---
 
 # Container Extension Points

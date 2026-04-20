@@ -2,9 +2,9 @@
 title: "Saga 분산 트랜잭션 패턴"
 description: "Saga 디자인 패턴은 분산 시스템에서 여러 서비스에 걸친 트랜잭션을 조율하여 데이터 일관성을 유지하는 패턴이다. 트랜잭션을 일련의 로컬 트랜잭션으로 분해하고, 실패 시 보상 트랜잭션을 통해 롤백하는 방식을 제공한다. 구현 방식으로는 코레오그래피와 오케스트레이션 두 가지 접근법이 있다."
 pubDate: "2026-03-03"
-tags: ["Resources/translations/tech-blog", "Areas/architecture", "Areas/개발/design-pattern"]
+tags: ["Resources/translations/tech-blog", "Areas/architecture", "Areas/software/design-pattern"]
 contentSource: "ai-generated"
-draft: true
+draft: false
 ---
 
 > 원문: [Saga distributed transactions pattern - Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/patterns/saga)
