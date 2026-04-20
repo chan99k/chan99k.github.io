@@ -162,17 +162,6 @@ html {
     @apply bg-navy-800/50;
 }
 
-/* Prose Paragraph: first-line indent for CJK readability */
-.prose :where(p) {
-    text-indent: 1em;
-}
-
-.prose :where(p):first-child,
-.prose :where(h2, h3, h4) + p,
-.prose :where(blockquote) p,
-.prose :where(li) p {
-    text-indent: 0;
-}
 
 /* Prose Blockquote */
 .prose :where(blockquote) {

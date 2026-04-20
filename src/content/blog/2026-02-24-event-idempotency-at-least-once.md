@@ -7,7 +7,7 @@ pubDate: 2026-02-24
 tags:
   - Areas/architecture
   - Areas/개발/Spring
-draft: false
+draft: true
 ---
 
 # @ApplicationModuleListener 전환 후 이벤트 멱등성 확보: 2계층 방어 설계기

@@ -5,9 +5,8 @@ import { getCollection } from 'astro:content';
 import InterviewWidget from '../components/InterviewWidget';
 
 const questions = await getCollection('questions');
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection('blog', ({ data }) => data.draft !== true);
 const posts = allPosts
-    .filter((p) => !p.data.draft)
     .map((p) => ({ slug: p.slug, data: { title: p.data.title, tags: p.data.tags } }));
 
 const questionsData = questions.map((q) => ({
