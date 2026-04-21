@@ -244,27 +244,27 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                     phase === 'chat' ? 'max-h-[60dvh] opacity-100' : 'max-h-0 opacity-0'
                 }`}
             >
-                <div className="mb-1 border-t border-neutral-200 dark:border-neutral-700" />
+                <div className="mb-2 border-t border-gray-200 dark:border-gray-700" />
                 <div
                     ref={chatContainerRef}
-                    className="max-h-[55dvh] space-y-1 overflow-y-auto py-4"
+                    className="max-h-[55dvh] space-y-6 overflow-y-auto py-6"
                     role="log"
                     aria-label="면접 대화"
                 >
                     {messages.map((msg, i) => (
                         <ChatMessage key={i} role={msg.role}>
                             {msg.role === 'user' ? (
-                                <p className="whitespace-pre-wrap text-sm">{msg.content}</p>
+                                <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{msg.content}</p>
                             ) : msg.feedback ? (
                                 <AiFeedback feedback={msg.feedback} isLoading={false} />
                             ) : (
-                                <p className="whitespace-pre-wrap text-sm">{msg.content}</p>
+                                <p className="whitespace-pre-wrap text-[15px] leading-relaxed text-slate-700 dark:text-slate-300">{msg.content}</p>
                             )}
                         </ChatMessage>
                     ))}
                     {chat.isLoading && chat.displayText && (
                         <ChatMessage role="interviewer">
-                            <p className="whitespace-pre-wrap text-sm text-neutral-500">{chat.displayText}</p>
+                            <p className="whitespace-pre-wrap text-[15px] leading-relaxed text-slate-500">{chat.displayText}</p>
                         </ChatMessage>
                     )}
                     {chat.isLoading && !chat.displayText && (
@@ -297,10 +297,10 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                 />
             </div>
 
-            {/* Status bar - below input, aligned with input padding */}
-            <div className="w-full px-4 pt-1.5">
+            {/* Status bar - below input */}
+            <div className="w-full px-4 pt-2">
                 {chat.error && (
-                    <p className="mb-1 text-xs text-red-500 dark:text-red-400">{chat.error}</p>
+                    <p className="mb-2 text-xs text-red-500 dark:text-red-400">{chat.error}</p>
                 )}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -315,6 +315,18 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                         onLoginClick={() => {}}
                         pointBalance={points.balance}
                     />
+                </div>
+                {/* Question submission CTA */}
+                <div className="mt-4 text-center">
+                    <a
+                        href="/interview/submit"
+                        className="text-xs text-neutral-400 hover:text-[#0078FF] transition-colors dark:text-neutral-500"
+                    >
+                        실제 면접 기출이 있나요?{' '}
+                        <span className="underline underline-offset-4 decoration-[#0078FF]/30 font-medium text-[#0078FF]">
+                            제출하고 100P 받기
+                        </span>
+                    </a>
                 </div>
             </div>
 

@@ -41,7 +41,7 @@ export function AnswerInput({
 
 	return (
 		<div className="w-full max-w-2xl mx-auto">
-			<div className="flex items-end gap-2 rounded-2xl border border-gray-200 bg-white px-3 py-2 sm:px-4 shadow-lg dark:border-gray-700 dark:bg-[#2B3040] dark:shadow-none">
+			<div className="relative w-full">
 				<textarea
 					ref={textareaRef}
 					value={value}
@@ -50,16 +50,16 @@ export function AnswerInput({
 					placeholder={placeholder}
 					rows={1}
 					disabled={isLoading}
-					className="flex-1 resize-none overflow-hidden border-none bg-transparent text-sm leading-8 outline-none dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
+					className="w-full bg-white dark:bg-[#2B3040] border border-gray-200 dark:border-gray-700 rounded-full py-4 pl-8 pr-16 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] dark:shadow-none focus:ring-2 focus:ring-[#0078FF] focus:border-transparent transition-all outline-none resize-none overflow-hidden text-sm leading-6 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
 				/>
 				<button
 					onClick={onSubmit}
 					disabled={isDisabled}
-					className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0078FF] text-white transition-colors hover:bg-[#0066DD] disabled:bg-gray-300 dark:disabled:bg-gray-600"
+					className="absolute right-3 top-1/2 -translate-y-1/2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-400 text-white transition-colors hover:bg-slate-500 disabled:bg-gray-300 dark:disabled:bg-gray-600"
 					title={!hasApiKey ? 'API 키를 먼저 설정하세요' : '제출 (Enter)'}
 				>
 					{isLoading ? (
-						<svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+						<svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">
 							<circle
 								className="opacity-25"
 								cx="12"
@@ -75,8 +75,8 @@ export function AnswerInput({
 							/>
 						</svg>
 					) : (
-						<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
-							<path d="M12 19V5M5 12l7-7 7 7" />
+						<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+							<path d="M5 10l7-7m0 0l7 7m-7-7v18" strokeLinecap="round" strokeLinejoin="round" />
 						</svg>
 					)}
 				</button>
