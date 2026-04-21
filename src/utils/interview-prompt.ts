@@ -10,6 +10,8 @@ interface PromptInput {
     depth: number;
     interviewers?: InterviewerId[];
     jdContext?: { company: string; jd: string };
+    referenceAnswer?: string;
+    referenceExplanation?: string;
 }
 
 export function buildInterviewSystemPrompt(input: PromptInput): string {
@@ -34,6 +36,12 @@ export function buildInterviewSystemPrompt(input: PromptInput): string {
 
     const jdSection = input.jdContext
         ? `\n\n## 기업 맥락\n- 기업: ${input.jdContext.company}\n- 채용공고:\n${input.jdContext.jd}\n\n이 기업의 기술 스택과 채용 요구사항을 고려하여 질문하세요.`
+        : '';
+
+    const referenceSection = (input.referenceAnswer || input.referenceExplanation)
+        ? `\n\n## 채점 참고 자료 (지원자에게 보이지 않음)
+${input.referenceAnswer ? `### 모범 답안\n${input.referenceAnswer}\n` : ''}${input.referenceExplanation ? `### 상세 해설\n${input.referenceExplanation}\n` : ''}
+위 모범 답안을 기준으로 정확성을 채점하세요. 모범 답안에 없는 추가 지식을 답변하면 깊이 점수에 가산하세요.`
         : '';
 
     const criteriaTotal = Object.values(criteria).reduce((a, b) => a + b, 0);
@@ -78,7 +86,7 @@ ${interviewerSection}
 
 ## 초기 질문
 ${input.question}
-${ragSection}${jdSection}
+${ragSection}${jdSection}${referenceSection}
 
 ## 평가 기준 (${criteriaTotal}점 만점)
 ${criteriaSection}

@@ -49,6 +49,11 @@ export default async (req: Request, _context: Context) => {
         return new Response('Method not allowed', { status: 405 });
     }
 
+    // Shared Supabase client for the entire request
+    const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
+    const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? process.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
     // 1. Authenticate — allow anonymous with rate limiting
     const authHeader = req.headers.get('Authorization');
     let user: { id: string } | null = null;
@@ -56,10 +61,6 @@ export default async (req: Request, _context: Context) => {
 
     if (authHeader?.startsWith('Bearer ')) {
         const token = authHeader.slice(7);
-        const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
-        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? process.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
         const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(token);
         if (!authError && authUser) {
             user = authUser;
@@ -86,10 +87,6 @@ export default async (req: Request, _context: Context) => {
     const isByok = req.headers.get('X-Use-Own-Key') === 'true';
 
     if (!isAnonymous && !isByok && user) {
-        const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
-        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? process.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
         const { data: newBalance, error: pointError } = await supabase.rpc('spend_points', {
             p_user_id: user.id,
             p_amount: INTERVIEW_POINT_COST,
@@ -170,9 +167,6 @@ export default async (req: Request, _context: Context) => {
 
     // Refund points if Anthropic API call failed (authenticated users only)
     if (!response.ok && !isByok && !isAnonymous && user) {
-        const supabaseUrl = process.env.SUPABASE_URL ?? process.env.PUBLIC_SUPABASE_URL ?? '';
-        const supabaseAnonKey = process.env.SUPABASE_ANON_KEY ?? process.env.PUBLIC_SUPABASE_ANON_KEY ?? '';
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
         const { error: refundError } = await supabase.rpc('earn_points', {
             p_user_id: user.id,
             p_amount: INTERVIEW_POINT_COST,
