@@ -1,0 +1,43 @@
+---
+import { tagToSlug } from '../utils/tags';
+
+interface TagItem {
+	name: string;
+	fullPath: string;
+	count: number;
+	children: TagItem[];
+}
+
+interface Props {
+	items: TagItem[];
+	currentTag?: string;
+	depth?: number;
+}
+
+const { items, currentTag, depth = 0 } = Astro.props;
+---
+
+{items.map((item) => (
+	<Fragment>
+		<a
+			href={`/tags/${tagToSlug(item.fullPath)}/`}
+			class:list={[
+				'no-underline block text-sm transition-colors',
+				depth === 0 ? 'py-1.5' : 'py-1',
+				currentTag === item.fullPath
+					? 'text-accent font-semibold'
+					: depth === 0
+						? 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'
+						: 'text-gray-400 dark:text-gray-500 hover:text-black dark:hover:text-white',
+			]}
+		>
+			{item.name}
+			<span class="text-xs text-gray-300 dark:text-gray-600 ml-1">{item.count}</span>
+		</a>
+		{item.children.length > 0 && (
+			<div class="ml-3 border-l border-gray-100 dark:border-gray-800 pl-3">
+				<Astro.self items={item.children} currentTag={currentTag} depth={depth + 1} />
+			</div>
+		)}
+	</Fragment>
+))}

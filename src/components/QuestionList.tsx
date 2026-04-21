@@ -11,7 +11,10 @@ interface Question {
     created_at: string;
 }
 
-const CATEGORIES = ['general', 'java', 'spring', 'database', 'network', 'os', 'design-pattern', 'architecture'];
+const CATEGORIES = [
+    'general', 'java', 'spring', 'database', 'network', 'os', 'design-pattern', 'architecture',
+    'loss-adjuster-law', 'loss-adjuster-claim', 'loss-adjuster-medical',
+];
 
 export default function QuestionList() {
     const [questions, setQuestions] = useState<Question[]>([]);

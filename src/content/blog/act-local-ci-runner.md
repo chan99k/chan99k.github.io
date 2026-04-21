@@ -2,7 +2,7 @@
 title: "나의 구원자, act 도입기"
 description: "GitHub Actions 워크플로우를 로컬에서 실행하는 act 도입 과정에서 OrbStack 소켓 문제, Apple Silicon 호환성, 프로젝트 준비 상태까지 — Push & Pray 사이클을 끊기 위한 여정."
 pubDate: "2026-03-05"
-tags: ["Areas/infra", "Areas/개발/도구"]
+tags: ["Areas/infra", "Areas/software/도구"]
 draft: true
 ---
 

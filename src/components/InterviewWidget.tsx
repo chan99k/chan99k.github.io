@@ -15,7 +15,7 @@ import ServerKeyBanner from './interview/ServerKeyBanner';
 import InterviewerPicker from './interview/InterviewerPicker';
 import SessionControls from './interview/SessionControls';
 import { SESSION_CONFIG } from '../config/interview-session';
-import type { InterviewerId } from '../config/interviewers';
+import { getInterviewersByCategory, type InterviewerId } from '../config/interviewers';
 import { useInterviewSession } from '../hooks/useInterviewSession';
 import { useInterviewChat } from '../hooks/useInterviewChat';
 import { useRAGSearch } from '../hooks/useRAGSearch';
@@ -70,7 +70,7 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
     const [messages, setMessages] = useState<Message[]>([]);
 
     // Interviewers
-    const [interviewers, setInterviewers] = useState<InterviewerId[]>(['frontend', 'backend', 'dba']);
+    const [interviewers, setInterviewers] = useState<InterviewerId[]>(() => getInterviewersByCategory('developer'));
 
     // Custom hooks
     const session = useInterviewSession({ token });
@@ -105,6 +105,7 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
 
         // Add user message
         setMessages((prev) => [...prev, { role: 'user', content: answer }]);
+
 
         try {
             // Step 1: Create session if first answer and logged in
@@ -329,6 +330,7 @@ function InterviewWidgetInner({ questions, posts, user, token }: InnerProps) {
                     </a>
                 </div>
             </div>
+
 
             {/* Bottom spacer - balances top spacer so input bar sits at ~center */}
             {phase === 'initial' && <div className="flex-[1.3]" />}

@@ -2,9 +2,9 @@
 title: "CQRS Pattern"
 description: "CQRS(Command Query Responsibility Segregation)는 데이터 저장소에 대한 읽기와 쓰기 작업을 별도의 데이터 모델로 분리하는 디자인 패턴이다. 각 모델을 독립적으로 최적화할 수 있어 애플리케이션의 성능, 확장성, 보안을 향상시킬 수 있다."
 pubDate: "2026-03-05"
-tags: ["Areas/architecture", "Areas/개발/design-pattern", "Resources/translations/tech-blog"]
+tags: ["Areas/architecture", "Areas/software/design-pattern", "Resources/translations/tech-blog"]
 contentSource: "ai-generated"
-draft: true
+draft: false
 ---
 
 # CQRS Pattern
