@@ -1,29 +1,11 @@
 import type { Context } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
+import { validateOrigin, addCorsHeaders } from './utils/cors.js';
 
-const ALLOWED_ORIGINS = ['https://blog.chan99k.dev'];
 const MAX_BODY_SIZE = 50 * 1024;
 const MAX_CONTENT_LENGTH = 10000;
 const ALLOWED_ACTIONS = ['create', 'message', 'complete', 'get', 'list'] as const;
 const ALLOWED_ROLES = ['user', 'assistant'] as const;
-
-function getAllowedOrigins(): string[] {
-    const origins = [...ALLOWED_ORIGINS];
-    const deployUrl = process.env.DEPLOY_PRIME_URL;
-    if (deployUrl) origins.push(deployUrl);
-    return origins;
-}
-
-function validateOrigin(origin: string | null): boolean {
-    if (!origin) return false;
-    return getAllowedOrigins().includes(origin);
-}
-
-function addCorsHeaders(headers: Headers, origin: string): void {
-    headers.set('Access-Control-Allow-Origin', origin);
-    headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-}
 
 async function authenticateUser(authHeader: string | null, supabaseUrl: string, serviceRoleKey: string) {
     if (!authHeader?.startsWith('Bearer ')) return null;
