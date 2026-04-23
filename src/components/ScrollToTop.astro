@@ -1,0 +1,28 @@
+<button
+    id="scroll-to-top"
+    class="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-accent hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 opacity-0 pointer-events-none shadow-lg"
+    aria-label="맨 위로"
+>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+</button>
+
+<script>
+    const btn = document.getElementById('scroll-to-top');
+    if (btn) {
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                btn.classList.remove('opacity-0', 'pointer-events-none');
+                btn.classList.add('opacity-100');
+            } else {
+                btn.classList.add('opacity-0', 'pointer-events-none');
+                btn.classList.remove('opacity-100');
+            }
+        }, { passive: true });
+
+        // Scroll to top on click
+        btn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+</script>
