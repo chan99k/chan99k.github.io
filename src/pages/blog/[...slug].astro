@@ -10,6 +10,7 @@ import { calculateReadingTime } from '../../utils/reading-time';
 import SeriesNav from '../../components/SeriesNav.astro';
 import ShareButtons from '../../components/ShareButtons.astro';
 import ScrollProgress from '../../components/ScrollProgress.astro';
+import { SITE } from '../../config/site';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -46,6 +47,27 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 <Layout title={post.data.title} description={post.data.description} image={post.data.heroImage}>
 	<ScrollProgress />
+	<script type="application/ld+json" set:html={JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		"headline": post.data.title,
+		"description": post.data.description,
+		"datePublished": post.data.pubDate.toISOString(),
+		"dateModified": (post.data.updatedDate || post.data.pubDate).toISOString(),
+		"author": {
+			"@type": "Person",
+			"name": SITE.name,
+			"url": SITE.url
+		},
+		...(post.data.heroImage && {
+			"image": new URL(post.data.heroImage, SITE.url).toString()
+		}),
+		"url": new URL(`/blog/${post.slug}/`, SITE.url).toString(),
+		"publisher": {
+			"@type": "Person",
+			"name": SITE.name
+		}
+	})} />
 	<div class="flex gap-0">
 		<BlogSidebar currentTag={currentTag} />
 		<article class="py-8 sm:py-12 pl-8 max-w-3xl min-w-0 grow">
