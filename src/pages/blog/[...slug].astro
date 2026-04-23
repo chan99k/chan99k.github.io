@@ -9,6 +9,7 @@ import TagChips from '../../components/TagChips.astro';
 import { calculateReadingTime } from '../../utils/reading-time';
 import SeriesNav from '../../components/SeriesNav.astro';
 import ShareButtons from '../../components/ShareButtons.astro';
+import ScrollProgress from '../../components/ScrollProgress.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -44,6 +45,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
 <Layout title={post.data.title} description={post.data.description} image={post.data.heroImage}>
+	<ScrollProgress />
 	<div class="flex gap-0">
 		<BlogSidebar currentTag={currentTag} />
 		<article class="py-8 sm:py-12 pl-8 max-w-3xl min-w-0 grow">
