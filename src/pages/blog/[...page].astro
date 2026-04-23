@@ -1,17 +1,26 @@
 ---
+import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import PostCard from '../../components/PostCard.astro';
 import TagChips from '../../components/TagChips.astro';
 import BlogSidebar from '../../components/BlogSidebar.astro';
+import Pagination from '../../components/Pagination.astro';
 import { getRootTags } from '../../utils/tags';
 import { SITE } from '../../config/site';
 
-const posts = (await getCollection('blog', ({ data }) => data.draft !== true)).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+export const getStaticPaths = (async ({ paginate }) => {
+	const posts = (await getCollection('blog', ({ data }) => data.draft !== true)).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+	);
+	return paginate(posts, { pageSize: 10 });
+}) satisfies GetStaticPaths;
 
-const rootTags = getRootTags(posts);
+const { page } = Astro.props;
+
+// Get all posts for tag chips (independent of current page)
+const allPosts = (await getCollection('blog', ({ data }) => data.draft !== true));
+const rootTags = getRootTags(allPosts);
 ---
 
 <Layout title={`블로그 - ${SITE.name}`} description="Java, Spring, 인프라, 아키텍처에 관한 학습 기록">
@@ -25,14 +34,19 @@ const rootTags = getRootTags(posts);
 				</div>
 			)}
 			<div class="flex flex-col">
-				{posts.length > 0 ? (
-					posts.map((post) => (
+				{page.data.length > 0 ? (
+					page.data.map((post) => (
 						<PostCard post={post} />
 					))
 				) : (
 					<p class="text-gray-400 py-12 text-center">아직 작성된 글이 없습니다.</p>
 				)}
 			</div>
+
+			{/* Show pagination only if there are multiple pages */}
+			{page.lastPage > 1 && (
+				<Pagination page={page} />
+			)}
 		</section>
 	</div>
 </Layout>
