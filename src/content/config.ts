@@ -40,6 +40,8 @@ const blog = defineCollection({
         project: z.string().optional(),
         contentSource: z.enum(['original', 'ai-generated', 'ai-assisted']).default('ai-assisted'),
         draft: z.boolean().default(false),
+        series: z.string().optional(),
+        seriesOrder: z.number().optional(),
     }),
 });
 
