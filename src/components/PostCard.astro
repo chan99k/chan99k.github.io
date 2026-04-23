@@ -2,12 +2,14 @@
 import { type CollectionEntry } from 'astro:content';
 import FormattedDate from './FormattedDate.astro';
 import TagChips from './TagChips.astro';
+import { calculateReadingTime } from '../utils/reading-time';
 
 interface Props {
 	post: CollectionEntry<'blog'>;
 }
 
 const { post } = Astro.props;
+const readingTime = calculateReadingTime(post.body);
 ---
 
 <div class="group py-6 sm:py-8 border-b border-gray-100 dark:border-gray-800 last:border-0 transition-colors duration-200 hover:bg-gray-50/50 dark:hover:bg-white/[0.02] -mx-4 px-4 rounded-lg">
@@ -15,6 +17,7 @@ const { post } = Astro.props;
         <div class="flex items-center justify-between">
             <span class="flex items-center gap-2 text-xs text-gray-400 font-mono uppercase tracking-widest">
                 <FormattedDate date={post.data.pubDate} />
+                <span class="normal-case">· 약 {readingTime}분</span>
                 {post.data.contentSource !== 'original' && (
                     <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-sans font-medium normal-case tracking-normal bg-gray-100 text-gray-500 dark:bg-white/[0.08] dark:text-gray-400">
                         {post.data.contentSource === 'ai-generated' ? 'AI-generated' : 'AI assisted'}
