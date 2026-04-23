@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import PortfolioCard from '../../components/PortfolioCard.astro';
+import { SITE } from '../../config/site';
+
+const projects = (await getCollection('projects')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const portfolio = await getCollection('portfolio');
+const problemSolving = portfolio
+	.filter(entry => entry.data.category === 'problem')
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const decisionMaking = portfolio
+	.filter(entry => entry.data.category === 'decision')
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout title={`포트폴리오 - ${SITE.name}`} description="백엔드 설계 판단과 문제 해결 과정">
+	<section class="py-8 sm:py-12">
+		<div class="mb-12 sm:mb-16">
+			<h1 class="text-2xl sm:text-4xl font-bold mb-4">포트폴리오</h1>
+			<p class="text-base sm:text-lg text-gray-500 dark:text-gray-400">백엔드 설계 판단과 문제 해결 과정</p>
+		</div>
+
+		<!-- 프로젝트 섹션 -->
+		<div class="mb-16 sm:mb-20">
+			<h2 class="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 pb-2 border-b border-gray-100 dark:border-gray-800">프로젝트</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 sm:gap-y-16">
+				{projects.length > 0 ? (
+					projects.map((project) => (
+						<ProjectCard project={project} />
+					))
+				) : (
+					<p class="text-gray-400 py-12 text-center col-span-full">아직 등록된 프로젝트가 없습니다.</p>
+				)}
+			</div>
+		</div>
+
+		<!-- 문제 해결 섹션 -->
+		<div class="mb-16 sm:mb-20">
+			<h2 class="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 pb-2 border-b border-gray-100 dark:border-gray-800">문제 해결</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 sm:gap-y-16">
+				{problemSolving.length > 0 ? (
+					problemSolving.map((entry) => (
+						<PortfolioCard entry={entry} />
+					))
+				) : (
+					<p class="text-gray-400 py-12 text-center col-span-full">아직 등록된 문제 해결 사례가 없습니다.</p>
+				)}
+			</div>
+		</div>
+
+		<!-- 의사결정 섹션 -->
+		<div>
+			<h2 class="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 pb-2 border-b border-gray-100 dark:border-gray-800">의사결정</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 sm:gap-y-16">
+				{decisionMaking.length > 0 ? (
+					decisionMaking.map((entry) => (
+						<PortfolioCard entry={entry} />
+					))
+				) : (
+					<p class="text-gray-400 py-12 text-center col-span-full">아직 등록된 의사결정 사례가 없습니다.</p>
+				)}
+			</div>
+		</div>
+	</section>
+</Layout>
