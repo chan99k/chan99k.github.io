@@ -1,0 +1,49 @@
+<dialog id="image-lightbox" class="fixed inset-0 z-50 bg-transparent p-0 m-0 max-w-none max-h-none w-full h-full">
+    <div class="flex items-center justify-center w-full h-full bg-black/80 backdrop-blur-sm cursor-pointer" id="lightbox-backdrop">
+        <img id="lightbox-img" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl" src="" alt="" />
+    </div>
+</dialog>
+
+<script>
+    // Event delegation on article images
+    const dialog = document.getElementById('image-lightbox') as HTMLDialogElement;
+    const img = document.getElementById('lightbox-img') as HTMLImageElement;
+    const backdrop = document.getElementById('lightbox-backdrop');
+    const article = document.querySelector('article');
+
+    if (dialog && img && backdrop && article) {
+        // Click on images in article prose content
+        article.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            if (target.tagName === 'IMG' && target.closest('.prose')) {
+                const src = (target as HTMLImageElement).src;
+                const alt = (target as HTMLImageElement).alt;
+                img.src = src;
+                img.alt = alt;
+                dialog.showModal();
+            }
+        });
+
+        // Close on backdrop click
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) {
+                dialog.close();
+            }
+        });
+
+        // Close on ESC is built-in with <dialog>
+    }
+</script>
+
+<style>
+    dialog::backdrop {
+        background: transparent;
+    }
+    dialog[open] {
+        animation: fade-in 0.15s ease-out;
+    }
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
