@@ -8,6 +8,7 @@ import AdUnit from '../../components/AdUnit.astro';
 import TagChips from '../../components/TagChips.astro';
 import { calculateReadingTime } from '../../utils/reading-time';
 import SeriesNav from '../../components/SeriesNav.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -92,6 +93,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 			{post.data.tags.length > 0 && (
 				<div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
 					<TagChips tags={post.data.tags} />
+					<ShareButtons title={post.data.title} url={Astro.url.href} />
 				</div>
 			)}
 
