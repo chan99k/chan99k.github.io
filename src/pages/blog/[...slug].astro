@@ -7,6 +7,7 @@ import Giscus from '../../components/Giscus';
 import AdUnit from '../../components/AdUnit.astro';
 import TagChips from '../../components/TagChips.astro';
 import { calculateReadingTime } from '../../utils/reading-time';
+import SeriesNav from '../../components/SeriesNav.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -58,6 +59,11 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 				<h1 class="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 leading-tight">{post.data.title}</h1>
 				<p class="text-base sm:text-xl text-gray-500 dark:text-gray-400">{post.data.description}</p>
 			</header>
+
+			{/* Series Navigation */}
+			{post.data.series && (
+				<SeriesNav series={post.data.series} currentSlug={post.slug} />
+			)}
 
 			{/* Table of Contents */}
 			{tocHeadings.length > 3 && (
