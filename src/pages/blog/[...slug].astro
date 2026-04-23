@@ -11,6 +11,7 @@ import SeriesNav from '../../components/SeriesNav.astro';
 import ShareButtons from '../../components/ShareButtons.astro';
 import ScrollProgress from '../../components/ScrollProgress.astro';
 import { SITE } from '../../config/site';
+import ImageLightbox from '../../components/ImageLightbox.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -109,7 +110,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 				</nav>
 			)}
 
-			<div class="prose prose-lg dark:prose-invert max-w-prose prose-headings:font-bold prose-headings:text-black dark:prose-headings:text-white prose-a:text-accent prose-img:rounded-xl dark:prose-img:bg-white/90 dark:prose-img:p-2 prose-table:block prose-table:overflow-x-auto">
+			<div class="prose prose-lg dark:prose-invert max-w-prose prose-headings:font-bold prose-headings:text-black dark:prose-headings:text-white prose-a:text-accent prose-img:rounded-xl prose-img:cursor-pointer dark:prose-img:bg-white/90 dark:prose-img:p-2 prose-table:block prose-table:overflow-x-auto">
 				<Content />
 			</div>
 
@@ -164,6 +165,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 					<Giscus client:visible />
 				</div>
 			</div>
+			<ImageLightbox />
 		</article>
 	</div>
 </Layout>
