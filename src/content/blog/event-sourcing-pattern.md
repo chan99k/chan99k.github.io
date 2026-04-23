@@ -4,6 +4,8 @@ description: "이벤트 소싱 패턴은 객체의 현재 상태만 저장하는
 pubDate: "2026-03-05"
 tags: ["Areas/architecture", "Areas/software/design-pattern", "Resources/translations/tech-blog"]
 contentSource: "ai-generated"
+series: "클라우드 디자인 패턴"
+seriesOrder: 4
 draft: false
 ---
 
