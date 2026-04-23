@@ -4,6 +4,8 @@ description: "이 문서는 Spring Framework의 IoC 컨테이너에서 빈(bean)
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 5
 draft: false
 ---
 

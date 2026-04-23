@@ -4,6 +4,8 @@ description: "Spring IoC 컨테이너에서 빈(Bean) 간의 초기화 순서를
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 6
 draft: false
 ---
 

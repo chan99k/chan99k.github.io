@@ -4,6 +4,8 @@ description: "이 문서는 Spring Framework의 `@Bean` 애노테이션에 대�
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 17
 draft: false
 ---
 

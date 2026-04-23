@@ -4,6 +4,8 @@ description: "이 문서는 Spring Framework에서 JSR-330 표준 의존성 주�
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 15
 draft: false
 ---
 

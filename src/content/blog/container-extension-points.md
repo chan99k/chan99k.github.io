@@ -4,6 +4,8 @@ description: "Spring IoC 컨테이너는 특별한 통합 인터페이스를 구
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 12
 draft: false
 ---
 

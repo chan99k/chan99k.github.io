@@ -4,6 +4,8 @@ description: "Spring의 ApplicationContext는 기본적으로 모든 싱글톤 �
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 7
 draft: false
 ---
 
