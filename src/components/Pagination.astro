@@ -1,0 +1,106 @@
+---
+import type { Page } from 'astro';
+
+interface Props {
+	page: Page;
+}
+
+const { page } = Astro.props;
+
+// Generate page number array based on current page and total pages
+function getPageNumbers(currentPage: number, lastPage: number): (number | 'ellipsis')[] {
+	if (lastPage <= 7) {
+		return Array.from({ length: lastPage }, (_, i) => i + 1);
+	}
+
+	const pages: (number | 'ellipsis')[] = [];
+
+	// Always show first page
+	pages.push(1);
+
+	// Calculate range around current page
+	const showLeftEllipsis = currentPage > 3;
+	const showRightEllipsis = currentPage < lastPage - 2;
+
+	if (showLeftEllipsis) {
+		pages.push('ellipsis');
+	}
+
+	// Show pages around current page
+	const startPage = Math.max(2, currentPage - 1);
+	const endPage = Math.min(lastPage - 1, currentPage + 1);
+
+	for (let i = startPage; i <= endPage; i++) {
+		pages.push(i);
+	}
+
+	if (showRightEllipsis) {
+		pages.push('ellipsis');
+	}
+
+	// Always show last page
+	pages.push(lastPage);
+
+	return pages;
+}
+
+const pageNumbers = getPageNumbers(page.currentPage, page.lastPage);
+---
+
+<nav class="flex items-center justify-center gap-2 mt-12 mb-8" aria-label="Pagination">
+	<!-- Previous button -->
+	<a
+		href={page.url.prev || '#'}
+		class={`px-3 py-2 font-mono text-sm transition-colors ${
+			page.url.prev
+				? 'text-gray-500 hover:text-accent dark:text-gray-400 dark:hover:text-accent'
+				: 'text-gray-300 dark:text-gray-700 pointer-events-none cursor-default'
+		}`}
+		aria-disabled={!page.url.prev}
+	>
+		« 이전
+	</a>
+
+	<!-- Page numbers -->
+	<div class="flex items-center gap-1">
+		{pageNumbers.map((num) => {
+			if (num === 'ellipsis') {
+				return (
+					<span class="px-2 py-1 text-sm text-gray-400 dark:text-gray-600">
+						...
+					</span>
+				);
+			}
+
+			const isCurrentPage = num === page.currentPage;
+			const pageUrl = num === 1 ? '/blog/' : `/blog/${num}/`;
+
+			return (
+				<a
+					href={pageUrl}
+					class={`min-w-[2rem] px-2 py-1 font-mono text-sm text-center transition-colors ${
+						isCurrentPage
+							? 'bg-accent text-white rounded'
+							: 'text-gray-500 hover:text-accent dark:text-gray-400 dark:hover:text-accent'
+					}`}
+					aria-current={isCurrentPage ? 'page' : undefined}
+				>
+					{num}
+				</a>
+			);
+		})}
+	</div>
+
+	<!-- Next button -->
+	<a
+		href={page.url.next || '#'}
+		class={`px-3 py-2 font-mono text-sm transition-colors ${
+			page.url.next
+				? 'text-gray-500 hover:text-accent dark:text-gray-400 dark:hover:text-accent'
+				: 'text-gray-300 dark:text-gray-700 pointer-events-none cursor-default'
+		}`}
+		aria-disabled={!page.url.next}
+	>
+		다음 »
+	</a>
+</nav>
