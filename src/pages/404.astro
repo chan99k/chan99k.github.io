@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+
+const recentPosts = (await getCollection('blog', ({ data }) => data.draft !== true))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 3);
+---
+
+<Layout title="페이지를 찾을 수 없습니다">
+    <div class="py-20 sm:py-32 text-center max-w-xl mx-auto">
+        <p class="text-6xl sm:text-8xl font-bold text-gray-200 dark:text-gray-800 font-mono">404</p>
+        <h1 class="text-xl sm:text-2xl font-bold mt-4">페이지를 찾을 수 없습니다</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-2">요청하신 페이지가 존재하지 않거나 이동되었습니다.</p>
+        <a href="/" class="inline-block mt-6 px-6 py-2.5 rounded-lg bg-accent text-white text-sm font-medium hover:opacity-90 transition-opacity">
+            홈으로 돌아가기
+        </a>
+    </div>
+
+    {recentPosts.length > 0 && (
+        <section class="max-w-xl mx-auto pb-20">
+            <h2 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">최근 글</h2>
+            <ul class="space-y-3">
+                {recentPosts.map((post) => (
+                    <li>
+                        <a href={`/blog/${post.slug}/`} class="group flex items-center justify-between no-underline py-2">
+                            <span class="text-sm sm:text-base group-hover:text-accent transition-colors line-clamp-1">{post.data.title}</span>
+                            <span class="text-xs text-gray-400 font-mono shrink-0 ml-4">
+                                <FormattedDate date={post.data.pubDate} />
+                            </span>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </section>
+    )}
+</Layout>
