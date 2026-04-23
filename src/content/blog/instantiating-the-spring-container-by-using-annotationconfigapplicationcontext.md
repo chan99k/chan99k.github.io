@@ -4,6 +4,8 @@ description: "이 문서는 Spring 3.0에서 도입된 `AnnotationConfigApplicat
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 19
 draft: false
 ---
 

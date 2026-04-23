@@ -4,6 +4,8 @@ description: "Spring Framework는 애너테이션 기반 구성(annotation-based
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 13
 draft: false
 ---
 

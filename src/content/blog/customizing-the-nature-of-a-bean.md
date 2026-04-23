@@ -6,6 +6,8 @@ description: "Spring Framework는 빈(bean)의 동작을 커스터마이징하�
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 10
 draft: false
 ---
 

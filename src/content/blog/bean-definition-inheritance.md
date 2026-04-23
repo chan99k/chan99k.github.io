@@ -4,6 +4,8 @@ description: "Spring의 빈 정의 상속(Bean Definition Inheritance)은 부모
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 11
 draft: false
 ---
 

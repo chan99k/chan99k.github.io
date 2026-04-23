@@ -4,6 +4,8 @@ description: "Spring Framework는 Java 엔터프라이즈 애플리케이션 개
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 1
 draft: false
 ---
 

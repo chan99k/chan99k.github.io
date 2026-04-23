@@ -4,6 +4,8 @@ description: "Spring 컨테이너는 협력하는 빈(Bean) 간의 관계를 자
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 20
 draft: false
 ---
 

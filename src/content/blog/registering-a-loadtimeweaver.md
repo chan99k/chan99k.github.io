@@ -4,6 +4,8 @@ description: "Spring의 `LoadTimeWeaver`는 클래스가 JVM(Java Virtual Machin
 pubDate: "2026-03-10"
 tags: ["Resources/translations/spring/core/ioc-container"]
 contentSource: "ai-assisted"
+series: "Spring IoC Container"
+seriesOrder: 22
 draft: false
 ---
 
