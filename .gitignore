@@ -31,6 +31,7 @@ pnpm-debug.log*
 .playwright-mcp/
 .omc/
 .worktrees/
+graphify-out/
 
 # Local docs
 docs/plans/

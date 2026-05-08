@@ -2,7 +2,7 @@
 title: chan99k's 블로그
 description: 미니멀한 개발자 학습 기록 블로그.
 pubDate: 2026-02-07
-heroImage: /src/assets/images/blog/img_5539.png
+heroImage: /images/img_5539.png
 techStack:
   - Astro
   - React
