@@ -181,9 +181,22 @@ html {
     }
 }
 
-/* Prose Table Styles (Programmers-inspired: blue header + clean borders) */
+/* Prose Image — 컨테이너보다 좁은 이미지는 가운데 정렬 (Tailwind Typography prose img는 이미 display:block) */
+.markdown :where(img),
+.prose :where(img) {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Prose Table Styles (Programmers-inspired: blue header + clean borders)
+   - 표는 내용에 맞는 폭(fit-content)으로 가운데 정렬
+   - 컨테이너보다 넓은 표는 max-width:100%로 안전하게 잘리고, 부모의 prose-table:overflow-x-auto가 가로 스크롤 제공 */
 .prose :where(table) {
-    @apply w-full text-sm border-collapse;
+    @apply text-sm border-collapse;
+    width: fit-content;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .prose :where(thead th) {
