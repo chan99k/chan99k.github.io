@@ -211,6 +211,12 @@ html {
 }
 
 
+/* Giscus — iframe은 CSS width 미지정 시 브라우저 기본값(~300px)으로 렌더되므로 강제로 100% */
+.giscus,
+.giscus-frame {
+    width: 100%;
+}
+
 /* Prose Blockquote */
 .prose :where(blockquote) {
     @apply border-l-4 border-accent/40 pl-5 italic text-gray-600 not-italic;
