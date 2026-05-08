@@ -9,8 +9,6 @@ seriesOrder: 9
 draft: false
 ---
 
-# Bean Scopes
-
 > 원문: [Bean Scopes](https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html)
 
 ## 전문 번역

@@ -9,8 +9,6 @@ seriesOrder: 2
 draft: false
 ---
 
-# Core Technologies
-
 > 원문: [Core Technologies](https://docs.spring.io/spring-framework/reference/core.html)
 
 ## 전문 번역

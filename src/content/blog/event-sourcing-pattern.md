@@ -9,8 +9,6 @@ seriesOrder: 4
 draft: false
 ---
 
-# Event Sourcing Pattern
-
 > 원문: [Event Sourcing Pattern - Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)
 
 ## 1. Highlights / Summary

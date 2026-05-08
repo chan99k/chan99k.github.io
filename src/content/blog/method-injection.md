@@ -9,8 +9,6 @@ seriesOrder: 8
 draft: false
 ---
 
-# Method Injection
-
 > 원문: [Method Injection](https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-method-injection.html)
 
 ## 전문 번역

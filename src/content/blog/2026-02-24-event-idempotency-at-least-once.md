@@ -10,8 +10,6 @@ tags:
 draft: true
 ---
 
-# @ApplicationModuleListener 전환 후 이벤트 멱등성 확보: 2계층 방어 설계기
-
 ## TL;DR
 
 `@TransactionalEventListener`(at-most-once)에서 `@ApplicationModuleListener`(at-least-once)로 전환하면서 리스너가 중복 호출될 수 있게 되었다. 3개 리스너 중 2개가 멱등하지 않았고, Redis AOP(1차) + 서비스 레벨 가드(2차)의 2계층 방어로 해결했다.

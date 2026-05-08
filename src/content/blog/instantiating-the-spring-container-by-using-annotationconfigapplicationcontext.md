@@ -9,8 +9,6 @@ seriesOrder: 19
 draft: false
 ---
 
-# Instantiating the Spring Container by Using AnnotationConfigApplicationContext
-
 > 원문: [Instantiating the Spring Container by Using AnnotationConfigApplicationContext](https://docs.spring.io/spring-framework/reference/core/beans/java/instantiating-container.html)
 
 ## 전문 번역

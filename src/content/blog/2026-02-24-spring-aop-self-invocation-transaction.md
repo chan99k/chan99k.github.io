@@ -10,8 +10,6 @@ tags:
 draft: true
 ---
 
-# 디버깅: Spring AOP Self-Invocation으로 인한 @Transactional 미적용
-
 ## TL;DR
 
 정산 실행 배치에서 `@Transactional(REQUIRES_NEW)`가 같은 클래스 내부 호출(self-invocation)로 인해 무시되어, 판매자 A 정산 실패 시 판매자 B까지 롤백되는 문제가 발생했다. 트랜잭션이 필요한 로직을 별도 Spring Bean으로 분리하여 프록시를 통한 호출이 이루어지도록 수정해 해결했다.

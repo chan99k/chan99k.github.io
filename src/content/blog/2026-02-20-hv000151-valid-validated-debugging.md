@@ -10,8 +10,6 @@ tags:
 draft: true
 ---
 
-# 디버깅 HV000151: @Valid와 @Validated가 만나면 생기는 일
-
 ## TL;DR
 
 `@Validated` 컨트롤러가 인터페이스를 구현할 때, 구현체에만 `@Valid`를 선언하면 Hibernate Validator가 "서브타입이 파라미터 제약을 추가했다"고 판단하여 HV000151을 발생시킨다.

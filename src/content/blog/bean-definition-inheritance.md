@@ -9,8 +9,6 @@ seriesOrder: 11
 draft: false
 ---
 
-# Bean Definition Inheritance
-
 > 원문: [Bean Definition Inheritance](https://docs.spring.io/spring-framework/reference/core/beans/child-bean-definitions.html)
 
 ## 전문 번역

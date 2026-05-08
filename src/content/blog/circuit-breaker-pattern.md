@@ -9,8 +9,6 @@ seriesOrder: 2
 draft: false
 ---
 
-# Circuit Breaker Pattern
-
 > 원문: [Circuit Breaker Pattern - Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)
 
 ## 1. Highlights / Summary

@@ -9,8 +9,6 @@ seriesOrder: 22
 draft: false
 ---
 
-# Registering a LoadTimeWeaver
-
 > 원문: [Registering a LoadTimeWeaver](https://docs.spring.io/spring-framework/reference/core/beans/context-load-time-weaver.html)
 
 ## 전문 번역

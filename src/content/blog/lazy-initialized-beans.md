@@ -9,8 +9,6 @@ seriesOrder: 7
 draft: false
 ---
 
-# Lazy-initialized Beans
-
 > 원문: [Lazy-initialized Beans](https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-lazy-init.html)
 
 ## 전문 번역

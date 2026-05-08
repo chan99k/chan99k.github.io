@@ -9,8 +9,6 @@ seriesOrder: 5
 draft: false
 ---
 
-# Dependencies and Configuration in Detail
-
 > 원문: [Dependencies and Configuration in Detail](https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-properties-detailed.html)
 
 ## 전문 번역

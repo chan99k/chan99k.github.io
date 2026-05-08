@@ -9,8 +9,6 @@ seriesOrder: 3
 draft: false
 ---
 
-# Container Overview
-
 > 원문: [Container Overview](https://docs.spring.io/spring-framework/reference/core/beans/basics.html)
 
 ## 전문 번역
