@@ -9,8 +9,6 @@ seriesOrder: 17
 draft: false
 ---
 
-# Using the @Bean Annotation
-
 > 원문: [Using the @Bean Annotation](https://docs.spring.io/spring-framework/reference/core/beans/java/bean-annotation.html)
 
 ## 전문 번역

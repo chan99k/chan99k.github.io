@@ -9,8 +9,6 @@ seriesOrder: 13
 draft: false
 ---
 
-# Annotation-based Container Configuration
-
 > 원문: [Annotation-based Container Configuration](https://docs.spring.io/spring-framework/reference/core/beans/annotation-config.html)
 
 ## 전문 번역

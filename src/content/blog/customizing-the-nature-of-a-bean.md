@@ -11,8 +11,6 @@ seriesOrder: 10
 draft: false
 ---
 
-# Customizing the Nature of a Bean
-
 > 원문: [Customizing the Nature of a Bean](https://docs.spring.io/spring-framework/reference/core/beans/factory-nature.html)
 
 ## 전문 번역

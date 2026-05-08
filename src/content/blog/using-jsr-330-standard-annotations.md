@@ -9,8 +9,6 @@ seriesOrder: 15
 draft: false
 ---
 
-# Using JSR-330 Standard Annotations
-
 > 원문: [Using JSR-330 Standard Annotations](https://docs.spring.io/spring-framework/reference/core/beans/standard-annotations.html)
 
 ## 전문 번역

@@ -9,8 +9,6 @@ seriesOrder: 18
 draft: false
 ---
 
-# Using the @Configuration annotation
-
 > 원문: [Using the @Configuration annotation](https://docs.spring.io/spring-framework/reference/core/beans/java/configuration-annotation.html)
 
 ## 전문 번역

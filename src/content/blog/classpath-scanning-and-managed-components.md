@@ -9,8 +9,6 @@ seriesOrder: 14
 draft: false
 ---
 
-# Classpath Scanning and Managed Components
-
 > 원문: [Classpath Scanning and Managed Components](https://docs.spring.io/spring-framework/reference/core/beans/classpath-scanning.html)
 
 ## 전문 번역

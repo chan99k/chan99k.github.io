@@ -9,8 +9,6 @@ seriesOrder: 20
 draft: false
 ---
 
-# Autowiring Collaborators
-
 > 원문: [Autowiring Collaborators](https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-autowire.html)
 
 ## 전문 번역

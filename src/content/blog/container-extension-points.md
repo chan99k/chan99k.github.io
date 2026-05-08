@@ -9,8 +9,6 @@ seriesOrder: 12
 draft: false
 ---
 
-# Container Extension Points
-
 > 원문: [Container Extension Points](https://docs.spring.io/spring-framework/reference/core/beans/factory-extension.html)
 
 ## 전문 번역

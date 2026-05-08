@@ -12,8 +12,6 @@ tags:
 draft: true
 ---
 
-# 디버깅: ArgoCD + EC2 배포 후 전체 인프라 복구까지의 여정
-
 ## TL;DR
 
 ArgoCD가 관리하는 EC2(k3s) 환경에서 develop->main 머지 후 PostgreSQL 재초기화를 시도하면서 Flyway 마이그레이션 버전 충돌, Elasticsearch arm64/amd64 아키텍처 불일치, ArgoCD git 인증 실패, Secret 누락까지 연쇄적으로 발생한 문제를 하나씩 해결한 과정. 총 3개의 hotfix 브랜치와 6시간의 디버깅 끝에 전체 Pod가 Running 상태로 복구되었다.

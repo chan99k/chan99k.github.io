@@ -9,8 +9,6 @@ seriesOrder: 21
 draft: false
 ---
 
-# Environment Abstraction
-
 > 원문: [Environment Abstraction](https://docs.spring.io/spring-framework/reference/core/beans/environment.html)
 
 ## 전문 번역

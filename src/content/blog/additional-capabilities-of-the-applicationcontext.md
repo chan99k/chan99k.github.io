@@ -9,8 +9,6 @@ seriesOrder: 23
 draft: false
 ---
 
-# Additional Capabilities of the ApplicationContext
-
 > 원문: [Additional Capabilities of the ApplicationContext](https://docs.spring.io/spring-framework/reference/core/beans/context-introduction.html)
 
 ## 전문 번역

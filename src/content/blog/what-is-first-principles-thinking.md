@@ -7,8 +7,6 @@ contentSource: "ai-generated"
 draft: false
 ---
 
-# 제1원리 사고란 무엇인가? (What is First Principles Thinking?)
-
 > 원문: [What is First Principles Thinking?](https://fs.blog/first-principles/)
 
 ![First Principles](/images/first-principles-white.jpg)

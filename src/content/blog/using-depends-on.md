@@ -9,8 +9,6 @@ seriesOrder: 6
 draft: false
 ---
 
-# Using depends-on
-
 > 원문: [Using depends-on](https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-dependson.html)
 
 ## 전문 번역

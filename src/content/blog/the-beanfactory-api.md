@@ -9,8 +9,6 @@ seriesOrder: 24
 draft: false
 ---
 
-# The BeanFactory API
-
 > 원문: [The BeanFactory API](https://docs.spring.io/spring-framework/reference/core/beans/beanfactory.html)
 
 ## 전문 번역

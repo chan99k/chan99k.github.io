@@ -9,8 +9,6 @@ seriesOrder: 16
 draft: false
 ---
 
-# Basic Concepts: @Bean and @Configuration
-
 > 원문: [Basic Concepts: @Bean and @Configuration](https://docs.spring.io/spring-framework/reference/core/beans/java/basic-concepts.html)
 
 ## 전문 번역

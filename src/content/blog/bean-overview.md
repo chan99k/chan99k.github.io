@@ -9,8 +9,6 @@ seriesOrder: 4
 draft: false
 ---
 
-# Bean Overview
-
 > 원문: [Bean Overview](https://docs.spring.io/spring-framework/reference/core/beans/definition.html)
 
 ## 전문 번역

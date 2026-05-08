@@ -9,8 +9,6 @@ seriesOrder: 3
 draft: false
 ---
 
-# CQRS Pattern
-
 > 원문: [CQRS Pattern - Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs)
 
 ## 1. Highlights / Summary

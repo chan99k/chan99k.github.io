@@ -9,8 +9,6 @@ seriesOrder: 1
 draft: false
 ---
 
-# Spring Framework Overview
-
 > 원문: [Spring Framework Overview](https://docs.spring.io/spring-framework/reference/overview.html)
 
 ## 전문 번역
