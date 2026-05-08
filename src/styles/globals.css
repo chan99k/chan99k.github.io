@@ -80,18 +80,16 @@
         letter-spacing: -0.02em;
     }
 
-    /* 본문 typography 통일 — line-height/사이즈/weight 일관성 */
+    /* 본문 typography — Tailwind Typography(prose-lg)의 사이즈/리듬은 유지하고
+       한글 가독성을 위한 line-height 만 살짝 늘림. font-size/weight 강제 X. */
     .markdown,
     .prose {
         font-family: var(--font-sans);
-        font-size: 1rem;
-        line-height: 1.7;
     }
 
     .markdown :where(p, li, blockquote, dd, td),
     .prose :where(p, li, blockquote, dd, td) {
-        font-weight: 400;
-        line-height: 1.7;
+        line-height: 1.85;
     }
 
     /* 리스트 폰트 사이즈를 본문과 동일하게 (audit: 14px 27회 등장 문제) */

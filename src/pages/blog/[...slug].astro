@@ -28,17 +28,31 @@ const readingTime = calculateReadingTime(post.body);
 
 const currentTag = post.data.tags?.[0];
 
-// Prev/Next navigation
-const allPosts = (await getCollection('blog'))
+// 전체 published 글 (related posts 후보용)
+const publishedPosts = (await getCollection('blog'))
 	.filter((p) => !p.data.draft)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const currentIndex = allPosts.findIndex((p) => p.slug === post.slug);
-const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
-const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+// 시리즈 글일 때만 prev/next — seriesOrder 기준으로 같은 시리즈 내에서 이동
+let prevPost: typeof publishedPosts[number] | null = null;
+let nextPost: typeof publishedPosts[number] | null = null;
+
+if (post.data.series) {
+	const seriesPosts = publishedPosts
+		.filter((p) => p.data.series === post.data.series)
+		.sort((a, b) => {
+			const ao = a.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
+			const bo = b.data.seriesOrder ?? Number.MAX_SAFE_INTEGER;
+			if (ao !== bo) return ao - bo;
+			return a.data.pubDate.valueOf() - b.data.pubDate.valueOf();
+		});
+	const idx = seriesPosts.findIndex((p) => p.slug === post.slug);
+	prevPost = idx > 0 ? seriesPosts[idx - 1] : null;
+	nextPost = idx >= 0 && idx < seriesPosts.length - 1 ? seriesPosts[idx + 1] : null;
+}
 
 // Related posts (same tag, excluding current)
-const relatedPosts = allPosts
+const relatedPosts = publishedPosts
 	.filter((p) => p.slug !== post.slug && p.data.tags.some((t: string) => post.data.tags.includes(t)))
 	.slice(0, 3);
 
@@ -70,8 +84,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 		}
 	})} />
 	<div class="flex gap-0">
-		<BlogSidebar currentTag={currentTag} />
-		<article class="py-8 sm:py-12 pl-8 max-w-3xl min-w-0 grow">
+		<BlogSidebar currentTag={currentTag} tocHeadings={tocHeadings} />
+		<article class="py-8 sm:py-12 lg:pl-8 max-w-4xl min-w-0 grow">
 			<header class="mb-8 sm:mb-10">
 				<div class="mb-3 sm:mb-4 flex items-center gap-3 text-gray-400 text-sm font-mono">
 					<FormattedDate date={post.data.pubDate} />
@@ -83,7 +97,6 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 					)}
 				</div>
 				<h1 class="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 leading-tight">{post.data.title}</h1>
-				<p class="text-base sm:text-xl text-gray-500 dark:text-gray-400">{post.data.description}</p>
 			</header>
 
 			{/* Series Navigation */}
@@ -91,26 +104,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 				<SeriesNav series={post.data.series} currentSlug={post.slug} />
 			)}
 
-			{/* Table of Contents */}
-			{tocHeadings.length > 3 && (
-				<nav class="mb-8 sm:mb-10 p-4 sm:p-5 rounded-lg border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-white/[0.02]" aria-label="목차">
-					<h2 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-3">목차</h2>
-					<ul class="space-y-1.5 text-sm">
-						{tocHeadings.map((heading) => (
-							<li class={heading.depth === 3 ? 'ml-4' : ''}>
-								<a
-									href={`#${heading.slug}`}
-									class="text-gray-500 dark:text-gray-400 hover:text-accent transition-colors no-underline"
-								>
-									{heading.text}
-								</a>
-							</li>
-						))}
-					</ul>
-				</nav>
-			)}
-
-			<div class="prose prose-lg dark:prose-invert max-w-prose prose-headings:font-bold prose-headings:text-black dark:prose-headings:text-white prose-a:text-accent prose-img:rounded-xl prose-img:cursor-pointer dark:prose-img:bg-white/90 dark:prose-img:p-2 prose-table:block prose-table:overflow-x-auto">
+			<div class="prose prose-lg dark:prose-invert prose-headings:font-bold prose-headings:text-black dark:prose-headings:text-white prose-a:text-accent prose-img:rounded-xl prose-img:cursor-pointer dark:prose-img:bg-white/90 dark:prose-img:p-2 prose-table:block prose-table:overflow-x-auto">
 				<Content />
 			</div>
 
@@ -122,21 +116,23 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 				</div>
 			)}
 
-			{/* Prev/Next Navigation */}
-			<nav class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800 grid grid-cols-2 gap-4" aria-label="이전/다음 글">
-				{prevPost ? (
-					<a href={`/blog/${prevPost.slug}/`} class="group block no-underline p-4 rounded-lg border border-gray-100 dark:border-gray-800 hover:border-accent/30 transition-colors">
-						<span class="text-xs text-gray-400 font-mono uppercase tracking-widest">이전 글</span>
-						<p class="text-sm sm:text-base font-medium mt-1 line-clamp-2 group-hover:text-accent transition-colors">{prevPost.data.title}</p>
-					</a>
-				) : <div />}
-				{nextPost ? (
-					<a href={`/blog/${nextPost.slug}/`} class="group block no-underline p-4 rounded-lg border border-gray-100 dark:border-gray-800 hover:border-accent/30 transition-colors text-right">
-						<span class="text-xs text-gray-400 font-mono uppercase tracking-widest">다음 글</span>
-						<p class="text-sm sm:text-base font-medium mt-1 line-clamp-2 group-hover:text-accent transition-colors">{nextPost.data.title}</p>
-					</a>
-				) : <div />}
-			</nav>
+			{/* Prev/Next Navigation — 시리즈 글일 때만 같은 시리즈 내 이동 노출 */}
+			{post.data.series && (prevPost || nextPost) && (
+				<nav class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800 grid grid-cols-2 gap-4" aria-label="시리즈 이전/다음 글">
+					{prevPost ? (
+						<a href={`/blog/${prevPost.slug}/`} class="group block no-underline p-4 rounded-lg border border-gray-100 dark:border-gray-800 hover:border-accent/30 transition-colors">
+							<span class="text-xs text-gray-400 font-mono uppercase tracking-widest">이전 글</span>
+							<p class="text-sm sm:text-base font-medium mt-1 line-clamp-2 group-hover:text-accent transition-colors">{prevPost.data.title}</p>
+						</a>
+					) : <div />}
+					{nextPost ? (
+						<a href={`/blog/${nextPost.slug}/`} class="group block no-underline p-4 rounded-lg border border-gray-100 dark:border-gray-800 hover:border-accent/30 transition-colors text-right">
+							<span class="text-xs text-gray-400 font-mono uppercase tracking-widest">다음 글</span>
+							<p class="text-sm sm:text-base font-medium mt-1 line-clamp-2 group-hover:text-accent transition-colors">{nextPost.data.title}</p>
+						</a>
+					) : <div />}
+				</nav>
+			)}
 
 			{/* Related Posts */}
 			{relatedPosts.length > 0 && (
