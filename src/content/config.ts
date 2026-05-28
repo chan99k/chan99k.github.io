@@ -71,4 +71,16 @@ const questions = defineCollection({
     schema: questionSchema,
 });
 
-export const collections = { blog, projects, pages, questions };
+const portfolio = defineCollection({
+    type: 'content',
+    schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        pubDate: z.coerce.date(),
+        category: z.enum(['problem', 'decision']),
+        project: z.string(),
+        techStack: z.array(z.string()).optional(),
+    }),
+});
+
+export const collections = { blog, projects, pages, questions, portfolio };
